@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3656954414905745779}
   - component: {fileID: 5912026299586715090}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RiotShieldPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,6 +57,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RiotShieldVisual
+      objectReference: {fileID: 0}
+    - target: {fileID: 3233895780204123466, guid: 41bf1614c63cc4744bb48690df3c92cb,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 4927416628375602924, guid: 41bf1614c63cc4744bb48690df3c92cb,
         type: 3}

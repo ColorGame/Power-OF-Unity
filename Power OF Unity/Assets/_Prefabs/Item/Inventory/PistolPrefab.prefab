@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3656954414905745779}
   - component: {fileID: 4100025684031183867}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: PistolPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,6 +107,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PistolVisual
+      objectReference: {fileID: 0}
+    - target: {fileID: 6619333253739986675, guid: 02501de2b44794e4ea2b1fe3b17da24e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

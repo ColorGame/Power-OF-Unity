@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3656954414905745779}
   - component: {fileID: 5912026299586715090}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RiflePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,6 +53,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3656954414905745779}
     m_Modifications:
+    - target: {fileID: 3233895780204123466, guid: 29ceabbf765f72b408f89a17c0994c58,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 4927416628375602924, guid: 29ceabbf765f72b408f89a17c0994c58,
         type: 3}
       propertyPath: m_LocalPosition.x

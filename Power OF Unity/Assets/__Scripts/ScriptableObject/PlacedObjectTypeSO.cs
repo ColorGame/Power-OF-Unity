@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "ScriptableObjects/PlacedObjectType")]
-public class PlacedObjectTypeSO : ScriptableObject  // размещенный объект типа SO List
+public class PlacedObjectTypeSO : ScriptableObject  // размещенный объект типа SO
 { 
 
     public static Dir GetNextDir(Dir dir) // Вернуть следующие направление
@@ -63,13 +63,14 @@ public class PlacedObjectTypeSO : ScriptableObject  // размещенный объект типа S
         Up,
         Right,
     }
+      
 
     public string nameString;
     public Transform prefab;
     public Transform visual;
     public int widthX; // Сколько занимает клеток в ширину Х
     public int heightY; // и высоту У
-
+   
 
     public int GetRotationAngle(Dir dir) // Получить угол поворота в зависимости от направления
     {

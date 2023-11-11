@@ -640,6 +640,7 @@ GameObject:
   - component: {fileID: 3460450167430738910}
   - component: {fileID: 4233964869486218640}
   - component: {fileID: -4672128768459207291}
+  - component: {fileID: 2092770731573479723}
   - component: {fileID: 8643072005151199782}
   - component: {fileID: 6056872332027202334}
   m_Layer: 7
@@ -932,6 +933,18 @@ MonoBehaviour:
   _ragdollPrefab: {fileID: 3013477999232598443, guid: 6a2a0287dcd8d6d47879a07c82fd7818,
     type: 3}
   _originalRootBone: {fileID: 3009427759357829087}
+--- !u!114 &2092770731573479723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3013477999232598442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41abe237772a1ae4ea9c9f996ae7f466, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8643072005151199782
 MonoBehaviour:
   m_ObjectHideFlags: 0

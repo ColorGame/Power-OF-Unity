@@ -6,10 +6,16 @@ using static PlacedObjectTypeSO;
 
 public class PlacedObject : MonoBehaviour // Размещенный объект (создаем и размещаем объект на сетке)
 {
-    public static PlacedObject CreateInGrid(Vector3 worldPosition, Vector2Int gridPosition, PlacedObjectTypeSO.Dir dir, PlacedObjectTypeSO placedObjectTypeSO, Transform parent) // (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру)
-    {
-        PlacedObject placedObject = CreateInWorld(worldPosition, dir, placedObjectTypeSO, parent);
-        placedObject._gridPositioAnchor = gridPosition;
+    public static PlacedObject CreateInGrid(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY, Vector2Int gridPosition, PlacedObjectTypeSO.Dir dir, PlacedObjectTypeSO placedObjectTypeSO, Transform parent) // (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру)
+    {        
+        Vector3 offset = placedObjectTypeSO.GetOffsetVisualFromParent(); // вычислим смещение чтобы в дальнейшем создавать объекты в центре worldPosition
+        Vector3 worldPosition = InventoryGrid.Instance.GetWorldPositionLowerLeftСornerCell(gridPosition, gridSystemXY);
+        Transform placedObjectTransform = Instantiate(placedObjectTypeSO.prefab, worldPosition, Quaternion.Euler(parent.rotation.eulerAngles.x, 0, placedObjectTypeSO.GetRotationAngle(dir)), parent); //parent.rotation.eulerAngles.x- что бы был повернут как родитель
+        PlacedObject placedObject = placedObjectTransform.GetComponent<PlacedObject>();
+        placedObject._placedObjectTypeSO = placedObjectTypeSO;
+        placedObject._dir = dir;
+        placedObject._offsetVisualFromParent = offset;       
+        placedObject.Setup();        
 
         return placedObject;
     }
@@ -22,7 +28,7 @@ public class PlacedObject : MonoBehaviour // Размещенный объект (создаем и разме
         PlacedObject placedObject = placedObjectTransform.GetComponent<PlacedObject>();
         placedObject._placedObjectTypeSO = placedObjectTypeSO;
         placedObject._dir = dir;
-        placedObject._offsetVisualFromParent = offset;
+        placedObject._offsetVisualFromParent = offset;      
         placedObject.Setup();
 
         return placedObject;
@@ -35,8 +41,7 @@ public class PlacedObject : MonoBehaviour // Размещенный объект (создаем и разме
         placedObjectTransform.GetComponent<RectTransform>().anchoredPosition = anchoredPosition;
 
         PlacedObject placedObject = placedObjectTransform.GetComponent<PlacedObject>();
-        placedObject._placedObjectTypeSO = placedObjectTypeSO;
-        placedObject._gridPositioAnchor = gridPosition;
+        placedObject._placedObjectTypeSO = placedObjectTypeSO;       
         placedObject._dir = dir;
         placedObject.Setup();
 
@@ -51,9 +56,9 @@ public class PlacedObject : MonoBehaviour // Размещенный объект (создаем и разме
     private Vector3 _targetRotation;
     private Vector3 _targetPosition;
     private Vector3 _startPosition;
-    private bool _grabbed; // Схвачен   
-    private bool _moveStartPosition = false; // Переместить в начальную позицию
     private Vector3 _scaleOriginal;
+    private bool _grabbed; // Схвачен   
+    private bool _moveStartPosition = false; // Переместить в начальную позицию    
     private Transform _visual;
     private Vector3 _offsetVisualFromParent;
 
@@ -70,7 +75,7 @@ public class PlacedObject : MonoBehaviour // Размещенный объект (создаем и разме
             float moveSpeed = 20f;
             transform.position = Vector3.Lerp(transform.position, _targetPosition, Time.deltaTime * moveSpeed);
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_targetRotation), Time.deltaTime * 15f);
-            //transform.rotation = Quaternion.Lerp(transform.rotation, PickUpDropManager.Instance.GetPlacedObjectRotation(), Time.deltaTime * 15f);// Плавно повернем объект
+            //transform.rotation = Quaternion.Lerp(transform.rotation, PickUpDropSystem.Instance.GetPlacedObjectRotation(), Time.deltaTime * 15f);// Плавно повернем объект
         }
 
         if (_moveStartPosition) // Если надо переместить в начальную позиции и в конце уничтожим объект
@@ -91,7 +96,8 @@ public class PlacedObject : MonoBehaviour // Размещенный объект (создаем и разме
     {
         _visual = transform.GetChild(0); //Получим визуальный объект   
         _visual.localPosition = _offsetVisualFromParent;    // Установим в середину занимаемых ячеек наш визуальный объект (Если забыли установить вручную в префабе инвенторя)           
-        _startPosition = transform.position;  // Запомним стартовую позицию       
+        _startPosition = transform.position;  // Запомним стартовую позицию
+        _scaleOriginal = transform.localScale;
     }
 
     public Vector3 GetOffsetVisualFromParent()
@@ -102,8 +108,7 @@ public class PlacedObject : MonoBehaviour // Размещенный объект (создаем и разме
     public void Grab() // Захватить
     {
         _grabbed = true;
-        // Сохраним оригинальный масштаб и поменяем его
-        _scaleOriginal = transform.localScale;
+        //поменяем оригинальный масштаб    
         float _scaleMultiplier = 1.1f; // множитель масштаба для эффекта увеличения при захвате
         transform.localScale = _scaleOriginal * _scaleMultiplier;
     }
@@ -122,20 +127,7 @@ public class PlacedObject : MonoBehaviour // Размещенный объект (создаем и разме
     public void SetTargetRotation(Vector3 targetRotation)
     {
         _targetRotation = targetRotation;
-    }
-
-    public virtual void GridSetupDone()
-    {
-        //Debug.Log("PlacedObject.GridSetupDone() " + transform);
-    }
-
-    /* protected virtual void TriggerGridObjectChanged()
-     {
-         foreach (GridPositionXZ _gridPositioAnchor in GetGridPositionList())
-         {
-             GridBuildingSystem3D.Instance.GetGridObject(_gridPositioAnchor).TriggerGridObjectChanged();
-         }
-     }*/
+    }  
 
     public Vector2Int GetGridPositionAnchor()
     {
@@ -198,26 +190,8 @@ public class PlacedObject : MonoBehaviour // Размещенный объект (создаем и разме
         _moveStartPosition = moveStartPosition;
     }
 
-    /*public SaveObject GetSaveObject() // Получить сохраненный объект
+    public virtual void DestroySelf() // Уничтожить себя
     {
-        return new SaveObject
-        {
-            placedObjectTypeSOName = _placedObject.name,
-            gridPosition = _gridPositioAnchor,
-            _dir = _dir,
-            floorPlacedObjectSave = (this is FloorPlacedObject) ? ((FloorPlacedObject)this).Save() : "", //
-        };
-    }*/
-
-    [System.Serializable]
-    public class SaveObject // Сохраненный объект
-    {
-
-        public string placedObjectTypeSOName;
-        public Vector2Int gridPosition;
-        public PlacedObjectTypeSO.Dir dir;
-        public string floorPlacedObjectSave; // сохранение объекта, размещенного на полу
-
+        Destroy(gameObject);
     }
-
 }

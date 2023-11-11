@@ -8,7 +8,7 @@ using UnityEngine;
 public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетке и очки действий, получение урона
 {
 
-    private const int ACTION_POINTS_MAX = 3; //НАДО НАСТРОИТЬ//
+    private const int ACTION_POINTS_MAX = 5; //НАДО НАСТРОИТЬ//
 
     // для // РЕШЕНИЕ 2 //в UnitActionSystemUI
     // static - обозначает что event будет существовать для всего класса не зависимо от того скольго у нас созданно Юнитов.

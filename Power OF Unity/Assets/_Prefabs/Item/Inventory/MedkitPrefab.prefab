@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3303400256944434717}
   - component: {fileID: -5463609313783542448}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: MedkitPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,6 +107,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MedkitVisual
+      objectReference: {fileID: 0}
+    - target: {fileID: 3449393188852514866, guid: 1394447990d627447b7f6adf5bf0f384,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
