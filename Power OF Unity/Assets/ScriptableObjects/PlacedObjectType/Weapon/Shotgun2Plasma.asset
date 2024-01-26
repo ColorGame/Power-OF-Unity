@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f3beb8e28e58c540b93f0005b857c3e, type: 3}
+  m_Name: Shotgun2Plasma
+  m_EditorClassIdentifier: 
+  nameString: Shotgun2Plasma
+  prefab: {fileID: 3656954414905745779, guid: 7da8ebe8f01bf944b9c112aa58fd00f6, type: 3}
+  visual: {fileID: 4927416628375602924, guid: 51b5b96ee160e2545a11747ea3e7c829, type: 3}
+  widthX: 5
+  heightY: 2
+  weight: 1
+  rangeActionInCels: 5
+  canPlacedOnGridList: 0100000002000000
+  typeWeapon: 14
+  damage: 0
+  numberShotInOneAction: 0
+  delayShot: 0

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 429b08114426cba47b667250ba3d26fa, type: 3}
+  m_Name: GrenadeStun
+  m_EditorClassIdentifier: 
+  nameString: GrenadeStun
+  prefab: {fileID: 365739320742059584, guid: b385b16009fbda64686a960b1c4aa870, type: 3}
+  visual: {fileID: 968197219085527477, guid: 5e92b2f26771fd44e8b69fb057346373, type: 3}
+  widthX: 1
+  heightY: 1
+  weight: 1
+  rangeActionInCels: 5
+  canPlacedOnGridList: 01000000
+  damage: 0
