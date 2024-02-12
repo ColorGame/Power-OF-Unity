@@ -4808,7 +4808,7 @@ GameObject:
   - component: {fileID: 4012515571209480648}
   - component: {fileID: 6680144253068232000}
   m_Layer: 5
-  m_Name: PickUpDropSystem
+  m_Name: PickUpDrop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4838,12 +4838,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5626137873303912141}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5cb57953da1e2d246a2fda5a2a1de9d8, type: 3}
+  m_Script: {fileID: 11500000, guid: 6955bc4b3e0e9d24caf5528b3aa00d30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _inventoryLayerMask:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 0
   _canvasInventoryWorld: {fileID: 635086445285565883}
   _cameraUI: {fileID: 0}
 --- !u!1 &5687983636235380462
@@ -5539,7 +5539,7 @@ GameObject:
   - component: {fileID: 4613915260115631341}
   - component: {fileID: 8580613416918958361}
   m_Layer: 0
-  m_Name: InventoryGridSystemVisual
+  m_Name: InventoryGridVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

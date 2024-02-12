@@ -195,7 +195,7 @@ public class ShootAction : BaseAction
         Transform bulletProjectilePrefabTransform = Instantiate(GameAssets.Instance.bulletProjectilePrefab, _shootPointTransform.position, Quaternion.identity); // Создадим префаб пули в точке выстрела
         BulletProjectile bulletProjectile = bulletProjectilePrefabTransform.GetComponent<BulletProjectile>(); // Вернем компонент BulletProjectile созданной пули
         
-        SoundManager.Instance.PlaySoundOneShot(SoundManager.Sound.Shoot); // Воспроизведем звук 
+        SoundManager.Instance.PlaySoundOneShot(SoundName.Shoot); // Воспроизведем звук 
         if (_hit) // Если попали то
         {
             bulletProjectile.Setup(_targetUnitAimPointPosition, _hit); // В аргумент предали позицию Прицеливания целевого юнита

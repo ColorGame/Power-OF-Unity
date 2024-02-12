@@ -1,7 +1,5 @@
-using Pathfinding;
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -135,7 +133,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
                 break;
 
             case State.ComboAfter: // В этом состоянии кнопки UI появляются
-                Destroy(_instantiateFXPrefab.GameObject());
+                Destroy(_instantiateFXPrefab.gameObject);
                 _unitPartner.GetUnitRope().HideRope();
                 _unit.GetUnitRope().HideRope();
 
@@ -184,7 +182,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
             if (zOffset >= Vector3.Distance(_unitPartner.transform.position, _unitEnemy.transform.position) &&
                 zOffset >= Vector3.Distance(transform.position, _unitEnemy.transform.position)) // Веревка долетела до врага
             {
-                SoundManager.Instance.PlaySoundOneShot(SoundManager.Sound.HookShoot);
+                SoundManager.Instance.PlaySoundOneShot(SoundName.HookShoot);
                 NextState(); //Следующие состояние
             }
         }
@@ -214,7 +212,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
         {
             float stunPercent = 0.3f; // Процент ОГЛУШЕНИЯ
             _unitEnemy.Stun(stunPercent); //НУЖНО НАСТРОИТЬ// Оглушим
-            SoundManager.Instance.PlaySoundOneShot(SoundManager.Sound.HookPull);
+            SoundManager.Instance.PlaySoundOneShot(SoundName.HookPull);
             NextState(); //Следующие состояние
         }
     }   

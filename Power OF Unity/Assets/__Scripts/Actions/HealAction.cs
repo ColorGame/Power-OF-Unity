@@ -84,7 +84,7 @@ public class HealAction : BaseAction // Действие Лечение НАСЛЕДУЕТ класс BaseAct
 
     private void Heal() // Лечение
     {
-        SoundManager.Instance.PlaySoundOneShot(SoundManager.Sound.Heal);
+        SoundManager.Instance.PlaySoundOneShot(SoundName.Heal);
         _targetUnit.Healing(_healAmount);
     }
 

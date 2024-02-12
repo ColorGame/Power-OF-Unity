@@ -186,10 +186,10 @@ public class GrenadeProjectile : MonoBehaviour // Гранатный снаряд
 
                 if (_crateDestroy) // Если есть в радиусе разрушаемый ящик то ...  (чтобы не запускать несколько раз в цикле если несколько ящиков )
                 {
-                    SoundManager.Instance.PlaySoundOneShot(SoundManager.Sound.DestructionCrate); 
+                    SoundManager.Instance.PlaySoundOneShot(SoundName.DestructionCrate); 
                 }
 
-                SoundManager.Instance.PlaySoundOneShot(SoundManager.Sound.GrenadeExplosion);
+                SoundManager.Instance.PlaySoundOneShot(SoundName.GrenadeExplosion);
 
                 Instantiate(GameAssets.Instance.grenadeExplosionFXPrefab, _targetPosition, Quaternion.identity); //Создадим частьички взрыва. 
 
@@ -197,7 +197,7 @@ public class GrenadeProjectile : MonoBehaviour // Гранатный снаряд
 
             case TypeGrenade.Smoke:
 
-                SoundManager.Instance.PlaySoundOneShot(SoundManager.Sound.GrenadeSmoke);
+                SoundManager.Instance.PlaySoundOneShot(SoundName.GrenadeSmoke);
                 Instantiate(GameAssets.Instance.grenadeSmokeFXPrefab, _targetPosition, Quaternion.identity); //Создадим Дым в месте взрыва гранаты.
 
                 break;
@@ -225,7 +225,7 @@ public class GrenadeProjectile : MonoBehaviour // Гранатный снаряд
                         targetUnit.Stun(stunPercent); //Оглушим юнита которы попал в радиус действия
                     }
                 }
-                SoundManager.Instance.PlaySoundOneShot(SoundManager.Sound.GrenadeStun);
+                SoundManager.Instance.PlaySoundOneShot(SoundName.GrenadeStun);
                 Instantiate(GameAssets.Instance.grenadeExplosionFXPrefab, _targetPosition, Quaternion.identity); //Создадим частички взрыва.
                 Instantiate(GameAssets.Instance.electricityWhiteFXPrefab, _targetPosition, Quaternion.identity); //Создадим электромагнитное облако.
 

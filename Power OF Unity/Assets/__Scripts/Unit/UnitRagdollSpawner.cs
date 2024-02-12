@@ -7,14 +7,14 @@ public class UnitRagdollSpawner : MonoBehaviour // Юнит Тряпичная кукла Зарожден
     [SerializeField] private Transform _ragdollPrefab; // Префаб тряпичной куклы
     [SerializeField] private Transform _originalRootBone; // Оригинальная Корневая Кость(юнита) // В инспекторе закинуть кость юнита под названием Root 
 
-    private HealthSystem _healthSystem;
+    private Health _healthSystem;
 
     private Unit _keelerUnit; //Сохраним юнита который хочет нас убить Киллер.
     private Unit _unit; // Юнит на котором лежит этот скрипт
 
     private void Awake()
     {
-        _healthSystem = GetComponent<HealthSystem>();       
+        _healthSystem = GetComponent<Health>();       
         _unit= GetComponent<Unit>();
     }
 

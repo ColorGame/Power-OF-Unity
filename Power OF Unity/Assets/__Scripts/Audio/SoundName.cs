@@ -1,0 +1,19 @@
+public enum SoundName // Перечесление звуков, что бы избежать строки (ПРОВЕРИТЬ НАЗВАНИЕ аудио клипов В ИЕРАРХИИ)
+{
+    DeathCry,
+    DestructionCrate,
+    DoorClosed,
+    DoorOpen,
+    GrenadeExplosion,
+    GrenadeSmoke,
+    GrenadeStun,
+    GrenadeThrow,
+    Heal,
+    HookPull,
+    HookShoot,
+    Interact,
+    Move,
+    Shoot,
+    Spotter,
+    Sword
+}

@@ -242,10 +242,10 @@ public class InventoryGrid : MonoBehaviour // Сетка инверторя
             foreach (AddPlacedObject addPlacedObject in listAddPlacedObject.addPlacedObjectList) // Переберем каждый Добавленный Размещенный объект в списке
             {
                 // Создадим и разместим сохраненный объект
-                Transform parentCanvas = PickUpDropSystem.Instance.GetCanvasInventoryWorld();
+                Transform parentCanvas = PickUpDrop.Instance.GetCanvasInventoryWorld();
                 GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY = GetGridSystemTiltedXY(addPlacedObject.gridName); // Получим сетку для размещения
                 PlacedObject placedObject = PlacedObject.CreateInGrid(gridSystemXY, addPlacedObject.gridPositioAnchor, PlacedObjectTypeSO.Dir.Down, addPlacedObject.placedObjectTypeSO, parentCanvas);
-                if (!PickUpDropSystem.Instance.TryDrop(gridSystemXY, addPlacedObject.gridPositioAnchor, placedObject)) // Если не удалось сбросить объект на сетку то
+                if (!PickUpDrop.Instance.TryDrop(gridSystemXY, addPlacedObject.gridPositioAnchor, placedObject)) // Если не удалось сбросить объект на сетку то
                 {
                     placedObject.DestroySelf(); // Уничтожим этот объект
                     TooltipUI.Instance.Show("не удалось загрузить сохранение", new TooltipUI.TooltipTimer { timer = 3f }); // Покажем подсказку и зададим новый таймер отображения подсказки

@@ -89,7 +89,7 @@ public abstract class GrenadeAction : BaseAction // Граната ДЕйствие. Наследует 
             case State.GrenadeBefore:
 
                 _state = State.GrenadeInstantiate;
-                SoundManager.Instance.PlaySoundOneShot(SoundManager.Sound.GrenadeThrow);
+                SoundManager.Instance.PlaySoundOneShot(SoundName.GrenadeThrow);
                 //float grenadeInstantiateStateTime = 0.5f; // Для избежания магических чисель введем переменную  Продолжительность Состояния Создание Гранаты //НУЖНО НАСТРОИТЬ// Можно ЗДЕСЬ настроить время создания ГРАНАТЫ (сейчас использую AnimationEvent)
                 //_musicTimer = grenadeInstantiateStateTime;                               
 

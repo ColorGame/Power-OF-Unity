@@ -10,7 +10,7 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
 {
 
     public static PathfindingMonkey Instance { get; private set; }   //(ПАТТЕРН SINGLETON) Это свойство которое может быть заданно (SET-присвоено) только этим классом, но может быть прочитан GET любым другим классом
-                                                                     // instance - экземпляр, У нас будет один экземпляр PathfindingMonkey можно сдел его static. Instance нужен для того чтобы другие методы, через него, могли подписаться на Event.
+                                                                     // _instance - экземпляр, У нас будет один экземпляр PathfindingMonkey можно сдел его static. Instance нужен для того чтобы другие методы, через него, могли подписаться на Event.
 
 
 

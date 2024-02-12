@@ -108,7 +108,7 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
         else
         {
             // МОЖНО РЕАЛИЗОВАТЬ ЗВУК НЕУДАЧНОГО ОТКРЫВАНИЯ или запустить событие
-            SoundManager.Instance.PlaySoundOneShot(SoundManager.Sound.DoorClosed);
+            SoundManager.Instance.PlaySoundOneShot(SoundName.DoorClosed);
             OnAnyDoorIsLocked?.Invoke(this, EventArgs.Empty); // Запустим событие любая дверь заперта (для реализации надписи)
         }
     }
@@ -125,7 +125,7 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
             GraphNode graphNode = LevelGrid.Instance.GetGridNode(gridPosition); // Получим проверяемый узел
             BlockManager.Instance.InternalUnblock(graphNode, _singleNodeBlocker); // Разблокируем узлы
         }
-        SoundManager.Instance.PlaySoundOneShot(SoundManager.Sound.DoorOpen);
+        SoundManager.Instance.PlaySoundOneShot(SoundName.DoorOpen);
 
         // Запустим события
         OnDoorOpened?.Invoke(this, EventArgs.Empty);
@@ -157,7 +157,7 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
         _isOpen = false;
         _animator.CrossFade(_animBase.DoorClose, 0.2f);
         // _animator.SetBool("IsOpen", _isOpen); // Настроим булевую переменную "GetIsOpen". Передадим ей значение _isOpen
-        SoundManager.Instance.PlaySoundOneShot(SoundManager.Sound.DoorOpen);
+        SoundManager.Instance.PlaySoundOneShot(SoundName.DoorOpen);
     }
 
     private List<GridPositionXZ> GetDoorGridPositionList() //Получить Список Сеточных позиций двери  

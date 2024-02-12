@@ -14,7 +14,7 @@ public class UnitWorldUI : MonoBehaviour // Мировой пользовательский интерфейс ю
     [SerializeField] private Image _stunnedImage; // закинуть иконку ОГЛУШЕНИЯ
     [SerializeField] private Image _healthBarImage; // в инспекторе закинуть шкалу здоровья "Bar"
     [SerializeField] private Unit _unit; // в инспекторе закинуть юнита
-    [SerializeField] private HealthSystem _healthSystem; // Закинуть самого юнита тк скрипт висит на нем
+    [SerializeField] private Health _healthSystem; // Закинуть самого юнита тк скрипт висит на нем
 
 
     private void Start()

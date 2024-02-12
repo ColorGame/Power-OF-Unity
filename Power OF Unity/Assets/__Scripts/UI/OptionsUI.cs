@@ -52,12 +52,12 @@ public class OptionsUI : MonoBehaviour // Меню настроик
 
         transform.Find("mainMenuButton").GetComponent<Button>().onClick.AddListener(() =>
         {           
-            GameSceneManager.Load(GameSceneManager.Scene.MainMenuScene);
+            SceneLoader.Load(SceneName.MainMenuScene);
         });
 
         transform.Find("edgeScrollingToggle").GetComponent<Toggle>().onValueChanged.AddListener((bool set) => // Подпишемся на изменение значения Тумблера прокрутка по краям (принимает булевое значение)
         {
-            CameraController.Instance.SetEdgeScrolling(set);
+            CameraMove.Instance.SetEdgeScrolling(set);
         });
 
         transform.Find("resumeButton").GetComponent<Button>().onClick.AddListener(() =>
@@ -78,7 +78,7 @@ public class OptionsUI : MonoBehaviour // Меню настроик
         UpdateText();
         gameObject.SetActive(false); // спрячем меню
 
-        transform.Find("edgeScrollingToggle").GetComponent<Toggle>().SetIsOnWithoutNotify(CameraController.Instance.GetEdgeScrolling()); // Установим актуальное значения Тумблера прокрутка по краям
+        transform.Find("edgeScrollingToggle").GetComponent<Toggle>().SetIsOnWithoutNotify(CameraMove.Instance.GetEdgeScrolling()); // Установим актуальное значения Тумблера прокрутка по краям
     } 
 
 

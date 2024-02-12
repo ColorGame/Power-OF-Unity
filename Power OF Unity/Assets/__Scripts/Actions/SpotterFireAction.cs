@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -41,7 +39,7 @@ public class SpotterFireAction : BaseAction // Действие Корректировщик огня НАСЛ
                 _partnerUnit.GetAction<ShootAction>().СlearSpotterFireUnit(); // Очистить у партнера поле корректировщика огня
                 foreach (Transform spotterFireFX in _spotterFireFXList) // Удалим волны
                 {
-                    Destroy(spotterFireFX.GameObject()); // Уничтожим волны
+                    Destroy(spotterFireFX.gameObject); // Уничтожим волны
                 }
                 _partnerUnit = null; // Обнулим партнера
 
@@ -179,7 +177,7 @@ public class SpotterFireAction : BaseAction // Действие Корректировщик огня НАСЛ
             Instantiate(GameAssets.Instance.spotterFireFXPrefab, partnerAimPoinTransform.position, Quaternion.identity ,partnerAimPoinTransform)
         };
 
-        SoundManager.Instance.PlaySoundOneShot(SoundManager.Sound.Spotter);
+        SoundManager.Instance.PlaySoundOneShot(SoundName.Spotter);
 
         _partnerUnit.GetAction<ShootAction>().SetSpotterFireUnit(_unit); // Установим партнеру, Себя, как коррект. огня
         UnitActionSystem.Instance.SetSelectedUnit(_partnerUnit, _partnerUnit.GetAction<ShootAction>()); //Сделаем Партнера выделенным и выберем действие стрелять

@@ -174,7 +174,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
         }
 #endif
         SoundManager.Instance.SetLoop(true);
-        SoundManager.Instance.Play(SoundManager.Sound.Move);
+        SoundManager.Instance.Play(SoundName.Move);
         _currentPositionIndex = 0; // По умолчанию возвращаем к нулю
         OnStartMoving?.Invoke(this, EventArgs.Empty); // Запустим событие Начал двигаться 
         ActionStart(onActionComplete); // Вызовим базовую функцию СТАРТ ДЕЙСТВИЯ // Вызываем этот метод в конце после всех настроек т.к. в этом методе есть EVENT и он должен запускаться после всех настроек

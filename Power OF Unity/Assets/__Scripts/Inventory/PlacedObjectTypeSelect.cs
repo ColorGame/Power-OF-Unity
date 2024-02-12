@@ -110,7 +110,7 @@ public class PlacedObjectTypeSelect : MonoBehaviour // Выбранный Тип Размещаемог
 
         buttonTransform.GetComponent<Button>().onClick.AddListener(() => //Добавим событие при нажатии на нашу кнопку// AddListener() в аргумент должен получить делегат- ссылку на функцию. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
         {
-            PickUpDropSystem.Instance.CreatePlacedObject(buttonTransform.position, placedObjectTypeSO); // Создадим нужный объект в позиции кнопки                
+            PickUpDrop.Instance.CreatePlacedObject(buttonTransform.position, placedObjectTypeSO); // Создадим нужный объект в позиции кнопки                
         });
 
         MouseEnterExitEventsUI mouseEnterExitEventsUI = buttonTransform.GetComponent<MouseEnterExitEventsUI>(); // Найдем на кнопке компонент - События входа и выхода мышью 

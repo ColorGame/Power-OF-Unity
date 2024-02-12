@@ -1,8 +1,5 @@
 using Pathfinding;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетке и очки действий, получение урона
@@ -25,7 +22,7 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
 
     // Частные случаи
     private GridPositionXZ _gridPosition;
-    private HealthSystem _healthSystem;
+    private Health _healthSystem;
     private BaseAction[] _baseActionsArray; // Массив базовых действий // Будем использовать при создании кнопок   
     private Rope _unitRope;
     private int _actionPoints = ACTION_POINTS_MAX; // Очки действия
@@ -37,7 +34,7 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
 
     private void Awake()
     {
-        _healthSystem = GetComponent<HealthSystem>();
+        _healthSystem = GetComponent<Health>();
 
         if (TryGetComponent<Rope>(out Rope unitRope))
         {
@@ -246,7 +243,7 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
     {
         return _healthSystem.IsDead();
     }
-    public HealthSystem GetHealthSystem()
+    public Health GetHealthSystem()
     {
         return _healthSystem;
     }

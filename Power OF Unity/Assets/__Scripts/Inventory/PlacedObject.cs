@@ -80,7 +80,7 @@ public class PlacedObject : MonoBehaviour // Размещенный объект (создаем и разме
             float moveSpeed = 20f;
             transform.position = Vector3.Lerp(transform.position, _targetPosition, Time.deltaTime * moveSpeed);
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_targetRotation), Time.deltaTime * 15f);
-            //transform.rotation = Quaternion.Lerp(transform.rotation, PickUpDropSystem.Instance.GetPlacedObjectRotation(), Time.deltaTime * 15f);// Плавно повернем объект
+            //transform.rotation = Quaternion.Lerp(transform.rotation, PickUpDrop.Instance.GetPlacedObjectRotation(), Time.deltaTime * 15f);// Плавно повернем объект
         }
 
         if (_moveStartPosition) // Если надо переместить в начальную позиции и в конце уничтожим объект

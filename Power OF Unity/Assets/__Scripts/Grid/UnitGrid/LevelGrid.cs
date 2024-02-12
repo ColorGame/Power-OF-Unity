@@ -10,7 +10,7 @@ public class LevelGrid : MonoBehaviour // Основной скрипт который управляет СЕТК
 {
 
     public static LevelGrid Instance { get; private set; }   //(ПАТТЕРН SINGLETON) Это свойство которое может быть заданно (SET-присвоено) только этим классом, но может быть прочитан GET любым другим классом
-                                                             // instance - экземпляр, У нас будет один экземпляр LevelGrid можно сдел его static. Instance нужен для того чтобы другие методы, через него, могли подписаться на Event.
+                                                             // _instance - экземпляр, У нас будет один экземпляр LevelGrid можно сдел его static. Instance нужен для того чтобы другие методы, через него, могли подписаться на Event.
 
     public const float FLOOR_HEIGHT = 3f; // Высота этажа в уровне - это высота стенок
 

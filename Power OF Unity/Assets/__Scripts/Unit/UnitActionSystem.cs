@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static UnityEngine.UI.CanvasScaler;
 
 
 // Этот клас важен и он должен просыпаться самым первым. Настроим его, добавим в Project Settings/ Script Execution Order и поместим выше Deafault Time
@@ -12,7 +9,7 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
 {
 
     public static UnitActionSystem Instance { get; private set; }   //(ПАТТЕРН SINGLETON) Это свойство которое может быть заданно (SET-присвоено) только этим классом, но может быть прочитан GET любым другим классом
-                                                                    // instance - экземпляр, У нас будет один экземпляр UnitActionSystem можно сдел его static. Instance нужен для того чтобы другие методы, через него, могли подписаться на Event.
+                                                                    // _instance - экземпляр, У нас будет один экземпляр UnitActionSystem можно сдел его static. Instance нужен для того чтобы другие методы, через него, могли подписаться на Event.
 
     public event EventHandler OnSelectedUnitChanged; // Выбранный Юнит Изменен (когда поменяется выбранный юнит мы запустим событие Event) <Unit>-новый выбранный юнит
     public event EventHandler OnSelectedActionChanged; // Выбранное Действие Изменено (когда меняется активное действие в блоке кнопок мы запустим событие Event)
@@ -49,11 +46,24 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
 
     private void Start()
     {
-        SetSelectedUnit(_selectedUnit, _selectedUnit.GetAction<MoveAction>()); // Присвоить(Установить) выбранного юнита, Установить Выбранное Действие, 
-                                                                               // При старте в _targetUnit передается юнит по умолчанию
+        SetSelectedUnit(_selectedUnit, _selectedUnit.GetAction<MoveAction>()); // Присвоить(Установить) выбранного юнита, Установить Выбранное Действие,   // При старте в _targetUnit передается юнит по умолчанию 
 
+
+        // Пока сделала в старте так как возникает гонка
+        GameInput.Instance.OnClickAction += GameInput_OnClickAction; // Подпишемся на событие клик по мыши или геймпаду
+    }
+
+    private void OnEnable()
+    {
         UnitManager.OnAnyUnitDeadAndRemoveList += UnitManager_OnAnyUnitDeadAndRemoveList; //Подпишемся на событие Любой Юнит Умер И Удален из Списка
         TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged; // Подпишемся Ход Изменен
+        
+    }
+    private void OnDisable()
+    {
+        UnitManager.OnAnyUnitDeadAndRemoveList -= UnitManager_OnAnyUnitDeadAndRemoveList; //Подпишемся на событие Любой Юнит Умер И Удален из Списка
+        TurnSystem.Instance.OnTurnChanged -= TurnSystem_OnTurnChanged; // Подпишемся Ход Изменен
+        GameInput.Instance.OnClickAction -= GameInput_OnClickAction; // Подпишемся на событие клик по мыши или геймпаду
     }
 
     private void TurnSystem_OnTurnChanged(object sender, EventArgs e)
@@ -84,9 +94,8 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
         }
     }
 
-
-    private void Update()
-    {
+    private void GameInput_OnClickAction(object sender, EventArgs e)
+    {      
         if (_isBusy) // Если занят ... то остановить выполнение
         {
             return;
@@ -107,30 +116,27 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
             return; //Если мы выбрали юнита то TryHandleUnitSelection() вернет true. ТОГДА останавливаем метод, чтобы во время кликанья по юниту, которого хотим выбрать, предыдущий выбранный юнит не шел в место клика мышки
         }
 
-        HandleSelectedAction(); // Обработать выбранное действие        
+        HandleSelectedAction(); // Обработать выбранное действие      
     }
 
     public void HandleSelectedAction() // Обработать выбранное действие
     {
-        if (InputManager.Instance.IsMouseButtonDownThisFrame()) // При нажатии лев кнопки мыши 
+        GridPositionXZ mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseOnGameGrid.GetPositionOnlyHitVisible()); // Преобразуем позицию мыши из мирового в сеточную.
+
+        if (!_selectedAction.IsValidActionGridPosition(mouseGridPosition)) // Проверяем для нашего выбранного действия, сеточную позицию мыши на допустимость действий . Если не допустимо то...
         {
-            GridPositionXZ mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.GetPositionOnlyHitVisible()); // Преобразуем позицию мыши из мирового в сеточную.
-
-            if (!_selectedAction.IsValidActionGridPosition(mouseGridPosition)) // Проверяем для нашего выбранного действия, сеточную позицию мыши на допустимость действий . Если не допустимо то...
-            {
-                return; // Остановить выполнение  //Добавление ! и return; помогает раскрвть скобки if()
-            }
-
-            if (!_selectedUnit.TrySpendActionPointsToTakeAction(_selectedAction)) // для Выбранного Юнита ПОПРОБУЕМ Потратить Очки Действия, Чтобы Выполнить выбранное Действие. Если не можем то...
-            {
-                return; // Остановить выполнение
-            }
-
-            SetBusy(); // Установить Занятый
-            _selectedAction.TakeAction(mouseGridPosition, ClearBusy); //У выбранного действия вызовим метод "Применить Действие (Действовать)" и передадим в делегат функцию ClearBusy
-
-            OnActionStarted?.Invoke(this, EventArgs.Empty); // "?"- проверяем что !=0. Invoke вызвать (this-ссылка на объект который запускает событие "отправитель" а класс UnitActionSystemUI будет его прослушивать "обрабатывать"                     
+            return; // Остановить выполнение  //Добавление ! и return; помогает раскрвть скобки if()
         }
+
+        if (!_selectedUnit.TrySpendActionPointsToTakeAction(_selectedAction)) // для Выбранного Юнита ПОПРОБУЕМ Потратить Очки Действия, Чтобы Выполнить выбранное Действие. Если не можем то...
+        {
+            return; // Остановить выполнение
+        }
+
+        SetBusy(); // Установить Занятый
+        _selectedAction.TakeAction(mouseGridPosition, ClearBusy); //У выбранного действия вызовим метод "Применить Действие (Действовать)" и передадим в делегат функцию ClearBusy
+
+        OnActionStarted?.Invoke(this, EventArgs.Empty); // "?"- проверяем что !=0. Invoke вызвать (this-ссылка на объект который запускает событие "отправитель" а класс UnitActionSystemUI будет его прослушивать "обрабатывать"                     
     }
 
     private void SetBusy() // Установить Занятый
@@ -155,41 +161,39 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
 
     private bool TryHandleUnitSelection() // Попытка обработки выбора юнита
     {
-        if (InputManager.Instance.IsMouseButtonDownThisFrame()) // При нажатии лев кнопки мыши 
+        if (_selectedAction is GrappleAction comboAction) //Если Выбранное Действие GrappleAction то
         {
-            if (_selectedAction is GrappleAction comboAction) //Если Выбранное Действие GrappleAction то
+            switch (comboAction.GetState()) // Получим состояние КОМБО 
             {
-                switch (comboAction.GetState()) // Получим состояние КОМБО 
-                {                    
-                    case GrappleAction.State.ComboSearchEnemy:
-                    case GrappleAction.State.ComboStart:
-                        // В этих режимах нельзя выбирать другого юнита
-                        return false;
-                }
-            }
-
-            Ray ray = Camera.main.ScreenPointToRay(InputManager.Instance.GetMouseScreenPosition()); // Луч от камеры в точку где находиться курсор мыши
-            if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, _unitLayerMask)) // Вернет true если во что-то попадет. Т.к. указана маска взаимодействия то реагировать будет только на юнитов
-            {   // Проверим есть ли на объекте в который мы попали компонент  <Unit>
-                if (raycastHit.transform.TryGetComponent<Unit>(out Unit unit)) // ПРЕИМУЩЕСТВО TryGetComponent перед GetComponent в том что НЕ НАДО делать нулевую проверку. TryGetComponent - возвращает true, если компонент < > найден. Возвращает компонент указанного типа, если он существует.
-                {
-                    if (unit == _selectedUnit) // Данная проверка позволяет нажимать на выбранного юнита для выполнения _selectedAction (нажимать сквозь выбранного юнита на сеточную позиция спрятанную за ним) Если эти строки убрать то вместо выполнения _selectedAction мы просто опять выберим юнита.
-                    {
-                        // ЭТОТ ЮНИТ УЖЕ ВЫБРАН
-                        return false;
-                    }
-
-                    if (unit.IsEnemy()) // Если луч попал в врага 
-                    {
-                        // ЭТО ВРАГ ЕГО ВЫБИРАТЬ НЕ НАДО
-                        return false;
-                    }
-                    SetSelectedUnit(unit, unit.GetAction<MoveAction>()); // Объект (Юнит) в который попал луч становиться ВЫБРАННЫМ.
-                    return true;
-                }
+                case GrappleAction.State.ComboSearchEnemy:
+                case GrappleAction.State.ComboStart:
+                    // В этих режимах нельзя выбирать другого юнита
+                    return false;
             }
         }
-        return false; // если нечего не выбрали
+
+        Ray ray = Camera.main.ScreenPointToRay(GameInput.Instance.GetMouseScreenPosition()); // Луч от камеры в точку где находиться курсор мыши
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, _unitLayerMask)) // Вернет true если во что-то попадет. Т.к. указана маска взаимодействия то реагировать будет только на юнитов
+        {   // Проверим есть ли на объекте в который мы попали компонент  <Unit>
+            if (raycastHit.transform.TryGetComponent<Unit>(out Unit unit)) // ПРЕИМУЩЕСТВО TryGetComponent перед GetComponent в том что НЕ НАДО делать нулевую проверку. TryGetComponent - возвращает true, если компонент < > найден. Возвращает компонент указанного типа, если он существует.
+            {
+                if (unit == _selectedUnit) // Данная проверка позволяет нажимать на выбранного юнита для выполнения _selectedAction (нажимать сквозь выбранного юнита на сеточную позиция спрятанную за ним) Если эти строки убрать то вместо выполнения _selectedAction мы просто опять выберим юнита.
+                {
+                    // ЭТОТ ЮНИТ УЖЕ ВЫБРАН
+                    return false;
+                }
+
+                if (unit.IsEnemy()) // Если луч попал в врага 
+                {
+                    // ЭТО ВРАГ ЕГО ВЫБИРАТЬ НЕ НАДО
+                    return false;
+                }
+                SetSelectedUnit(unit, unit.GetAction<MoveAction>()); // Объект (Юнит) в который попал луч становиться ВЫБРАННЫМ.
+                return true;
+            }
+        }
+        // Не смог выбрать юнита
+        return false;
     }
 
     public void SetSelectedUnit(Unit unit, BaseAction baseAction) // Присвоить(Установить) выбранного юнита,и Установить базовое Действие, И запускаем событие   
@@ -205,7 +209,7 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
     {
         _selectedAction = baseAction;
 
-        OnSelectedActionChanged?.Invoke(this, EventArgs.Empty); // "?"- проверяем что !=0. Invoke вызвать (this-ссылка на объект который запускает событие "отправитель" а класс UnitActionSystemUI  LevelGridSystemVisual будет его прослушивать "обрабатывать")
+        OnSelectedActionChanged?.Invoke(this, EventArgs.Empty); // "?"- проверяем что !=0. Invoke вызвать (this-ссылка на объект который запускает событие "отправитель" а класс UnitActionSystemUI  LevelGridVisual будет его прослушивать "обрабатывать")
     }
     public BaseAction GetSelectedAction() // Вернуть выбранное действие
     {

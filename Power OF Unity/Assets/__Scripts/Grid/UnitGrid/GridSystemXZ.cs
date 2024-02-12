@@ -1,6 +1,6 @@
 //#define HEX_GRID_SYSTEM //Ў≈—“»√–јЌЌјя —≈“ќ„Ќјя —»—“≈ћј //  ¬ C# определен р€д директив препроцессора, оказывающих вли€ние на интерпретацию исходного кода программы компил€тором. 
 //Ёти директивы определ€ют пор€док интерпретации текста программы перед ее трансл€цией в объектный код в том исходном файле, где они по€вл€ютс€. 
-// еще 3 скрипта LevelGridSystemVisual  LevelGridSystemVisualSingle  PathfindingMonkey
+// еще 3 скрипта LevelGridVisual  LevelGridVisualSingle  PathfindingMonkey
 using System;
 using UnityEngine;
 

@@ -38,7 +38,7 @@ public class PressedBtn : MonoBehaviour , IPointerDownHandler ,IPointerClickHand
 
     public void OnPointerClick(PointerEventData eventData)
     {
-    //    OnClick();
+    //    OnClickAction();
     }
 
     public void OnPointerEnter(PointerEventData eventData)

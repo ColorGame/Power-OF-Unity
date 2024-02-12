@@ -13,7 +13,7 @@ public class MainMenuUI : MonoBehaviour // Главное меню
         // AddListener() в аргумент должен получить делегат- ссылку на функцию. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
         transform.Find("playButton").GetComponent<Button>().onClick.AddListener(() =>
         {
-            GameSceneManager.Load(GameSceneManager.Scene.GameScene_MultiFloors);
+            SceneLoader.Load(SceneName.GameScene_MultiFloors);
         });
 
         transform.Find("quitButton").GetComponent<Button>().onClick.AddListener(() =>

@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using TMPro;
 using UnityEngine;
 
@@ -16,7 +15,13 @@ public class OptionsMenagerUI : MonoBehaviour
     {
         UnitManager.OnAnyUnitDeadAndRemoveList += UnitManager_OnAnyUnitDeadAndRemoveList;
         UnitActionSystem.Instance.OnGameOver += UnitActionSystem_OnGameOver;
+        GameInput.Instance.OnMenuAlternate += GameInput_OnMenuAlternate;
         _gameEndUI.gameObject.SetActive(false);
+    }
+
+    private void GameInput_OnMenuAlternate(object sender, System.EventArgs e)
+    {
+        _optionsUI.ToggleVisible();
     }
 
     private void UnitActionSystem_OnGameOver(object sender, System.EventArgs e)
@@ -32,13 +37,5 @@ public class OptionsMenagerUI : MonoBehaviour
             _gameEndUI.gameObject.SetActive(true);
             _gameEndTextText.SetText("¬—≈ ¬–¿√» ”Õ»◊“Œ∆≈Õ€ :)");
         }
-    }
-
-    private void Update()
-    {
-        if (InputManager.Instance.IsEscButtonDownThisFrame()) // ≈ÒÎË Ì‡Ê‡Ú‡ ESC
-        {
-            _optionsUI.ToggleVisible();
-        }
-    }
+    }    
 }

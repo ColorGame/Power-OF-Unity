@@ -93,7 +93,7 @@ public class SwordAction : BaseAction // Базовое действие Меч
             hittingUnit = _unit
         }); // Запустим событие ЛЮБОЙ Начал удар мечом и в аргумент передадим в кого ударяем и кто нанносит удар (Подписчики ScreenShakeActions ДЛЯ РЕАЛИЗАЦИИ ТРЯСКИ ЭКРАНА и UnitRagdollSpawner- для определения направления поражения)
 
-        SoundManager.Instance.PlaySoundOneShot(SoundManager.Sound.Sword);
+        SoundManager.Instance.PlaySoundOneShot(SoundName.Sword);
 
         if (_targetUnit.GetStunned() && !_unit.GetStunned()) // Если враг оглушенный а я нет
         {
