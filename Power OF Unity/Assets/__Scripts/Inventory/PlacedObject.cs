@@ -1,59 +1,60 @@
-using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
-using static PlacedObjectTypeSO;
-
-public class PlacedObject : MonoBehaviour // Размещенный объект (создаем и размещаем объект на сетке)
+/// <summary>
+/// Размещенный объект. Создаем и размещаем объект на сетке
+/// </summary>
+/// <remarks>
+/// Прикрипить к перетаскиваемому объекту 
+/// </remarks>
+public class PlacedObject : MonoBehaviour 
 {
-    public static PlacedObject CreateInGrid(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY, Vector2Int gridPosition, PlacedObjectTypeSO.Dir dir, PlacedObjectTypeSO placedObjectTypeSO, Transform parent) // (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру)
+    public static PlacedObject CreateInGrid(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY, Vector2Int gridPosition, PlacedObjectTypeSO placedObjectTypeSO, Transform parent) // (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру)
     {        
         Vector3 offset = placedObjectTypeSO.GetOffsetVisualFromParent(); // вычислим смещение чтобы в дальнейшем создавать объекты в центре worldPosition
         Vector3 worldPosition = InventoryGrid.Instance.GetWorldPositionLowerLeftСornerCell(gridPosition, gridSystemXY);
-        Transform placedObjectTransform = Instantiate(placedObjectTypeSO.prefab, worldPosition, Quaternion.Euler(parent.rotation.eulerAngles.x, 0, placedObjectTypeSO.GetRotationAngle(dir)), parent); //parent.rotation.eulerAngles.x- что бы был повернут как родитель
+        Transform placedObjectTransform = Instantiate(placedObjectTypeSO.GetPrefab(), worldPosition, Quaternion.Euler(parent.rotation.eulerAngles.x, 0, 0), parent); //parent.rotation.eulerAngles.x- что бы был повернут как родитель
         PlacedObject placedObject = placedObjectTransform.GetComponent<PlacedObject>();
         placedObject._placedObjectTypeSO = placedObjectTypeSO;
-        placedObject._dir = dir;
+     
         placedObject._offsetVisualFromParent = offset;       
         placedObject.Setup();        
 
         return placedObject;
     }
 
-    public static PlacedObject CreateInWorld(Vector3 worldPosition, PlacedObjectTypeSO.Dir dir, PlacedObjectTypeSO placedObjectTypeSO, Transform parent)
+    public static PlacedObject CreateInWorld(Vector3 worldPosition,  PlacedObjectTypeSO placedObjectTypeSO, Transform parent)
     {
         Vector3 offset = placedObjectTypeSO.GetOffsetVisualFromParent(); // вычислим смещение чтобы создать объект в центре worldPosition
-        Transform placedObjectTransform = Instantiate(placedObjectTypeSO.prefab, worldPosition - offset, Quaternion.Euler(parent.rotation.eulerAngles.x, 0, placedObjectTypeSO.GetRotationAngle(dir)), parent); //parent.rotation.eulerAngles.x- что бы был повернут как родитель
+        Transform placedObjectTransform = Instantiate(placedObjectTypeSO.GetPrefab(), worldPosition - offset, Quaternion.Euler(parent.rotation.eulerAngles.x, 0, 0), parent); //parent.rotation.eulerAngles.x- что бы был повернут как родитель
 
         PlacedObject placedObject = placedObjectTransform.GetComponent<PlacedObject>();
         placedObject._placedObjectTypeSO = placedObjectTypeSO;
-        placedObject._dir = dir;
+       
         placedObject._offsetVisualFromParent = offset;        
         placedObject.Setup();
 
         return placedObject;
     }
 
-    public static PlacedObject CreateCanvas(Transform parent, Vector2 anchoredPosition, Vector2Int gridPosition, PlacedObjectTypeSO.Dir dir, PlacedObjectTypeSO placedObjectTypeSO)
+
+    public static PlacedObject CreateInCanvas(Transform parent, Vector2 anchoredPosition, Vector2Int gridPosition, PlacedObjectTypeSO placedObjectTypeSO)
     {
-        Transform placedObjectTransform = Instantiate(placedObjectTypeSO.prefab, parent);
-        placedObjectTransform.rotation = Quaternion.Euler(0, placedObjectTypeSO.GetRotationAngle(dir), 0);
+        Transform placedObjectTransform = Instantiate(placedObjectTypeSO.GetPrefab(), parent);       
         placedObjectTransform.GetComponent<RectTransform>().anchoredPosition = anchoredPosition;
 
         PlacedObject placedObject = placedObjectTransform.GetComponent<PlacedObject>();
         placedObject._placedObjectTypeSO = placedObjectTypeSO;       
-        placedObject._dir = dir;
+ 
         placedObject.Setup();
 
         return placedObject;
     }
 
+    
 
     private PlacedObjectTypeSO _placedObjectTypeSO;
     private GridSystemTiltedXY<GridObjectInventoryXY> _gridSystemXY; // Сетка в которой разместилься наш объект
-    private Vector2Int _gridPositioAnchor; // Сеточная позиция Якоря
-    private PlacedObjectTypeSO.Dir _dir;
+    private Vector2Int _gridPositioAnchor; // Сеточная позиция Якоря  
     private Vector3 _targetRotation;
     private Vector3 _targetPosition;
     private Vector3 _startPosition;
@@ -99,7 +100,7 @@ public class PlacedObject : MonoBehaviour // Размещенный объект (создаем и разме
 
     protected virtual void Setup()
     {
-        _canPlacedOnGridList = _placedObjectTypeSO.canPlacedOnGridList;
+        _canPlacedOnGridList = _placedObjectTypeSO.GetCanPlacedOnGridList();
         _visual = transform.GetChild(0); //Получим визуальный объект   
         _visual.localPosition = _offsetVisualFromParent;    // Установим в середину занимаемых ячеек наш визуальный объект (Если забыли установить вручную в префабе инвенторя)           
         _scaleOriginal = transform.localScale; // Сохраним оригинальный масштаб
@@ -157,19 +158,15 @@ public class PlacedObject : MonoBehaviour // Размещенный объект (создаем и разме
 
     public List<Vector2Int> GetOccupiesGridPositionList() // Получить список занимаемых позиций в сетке. 
     {
-        return _placedObjectTypeSO.GetGridPositionList(_gridPositioAnchor, _dir); // (в аргумент передадим его актуальную сеточную позицию и направлени)
+        return _placedObjectTypeSO.GetGridPositionList(_gridPositioAnchor); // (в аргумент передадим его актуальную сеточную позицию и направлени)
     }
 
 
     public List<Vector2Int> GetTryOccupiesGridPositionList(Vector2Int gridPosition) //Получить список позиций в сетке, которые пытается занять. (в аргумент передадим сеточную позицию где хотим разместить)
     {
-        return _placedObjectTypeSO.GetGridPositionList(gridPosition, _dir);
+        return _placedObjectTypeSO.GetGridPositionList(gridPosition);
     }
-
-    public PlacedObjectTypeSO.Dir GetDir() // Получить направление
-    {
-        return _dir;
-    }
+       
 
     /*public override string ToString()
     {

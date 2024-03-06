@@ -1,6 +1,7 @@
 
 using System;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 
 public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание объектовЫ
@@ -23,12 +24,13 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
 
     [SerializeField] private LayerMask _inventoryLayerMask; // Для инвенторя настроить слой как Inventory // Настроим на объекте где есть коллайдер    
     [SerializeField] private Transform _canvasInventoryWorld;
-    [SerializeField] private Camera _cameraUI;
+    [SerializeField] private Camera _cameraInventoryUI;
+
+    private GameInput _gameInput;
 
     private PlacedObject _placedObject; // Размещенный объект    
     private Vector3 _offset; // Смещение от мышки
-    private PlacedObjectTypeSO _placedObjectTypeSO;
-    private PlacedObjectTypeSO.Dir _dir;
+    private PlacedObjectTypeSO _placedObjectTypeSO;  
     private Plane _plane; // плоскость по которой будем перемещять захваченные объекты    
     private Vector2Int _mouseGridPosition;  // сеточная позиция мыши
     private bool _startEventOnGrabbedObjectGridExits = false; // Запущено событие (Захваченый объект покинул сетку), чтобы не запускать событие каждый кадр сделал переключатель
@@ -44,16 +46,20 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
         Instance = this;
     }
 
-    private void Start()
-    {       
-        _plane = new Plane(_canvasInventoryWorld.forward, _canvasInventoryWorld.position); // Создадим плоскость в позиции canvasInventory
+    public void Initialize(GameInput gameInput)
+    {
+        _gameInput = gameInput;
     }
 
-    private void OnEnable()
+    private void Start()
     {
-        GameInput.Instance.OnClickAction += GameInput_OnClickAction;
-    }
-    
+        Camera.main.GetUniversalAdditionalCameraData().cameraStack.Add(_cameraInventoryUI); //Добавим в стек основной камеры нашу камеру инвенторя
+        _plane = new Plane(_canvasInventoryWorld.forward, _canvasInventoryWorld.position); // Создадим плоскость в позиции canvasInventory
+
+        
+        CoreEntryPoint.Instance.gameInput.OnClickAction += GameInput_OnClickAction;
+       // _gameInput.OnClickAction += GameInput_OnClickAction;
+    }       
 
     private void GameInput_OnClickAction(object sender, EventArgs e) // Если мыш нажата 
     {
@@ -90,7 +96,7 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
 
     public void TryGrab()
     {
-        Ray ray = _cameraUI.ScreenPointToRay(GameInput.Instance.GetMouseScreenPosition()); //Возвращает луч, идущий от камеры через точку экрана где находиться курсор мыши 
+        Ray ray = _cameraInventoryUI.ScreenPointToRay(_gameInput.GetMouseScreenPosition()); //Возвращает луч, идущий от камеры через точку экрана где находиться курсор мыши 
         if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, _inventoryLayerMask)) // Вернет true если попадет в инвертарь.
         {
             _placedObject = raycastHit.transform.GetComponentInParent<PlacedObject>();
@@ -243,7 +249,7 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
         }
         else
         {
-            _placedObject = PlacedObject.CreateInWorld(worldPosition, PlacedObjectTypeSO.Dir.Down, placedObjectTypeSO, _canvasInventoryWorld); // Создадим объект
+            _placedObject = PlacedObject.CreateInWorld(worldPosition, placedObjectTypeSO, _canvasInventoryWorld); // Создадим объект
             _placedObject.Grab(); // Схватим его
             _offset = _placedObject.GetOffsetVisualFromParent(); // Чтобы объект был по центру мышки надо вычесть смещение визуала относительно родителя
             _placedObjectTypeSO = _placedObject.GetPlacedObjectTypeSO();
@@ -252,7 +258,7 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
 
     public Vector3 GetMousePositionOnPlane() // Получить позицию мыши на плоскости
     {
-        Ray ray = _cameraUI.ScreenPointToRay(GameInput.Instance.GetMouseScreenPosition());//Возвращает луч, идущий от камеры через точку экрана где находиться курсор мыши 
+        Ray ray = _cameraInventoryUI.ScreenPointToRay(_gameInput.GetMouseScreenPosition());//Возвращает луч, идущий от камеры через точку экрана где находиться курсор мыши 
         _plane.Raycast(ray, out float planeDistance); // Пересечем луч и плоскость и получим расстояние вдоль луча, где он пересекает плоскость.
         return ray.GetPoint(planeDistance); // получим точку на луче где она пересекла плоскость
     }
@@ -269,14 +275,14 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
 
     /*  public Vector3 CalculateOffsetGrab() // вычислим смещение захвата
       {
-          Ray ray = _cameraUI.ScreenPointToRay(GameInput.Instance.GetMouseScreenPosition()); //Возвращает луч, идущий от камеры через точку экрана где находиться курсор мыши 
+          Ray ray = _cameraInventoryUI.ScreenPointToRay(_gameInput.GetMouseScreenPosition()); //Возвращает луч, идущий от камеры через точку экрана где находиться курсор мыши 
           _plane.Raycast(ray, out float planeDistance); // Пересечем луч и плоскость и получим расстояние вдоль луча, где он пересекает плоскость.
           return _placedObject.transform.position - ray.GetPoint(planeDistance); // Вычислим смещение от точкой захвата и точкой  pivot на объекте.        
       }
 
       public Vector3 GetMousePosition(LayerMask layerMask) // Получить позицию мыши (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру) // При одноэтажной игре
       {
-          Ray ray = _cameraUI.ScreenPointToRay(GameInput.Instance.GetMouseScreenPosition()); // Луч от камеры в точку на экране где находиться курсор мыши
+          Ray ray = _cameraInventoryUI.ScreenPointToRay(_gameInput.GetMouseScreenPosition()); // Луч от камеры в точку на экране где находиться курсор мыши
           Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, layerMask);
           return raycastHit.point; // Если луч попадет в колайдер то Physics.Raycast будет true, и raycastHit.point вернет "Точку удара в мировом пространстве, где луч попал в коллайдер", а если false то можно вернуть какоенибудь другое нужное значение(в нашем случае вернет нулевой вектор).
       }

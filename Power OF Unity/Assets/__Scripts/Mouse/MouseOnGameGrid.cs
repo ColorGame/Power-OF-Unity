@@ -6,7 +6,7 @@ public class MouseOnGameGrid : MonoBehaviour // Класс отвечающий за положение ку
 {
 
     public static MouseOnGameGrid Instance { get; private set; }   //(ПАТТЕРН SINGLETON) Это свойство которое может быть заданно (SET-присвоено) только этим классом, но может быть прочитан GET любым другим классом
-                                                              // _instance - экземпляр, У нас будет один экземпляр MouseOnGameGrid можно сдел его static. Instance нужен для того чтобы другие методы, через него, могли подписаться на Event.
+                                                                   // _instance - экземпляр, У нас будет один экземпляр MouseOnGameGrid можно сдел его static. Instance нужен для того чтобы другие методы, через него, могли подписаться на Event.
 
     public static event EventHandler<OnMouseGridPositionChangedEventArgs> OnMouseGridPositionChanged; // Событие позиция мыши на сетке изменилось
     public class OnMouseGridPositionChangedEventArgs : EventArgs // Расширим класс событий, чтобы в аргументе события передать
@@ -17,7 +17,8 @@ public class MouseOnGameGrid : MonoBehaviour // Класс отвечающий за положение ку
 
     [SerializeField] private LayerMask _mousePlaneLayerMask; // маска слоя плоскости мыши (появится в ИНСПЕКТОРЕ)
 
-   private GridPositionXZ _mouseGridPosition;  // сеточная позиция мыши
+    private static GameInput _gameInput;
+    private GridPositionXZ _mouseGridPosition;  // сеточная позиция мыши
 
 
     private void Awake()
@@ -30,6 +31,11 @@ public class MouseOnGameGrid : MonoBehaviour // Класс отвечающий за положение ку
             return; // т.к. у нас уже есть экземпляр MouseOnGameGrid прекратим выполнение, что бы не выполнить строку ниже
         }
         Instance = this;
+    }
+
+    public void Initialize(GameInput gameInput)
+    {
+        _gameInput = gameInput;
     }
 
     private void Start()
@@ -61,14 +67,14 @@ public class MouseOnGameGrid : MonoBehaviour // Класс отвечающий за положение ку
 
     public static Vector3 GetPosition() // Получить позицию (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру) // При одноэтажной игре
     {
-        Ray ray = Camera.main.ScreenPointToRay(GameInput.Instance.GetMouseScreenPosition()); // Луч от камеры в точку на экране где находиться курсор мыши
+        Ray ray = Camera.main.ScreenPointToRay(_gameInput.GetMouseScreenPosition()); // Луч от камеры в точку на экране где находиться курсор мыши
         Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, Instance._mousePlaneLayerMask); // Instance._coverLayerMask - можно задать как смещение битов слоев 1<<6  т.к. mousePlane под 6 номером
         return raycastHit.point; // Если луч попадет в колайдер то Physics.Raycast будет true, и raycastHit.point вернет "Точку удара в мировом пространстве, где луч попал в коллайдер", а если false то можно вернуть какоенибудь другое нужное значение(в нашем случае вернет нулевой вектор).
     }
 
     public static Vector3 GetPositionOnlyHitVisible() // Получить позицию при попадании, только для видимых объектов (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру) // В некоторых отдельных случаях при отключении видимости этажа пол становиться не видимым но колайдер остается активным, и тогда мы не можем кликнуть по позиции или юниту т.к. нашему лучу мешает коллайдер
     {
-        Ray ray = Camera.main.ScreenPointToRay(GameInput.Instance.GetMouseScreenPosition()); // Луч от камеры в точку на экране где находиться курсор мыши
+        Ray ray = Camera.main.ScreenPointToRay(_gameInput.GetMouseScreenPosition()); // Луч от камеры в точку на экране где находиться курсор мыши
         RaycastHit[] raycastHitArray = Physics.RaycastAll(ray, float.MaxValue, Instance._mousePlaneLayerMask); // Сохраним массив всех попаданий луча
         System.Array.Sort(raycastHitArray, (RaycastHit raycastHitA, RaycastHit raycastHitB) => // Отсортируем элементы в нашем одномерном массиве по растоянию от точки выстрела луча (т.к. они сохраняются рандомно)
         {

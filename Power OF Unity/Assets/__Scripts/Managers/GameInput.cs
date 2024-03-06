@@ -8,18 +8,23 @@ using UnityEngine.InputSystem;
 public class GameInput   
 {
     private const string PLAYER_PREFS_BINDINGS = "InputBindings";
-    
-    private GameInput() // Конструктор private что бы нельзя было создать  new GameInput() 
+
+    public GameInput() // Конструктор что бы отследить количество созданных new T() ОН ДОЛЖЕН БЫТЬ ОДИН
     {
     }
 
-    // Тип Lazy потокобезопасная. Ленивая загрузка. Все, что вам нужно сделать, это передать делегат конструктору, который вызывает конструктор Singleton, которому передается лямбда-выражение:
-    private static readonly Lazy<GameInput> lazy = 
-        new Lazy<GameInput>(() => new GameInput());
 
-    public static GameInput Instance { get { return lazy.Value; } } 
+    /* private GameInput() // Конструктор private что бы нельзя было создать  new GameInput() 
+     {
+     }
 
+     // Тип Lazy потокобезопасная. Ленивая загрузка. Все, что вам нужно сделать, это передать делегат конструктору, который вызывает конструктор Singleton, которому передается лямбда-выражение:
+     private static readonly Lazy<GameInput> lazy =
+         new Lazy<GameInput>(() => new GameInput());
 
+     public static GameInput Instance { get { return lazy.Value; } }
+
+ */
     public event EventHandler OnClickAction;
     public event EventHandler OnMenuAlternate;
     public event EventHandler OnCameraMovementStarted;
@@ -51,26 +56,7 @@ public class GameInput
 
     private PlayerInputActions _playerInpytActions; // Объявим - Действия, вводимые игроком (NEW INPUT SYSTEM)
     private GameDevice _activeGameDevice = GameDevice.KeyboardMouse;
-
-
-    /*   private void Awake()
-       {
-           if (Instance != null)
-           {
-               Debug.LogError("Там больше, чем один Singleton" + transform + " - " + Instance);
-               Destroy(gameObject);            
-           }
-           Instance = this;
-
-           _playerInpytActions = new PlayerInputActions(); //Создадим и сохраним новый экземпляр Ввода 
-
-           if (PlayerPrefs.HasKey(PLAYER_PREFS_BINDINGS)) // Сохраненая привязка ввода
-           {
-               _playerInpytActions.LoadBindingOverridesFromJson(PlayerPrefs.GetString(PLAYER_PREFS_BINDINGS));
-           }
-           _playerInpytActions.Player.Enable(); // Откроем карту действий (мы назвали ее Player в InputActions) и включим ее, что бы использовать этот актив        
-       }*/
-
+           
 
     public void Initialize()
     {
@@ -91,6 +77,8 @@ public class GameInput
 
         _playerInpytActions.Player.CameraMovement.started += (Context) => { OnCameraMovementStarted?.Invoke(this, EventArgs.Empty); };
         _playerInpytActions.Player.CameraMovement.canceled += (Context) => { OnCameraMovementCanceled?.Invoke(this, EventArgs.Empty); };
+
+        Debug.Log("Создан и Инициализирован GameInput");
     }
 
     private void InputSystem_onActionChange(object arg1, InputActionChange inputActionChange)
@@ -146,10 +134,7 @@ public class GameInput
     }
 
 
-    /*
-       
-         
-
+        /*     
         public bool IsEscButtonDownThisFrame() // Нажата кнопка Esc в этот кадр
         {
             return _playerInpytActions.Player.MenuAlternate.WasPressedThisFrame(); //Был Нажат Этот Кадр возвращает true если на этом кадре была нажата Esc        
@@ -164,7 +149,6 @@ public class GameInput
         {
             return _playerInpytActions.Player.Click.IsPressed(); //Была Зажата Этот Кадр возвращает true если на этом кадре была Зажата левая кнопка мыши
         }
-
          */
    
 }

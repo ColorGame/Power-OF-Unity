@@ -51,8 +51,10 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
         
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         // Установите провайдера обхода так, чтобы он блокировал все узлы, которые заблокированы SingleNodeBlocker
         // за исключением SingleNodeBlocker, принадлежащего этому ЮНИТУ (мы не хотим, блокировать самих себя).
         _singleNodeBlocker = _unit.GetSingleNodeBlocker();
@@ -124,8 +126,8 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
 
             if (_currentPositionIndex >= _positionList.Count) // Если мы дошли до конца списка тогда...
             {
-                SoundManager.Instance.SetLoop(false);
-                SoundManager.Instance.Stop();
+                _soundManager.SetLoop(false);
+                _soundManager.Stop();
 
                 OnStopMoving?.Invoke(this, EventArgs.Empty); //Запустим событие Прекратил движение
                 _singleNodeBlocker.BlockAtCurrentPosition(); // Заблокирую узел на новом месте и разблокирую предыдущий
@@ -173,8 +175,8 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
             _positionList.Add(LevelGrid.Instance.GetWorldPosition(pathGridPosition)); // преобразуем pathGridPosition в мировую и добавим в _positionList
         }
 #endif
-        SoundManager.Instance.SetLoop(true);
-        SoundManager.Instance.Play(SoundName.Move);
+        _soundManager.SetLoop(true);
+        _soundManager.Play(SoundName.Move);
         _currentPositionIndex = 0; // По умолчанию возвращаем к нулю
         OnStartMoving?.Invoke(this, EventArgs.Empty); // Запустим событие Начал двигаться 
         ActionStart(onActionComplete); // Вызовим базовую функцию СТАРТ ДЕЙСТВИЯ // Вызываем этот метод в конце после всех настроек т.к. в этом методе есть EVENT и он должен запускаться после всех настроек

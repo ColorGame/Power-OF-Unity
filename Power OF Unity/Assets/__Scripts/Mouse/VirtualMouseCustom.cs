@@ -262,9 +262,15 @@ namespace UnityEngine.InputSystem.UI
             get => m_ScrollWheelAction;
             set => SetAction(ref m_ScrollWheelAction, value);
         }
-
-        protected void OnEnable()
+        
+        public void Initialize(GameInput gameInput)
         {
+            _gameInput = gameInput;
+        }
+
+
+        private void OnEnable()
+        {   
             // Перехватывать системную мышь, если она включена.
             if (m_CursorMode == CursorMode.HardwareCursorIfAvailable)
                 TryEnableHardwareCursor();
@@ -311,30 +317,13 @@ namespace UnityEngine.InputSystem.UI
             m_ScrollWheelAction.action.canceled += ScrollWheelAction_canceled;
 
             m_Canvas.sortingOrder = 100; //Canvas с более высоким порядком сортировки всегда будет отображаться над Canvas с более низким порядком сортировки. 
-
-            GameInput.Instance.OnGameDeviceChanged += GameInput_OnGameDeviceChanged;
-
+            
+            if(_gameInput!= null)
+                _gameInput.OnGameDeviceChanged += GameInput_OnGameDeviceChanged;            
 
             ResetMouseToCenter();
             UpdateVisibility();
-        }
-
-        private void ScrollWheelAction_canceled(InputAction.CallbackContext obj) { _pressedForWhile = false; }
-        private void ScrollWheelAction_performed(InputAction.CallbackContext obj) { _pressedForWhile = true; }
-        private void ScrollWheelAction_started(InputAction.CallbackContext obj)
-        {
-            // Обновите колесо прокрутки.
-            var scrollAction = m_ScrollWheelAction.action;
-            if (scrollAction != null)
-            {
-                var scrollValue = scrollAction.ReadValue<Vector2>();
-                scrollValue.x *= m_ScrollSpeed;
-                scrollValue.y *= m_ScrollSpeed;
-
-
-                InputState.Change(m_VirtualMouse.scroll, scrollValue);
-            }
-        }
+        }       
 
         protected void OnDisable()
         {
@@ -384,9 +373,25 @@ namespace UnityEngine.InputSystem.UI
         {
             // Если отписаться в OnEnable() то когда мы вызовим Hide(){gameObject.SetActive(false);} и отключим этот объект то он автоматически отпишется, и мы не сможем больше его включить, 
             // а так подписка срабатывает даже если gameObject.SetActive(false) и при смене девайса мы сможем включить этот объект  
-            GameInput.Instance.OnGameDeviceChanged -= GameInput_OnGameDeviceChanged;
+            _gameInput.OnGameDeviceChanged -= GameInput_OnGameDeviceChanged;
         }
 
+        private void ScrollWheelAction_canceled(InputAction.CallbackContext obj) { _pressedForWhile = false; }
+        private void ScrollWheelAction_performed(InputAction.CallbackContext obj) { _pressedForWhile = true; }
+        private void ScrollWheelAction_started(InputAction.CallbackContext obj)
+        {
+            // Обновите колесо прокрутки.
+            var scrollAction = m_ScrollWheelAction.action;
+            if (scrollAction != null)
+            {
+                var scrollValue = scrollAction.ReadValue<Vector2>();
+                scrollValue.x *= m_ScrollSpeed;
+                scrollValue.y *= m_ScrollSpeed;
+
+
+                InputState.Change(m_VirtualMouse.scroll, scrollValue);
+            }
+        }
 
         /// <summary>
         /// Попробуйте включить аппаратный курсор, и синхронизировать позицию с виртуальной мышью
@@ -544,6 +549,7 @@ namespace UnityEngine.InputSystem.UI
         private Action<InputAction.CallbackContext> m_ButtonActionTriggeredDelegate;
         private double m_LastTime;
         private Vector2 m_LastStickValue;
+        private GameInput _gameInput;
 
         /// <summary>
         /// Нажата в течение некоторого времени
@@ -655,7 +661,7 @@ namespace UnityEngine.InputSystem.UI
 
         private void UpdateVisibility()
         {
-            if (GameInput.Instance.GetActiveGameDevice() == GameInput.GameDevice.Gamepad)
+            if (_gameInput.GetActiveGameDevice() == GameInput.GameDevice.Gamepad)
             {
                 ResetMouseToCenter();
                 Show();

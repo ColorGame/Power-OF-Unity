@@ -1,10 +1,7 @@
 using Pathfinding;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.SocialPlatforms;
 
 public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия Расширим класс интерфейсом 
 {
@@ -23,6 +20,8 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
 
     [SerializeField] private bool _isOpen; //Открыта (дверь)
     [SerializeField] private bool _isInteractable = true; //Можно взаимодействовать (по умолчанию true)
+
+    private SoundManager _soundManager;
 
     private HashAnimationName _animBase = new HashAnimationName(); 
     private bool _isActive;
@@ -46,6 +45,9 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
         _animator = GetComponent<Animator>();
         _transformChildrenDoorArray = GetComponentsInChildren<Transform>();
         _singleNodeBlocker = GetComponent<SingleNodeBlocker>();
+
+        _soundManager = CoreEntryPoint.Instance.soundManager;
+        //Debug.Log($"Старт ДВЕРЬ" + "_Инициализация-" + _soundManager);
     }
 
 
@@ -56,6 +58,8 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
             LevelGrid.Instance.SetInteractableAtGridPosition(gridPosition, this); // в полученную сеточную позицию установим наш дочерний объект Дверь с Интерфейсом Interactable(взаимодействия)            
         }        
         UpdateStateDoor(_isOpen);
+
+       
     }
 
     private void Update()
@@ -108,7 +112,7 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
         else
         {
             // МОЖНО РЕАЛИЗОВАТЬ ЗВУК НЕУДАЧНОГО ОТКРЫВАНИЯ или запустить событие
-            SoundManager.Instance.PlaySoundOneShot(SoundName.DoorClosed);
+            _soundManager.PlaySoundOneShot(SoundName.DoorClosed);
             OnAnyDoorIsLocked?.Invoke(this, EventArgs.Empty); // Запустим событие любая дверь заперта (для реализации надписи)
         }
     }
@@ -125,7 +129,7 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
             GraphNode graphNode = LevelGrid.Instance.GetGridNode(gridPosition); // Получим проверяемый узел
             BlockManager.Instance.InternalUnblock(graphNode, _singleNodeBlocker); // Разблокируем узлы
         }
-        SoundManager.Instance.PlaySoundOneShot(SoundName.DoorOpen);
+        _soundManager.PlaySoundOneShot(SoundName.DoorOpen);
 
         // Запустим события
         OnDoorOpened?.Invoke(this, EventArgs.Empty);
@@ -157,7 +161,7 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
         _isOpen = false;
         _animator.CrossFade(_animBase.DoorClose, 0.2f);
         // _animator.SetBool("IsOpen", _isOpen); // Настроим булевую переменную "GetIsOpen". Передадим ей значение _isOpen
-        SoundManager.Instance.PlaySoundOneShot(SoundName.DoorOpen);
+        _soundManager.PlaySoundOneShot(SoundName.DoorOpen);
     }
 
     private List<GridPositionXZ> GetDoorGridPositionList() //Получить Список Сеточных позиций двери  

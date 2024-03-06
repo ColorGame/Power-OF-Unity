@@ -9,12 +9,12 @@ public static class Bootstrapper // Загрузчик
     
     public static void Execute()
     {
-        Object bootstrapEntryPoint = Object.Instantiate(Resources.Load("BootstrapEntryPoint"));// Создать префаб BootstrapEntryPoint
+        Object bootstrapEntryPoint = Object.Instantiate(Resources.Load("CoreEntryPoint"));// Создать префаб CoreEntryPoint
         Object.DontDestroyOnLoad(bootstrapEntryPoint); // и не уничтожать при загрузке другой сцены
     }
 
     /*public static void Execute()
     {
-        Object.DontDestroyOnLoad(Addressables.InstatiateAsync("BootstrapEntryPoint").WaitForCompletion()); // Создать префаб BootstrapEntryPoint и не уничтожать при загрузке другой сцены
+        Object.DontDestroyOnLoad(Addressables.InstatiateAsync("CoreEntryPoint").WaitForCompletion()); // Создать префаб CoreEntryPoint и не уничтожать при загрузке другой сцены
     }*/
 }

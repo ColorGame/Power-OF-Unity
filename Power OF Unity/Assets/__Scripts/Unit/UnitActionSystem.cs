@@ -28,6 +28,7 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
     [SerializeField] private Unit _selectedUnit; // Выбранный юнит (ПО УМОЛЧАНИЮ).Ниже сделаем общедоступный метод который будет возвращать ВЫБРАННОГО ЮНИТА
     [SerializeField] private LayerMask _unitLayerMask; // маска слоя юнитов (появится в ИНСПЕКТОРЕ) НАДО ВЫБРАТЬ Units
 
+    private GameInput _gameInput;
     private BaseAction _selectedAction; // Выбранное Действие// Будем передовать в Button
     private bool _isBusy; // Занят (булевая переменная для исключения одновременных действий)
 
@@ -44,26 +45,28 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
         Instance = this;
     }
 
+    public void Initialize(GameInput gameInput)
+    {
+        _gameInput = gameInput;
+    }
+
     private void Start()
     {
         SetSelectedUnit(_selectedUnit, _selectedUnit.GetAction<MoveAction>()); // Присвоить(Установить) выбранного юнита, Установить Выбранное Действие,   // При старте в _targetUnit передается юнит по умолчанию 
 
 
         // Пока сделала в старте так как возникает гонка
-        GameInput.Instance.OnClickAction += GameInput_OnClickAction; // Подпишемся на событие клик по мыши или геймпаду
-    }
-
-    private void OnEnable()
-    {
+        _gameInput.OnClickAction += GameInput_OnClickAction; // Подпишемся на событие клик по мыши или геймпаду
         UnitManager.OnAnyUnitDeadAndRemoveList += UnitManager_OnAnyUnitDeadAndRemoveList; //Подпишемся на событие Любой Юнит Умер И Удален из Списка
         TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged; // Подпишемся Ход Изменен
-        
     }
+
+
     private void OnDisable()
     {
         UnitManager.OnAnyUnitDeadAndRemoveList -= UnitManager_OnAnyUnitDeadAndRemoveList; //Подпишемся на событие Любой Юнит Умер И Удален из Списка
         TurnSystem.Instance.OnTurnChanged -= TurnSystem_OnTurnChanged; // Подпишемся Ход Изменен
-        GameInput.Instance.OnClickAction -= GameInput_OnClickAction; // Подпишемся на событие клик по мыши или геймпаду
+        _gameInput.OnClickAction -= GameInput_OnClickAction; // Подпишемся на событие клик по мыши или геймпаду
     }
 
     private void TurnSystem_OnTurnChanged(object sender, EventArgs e)
@@ -172,7 +175,7 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
             }
         }
 
-        Ray ray = Camera.main.ScreenPointToRay(GameInput.Instance.GetMouseScreenPosition()); // Луч от камеры в точку где находиться курсор мыши
+        Ray ray = Camera.main.ScreenPointToRay(_gameInput.GetMouseScreenPosition()); // Луч от камеры в точку где находиться курсор мыши
         if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, _unitLayerMask)) // Вернет true если во что-то попадет. Т.к. указана маска взаимодействия то реагировать будет только на юнитов
         {   // Проверим есть ли на объекте в который мы попали компонент  <Unit>
             if (raycastHit.transform.TryGetComponent<Unit>(out Unit unit)) // ПРЕИМУЩЕСТВО TryGetComponent перед GetComponent в том что НЕ НАДО делать нулевую проверку. TryGetComponent - возвращает true, если компонент < > найден. Возвращает компонент указанного типа, если он существует.

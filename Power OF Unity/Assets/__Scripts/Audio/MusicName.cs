@@ -6,5 +6,6 @@ public enum MusicName // Перечесление треков, что бы избежать строки (ПРОВЕРИТЬ 
     AssassinsBreathe,
     TheDarklands,
     KingArthur58DestinyOfTheSword,
-    GrowingUpLondinium
+    GrowingUpLondinium,
+    BackgroundGrowingDisneyStyle,
 }

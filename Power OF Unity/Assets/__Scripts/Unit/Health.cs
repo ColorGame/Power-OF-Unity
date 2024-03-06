@@ -31,7 +31,7 @@ public class Health : MonoBehaviour // Система Здоровья // Висит на юните// Можн
         if(_health == 0)
         {
             Die();
-            SoundManager.Instance.PlaySoundOneShot(SoundName.DeathCry);
+            CoreEntryPoint.Instance.soundManager.PlaySoundOneShot(SoundName.DeathCry);
         }
 
         //Debug.Log(_health);

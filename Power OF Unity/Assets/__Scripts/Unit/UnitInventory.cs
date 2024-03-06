@@ -6,7 +6,7 @@ public class UnitInventory : MonoBehaviour // Инвентарь юнита
 {
 
 
-    private WeaponTypeSO.TypeWeapon  _typeWeapon;
+    private PlacedObjectType  _typeWeapon;
 
     private void Awake()
     {

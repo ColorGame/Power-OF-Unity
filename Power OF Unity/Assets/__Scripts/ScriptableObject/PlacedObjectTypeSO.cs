@@ -1,149 +1,111 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
-public abstract class PlacedObjectTypeSO : ScriptableObject  // размещенный объект типа SO
-                                                             // abstract - НЕ позволяет создать Instance (экземпляр) этого класса.
+
+
+/// <summary>
+/// ScriptableObject, представляющий любой предмет, который можно поместить в инвентарь. 
+/// </summary>
+/// <remarks>
+/// abstract - НЕЛЬЗЯ создать экземпляр данного класса.
+/// На практике вы, скорее всего, будете использовать подкласс, такой как "WeaponPlacedObjectSO"  "ItemPlacedObjectSO" или "ModulePlacedObjectSO" "EquipmentPlacedObjectSO".
+/// </remarks>
+public abstract class PlacedObjectTypeSO : ScriptableObject,  ISerializationCallbackReceiver//ISerializationCallbackReceiver Интерфейс для получения обратных вызовов при сериализации и десериализации.Будем использовать для создания ID при сериализации
+                                                                                           //Сериализацией называется процесс записи состояния объекта (с возможной последующей передачей) в поток. Десериализация это процесс обратный сериализации – из данных,
+                                                                                           //которые находятся в потоке, мы можем восстановить состояние объекта и использовать этот объект в другом месте.
 {
-
-    public static Dir GetNextDir(Dir dir) // Вернуть следующие направление
-    {
-        switch (dir)
-        {
-            default:
-            case Dir.Down: return Dir.Left;
-            case Dir.Left: return Dir.Up;
-            case Dir.Up: return Dir.Right;
-            case Dir.Right: return Dir.Down;
-        }
-    }
-
-    public static Vector2Int GetDirForwardVector(Dir dir) // Получить направление Forward(y) вектора в зависимости от переданного состояния
-    {
-        switch (dir)
-        {
-            default:
-            case Dir.Down: return new Vector2Int(0, -1);
-            case Dir.Left: return new Vector2Int(-1, 0);
-            case Dir.Up: return new Vector2Int(0, +1);
-            case Dir.Right: return new Vector2Int(+1, 0);
-        }
-    }
-
-    public static Dir GetDir(Vector2Int from, Vector2Int to) // Получить направление от from к to
-    {
-        if (from.x < to.x)
-        {
-            return Dir.Right;
-        }
-        else
-        {
-            if (from.x > to.x)
-            {
-                return Dir.Left;
-            }
-            else
-            {
-                if (from.y < to.y)
-                {
-                    return Dir.Up;
-                }
-                else
-                {
-                    return Dir.Down;
-                }
-            }
-        }
-    }
-
-    public enum Dir // Направления объекта
-    {
-        Down,
-        Left,
-        Up,
-        Right,
-    }
-      
-
-    public string nameString;
-    public Transform prefab;// { get; set; }
-    public Transform visual;// { get; set; }
-    public int widthX; // Сколько занимает клеток в ширину Х
-    public int heightY; // и высоту У    
-    [Range(0, 100)] public int weight; // Вес объекта
-    public int rangeActionInCels;
-    public List<GridName> canPlacedOnGridList; // Сетки где можно разместить наш объект
-
-
-
+    [Tooltip("Автоматически сгенерированный UUID для сохранения/загрузки. Очистите это поле, если вы хотите сгенерировать новое.")]
+    [SerializeField] private string _itemID = null;
+    [Tooltip("Тип размещаемого объекта")]
+    [SerializeField] private PlacedObjectType _placedObjectType;
+    [Tooltip("Префаб размещаемого объекта")]
+    [SerializeField] private Transform _prefab;
+    [Tooltip("Визуальная часть размещаемого объекта")]
+    [SerializeField] private Transform _visual;
+    [Tooltip("Сколько занимает клеток в ширину Х")]
+    [SerializeField] private int _widthX; 
+    [Tooltip("Сколько занимает клеток в высоту У")]
+    [SerializeField] private int _heightY;
+    [Tooltip("Список сеток на которые можно разместить наш объект")]
+    [SerializeField] private List<GridName> _canPlacedOnGridList; 
+    [Tooltip("Вес размещаемого объекта в килограммах")]
+    [Range(0, 50)][SerializeField] private int _weight; 
+       
 
     public virtual string GetToolTip() // Получить всплывающую подсказку // virtual- переопределим в наследуемых классах
     {
-        return nameString;
+        return GetName();
     }
-
-    public int GetRotationAngle(Dir dir) // Получить угол поворота в зависимости от направления
-    {
-        switch (dir)
-        {
-            default:
-            case Dir.Down: return 0;
-            case Dir.Left: return 90;
-            case Dir.Up: return 180;
-            case Dir.Right: return 270;
-        }
-    }
-
-    public Vector2Int GetRotationOffset(Dir dir) // Получить смещение объекта в зависимости от того как мы его повернули (крутим вокруг ниж. лев угла и надо чтоб объект всегда оставолся в центре))
-    {
-        switch (dir)
-        {
-            default:
-            case Dir.Down: return new Vector2Int(0, 0);
-            case Dir.Left: return new Vector2Int(0, widthX);
-            case Dir.Up: return new Vector2Int(widthX, heightY);
-            case Dir.Right: return new Vector2Int(heightY, 0);
-        }
-    }
-
+       
+    /// <summary>
+    /// Смещение визуальной части относительно родителя
+    /// </summary>
     public Vector3 GetOffsetVisualFromParent()
     {        
-        float x = InventoryGrid.Instance.GetCellSize() * widthX / 2; // Размер ячейки умножим на количество ячеек, которое занимает наш объект по Х и делим пополам
-        float y = InventoryGrid.Instance.GetCellSize() * heightY / 2;
+        float x = InventoryGrid.Instance.GetCellSize() * _widthX / 2; // Размер ячейки умножим на количество ячеек, которое занимает наш объект по Х и делим пополам
+        float y = InventoryGrid.Instance.GetCellSize() * _heightY / 2;
 
         return new Vector3(x, y, 0);
     }
 
-    public List<Vector2Int> GetGridPositionList(Vector2Int gridPosition, Dir dir) // Список сеточных позиций которые занимает объект относительно переданной сеточной позиции и направлении объекта
+    /// <summary>
+    /// Список сеточных позиций которые занимает объект относительно переданной сеточной позиции
+    /// </summary>
+    public List<Vector2Int> GetGridPositionList(Vector2Int gridPosition)
     {
         List<Vector2Int> gridPositionList = new List<Vector2Int>();
-        switch (dir)
+       
+        for (int x = 0; x < _widthX; x++)
         {
-            default:
-            case Dir.Down: // Состояние по умолчанию
-            case Dir.Up: 
-                for (int x = 0; x < widthX; x++)
-                {
-                    for (int y = 0; y < heightY; y++)
-                    {
-                        gridPositionList.Add(gridPosition + new Vector2Int(x, y));
-                    }
-                }
-                break;
-            case Dir.Left:
-            case Dir.Right:
-                for (int x = 0; x < heightY; x++)
-                {
-                    for (int y = 0; y < widthX; y++)
-                    {
-                        gridPositionList.Add(gridPosition + new Vector2Int(x, y));
-                    }
-                }
-                break;
+            for (int y = 0; y < _heightY; y++)
+            {
+                gridPositionList.Add(gridPosition + new Vector2Int(x, y));
+            }
         }
         return gridPositionList;
+    }
+
+    public string GetName()
+    {
+      return  PlacedObjectTypeBaseStatsSO.Instance.GetNamePlacedObject(_placedObjectType);
+    }
+
+    public PlacedObjectType GetPlacedObjectType()
+    {
+        return _placedObjectType;
+    }
+
+    public Transform GetPrefab()
+    {
+        return _prefab;
+    }
+
+    public Transform GetVisual()
+    {
+        return _visual;
+    }
+
+    /// <summary>
+    /// Список сеток на которые можно разместить наш объект
+    /// </summary>
+    public List<GridName> GetCanPlacedOnGridList()
+    {
+        return _canPlacedOnGridList;
+    }
+
+    void ISerializationCallbackReceiver.OnBeforeSerialize()
+    {
+        // Сгенерируйте и сохраните новый UUID, если он пуст или там просто пустые пробелы.
+        if (string.IsNullOrWhiteSpace(_itemID))
+        {
+            _itemID = Guid.NewGuid().ToString();
+        }
+    }
+
+    void ISerializationCallbackReceiver.OnAfterDeserialize()
+    {
+        // Требуется ISerializationCallbackReceiver, но нам не нужно ничего с этим делать.
     }
 
 }

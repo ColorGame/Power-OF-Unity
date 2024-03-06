@@ -1,14 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class SoundManager : MonoBehaviour // Менеджер ЗВУКА
 {
-
-    public static SoundManager Instance { get; private set; }//(ОДНОЭЛЕМЕНТНЫЙ ПАТТЕРН SINGLETON) Это свойство которое может быть заданно (SET-присвоено) только этим классом, но может быть прочитан GET любым другим классом
-                                                             // _instance - экземпляр, У нас будет один экземпляр ResourceManager можно сдел его static. Instance нужен для того чтобы другие методы, через него, могли подписаться на Event.
-                                                             // static Это значит то, что данная сущность принадлежит не конкретному объекту класса, а всему классу, как типу данных. Другими словами, если обычное поле класса принадлежит объекту, и у каждого конкретного объекта есть как бы своя копия данного поля, то статическое поле одно для всего класса.
-   
 
     private AudioSource audioSource; // Компонент источника звука (висит на SoundManager в сцене)
     private Dictionary<SoundName, AudioClip> soundAudioClipDictionary; // Словарь Звуковой Аудио-клип(состояние Звука - ключ, Аудиоклип- -значение)
@@ -16,9 +10,6 @@ public class SoundManager : MonoBehaviour // Менеджер ЗВУКА
 
     private void Awake()
     {
-
-        Instance = this; //созданим экземпляр класса
-
         audioSource = GetComponent<AudioSource>(); // Получим компонент источника звука
 
         volume = PlayerPrefs.GetFloat("soundVolume", .5f); // Загрузим громкость из сохранения
@@ -68,7 +59,7 @@ public class SoundManager : MonoBehaviour // Менеджер ЗВУКА
         audioSource.Play();
     }
     public void Stop()
-    {       
+    {
         audioSource.Stop();
         audioSource.clip = null;
     }

@@ -17,24 +17,24 @@ public class LookAtCamera : MonoBehaviour // Шкала здоровья будет смотреть в сто
     {
         UpdateTransform();
 
-        CameraMove.OnCameraRotateZoomStarted += CameraMove_OnCameraRotateZoomStarted;
-        CameraMove.OnCameraRotateZoomCompleted += CameraMove_OnCameraRotateZoomCompleted;
+        CameraFollow.OnCameraRotateStarted += CameraMove_OnCameraRotateZoomStarted;
+        CameraFollow.OnCameraRotateCompleted += CameraMove_OnCameraRotateZoomCompleted;
+
+        CameraFollow.OnCameraZoomStarted += CameraMove_OnCameraRotateZoomStarted;
+        CameraFollow.OnCameraZoomCompleted += CameraMove_OnCameraRotateZoomCompleted;
     }
 
     private void OnDisable()
     {
-        CameraMove.OnCameraRotateZoomStarted -= CameraMove_OnCameraRotateZoomStarted;
-        CameraMove.OnCameraRotateZoomCompleted -= CameraMove_OnCameraRotateZoomCompleted;
-    }
-    private void CameraMove_OnCameraRotateZoomCompleted(object sender, System.EventArgs e)
-    {
-        _updateTransformStarted= false;
-    }
+        CameraFollow.OnCameraRotateStarted -= CameraMove_OnCameraRotateZoomStarted;
+        CameraFollow.OnCameraRotateCompleted -= CameraMove_OnCameraRotateZoomCompleted;
 
-    private void CameraMove_OnCameraRotateZoomStarted(object sender, System.EventArgs e)
-    {
-        _updateTransformStarted = true;
+        CameraFollow.OnCameraZoomStarted -= CameraMove_OnCameraRotateZoomStarted;
+        CameraFollow.OnCameraZoomCompleted -= CameraMove_OnCameraRotateZoomCompleted;
     }
+    private void CameraMove_OnCameraRotateZoomCompleted(object sender, System.EventArgs e) { _updateTransformStarted = false; }
+    private void CameraMove_OnCameraRotateZoomStarted(object sender, float e) { _updateTransformStarted = true; }
+    private void CameraMove_OnCameraRotateZoomStarted(object sender, System.EventArgs e) { _updateTransformStarted = true; }
 
     private void LateUpdate() // будем выполнять после всех Update чтобы сначала переместились юниты а потом повернулась UI
     {
@@ -50,13 +50,13 @@ public class LookAtCamera : MonoBehaviour // Шкала здоровья будет смотреть в сто
         }// 1 МЕТОД//}*/
 
         // 2 ЛУЧШИЙ МЕТОД//{  в данном методе UI будет паралелен рамкам экрана
-       
+
         if (_updateTransformStarted) // удем обнавлять положение только при движении камеры
             UpdateTransform();
     }
 
     private void UpdateTransform()
     {
-        transform.forward = _cameraTransform.forward; // можно использовать rotetion, но это кваторноон и они немного сложнее чем Vector3
+        transform.forward = _cameraTransform.forward; // можно использовать rotetion, но это кватернион и они немного сложнее чем Vector3
     }
 }

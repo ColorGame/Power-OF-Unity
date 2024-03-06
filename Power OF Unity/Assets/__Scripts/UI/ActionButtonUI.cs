@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
-using static LevelGridVisual;
-using System;
 
 public class ActionButtonUI : MonoBehaviour // Обрабатываем логику нажатия на кнопку. Лежит на самой кнопке
 {

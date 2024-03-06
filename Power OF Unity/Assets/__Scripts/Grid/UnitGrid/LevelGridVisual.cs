@@ -62,7 +62,7 @@ public class LevelGridVisual : MonoBehaviour //—еточна€ система визуализации  ¬и
 
     private void Start()
     {
-        _gridSystemVisualSingleArray = new LevelGridVisualSingle[ // создаем массив определенного размером widthX на heightY  и FloorAmount
+        _gridSystemVisualSingleArray = new LevelGridVisualSingle[ // создаем массив определенного размером _widthX на _heightY  и FloorAmount
             LevelGrid.Instance.GetWidth(),
             LevelGrid.Instance.GetHeight(),
             LevelGrid.Instance.GetFloorAmount()

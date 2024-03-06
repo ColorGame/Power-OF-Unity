@@ -41,7 +41,9 @@ public class ShootAction : BaseAction
     private LayerMask _smokeLayerMask ; // маска слоя Дым   
 
     private int _maxShootDistance = 7;
+    private float _percentageShootDistanceIncrease = 0.5f;// Процент увеличения дальности выстрела 
     private int _shootDamage = 6; // Величина уронв
+    private float _percentageShootDamageIncrease = 0.5f;//Процент увеличения урона от выстрела 
     private State _state; // Состояние юнита
     private float _stateTimer; //Таймер состояния
     private Unit _targetUnit; // Юнит в которого стреляем целимся
@@ -57,8 +59,10 @@ public class ShootAction : BaseAction
     private bool _haveSpotterFire = false; // Есть корректировщик огня (по умолчанию нет)
     private Unit _spotterFireUnit; // Юнит корректировщик огня    
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         _obstaclesDoorMousePlaneCoverLayerMask = LayerMask.GetMask("Obstacles", "Door", "MousePlane", "Cover");
         _smokeCoverLayerMask = LayerMask.GetMask("Smoke", "Cover"); 
         _coverLayerMask = LayerMask.GetMask("Cover"); 
@@ -195,7 +199,7 @@ public class ShootAction : BaseAction
         Transform bulletProjectilePrefabTransform = Instantiate(GameAssets.Instance.bulletProjectilePrefab, _shootPointTransform.position, Quaternion.identity); // Создадим префаб пули в точке выстрела
         BulletProjectile bulletProjectile = bulletProjectilePrefabTransform.GetComponent<BulletProjectile>(); // Вернем компонент BulletProjectile созданной пули
         
-        SoundManager.Instance.PlaySoundOneShot(SoundName.Shoot); // Воспроизведем звук 
+        _soundManager.PlaySoundOneShot(SoundName.Shoot); // Воспроизведем звук 
         if (_hit) // Если попали то
         {
             bulletProjectile.Setup(_targetUnitAimPointPosition, _hit); // В аргумент предали позицию Прицеливания целевого юнита
@@ -431,9 +435,8 @@ public class ShootAction : BaseAction
     public override int GetMaxActionDistance() // Раскроем maxShootDistance
     {
         if (_haveSpotterFire)
-        {
-            float percentageShootDistanceIncrease = 0.5f;// Процент увеличения дальности выстрела //НУЖНО НАСТРОИТЬ//
-            return _maxShootDistance + Mathf.RoundToInt(_maxShootDistance * percentageShootDistanceIncrease);
+        {           
+            return _maxShootDistance + Mathf.RoundToInt(_maxShootDistance * _percentageShootDistanceIncrease);
         }
         else
         {
@@ -445,8 +448,7 @@ public class ShootAction : BaseAction
     {
         if (_haveSpotterFire)
         {
-            float percentageShootDamageIncrease = 0.5f;// Процент увеличения ehjyf выстрела //НУЖНО НАСТРОИТЬ//
-            return _shootDamage + Mathf.RoundToInt(_shootDamage * percentageShootDamageIncrease);
+            return _shootDamage + Mathf.RoundToInt(_shootDamage * _percentageShootDamageIncrease);
         }
         else
         {

@@ -36,8 +36,10 @@ public abstract class GrenadeAction : BaseAction // Граната ДЕйствие. Наследует 
         _grenadeProjectile = GameAssets.Instance.grenadeProjectilePrefab.GetComponent<GrenadeProjectile>();
     }
 
-    protected void Start()
+    protected override void Start()
     {
+        base.Start();
+
         _handleAnimationEvents.OnAnimationTossGrenadeEventStarted += _handleAnimationEvents_OnAnimationTossGrenadeEventStarted; // Подпишемся на событие "В анимации "Бросок гранаты" стартовало событие"
     }
 
@@ -89,7 +91,7 @@ public abstract class GrenadeAction : BaseAction // Граната ДЕйствие. Наследует 
             case State.GrenadeBefore:
 
                 _state = State.GrenadeInstantiate;
-                SoundManager.Instance.PlaySoundOneShot(SoundName.GrenadeThrow);
+                _soundManager.PlaySoundOneShot(SoundName.GrenadeThrow);
                 //float grenadeInstantiateStateTime = 0.5f; // Для избежания магических чисель введем переменную  Продолжительность Состояния Создание Гранаты //НУЖНО НАСТРОИТЬ// Можно ЗДЕСЬ настроить время создания ГРАНАТЫ (сейчас использую AnimationEvent)
                 //_musicTimer = grenadeInstantiateStateTime;                               
 

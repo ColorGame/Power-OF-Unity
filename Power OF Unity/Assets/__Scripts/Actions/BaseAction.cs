@@ -13,7 +13,8 @@ public abstract class BaseAction : MonoBehaviour    //Базовое Действие Этот клас
 
     protected Unit _unit; // Юнит на котором лежит Выбранное Действие
     protected bool _isActive; // Булевая переменная. Что бы исключить паралельное выполнение нескольких действий
-                              
+
+    protected SoundManager _soundManager;
 
     //Буду использовать встроенный делегат Action вместо - //public delegate void ActionCompleteDelegate(); //завершение действия // Объявляем делегат который не принимает аргумент и возвращает пустоту
     protected Action _onActionComplete; //(по завершении действия)// Объявляю делегат в пространстве имен - using System;
@@ -25,6 +26,11 @@ public abstract class BaseAction : MonoBehaviour    //Базовое Действие Этот клас
     protected virtual void Awake() // protected virtual- обозначает что можно переопределить в дочерних классах
     {
         _unit = GetComponent<Unit>();
+    }
+
+    protected virtual void Start()
+    {
+        _soundManager = CoreEntryPoint.Instance.soundManager;
     }
 
     public abstract string GetActionName(); // Вернуть имя действия // abstract - вынуждает реализовывать в каждом подклассе и в базовом должно иметь пустое тело.

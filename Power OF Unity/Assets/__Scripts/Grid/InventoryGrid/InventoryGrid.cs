@@ -244,7 +244,7 @@ public class InventoryGrid : MonoBehaviour // Сетка инверторя
                 // Создадим и разместим сохраненный объект
                 Transform parentCanvas = PickUpDrop.Instance.GetCanvasInventoryWorld();
                 GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY = GetGridSystemTiltedXY(addPlacedObject.gridName); // Получим сетку для размещения
-                PlacedObject placedObject = PlacedObject.CreateInGrid(gridSystemXY, addPlacedObject.gridPositioAnchor, PlacedObjectTypeSO.Dir.Down, addPlacedObject.placedObjectTypeSO, parentCanvas);
+                PlacedObject placedObject = PlacedObject.CreateInGrid(gridSystemXY, addPlacedObject.gridPositioAnchor, addPlacedObject.placedObjectTypeSO, parentCanvas);
                 if (!PickUpDrop.Instance.TryDrop(gridSystemXY, addPlacedObject.gridPositioAnchor, placedObject)) // Если не удалось сбросить объект на сетку то
                 {
                     placedObject.DestroySelf(); // Уничтожим этот объект

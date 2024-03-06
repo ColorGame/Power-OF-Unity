@@ -3,8 +3,7 @@ using TMPro;
 using UnityEngine;
 
 public class OptionsMenagerUI : MonoBehaviour
-{
-   [SerializeField] private OptionsUI _optionsUI;
+{  
    [SerializeField] private Transform _gameEndUI;
    [SerializeField] TextMeshProUGUI _gameEndTextText; // Текст окончания игры
 
@@ -15,14 +14,11 @@ public class OptionsMenagerUI : MonoBehaviour
     {
         UnitManager.OnAnyUnitDeadAndRemoveList += UnitManager_OnAnyUnitDeadAndRemoveList;
         UnitActionSystem.Instance.OnGameOver += UnitActionSystem_OnGameOver;
-        GameInput.Instance.OnMenuAlternate += GameInput_OnMenuAlternate;
+     
         _gameEndUI.gameObject.SetActive(false);
     }
 
-    private void GameInput_OnMenuAlternate(object sender, System.EventArgs e)
-    {
-        _optionsUI.ToggleVisible();
-    }
+    
 
     private void UnitActionSystem_OnGameOver(object sender, System.EventArgs e)
     {

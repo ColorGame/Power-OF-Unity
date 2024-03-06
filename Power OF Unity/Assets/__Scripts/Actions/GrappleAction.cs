@@ -47,8 +47,10 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
         base.Awake();
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         _state = State.ComboSearchPartner; // Установим состояние по умолчанию т.к. используем в методе GetValidActionGridPositionList
         _ropeRandererUnit = _unit.GetUnitRope().GetRopeRanderer();       
 
@@ -182,7 +184,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
             if (zOffset >= Vector3.Distance(_unitPartner.transform.position, _unitEnemy.transform.position) &&
                 zOffset >= Vector3.Distance(transform.position, _unitEnemy.transform.position)) // Веревка долетела до врага
             {
-                SoundManager.Instance.PlaySoundOneShot(SoundName.HookShoot);
+                _soundManager.PlaySoundOneShot(SoundName.HookShoot);
                 NextState(); //Следующие состояние
             }
         }
@@ -212,7 +214,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
         {
             float stunPercent = 0.3f; // Процент ОГЛУШЕНИЯ
             _unitEnemy.Stun(stunPercent); //НУЖНО НАСТРОИТЬ// Оглушим
-            SoundManager.Instance.PlaySoundOneShot(SoundName.HookPull);
+            _soundManager.PlaySoundOneShot(SoundName.HookPull);
             NextState(); //Следующие состояние
         }
     }   

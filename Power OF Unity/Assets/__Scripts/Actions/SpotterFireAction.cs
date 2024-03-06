@@ -24,8 +24,10 @@ public class SpotterFireAction : BaseAction // Действие Корректировщик огня НАСЛ
 
     private int _maxSpotterFireDistance = 1; //Максимальная дистанция выбора юнита для корректировки огня//НУЖНО НАСТРОИТЬ//
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged; // Выбранный юнит изменен
     }
 
@@ -177,7 +179,7 @@ public class SpotterFireAction : BaseAction // Действие Корректировщик огня НАСЛ
             Instantiate(GameAssets.Instance.spotterFireFXPrefab, partnerAimPoinTransform.position, Quaternion.identity ,partnerAimPoinTransform)
         };
 
-        SoundManager.Instance.PlaySoundOneShot(SoundName.Spotter);
+        _soundManager.PlaySoundOneShot(SoundName.Spotter);
 
         _partnerUnit.GetAction<ShootAction>().SetSpotterFireUnit(_unit); // Установим партнеру, Себя, как коррект. огня
         UnitActionSystem.Instance.SetSelectedUnit(_partnerUnit, _partnerUnit.GetAction<ShootAction>()); //Сделаем Партнера выделенным и выберем действие стрелять

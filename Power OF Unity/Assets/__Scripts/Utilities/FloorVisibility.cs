@@ -1,15 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class FloorVisibility : MonoBehaviour // Видимость этажа // Должна висеть на всех объектах которые хотим скрыть // Если изменить материал который поддерживает альфа канал то можно изменять прозрачность объектов
 {
-    [SerializeField] private bool dynamicFloorPosition; // Динамическая позиция этажа (для объектов которые могут перемещаться и менять этаж нахождения) // Для юнита в ИНСПЕКТОРЕ надо поставить галочку
+    [SerializeField] private bool dynamicFloorPosition = false; // Динамическая позиция этажа (для объектов которые могут перемещаться и менять этаж нахождения) // Для юнита в ИНСПЕКТОРЕ надо поставить галочку
     [SerializeField] private List<Renderer> ignoreRendererList; // Список Renderer который надо игнорировать при включении и отключении визуализации объектов // Это относиться к зеленому кругу на юните у которого своя логика отключения и включения
 
     private Renderer[] _rendererArray; // Массив Renderer дочерних объектов
     private Canvas _canvas;
     private int floor; // Этаж    
+    private bool _cameraZoomActionStarted; // Началось действие увеличения камеры
+    private float _cameraHeight;
 
     private void Awake()
     {
@@ -17,9 +18,9 @@ public class FloorVisibility : MonoBehaviour // Видимость этажа // Должна висеть
         _canvas = GetComponentInChildren<Canvas>(true); // Если на объекте нет то вернет null, ниже делаю проверку    
         if (TryGetComponent(out MoveAction moveAction)) // Если на объекте есть этот компонент то подпишемся на событие
         {
-            moveAction.OnChangedFloorsStarted += MoveAction_OnChangedFloorsStarted; 
+            moveAction.OnChangedFloorsStarted += MoveAction_OnChangedFloorsStarted;
         }
-    }   
+    }
 
     private void Start()
     {
@@ -29,19 +30,26 @@ public class FloorVisibility : MonoBehaviour // Видимость этажа // Должна висеть
         {
             Destroy(this); // Уничтожим этот скрипт что бы он просто так не занимал Update
         }
-    }    
+
+        CameraFollow.OnCameraZoomStarted += CameraFollow_OnCameraZoomStarted;
+        CameraFollow.OnCameraZoomCompleted += CameraFollow_OnCameraZoomCompleted;
+    }
+       
+
+    private void OnDestroy()
+    {
+        CameraFollow.OnCameraZoomStarted -= CameraFollow_OnCameraZoomStarted;
+        CameraFollow.OnCameraZoomCompleted -= CameraFollow_OnCameraZoomCompleted;
+    }
+    private void CameraFollow_OnCameraZoomStarted(object sender, float e) { _cameraZoomActionStarted = true; _cameraHeight = e; }
+    private void CameraFollow_OnCameraZoomCompleted(object sender, System.EventArgs e) { _cameraZoomActionStarted = false; }
 
     private void Update()
     {
-       /* if (dynamicFloorPosition) // Если объект Динамически меняет этажность то будем каждый кадр отслеживать его этаж // ДЛЯ ОПТИМИЗАЦИИ МОЖНО ИСПОЛЬЗОВАТЬ EVENT
-        {
-            floor = LevelGrid.Instance.GetFloor(transform.position);
-        }*/
-
-        float cameraHeight = CameraMove.Instance.GetCameraHeight(); // Получим высоту камеры
+        if (!_cameraZoomActionStarted) return; // Если камера не начала Zoom то выходим из апдейта
 
         float floorHeightOffset = 3f; // смещение высоты этажа // Для удобства отображения камеры
-        bool showObject = cameraHeight > LevelGrid.FLOOR_HEIGHT * floor + floorHeightOffset; // Показываемый объект при условии ( если Высота камеры больше Высоты этажа * на номер этажа + смещение)
+        bool showObject = _cameraHeight > LevelGrid.FLOOR_HEIGHT * floor + floorHeightOffset; // Показываемый объект при условии ( если Высота камеры больше Высоты этажа * на номер этажа + смещение)
 
         if (showObject || floor == 0) // Если можно показать объект или этаж нулевой (что бы если высота камера окажеться меньше cameraHeight, униты на нулевом этаже не отключались)
         {
@@ -60,7 +68,7 @@ public class FloorVisibility : MonoBehaviour // Видимость этажа // Должна висеть
             if (ignoreRendererList.Contains(renderer)) continue; // Если объект в списке исключения то пропустим его
             renderer.enabled = true;
         }
-       if(_canvas != null)
+        if (_canvas != null)
         {
             _canvas.gameObject.SetActive(true);
         }

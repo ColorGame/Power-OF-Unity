@@ -89,7 +89,7 @@ public class InteractAction : BaseAction // Действие взаимодействия
     public override void TakeAction(GridPositionXZ gridPosition, Action onActionComplete) // Переопределим TakeAction (Применить Действие (Действовать). (Делегат onActionComplete - по завершении действия). в нашем случае делегату передаем функцию ClearBusy - очистить занятость
     {
         IInteractable interactable = LevelGrid.Instance.GetInteractableAtGridPosition(gridPosition); // Получим IInteractable(интерфейс взаимодействия) из переданной сеточной позиции // НАМ БЕЗ РАЗНИЦЫ КАКОЙ ОБЪЕКТ МЫ ПОЛУЧИМ (дверь, сфера, кнопка...) - лиш бы он реализовал этот интерфейс
-        SoundManager.Instance.PlaySoundOneShot(SoundName.Interact);
+        _soundManager.PlaySoundOneShot(SoundName.Interact);
         interactable.Interact(OnInteractComplete); //Произведем Взаимодействие с полученной IInteractable(интерфейс взаимодействия) и Передадим делгат - При завершении взаимодействия (этот делегат будет вызывать сама дверь)
         _targetGridPosition = gridPosition;
         ActionStart(onActionComplete); // Вызовим базовую функцию СТАРТ ДЕЙСТВИЯ // Вызываем этот метод в конце после всех настроек т.к. в этом методе есть EVENT и он должен запускаться после всех настроек

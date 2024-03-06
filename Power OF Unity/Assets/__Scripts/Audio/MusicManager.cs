@@ -1,5 +1,6 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 public class MusicManager : MonoBehaviour   // Менеджер Фоновой музыки 
@@ -9,31 +10,33 @@ public class MusicManager : MonoBehaviour   // Менеджер Фоновой �
     private MusicName _music; // Аудио трек
     private float _musicTimer; //Таймер состояния
 
-    private AudioSource audioSource; // Компонент источника звука (висит на MusicManager в сцене)
-    private Dictionary<MusicName, AudioClip> musicAudioClipDictionary; // Словарь Звуковой Аудио-клип(состояние Звука - ключ, Аудиоклип- -значение)
-    private float volume = .5f; // Громкость по умолчанию 50%
+    private AudioSource _audioSource; // Компонент источника звука (висит на MusicManager в сцене)
+    private Array _musicNameArray;
+    private Dictionary<MusicName, AudioClip> _musicAudioClipDictionary; // Словарь Звуковой Аудио-клип(состояние Звука - ключ, Аудиоклип- -значение)
+    private float _volume = .5f; // Громкость по умолчанию 50%    
+    private System.Random _random = new System.Random();
 
     private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
+        _audioSource = GetComponent<AudioSource>();
 
-        volume = PlayerPrefs.GetFloat("musicVolume", .5f); // Загрузим громкость из сохранения
+        _volume = PlayerPrefs.GetFloat("musicVolume", .5f); // Загрузим громкость из сохранения
 
-        audioSource.volume = volume; // Установим громкость по умолчанию
+        _audioSource.volume = _volume; // Установим громкость по умолчанию
 
         // Загрузим все звуки при запуске, чтобы не искать их при воспроизведении
-        musicAudioClipDictionary = new Dictionary<MusicName, AudioClip>(); // Создадим словарь Звуковой Аудио-клип
-
-        foreach (MusicName sound in System.Enum.GetValues(typeof(MusicName))) // Переберем массив состояния звука  (GetValues(Type) - Возвращает массив значений констант в указанном перечислении.)
+        _musicAudioClipDictionary = new Dictionary<MusicName, AudioClip>(); // Создадим словарь Звуковой Аудио-клип
+        _musicNameArray = Enum.GetValues(typeof(MusicName));
+        foreach (MusicName sound in _musicNameArray) // Переберем массив состояния звука  (GetValues(Type) - Возвращает массив значений констант в указанном перечислении.)
         {
-            musicAudioClipDictionary[sound] = Resources.Load<AudioClip>(sound.ToString()); //Присвоим ключу значение - ресурс запрошенного типа, хранящийся по адресу path(путь) в папке Resources(эту папку я создал в папке Sounds).
+            _musicAudioClipDictionary[sound] = Resources.Load<AudioClip>(sound.ToString()); //Присвоим ключу значение - ресурс запрошенного типа, хранящийся по адресу path(путь) в папке Resources(эту папку я создал в папке Sounds).
         }
-    }
+    }    
 
     private void Start()
     {
-        _music= MusicName.SeasonedOak;   
-        _musicTimer = musicAudioClipDictionary[_music].length;
+        _music= RandomEnumValue<MusicName>();
+        _musicTimer = _musicAudioClipDictionary[_music].length;
         PlayMusic(_music); // Воспроизведем данный трек
     }
 
@@ -46,6 +49,14 @@ public class MusicManager : MonoBehaviour   // Менеджер Фоновой �
         {
             NextMusic(); //Следующая композиция
         }
+    }
+
+    /// <summary>
+    /// Рандомная музыка из нашего перечисления
+    /// </summary>    
+    private MusicName RandomEnumValue<MusicName>()
+    {
+        return (MusicName)_musicNameArray.GetValue(_random.Next(_musicNameArray.Length));
     }
 
     public void NextMusic() //Автомат переключения состояний
@@ -80,33 +91,33 @@ public class MusicManager : MonoBehaviour   // Менеджер Фоновой �
                 _music = MusicName.SeasonedOak;
                 break;
         }
-        audioSource.Stop();
-        _musicTimer = musicAudioClipDictionary[_music].length; // Задаем продолжительность след трека
-        PlayMusic(_music); // Воспроизведем полученный трек трек
+        _audioSource.Stop();
+        _musicTimer = _musicAudioClipDictionary[_music].length; // Задаем продолжительность след трека
+        PlayMusic(_music); // Воспроизведем полученный трек
     }
 
     public void PlayMusic(MusicName music) // Воспроизведение Звука
     {
-        audioSource.PlayOneShot(musicAudioClipDictionary[music], volume);// Воспроизводит аудиоклип и масштабирует громкость аудиоисточника по шкале громкости.
+        _audioSource.PlayOneShot(_musicAudioClipDictionary[music], _volume);// Воспроизводит аудиоклип и масштабирует громкость аудиоисточника по шкале громкости.
     }
     public void IncreaseVolume() // Увеличить громкость
     {
-        volume += .1f;
-        volume = Mathf.Clamp01(volume); // Ограничем между 0 и 1
-        audioSource.volume = volume; // Установим громкость
-        PlayerPrefs.SetFloat("musicVolume", volume); // Сохраним установленную громкость
+        _volume += .1f;
+        _volume = Mathf.Clamp01(_volume); // Ограничем между 0 и 1
+        _audioSource.volume = _volume; // Установим громкость
+        PlayerPrefs.SetFloat("musicVolume", _volume); // Сохраним установленную громкость
     }
 
     public void DecreaseVolume() // Уменьшить громкость
     {
-        volume -= .1f;
-        volume = Mathf.Clamp01(volume); // Ограничем между 0 и 1
-        audioSource.volume = volume; // Установим громкость
-        PlayerPrefs.SetFloat("musicVolume", volume); // Сохраним установленную громкость
+        _volume -= .1f;
+        _volume = Mathf.Clamp01(_volume); // Ограничем между 0 и 1
+        _audioSource.volume = _volume; // Установим громкость
+        PlayerPrefs.SetFloat("musicVolume", _volume); // Сохраним установленную громкость
     }
 
     public float GetVolume() // Получить громкость
     {
-        return volume;
+        return _volume;
     }
 }
