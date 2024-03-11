@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static ItemTypeSO;
 
 public class PlacedObjectTypeButton : MonoBehaviour // Кнопка  Типа Размещаемого Объекта // Создает кнопки для выбора инвенторя
 {
@@ -14,21 +13,32 @@ public class PlacedObjectTypeButton : MonoBehaviour // Кнопка  Типа Размещаемого
     [SerializeField] private Button _moduleButtonPanel;  // Кнопка для включения панели модуля
     [SerializeField] private List<PlacedObjectTypeSO> _ignorePlacedObjectList; // Список Объектов которые надо игнорировать при создании кнопок выделения
 
+    private Camera _cameraInventoryUI;
+    private TooltipUI _tooltipUI;
+    private PickUpDrop _pickUpDrop;
 
     private Transform[] _typeSelectContainerArray; // массив контейнеров для выбора оружия предметов и модулей
     private Dictionary<PlacedObjectTypeSO, Transform> _buttonTransformDictionary; // Словарь (Тип Размещаемого Объекта - ключ, Transform- -значение)
     private PlacedObjectTypeListSO _placedObjectTypeListSO; // Список типов Размещаемого Объекта    
     private ScrollRect _scrollRect; //Компонент прокрутки кнопок
 
+    public void Initialize(TooltipUI tooltipUI, PickUpDrop pickUpDrop)
+    {
+        _tooltipUI = tooltipUI;
+        _pickUpDrop = pickUpDrop;
+    }
+
     private void Awake()
     {
         _scrollRect = GetComponent<ScrollRect>();
+        _cameraInventoryUI = GetComponentInParent<Camera>();
+
         _placedObjectTypeListSO = Resources.Load<PlacedObjectTypeListSO>(typeof(PlacedObjectTypeListSO).Name);    // Загружает ресурс запрошенного типа, хранящийся по адресу path(путь) в папке Resources(эту папку я создал в папке ScriptableObjects).
                                                                                                                   // Что бы не ошибиться в имени пойдем другим путем. Создадим экземпляр BuildingTypeListSO (список будет один) и назавем также как и класс, потом для поиска SO будем извлекать имя класса которое совпадает с именем экземпляра
         _buttonTransformDictionary = new Dictionary<PlacedObjectTypeSO, Transform>(); // Инициализируем новый словарь
         _typeSelectContainerArray = new Transform[] { _weaponSelectContainer, _itemSelectContainer, _moduleSelectContainer };
     }
-
+   
     private void Start()
     {
         CreateTypePlacedObjectButton(); // Создать Кнопки типов Размещаемых объектов
@@ -98,9 +108,6 @@ public class PlacedObjectTypeButton : MonoBehaviour // Кнопка  Типа Размещаемого
         }
     }
 
-
-
-
     private void CreatePlacedObjectButton(PlacedObjectTypeSO placedObjectTypeSO, Transform containerTransform) // Создать Кнопки Размещаемых объектов и поместим в контейнер
     {
         Transform buttonTransform = Instantiate(GameAssets.Instance.placedObjectTypeButtonPrefab, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
@@ -113,18 +120,18 @@ public class PlacedObjectTypeButton : MonoBehaviour // Кнопка  Типа Размещаемого
 
         buttonTransform.GetComponent<Button>().onClick.AddListener(() => //Добавим событие при нажатии на нашу кнопку// AddListener() в аргумент должен получить делегат- ссылку на функцию. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
         {
-            PickUpDrop.Instance.CreatePlacedObject(buttonTransform.position, placedObjectTypeSO); // Создадим нужный объект в позиции кнопки                
+            _pickUpDrop.CreatePlacedObject(buttonTransform.position, placedObjectTypeSO); // Создадим нужный объект в позиции кнопки                
         });
 
         MouseEnterExitEventsUI mouseEnterExitEventsUI = buttonTransform.GetComponent<MouseEnterExitEventsUI>(); // Найдем на кнопке компонент - События входа и выхода мышью 
 
         mouseEnterExitEventsUI.OnMouseEnter += (object sender, EventArgs e) => // Подпишемся на событие
         {
-            TooltipUI.Instance.Show(placedObjectTypeSO.GetToolTip() + "\n" +"характеристики"); // При наведении на кнопку покажем подсказку и передадим текст
+            _tooltipUI.ShowPlacedObjectTooltip(placedObjectTypeSO.GetPlacedObjectTooltip(),(RectTransform) buttonTransform ,_cameraInventoryUI ); // При наведении на кнопку покажем подсказку и передадим текст и камеру которая рендерит эту кнопку
         };
         mouseEnterExitEventsUI.OnMouseExit += (object sender, EventArgs e) =>
         {
-            TooltipUI.Instance.Hide(); // При отведении мыши скроем подсказку
+            _tooltipUI.Hide(); // При отведении мыши скроем подсказку
         };
 
         _buttonTransformDictionary[placedObjectTypeSO] = buttonTransform; // Присвоим каждому ключу значение (Каждому типу объекта свой Трансформ кнопки созданного из шаблона)

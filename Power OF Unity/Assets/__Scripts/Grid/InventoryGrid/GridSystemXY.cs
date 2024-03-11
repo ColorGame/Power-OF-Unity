@@ -2,11 +2,13 @@ using System;
 using UnityEngine;
 
 
-
-public class GridSystemXY<TGridObject>  // Сеточная система // Стандартный класс C#// Будем использовать конструктор для создания нашей сетки поэтому он не наследует MonoBehaviour/
-                                      //<TGridObject> - Generic, для того чтобы GridSystemXY могла работать не только с GridSystemXY но и с др. передоваемыми ей типами Объектов Сетки
-                                      // Generic - позволит исользовать часть кода GridSystemXY для ПОИСКА пути (при этом нам не придется дублировать код и делать похожий класс)
-
+/// <summary>
+/// Сеточная система // Стандартный класс C# // Будем использовать конструктор для создания нашей сетки поэтому он не наследует MonoBehaviour/
+/// </summary>
+/// <remarks>
+/// <TGridObject> - Generic, для того чтобы GridSystemXY могла работать не только с GridSystemXY но и с др. передоваемыми ей типами Объектов Сетки
+/// </remarks>
+public class GridSystemXY<TGridObject> 
 {   
 
     protected int _width;     // Ширина

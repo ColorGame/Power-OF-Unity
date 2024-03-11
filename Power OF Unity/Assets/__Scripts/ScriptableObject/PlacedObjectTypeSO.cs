@@ -33,9 +33,9 @@ public abstract class PlacedObjectTypeSO : ScriptableObject,  ISerializationCall
     [Range(0, 50)][SerializeField] private int _weight; 
        
 
-    public virtual string GetToolTip() // Получить всплывающую подсказку // virtual- переопределим в наследуемых классах
+    public virtual PlacedObjectTooltip GetPlacedObjectTooltip() // Получить всплывающую подсказку длф данного размещенного объекта // virtual- переопределим в наследуемых классах
     {
-        return GetName();
+        return PlacedObjectTypeBaseStatsSO.Instance.GetTooltipPlacedObject(_placedObjectType);
     }
        
     /// <summary>
@@ -43,8 +43,8 @@ public abstract class PlacedObjectTypeSO : ScriptableObject,  ISerializationCall
     /// </summary>
     public Vector3 GetOffsetVisualFromParent()
     {        
-        float x = InventoryGrid.Instance.GetCellSize() * _widthX / 2; // Размер ячейки умножим на количество ячеек, которое занимает наш объект по Х и делим пополам
-        float y = InventoryGrid.Instance.GetCellSize() * _heightY / 2;
+        float x = InventoryGrid.GetCellSize() * _widthX / 2; // Размер ячейки умножим на количество ячеек, которое занимает наш объект по Х и делим пополам
+        float y = InventoryGrid.GetCellSize() * _heightY / 2;
 
         return new Vector3(x, y, 0);
     }
@@ -65,12 +65,7 @@ public abstract class PlacedObjectTypeSO : ScriptableObject,  ISerializationCall
         }
         return gridPositionList;
     }
-
-    public string GetName()
-    {
-      return  PlacedObjectTypeBaseStatsSO.Instance.GetNamePlacedObject(_placedObjectType);
-    }
-
+       
     public PlacedObjectType GetPlacedObjectType()
     {
         return _placedObjectType;

@@ -19,35 +19,48 @@ public class CoreEntryPoint : PersistentSingleton<CoreEntryPoint>
     public PickUpDrop pickUpDrop { get; private set; }
     public InventoryGridVisual inventoryGridVisual { get; private set; }
     public PlacedObjectTypeButton placedObjectTypeButton { get; private set; }
-    public InventoryGrid inventoryGrid { get; private set; }  
+    public InventoryGrid inventoryGrid { get; private set; }
+
 
     protected override void Awake()
     {
         base.Awake();
-        
 
         gameInput = new GameInput(); // Создадим экземпляр
         gameInput.Initialize(); // Инициализируем поля и сделаем подписки
+        jsonSavingSystem = new JsonSavingSystem();
+
 
         virtualMouseCustom = GetComponentInChildren<VirtualMouseCustom>(true);
+        soundManager = GetComponentInChildren<SoundManager>(true);
+        musicManager = GetComponentInChildren<MusicManager>(true);
+        optionsMenuUI = GetComponentInChildren<OptionsMenuUI>(true);
+        tooltipUI = GetComponentInChildren<TooltipUI>(true);
+        pickUpDrop = GetComponentInChildren<PickUpDrop>(true);
+        placedObjectTypeButton = GetComponentInChildren<PlacedObjectTypeButton>(true);
+        inventoryGrid = GetComponentInChildren<InventoryGrid>(true);
+        inventoryGridVisual = GetComponentInChildren<InventoryGridVisual>(true);
+
+
+
         if (virtualMouseCustom != null)
             virtualMouseCustom.Initialize(gameInput);
 
-        soundManager = GetComponentInChildren<SoundManager>(true);      
-
-        musicManager = GetComponentInChildren<MusicManager>(true);         
-
-        optionsMenuUI = GetComponentInChildren<OptionsMenuUI>(true);
         if (optionsMenuUI != null)
             optionsMenuUI.Initialize(gameInput, soundManager, musicManager);
 
-        tooltipUI = GetComponentInChildren<TooltipUI>(true);
-
-        pickUpDrop = GetComponentInChildren<PickUpDrop>(true);
         if(pickUpDrop != null)
-            pickUpDrop.Initialize(gameInput);
+            pickUpDrop.Initialize(gameInput, tooltipUI,inventoryGrid);
 
-        jsonSavingSystem = new JsonSavingSystem();
+        if (placedObjectTypeButton)
+            placedObjectTypeButton.Initialize(tooltipUI, pickUpDrop);
+
+        if (inventoryGrid != null)
+            inventoryGrid.Initialize(pickUpDrop,tooltipUI);
+
+        if (inventoryGridVisual != null)
+            inventoryGridVisual.Initialize(pickUpDrop, inventoryGrid);
+
 
         Debug.Log("CoreEntryPoint  Awake_CANCALED");
     }

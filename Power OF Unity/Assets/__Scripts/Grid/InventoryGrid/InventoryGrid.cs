@@ -4,25 +4,28 @@ using UnityEngine;
 
 
 public class InventoryGrid : MonoBehaviour // Сетка инверторя
-{
-    public static InventoryGrid Instance { get; private set; }
+{  
+
+    public static float cellSize;  // Размер ячейки
 
     [SerializeField] private GridParameters[] _gridParametersArray; // Массив параметров сеток ЗАДАТЬ в ИНСПЕКТОРЕ
     [SerializeField] private Transform _gridDebugObjectPrefab; // Префаб отладки сетки 
 
+    private TooltipUI _tooltipUI;
+    private PickUpDrop _pickUpDrop;
+    private Transform _canvasInventoryWorld;
+
     private List<GridSystemTiltedXY<GridObjectInventoryXY>> _gridSystemTiltedXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectInventoryXY    
 
-    private void Awake()
-    {
-        // Если ты акуратем в инспекторе то проверка не нужна
-        if (Instance != null) // Сделаем проверку что этот объект существует в еденичном екземпляре
-        {
-            Debug.LogError("There's more than one InventoryGrid!(Там больше, чем один InventoryGrid!) " + transform + " - " + Instance);
-            Destroy(gameObject); // Уничтожим этот дубликат
-            return; // т.к. у нас уже есть экземпляр InventoryGrid прекратим выполнение, что бы не выполнить строку ниже
-        }
-        Instance = this;
 
+    public void Initialize(PickUpDrop pickUpDrop, TooltipUI tooltipUI)
+    {
+        _pickUpDrop = pickUpDrop;
+        _tooltipUI = tooltipUI;
+    }
+
+    private void Awake()
+    {      
         _gridSystemTiltedXYList = new List<GridSystemTiltedXY<GridObjectInventoryXY>>(); // Инициализируем список              
 
         foreach (GridParameters gridParameters in _gridParametersArray)
@@ -33,6 +36,9 @@ public class InventoryGrid : MonoBehaviour // Сетка инверторя
             //gridSystem.CreateDebugObject(_gridDebugObjectPrefab); // Создадим наш префаб в каждой ячейки
             _gridSystemTiltedXYList.Add(gridSystem); // Добавим в список созданную сетку
         }
+
+        _canvasInventoryWorld = GetComponentInParent<Canvas>().transform;
+        cellSize = _gridSystemTiltedXYList[0].GetCellSize(); // Для всех сеток масштаб ячейки одинвковый  
     }
 
     private void Start()
@@ -64,8 +70,10 @@ public class InventoryGrid : MonoBehaviour // Сетка инверторя
             Load();
         }
     }
-
-    public bool TryGetGridSystemGridPosition(Vector3 worldPositionMouse, out GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY, out Vector2Int gridPositionMouse) //Попробуем Получим сеточную систему для заданной позиции Мыши и в случае удачи вернем ее и сеточную позицию
+    /// <summary>
+    /// Попробуем Получим сеточную систему для заданной позиции Мыши и в случае удачи вернем ее и сеточную позицию
+    /// </summary>   
+    public bool TryGetGridSystemGridPosition(Vector3 worldPositionMouse, out GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY, out Vector2Int gridPositionMouse)
     {
         gridSystemXY = null;
         gridPositionMouse = new Vector2Int(0, 0);
@@ -150,14 +158,20 @@ public class InventoryGrid : MonoBehaviour // Сетка инверторя
     //  Получим мировые координаты центра Сетки (относительно  нашей ***GridTransform)
     public Vector3 GetWorldPositionGridCenter(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWorldPositionGridCenter();
 
-    // Получим мировые координаты нижнего левого угола ячейки (относительно  нашей ***GridTransform)
+    /// <summary>
+    /// Получим мировые координаты нижнего левого угола ячейки (относительно  нашей ***GridTransform)
+    /// </summary>   
+    /// <returns></returns>
     public Vector3 GetWorldPositionLowerLeftСornerCell(Vector2Int gridPosition, GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWorldPositionLowerLeftСornerCell(gridPosition);
 
     public Vector3 GetRotationAnchorGrid(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetRotationAnchorGrid();
     public Transform GetAnchorGrid(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetAnchorGrid();
     public int GetWidth(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWidth();
     public int GetHeight(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetHeight();
-    public float GetCellSize() => _gridSystemTiltedXYList[0].GetCellSize(); // Для всех сеток масштаб ячейки одинвковый    
+    public static float GetCellSize()// (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру)
+    {
+        return cellSize;
+    }
 
     public GridSystemTiltedXY<GridObjectInventoryXY> GetGridSystemTiltedXY(GridName gridName) // Получить сетку по имени
     {
@@ -241,14 +255,13 @@ public class InventoryGrid : MonoBehaviour // Сетка инверторя
 
             foreach (AddPlacedObject addPlacedObject in listAddPlacedObject.addPlacedObjectList) // Переберем каждый Добавленный Размещенный объект в списке
             {
-                // Создадим и разместим сохраненный объект
-                Transform parentCanvas = PickUpDrop.Instance.GetCanvasInventoryWorld();
+                // Создадим и разместим сохраненный объект               
                 GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY = GetGridSystemTiltedXY(addPlacedObject.gridName); // Получим сетку для размещения
-                PlacedObject placedObject = PlacedObject.CreateInGrid(gridSystemXY, addPlacedObject.gridPositioAnchor, addPlacedObject.placedObjectTypeSO, parentCanvas);
-                if (!PickUpDrop.Instance.TryDrop(gridSystemXY, addPlacedObject.gridPositioAnchor, placedObject)) // Если не удалось сбросить объект на сетку то
+                PlacedObject placedObject = PlacedObject.CreateInGrid(gridSystemXY, addPlacedObject.gridPositioAnchor, addPlacedObject.placedObjectTypeSO, _canvasInventoryWorld , this);
+                if (!_pickUpDrop.TryDrop(gridSystemXY, addPlacedObject.gridPositioAnchor, placedObject)) // Если не удалось сбросить объект на сетку то
                 {
                     placedObject.DestroySelf(); // Уничтожим этот объект
-                    TooltipUI.Instance.Show("не удалось загрузить сохранение", new TooltipUI.TooltipTimer { timer = 3f }); // Покажем подсказку и зададим новый таймер отображения подсказки
+                    _tooltipUI.ShowShortTooltips("не удалось загрузить сохранение", new TooltipUI.TooltipTimer { timer = 3f }); // Покажем подсказку и зададим новый таймер отображения подсказки                   
                 }
             }
         }

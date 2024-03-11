@@ -3,8 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridSystemTiltedXY<TGridObject> : GridSystemXY<TGridObject>    // Наклоненная сеточная система :наследует стандартную 
-                                                                            // Учитывает наклон и поворот сетки
+/// <summary>
+/// Наклоненная сеточная система :наследует стандартную.
+/// </summary>
+/// <remarks>
+/// Учитывает наклон и поворот сетки.
+/// </remarks>
+public class GridSystemTiltedXY<TGridObject> : GridSystemXY<TGridObject>
 {
     public GridSystemTiltedXY(GridParameters gridParameters, Func<GridSystemXY<TGridObject>, Vector2Int, TGridObject> createGridObject) : base(gridParameters, createGridObject)
     {
@@ -33,7 +38,12 @@ public class GridSystemTiltedXY<TGridObject> : GridSystemXY<TGridObject>    // Н
                                                                                                                     // мы хотим что бы центр ячейки был смещен относительного нашего _anchorGridTransform  и левый угол сетки совподал с ***Grid.transform.position (для удобства создания сетки, достаточно переместить объект ***Grid в нужное место) поэтому + _offsetСenterCell,
         return _anchorGridTransform.TransformPoint(localPositionXY); // transform.TransformPoint -Преобразует position нашей ячейки из локального пространства(_anchorGridTransform) в мировое пространство(учитывая наклон поворот _anchorGridTransform). т.к. _anchorGridTransform может находиться не в (0,0) и наклонен в мировом пространмтве
     }
-    public override Vector3 GetWorldPositionLowerLeftСornerCell(Vector2Int gridPosition) // Получим мировые координаты нижнего левого угола ячейки (относительно  нашей _anchorGridTransform)
+
+    /// <summary>
+    /// Получим мировые координаты нижнего левого угола ячейки (относительно  нашей _anchorGridTransform)
+    /// </summary>  
+    /// <returns></returns>
+    public override Vector3 GetWorldPositionLowerLeftСornerCell(Vector2Int gridPosition) 
     {
         Vector3 localPositionXY = new Vector3(gridPosition.x, gridPosition.y, 0) * _cellSize;   // Получим локальные координаты нашей ячеки с учетом ее масштаба, относительно _anchorGridTransform                                                                                                  
         return _anchorGridTransform.TransformPoint(localPositionXY); // transform.TransformPoint -Преобразует position нашей ячейки из локального пространства(_anchorGridTransform) в мировое пространство(учитывая наклон поворот _anchorGridTransform). т.к. _anchorGridTransform может находиться не в (0,0) и наклонен в мировом пространмтве

@@ -8,10 +8,10 @@ using UnityEngine;
 /// </remarks>
 public class PlacedObject : MonoBehaviour 
 {
-    public static PlacedObject CreateInGrid(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY, Vector2Int gridPosition, PlacedObjectTypeSO placedObjectTypeSO, Transform parent) // (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру)
+    public static PlacedObject CreateInGrid(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY, Vector2Int gridPosition, PlacedObjectTypeSO placedObjectTypeSO, Transform parent , InventoryGrid inventoryGrid) // (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру)
     {        
         Vector3 offset = placedObjectTypeSO.GetOffsetVisualFromParent(); // вычислим смещение чтобы в дальнейшем создавать объекты в центре worldPosition
-        Vector3 worldPosition = InventoryGrid.Instance.GetWorldPositionLowerLeftСornerCell(gridPosition, gridSystemXY);
+        Vector3 worldPosition = inventoryGrid.GetWorldPositionLowerLeftСornerCell(gridPosition, gridSystemXY);
         Transform placedObjectTransform = Instantiate(placedObjectTypeSO.GetPrefab(), worldPosition, Quaternion.Euler(parent.rotation.eulerAngles.x, 0, 0), parent); //parent.rotation.eulerAngles.x- что бы был повернут как родитель
         PlacedObject placedObject = placedObjectTransform.GetComponent<PlacedObject>();
         placedObject._placedObjectTypeSO = placedObjectTypeSO;

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro; // Пространство имен для textMeshPro
+using TMPro; // Пространство имен для _shortTooltipsText
 
 public class GridDebugObject : MonoBehaviour // Отладка объекта сетки (Отображение сеточных координат и список юнитов в ячейке)
 {

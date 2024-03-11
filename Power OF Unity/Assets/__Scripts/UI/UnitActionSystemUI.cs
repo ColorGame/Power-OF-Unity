@@ -15,6 +15,8 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
     [SerializeField] private TextMeshProUGUI _actionPointsText; // Ссылка на текст очков
     [SerializeField] private Image _actionPointImage; // Картинка головы
 
+    private TooltipUI _tooltipUI;
+
     private List<ActionButtonUI> _actionButtonUIList; // Список кнопок действий
     private List<FriendlyUnitButtonUI> _friendlyUnitButonUIList; // Список кнопок Юнитов
 
@@ -26,7 +28,9 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
 
     private void Start()
     {
-        UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged; //Выбранный Юнит Изменен// подписываемся на Event из UnitActionSystem (становимся слушателями). Обозначает что мы выполняем функцию UnitActionSystem_OnSelectedUnitChanged()
+        _tooltipUI =CoreEntryPoint.Instance.tooltipUI;
+
+       UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged; //Выбранный Юнит Изменен// подписываемся на Event из UnitActionSystem (становимся слушателями). Обозначает что мы выполняем функцию UnitActionSystem_OnSelectedUnitChanged()
         UnitActionSystem.Instance.OnSelectedActionChanged += UnitActionSystem_OnSelectedActionChanged; //Выбранное Действие Изменено// подписываемся на Event Будет выполняться каждый раз когда мы меняем Базовое Действие // 
         UnitActionSystem.Instance.OnActionStarted += UnitActionSystem_OnActionStarted; // Действие Начато// подписываемся на Event// Будет выполняться каждый раз при старте действия. //
         UnitManager.OnAnyUnitDeadAndRemoveList += UnitManager_OnAnyUnitDeadAndRemoveList;// Событие Любой Юнит Умер И Удален из Списка
@@ -89,7 +93,7 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
     }
 
     /*//2//{ Второй способ скрыть кнопки когда занят действием
-    private void Show() // Показать
+    private void ShowShortTooltips() // Показать
     {
         gameObject.SetActive(true);
     }
@@ -107,7 +111,7 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
         }
         else
         {
-            Show();
+            ShowShortTooltips();
         }
     } //2//}*/
 
@@ -155,11 +159,11 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
             MouseEnterExitEventsUI mouseEnterExitEvents = actionButtonTransform.GetComponent<MouseEnterExitEventsUI>(); // Найдем на кнопке компонент - События входа и выхода мышью 
             mouseEnterExitEvents.OnMouseEnter += (object sender, EventArgs e) => // Подпишемся на событие - ПРИ ВХОДЕ мыши на кнопку. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
             {
-                TooltipUI.Instance.Show(baseAction.GetToolTip()); // При наведении на кнопку покажем подсказку и передадим текст
+                _tooltipUI.ShowShortTooltips(baseAction.GetToolTip()); // При наведении на кнопку покажем подсказку и передадим текст
             };
             mouseEnterExitEvents.OnMouseExit += (object sender, EventArgs e) => // Подпишемся на событие - ПРИ ВЫХОДЕ мыши из кнопки.
             {
-                TooltipUI.Instance.Hide(); // При отведении мыши скроем подсказку
+                _tooltipUI.Hide(); // При отведении мыши скроем подсказку
             };
 
             _actionButtonUIList.Add(actionButtonUI); // Добавим в список полученный компонент ActionButtonUI

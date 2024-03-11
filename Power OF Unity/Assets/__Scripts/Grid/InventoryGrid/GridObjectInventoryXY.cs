@@ -2,9 +2,14 @@ using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 
-public class GridObjectInventoryXY // Объект сетки (В будущем будет содержать список всех объектов которые находятся в позиции сетки) 
-                          // Стандартный класс C#// Будем использовать конструктор для создания нашей сетки поэтому он не наследует MonoBehaviour/
-                          // GridObjectInventoryXY создается в каждой ячейки сетки. Является оболочкой для хранения объектов
+
+/// <summary>
+/// Объект сетки (В будущем будет содержать список всех объектов которые находятся в позиции сетки) 
+/// </summary>
+/// <remarks>
+/// GridObjectInventoryXY создается в каждой ячейки сетки. Является оболочкой для хранения объектов
+/// </remarks>
+public class GridObjectInventoryXY 
 {
     private GridSystemXY<GridObjectInventoryXY> _gridSystem; // Сеточная система .В дженерик предаем тип GridObjectUnitXZ// Частная сеточная система которая создала этот объект (это расширение например для сетки 2-го этажа)
     private Vector2Int _gridPosition; // Положение объекта в сетке

@@ -12,10 +12,10 @@ public class WeaponTypeSO : PlacedObjectTypeSO // Оружие - объект типа SO (насле
     public int numberShotInOneAction; // Количество выстрелов за одно действие
     public float delayShot; //задержка между выстрелами
     
-    public override string GetToolTip()
+   /* public override string GetToolTip()
     {
         return""+ GetName();
-    }
+    }*/
 
   
 

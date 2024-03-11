@@ -98,7 +98,7 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
              for (int y = 0; y < LevelGrid.Instance.GetHeight(); y++)
              {
                  _gridSystemVisualSingleArray[x, y].
-                     Show(GetGridVisualTypeMaterial(GridVisualType.White));
+                     ShowShortTooltips(GetGridVisualTypeMaterial(GridVisualType.White));
              }
          }*/
 
@@ -290,7 +290,7 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
         foreach (GridPositionXZ gridPosition in gridPositionlist) // в цикле перебереи список и Покажем(включим) только те позиции которые нам передали
         {
             _gridSystemVisualSingleArray[gridPosition.x, gridPosition.z, gridPosition.floor].
-                Show(GetGridVisualTypeMaterial(gridVisualType)); // В аргумент Show предадим материал в зависимости от переданного нам события
+                Show(GetGridVisualTypeMaterial(gridVisualType)); // В аргумент ShowShortTooltips предадим материал в зависимости от переданного нам события
         }
     }
 
