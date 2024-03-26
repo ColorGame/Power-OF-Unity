@@ -10,7 +10,7 @@ public class PlacedObject : MonoBehaviour
 {
     public static PlacedObject CreateInGrid(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY, Vector2Int gridPosition, PlacedObjectTypeSO placedObjectTypeSO, Transform parent , InventoryGrid inventoryGrid) // (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру)
     {        
-        Vector3 offset = placedObjectTypeSO.GetOffsetVisualFromParent(); // вычислим смещение чтобы в дальнейшем создавать объекты в центре worldPosition
+        Vector3 offset = placedObjectTypeSO.GetOffsetVisualFromParent(); // вычислим смещение чтобы создать объект в центре worldPosition
         Vector3 worldPosition = inventoryGrid.GetWorldPositionLowerLeftСornerCell(gridPosition, gridSystemXY);
         Transform placedObjectTransform = Instantiate(placedObjectTypeSO.GetPrefab(), worldPosition, Quaternion.Euler(parent.rotation.eulerAngles.x, 0, 0), parent); //parent.rotation.eulerAngles.x- что бы был повернут как родитель
         PlacedObject placedObject = placedObjectTransform.GetComponent<PlacedObject>();
@@ -105,7 +105,7 @@ public class PlacedObject : MonoBehaviour
         _visual.localPosition = _offsetVisualFromParent;    // Установим в середину занимаемых ячеек наш визуальный объект (Если забыли установить вручную в префабе инвенторя)           
         _scaleOriginal = transform.localScale; // Сохраним оригинальный масштаб
         _startPosition = transform.position;  // Запомним стартовую позицию        
-    }
+    }  
 
     public Vector3 GetOffsetVisualFromParent()
     {

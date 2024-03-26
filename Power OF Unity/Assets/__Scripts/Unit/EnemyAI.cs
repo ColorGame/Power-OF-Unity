@@ -14,22 +14,30 @@ public class EnemyAI : MonoBehaviour // Искуственный интелект юнита
     }
 
     private State _state; // Частное состояние
+    private float _timer;
+    private UnitManager _unitManager;
+    private TurnSystem _turnSystem;
+
+    public void Initialize(UnitManager unitManager, TurnSystem turnSystem)
+    {
+        _unitManager = unitManager;
+        _turnSystem = turnSystem;
+    }
 
     private void Awake()
     {
         _state = State.WaitingForEnemyTurn; // Установим состояние "Ожидание вражеского хода" по умолчанию, т.к. игрок будет ходить первым
     }
 
-    private float _timer;
 
     private void Start()
     {
-        TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged; // Подпишемся на событие Ход Изменен
+        _turnSystem.OnTurnChanged += TurnSystem_OnTurnChanged; // Подпишемся на событие Ход Изменен
     }
 
     private void Update()
     {
-        if (TurnSystem.Instance.IsPlayerTurn()) // Проверяем это ход врага если ходит игрок то остановить выполнение (таймер работать не будет)
+        if (_turnSystem.IsPlayerTurn()) // Проверяем это ход врага если ходит игрок то остановить выполнение (таймер работать не будет)
         {
             return;
         }
@@ -50,7 +58,7 @@ public class EnemyAI : MonoBehaviour // Искуственный интелект юнита
                     else
                     {
                         // У ВРАГОВ НЕТ ДЕЙСТВИЙ КОТОРЫЕ МОЖНО ВЫПОЛНИТЬ,  ВРАЖЕСКИЙ ХОД ЗАВЕРШЕН
-                        TurnSystem.Instance.NextTurn(); // ПЕРЕЙДЕМ К СЛЕДУЮЩЕМУ ХОДУ
+                        _turnSystem.NextTurn(); // ПЕРЕЙДЕМ К СЛЕДУЮЩЕМУ ХОДУ
                     }
                 }
                 break;
@@ -67,7 +75,7 @@ public class EnemyAI : MonoBehaviour // Искуственный интелект юнита
 
     private void TurnSystem_OnTurnChanged(object seder, EventArgs emptu) // Во время смены хода установим таймер
     {
-        if (!TurnSystem.Instance.IsPlayerTurn()) // Проверим что это НЕ ход игрока
+        if (!_turnSystem.IsPlayerTurn()) // Проверим что это НЕ ход игрока
         {
             _state = State.TakingTurn; // Назначим состояние Выполнить ход (Принять ход)
             _timer = 2;
@@ -77,7 +85,7 @@ public class EnemyAI : MonoBehaviour // Искуственный интелект юнита
     private bool TryTakeEnemyAIAction(Action onEnemyAIActionComplete)   // ПОПРОБОВАТЬ Выполнить Действие Вражеского Искуственного Интелекта. В аргумент передаем делегат onEnemyAIActionComplete (Действие Вражеского Искуственного Интелекта завершено)
                                                                         // Проидем по списку врагов и выполним возможные действия
     {        
-        foreach (Unit enemyUnit in UnitManager.Instance.GetEnemyUnitList()) // В цикле переберем врагов в списке Врагов
+        foreach (Unit enemyUnit in _unitManager.GetEnemyUnitList()) // В цикле переберем врагов в списке Врагов
         {
             if (TryTakeEnemyAIAction(enemyUnit, onEnemyAIActionComplete))  // Проверим можем ли мы попробовать Выполним действие ИИ
             {

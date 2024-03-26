@@ -12,9 +12,8 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
     // Поэтому для прослушивания этого события слушателю не нужна ссылка на какую-либо конкретную единицу,
     // они могут получить доступ к событию через класс, который затем запускает одно и то же событие для каждой единицы. 
     public static event EventHandler OnAnyActionPointsChanged;  // изменении очков действий у ЛЮБОГО(Any) юнита а не только у выбранного.                                                           
-    public static event EventHandler OnAnyFriendlyUnitDamage; //Любой дружественный Юнит получил урон
-    public static event EventHandler OnAnyFriendlyUnitHealing; //Любой дружественный Юнит получил ИСЦИЛЕНИЕ
-    public static event EventHandler OnAnyUnitSpawned; // Событие Любой Рожденный(созданный) Юнит
+    public static event EventHandler OnAnyFriendlyChangeHealth; //У Любого дружественного Юнита изменилось здоровье   
+    public static event EventHandler OnAnyEnemyUnitSpawned; // Событие Любой Вражеский Рожденный(созданный) Юнит
     public static event EventHandler OnAnyUnitDead; // Событие Любой Юнит Умер
 
 
@@ -32,6 +31,20 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
     /*private int _startStunTurnNumber; //Номер очереди (хода) при старте события оглушения
     private int _durationStunEffectTurnNumber; // Продолжительность оглушающего эффекта Количество ходов*/
 
+
+    /// <summary>
+    /// Настройка ЮНИТА при запуске Миссии. (Настроим transform и gridPosition)
+    /// </summary>   
+    public void SetupTransformAndGridPosition(Transform PointSpawnTRansform)
+    {
+        // Когда Unit спавниться, настроим его положение в сетке и добовим к GridObjectUnitXZ(объектам сетки) в данной ячейки
+        transform.position = PointSpawnTRansform.position;
+        transform.rotation = PointSpawnTRansform.rotation;
+        _gridPosition = LevelGrid.Instance.GetGridPosition(PointSpawnTRansform.position); //Получим сеточную позицию в месте спавна
+        LevelGrid.Instance.AddUnitAtGridPosition(_gridPosition, this); // Зайдем в LevelGrid получим доступ к статическому экземпляру и вызовим AddUnitAtGridPosition
+    }
+
+
     private void Awake()
     {
         _healthSystem = GetComponent<Health>();
@@ -46,18 +59,20 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
         _baseActionsArray = GetComponents<BaseAction>(); // _moveAction и _spinAction также будут храниться внутри этого массива
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        // Когда Unit запускается он вычисляет свое положение в сетке и добовляет себя к GridObjectUnitXZ(объектам сетки) в данной ячейки
-        _gridPosition = LevelGrid.Instance.GetGridPosition(transform.position); //Получим позицию юнита на сетке. Для этого преобразуем мировую позицию ЮНИТА в позицию на СЕТКЕ
-        LevelGrid.Instance.AddUnitAtGridPosition(_gridPosition, this); // Зайдем в LevelGrid получим доступ к статическому экземпляру и вызовим AddUnitAtGridPosition
-
         TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged; // Подпиш. на событие Ход Изменен        
         _healthSystem.OnDead += HealthSystem_OnDead; // подписываемся на Event. Будет выполняться при смерти юнита
 
-        OnAnyUnitSpawned?.Invoke(this, EventArgs.Empty); // Запустим событие Любой Рожденный(созданный) Юнит. Событие статичное поэтому будет выполняться для всех созданных Юнитов
+        if (_isEnemy)
+            OnAnyEnemyUnitSpawned?.Invoke(this, EventArgs.Empty); // Запустим событие Любой Рожденный(созданный) Вражеский Юнит. Событие статичное поэтому будет выполняться для всех вражеских созданных Юнитов
     }
 
+    private void OnDisable()
+    {
+        TurnSystem.Instance.OnTurnChanged -= TurnSystem_OnTurnChanged;
+        _healthSystem.OnDead -= HealthSystem_OnDead;
+    }
 
     private void Update()
     {
@@ -183,7 +198,7 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
         _healthSystem.Healing(healingAmount);
         if (!_isEnemy)// Если НЕ ВРАГ то
         {
-            OnAnyFriendlyUnitHealing?.Invoke(this, EventArgs.Empty);
+            OnAnyFriendlyChangeHealth?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -192,7 +207,7 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
         _healthSystem.Damage(damageAmount);
         if (!_isEnemy)// Если НЕ ВРАГ то
         {
-            OnAnyFriendlyUnitDamage?.Invoke(this, EventArgs.Empty);
+            OnAnyFriendlyChangeHealth?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -210,7 +225,7 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
         if(_actionPoints<=0) // Если очков хода нету
         {
             _durationStunEffectTurnNumber = 3; //Нужно НАСТРОИТЬ// Оглушение будет длиться следующие 3 хода (через ход врага)
-        }*/       
+        }*/
         OnAnyActionPointsChanged?.Invoke(this, EventArgs.Empty); // запускаем событие ПОСЛЕ обнавления очков действий.
     }
 

@@ -6,53 +6,44 @@ using UnityEngine;
 // РЕШЕНИЕ //- НАСТРОИМ ПОРЯДОК ВЫПОЛНЕНИЯ СКРИПТА UnitManager и Unit , добавим в Project Settings/ Script Execution Order и поместим выполнение UnitManager выше Default Time), чтобы UnitManager запустился раньше чем сценарий Unit
 // (что бы сначала запустить слушателя в UnitManager а потом запустить само событие в Unit)
 // Иначе если скрипт Unit проснется раньше то юнит не добавиться в СПИСОК ЮНИТОВ т.к. тот еще не запустился
-public class UnitManager : MonoBehaviour // Менеджер (администратор) Юнитов
+public class UnitManager // Менеджер (администратор) Юнитов
 {
+    private const int MAX_COUNT_UNIT_ON_MISSION = 12;// Максимальное количество юнитов на миссии
 
-    public static UnitManager Instance { get; private set; }   //(ПАТТЕРН SINGLETON) Это свойство которое может быть заданно (SET-присвоено) только этим классом, но может быть прочитан GET любым другим классом
-                                                               // _instance - экземпляр, У нас будет один экземпляр UnitActionSystem можно сдел его static. Instance нужен для того чтобы другие методы, через него, могли подписаться на Event.
-
-    public static event EventHandler OnAnyUnitDeadAndRemoveList; // Событие Любой Юнит Умер И Удален из Списка
-    public static event EventHandler OnAnyEnemyUnitSpawnedAndAddList; // Событие Любой вражеский юнит ражден и добавлен в Списка
-
-    [SerializeField] private List<Unit> _enemyUnitFullList;  // Полный список Вражеских юнитов В ИНСПЕКТОРЕ ЗАКИНУТЬ ВСЕХ ВРАЖЕСКИХ ЮНИТОВ
-
-    private List<Unit> _unitList;       // Список юнитов (ОБЩИЙ)
-    private List<Unit> _friendlyUnitList;// Дружественный список юнитов
-    private List<Unit> _enemyUnitList;  // Вражеский список юнитов
-
-
-
-    private void Awake()
+    public UnitManager() // Конструктор что бы отследить количество созданных new T() ОН ДОЛЖЕН БЫТЬ ОДИН
     {
-        // Если ты акуратем в инспекторе то проверка не нужна
-        if (Instance != null) // Сделаем проверку что этот объект существует в еденичном екземпляре
-        {
-            Debug.LogError("There's more than one UnitManager!(Там больше, чем один UnitManager!) " + transform + " - " + Instance);
-            Destroy(gameObject); // Уничтожим этот дубликат
-            return; // т.к. у нас уже есть экземпляр UnitManager прекратим выполнение, что бы не выполнить строку ниже
-        }
-        Instance = this;
+    }
 
-        // Проведем инициализацию списков
-        _unitList = new List<Unit>();
-        _friendlyUnitList = new List<Unit>();
+    public  event EventHandler OnAnyUnitDeadAndRemoveList; // Событие Любой Юнит Умер И Удален из Списка
+    public  event EventHandler OnAnyEnemyUnitSpawnedAndAddList; // Событие Любой вражеский юнит ражден и добавлен в Списка
+
+    private List<Unit> _myUnitList;// список  моих юнитов
+    private List<Unit> _myUnitOnMissionList;// список моих юнитов на Миссии
+    private List<Unit> _enemyUnitList;  // список Вражеских юнитов
+
+    private TooltipUI _tooltipUI;  
+
+
+
+    public void Initialize(TooltipUI tooltipUI)
+    {
+        _tooltipUI = tooltipUI;
+
+        // Проведем инициализацию списков        
+        _myUnitList = new List<Unit>();
+        _myUnitOnMissionList = new List<Unit>();
         _enemyUnitList = new List<Unit>();
-    }
 
-    private void Start()
-    {
-        Unit.OnAnyUnitSpawned += Unit_OnAnyUnitSpawned; // Подпишемся на событие (Любой Рожденный(созданный) Юнит)  // ПРОБЛЕММА с порядком операций МЫ ПОДПИСЫВАЕМСЯ НА СОБЫТИЕ КОТОРОЕ ЗАПУСКАЕТСЯ ТОЖЕ В СТАРТЕ И КТО РАНЬШЕ ЭТО ВОПРОС  (РЕШЕНИЕ СМОТРИ В ШАПКЕ)
+        Unit.OnAnyEnemyUnitSpawned += Unit_OnAnyEnemyUnitSpawned; // Подпишемся на событие (Любой Рожденный(созданный) Юнит)
         Unit.OnAnyUnitDead += Unit_OnAnyUnitDead;  // Подпишемся на событие (Любой Мертвый Юнит)
-    }
+    }       
 
-    private void Unit_OnAnyUnitSpawned(object sender, System.EventArgs e) // При рождении юнитов распределим их по спискам
+
+    private void Unit_OnAnyEnemyUnitSpawned(object sender, System.EventArgs e) // При рождении юнитов распределим их по спискам
     {
         Unit unit = sender as Unit; // (Unit)sender - другая запись// Получим Юнита который является отправителем
 
         //Debug.Log(unit + " spawner"); // Для теста
-
-        _unitList.Add(unit); // Добавим Юнита в общий список
 
         if (unit.IsEnemy()) // Если отправитель Враг то ...
         {
@@ -61,7 +52,7 @@ public class UnitManager : MonoBehaviour // Менеджер (администратор) Юнитов
         }
         else// если нет
         {
-            _friendlyUnitList.Add(unit); // Добавим его в список Дружественных Юнитов
+            _myUnitList.Add(unit); // Добавим его в список Дружественных Юнитов
         }
 
     }
@@ -71,39 +62,51 @@ public class UnitManager : MonoBehaviour // Менеджер (администратор) Юнитов
 
         //Debug.Log(unit + " dead"); // Для теста
 
-        _unitList.Remove(unit); // Удалить Юнита из общего списка
-
         if (unit.IsEnemy()) // Если отправитель Враг то ...
         {
-            _enemyUnitList.Remove(unit); // Удалим его из списка Вражеских Юнитов
-            _enemyUnitFullList.Remove(unit);
+            _enemyUnitList.Remove(unit); // Удалим его из списка Вражеских Юнитов           
         }
         else// если нет
         {
-            _friendlyUnitList.Remove(unit); // Удалим его из списка Дружественных Юнитов
+            _myUnitList.Remove(unit); // Удалим его из списка Дружественных Юнитов
         }
 
         OnAnyUnitDeadAndRemoveList?.Invoke(this, EventArgs.Empty); // Запустим событьие
     }
 
-    public List<Unit> GetUnitList() // Откроем доступ для чтения
+    public void AddMyUnitOnMissionList(Unit unit)
     {
-        return _unitList;
+        if (_myUnitOnMissionList.Count <= Constant.MAX_COUNT_UNIT_ON_MISSION) // Проверим если количество юнитов в списке меньше МАКСТМАЛЬНОГО то добавим в список переданного юнита
+        {
+            _myUnitOnMissionList.Add(unit); 
+        }
+        else
+        {
+            _tooltipUI.ShowTooltipsFollowMouse("Все 12 мест заняты", new TooltipUI.TooltipTimer { timer = 2f }); // Покажем подсказку и зададим новый таймер отображения подсказки
+        }
     }
 
-    public List<Unit> GetFriendlyUnitList()
+    public void RemoveMyUnitOnMissionList(Unit unit)
     {
-        return _friendlyUnitList;
+        _myUnitOnMissionList.Remove(unit);
     }
 
+    public List<Unit> GetMyUnitList()
+    {
+        return _myUnitList;
+    }
+
+    public List<Unit> GetMyUnitOnMissionList()
+    {
+        return _myUnitOnMissionList;
+    }
 
     public List<Unit> GetEnemyUnitList()
     {
         return _enemyUnitList;
     }
 
-    public List<Unit> GetEnemyUnitFullList()
+    public int GetMaxCountUnitOnMission()
     {
-        return _enemyUnitFullList;
-    }
-}
+        return MAX_COUNT_UNIT_ON_MISSION;
+    }}

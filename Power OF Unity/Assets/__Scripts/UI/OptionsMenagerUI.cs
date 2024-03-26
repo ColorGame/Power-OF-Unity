@@ -3,22 +3,27 @@ using TMPro;
 using UnityEngine;
 
 public class OptionsMenagerUI : MonoBehaviour
-{  
-   [SerializeField] private Transform _gameEndUI;
-   [SerializeField] TextMeshProUGUI _gameEndTextText; // Текст окончания игры
+{
+    [SerializeField] private Transform _gameEndUI;
+    [SerializeField] TextMeshProUGUI _gameEndTextText; // Текст окончания игры
 
+    private UnitManager _unitManager;
 
+    public void Initialize(UnitManager unitManager)
+    {
+        _unitManager = unitManager;
+    }
 
 
     private void Start()
     {
-        UnitManager.OnAnyUnitDeadAndRemoveList += UnitManager_OnAnyUnitDeadAndRemoveList;
+        _unitManager.OnAnyUnitDeadAndRemoveList += UnitManager_OnAnyUnitDeadAndRemoveList;
         UnitActionSystem.Instance.OnGameOver += UnitActionSystem_OnGameOver;
-     
+
         _gameEndUI.gameObject.SetActive(false);
     }
 
-    
+
 
     private void UnitActionSystem_OnGameOver(object sender, System.EventArgs e)
     {
@@ -28,10 +33,10 @@ public class OptionsMenagerUI : MonoBehaviour
 
     private void UnitManager_OnAnyUnitDeadAndRemoveList(object sender, System.EventArgs e)
     {
-       if(UnitManager.Instance.GetEnemyUnitList().Count ==0) // проверим список врагов если их число =0
+        if (_unitManager.GetEnemyUnitList().Count == 0) // проверим список врагов если их число =0
         {
             _gameEndUI.gameObject.SetActive(true);
             _gameEndTextText.SetText("ВСЕ ВРАГИ УНИЧТОЖЕНЫ :)");
         }
-    }    
+    }
 }

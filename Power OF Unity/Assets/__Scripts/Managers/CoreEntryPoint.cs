@@ -7,7 +7,7 @@ using UnityEngine.InputSystem.UI;
 /// Ядро - Системная точка входа.
 /// Один основной объект, который никогда не уничтожается, с подсистемами в качестве дочерних, или внутри если они не наследуют MonoBehaviour
 /// </summary>
-public class CoreEntryPoint : PersistentSingleton<CoreEntryPoint>
+public class CoreEntryPoint : PersistentSingleton<CoreEntryPoint> // Пока этот объект создает Bootstrapper, НО в дальнейшем мы бкдем его создавать на первой сцене загрузки
 {
     public GameInput gameInput { get; private set; }
     public VirtualMouseCustom virtualMouseCustom { get; private set; }
@@ -20,15 +20,17 @@ public class CoreEntryPoint : PersistentSingleton<CoreEntryPoint>
     public InventoryGridVisual inventoryGridVisual { get; private set; }
     public PlacedObjectTypeButton placedObjectTypeButton { get; private set; }
     public InventoryGrid inventoryGrid { get; private set; }
+    public UnitManager unitManager { get; private set; }
 
 
     protected override void Awake()
     {
         base.Awake();
 
-        gameInput = new GameInput(); // Создадим экземпляр
-        gameInput.Initialize(); // Инициализируем поля и сделаем подписки
+        gameInput = new GameInput(); // Создадим экземпляр       
         jsonSavingSystem = new JsonSavingSystem();
+        unitManager = new UnitManager();
+
 
 
         virtualMouseCustom = GetComponentInChildren<VirtualMouseCustom>(true);
@@ -39,28 +41,44 @@ public class CoreEntryPoint : PersistentSingleton<CoreEntryPoint>
         pickUpDrop = GetComponentInChildren<PickUpDrop>(true);
         placedObjectTypeButton = GetComponentInChildren<PlacedObjectTypeButton>(true);
         inventoryGrid = GetComponentInChildren<InventoryGrid>(true);
-        inventoryGridVisual = GetComponentInChildren<InventoryGridVisual>(true);
+        inventoryGridVisual = GetComponentInChildren<InventoryGridVisual>(true);       
 
 
+        if(gameInput!=null)
+            gameInput.Initialize(); // Инициализируем поля и сделаем подписки
+        else Debug.Log("Нет GameInput");
 
         if (virtualMouseCustom != null)
             virtualMouseCustom.Initialize(gameInput);
+        else Debug.Log("Нет VirtualMouseCustom");
 
         if (optionsMenuUI != null)
             optionsMenuUI.Initialize(gameInput, soundManager, musicManager);
+        else Debug.Log("Нет OptionsMenuUI");
 
-        if(pickUpDrop != null)
+        if (tooltipUI != null)
+            tooltipUI.Initialize(virtualMouseCustom, gameInput);
+        else Debug.Log("Нет TooltipUI");
+
+        if (pickUpDrop != null)
             pickUpDrop.Initialize(gameInput, tooltipUI,inventoryGrid);
+        else Debug.Log("Нет PickUpDrop");
 
         if (placedObjectTypeButton)
             placedObjectTypeButton.Initialize(tooltipUI, pickUpDrop);
+        else Debug.Log("Нет PlacedObjectTypeButton");
 
         if (inventoryGrid != null)
             inventoryGrid.Initialize(pickUpDrop,tooltipUI);
+        else Debug.Log("Нет InventoryGrid");
 
         if (inventoryGridVisual != null)
             inventoryGridVisual.Initialize(pickUpDrop, inventoryGrid);
+        else Debug.Log("Нет InventoryGridVisual");
 
+        if (unitManager != null)
+            unitManager.Initialize(tooltipUI);
+        else Debug.Log("Нет UnitManager");
 
         Debug.Log("CoreEntryPoint  Awake_CANCALED");
     }

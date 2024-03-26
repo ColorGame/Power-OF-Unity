@@ -115,7 +115,7 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
 
         if (!placedObject.GetCanPlacedOnGridList().Contains(gridName)) //Если нашей сетки НЕТ в списке сеток где можно разместить наш объект то
         {
-            _tooltipUI.ShowShortTooltips("попробуй другой слот", new TooltipUI.TooltipTimer { timer = 2f }); // Покажем подсказку и зададим новый таймер отображения подсказки
+            _tooltipUI.ShowTooltipsFollowMouse("попробуй другой слот", new TooltipUI.TooltipTimer { timer = 2f }); // Покажем подсказку и зададим новый таймер отображения подсказки
 
             // Звук неудачи
             return false;
@@ -139,7 +139,7 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
                 }
                 else
                 {
-                    _tooltipUI.ShowShortTooltips("не удалось разместить", new TooltipUI.TooltipTimer { timer = 2f }); // Покажем подсказку и зададим новый таймер отображения подсказки
+                    _tooltipUI.ShowTooltipsFollowMouse("не удалось разместить", new TooltipUI.TooltipTimer { timer = 2f }); // Покажем подсказку и зададим новый таймер отображения подсказки
 
                     // Звук неудачи
                     drop = false;
@@ -163,7 +163,7 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
                 }
                 else
                 {
-                    _tooltipUI.ShowShortTooltips("не удалось разместить", new TooltipUI.TooltipTimer { timer = 2f }); // Покажем подсказку и зададим новый таймер отображения подсказки
+                    _tooltipUI.ShowTooltipsFollowMouse("не удалось разместить", new TooltipUI.TooltipTimer { timer = 2f }); // Покажем подсказку и зададим новый таймер отображения подсказки
 
                     // Звук неудачи
                     drop = false;

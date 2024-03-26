@@ -9,33 +9,26 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
 {
 
     [SerializeField] private Transform _actionButtonPrefab; // В инспекторе закинем префаб Кнопки
-    [SerializeField] private Transform _actionButtonContainerTransform; // В инспекторе назначить  Контейнер для кнопок( находиться в сцене в Canvas)
-    [SerializeField] private Transform _friendlyUnitButonPrefab; // В инспекторе закинем префаб Кнопки
-    [SerializeField] private Transform _friendlyUnitButonContainerTransform; // В инспекторе назначить  Контейнер для кнопок( находиться в сцене в Canvas)
+    [SerializeField] private Transform _actionButtonContainerTransform; // В инспекторе назначить  Контейнер для кнопок( находиться в сцене в Canvas)   
     [SerializeField] private TextMeshProUGUI _actionPointsText; // Ссылка на текст очков
     [SerializeField] private Image _actionPointImage; // Картинка головы
 
     private TooltipUI _tooltipUI;
 
-    private List<ActionButtonUI> _actionButtonUIList; // Список кнопок действий
-    private List<FriendlyUnitButtonUI> _friendlyUnitButonUIList; // Список кнопок Юнитов
+    private List<ActionButtonUI> _actionButtonUIList; // Список кнопок действий  
 
     private void Awake()
     {
-        _actionButtonUIList = new List<ActionButtonUI>(); // Создадим экземпляр списка
-        _friendlyUnitButonUIList = new List<FriendlyUnitButtonUI>();
+        _actionButtonUIList = new List<ActionButtonUI>(); // Создадим экземпляр списка       
     }
 
     private void Start()
     {
-        _tooltipUI =CoreEntryPoint.Instance.tooltipUI;
+        _tooltipUI = CoreEntryPoint.Instance.tooltipUI;
 
-       UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged; //Выбранный Юнит Изменен// подписываемся на Event из UnitActionSystem (становимся слушателями). Обозначает что мы выполняем функцию UnitActionSystem_OnSelectedUnitChanged()
+        UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged; //Выбранный Юнит Изменен// подписываемся на Event из UnitActionSystem (становимся слушателями). Обозначает что мы выполняем функцию UnitActionSystem_OnSelectedUnitChanged()
         UnitActionSystem.Instance.OnSelectedActionChanged += UnitActionSystem_OnSelectedActionChanged; //Выбранное Действие Изменено// подписываемся на Event Будет выполняться каждый раз когда мы меняем Базовое Действие // 
-        UnitActionSystem.Instance.OnActionStarted += UnitActionSystem_OnActionStarted; // Действие Начато// подписываемся на Event// Будет выполняться каждый раз при старте действия. //
-        UnitManager.OnAnyUnitDeadAndRemoveList += UnitManager_OnAnyUnitDeadAndRemoveList;// Событие Любой Юнит Умер И Удален из Списка
-        Unit.OnAnyFriendlyUnitDamage += Unit_OnAnyFriendlyUnitDamage; //Любой дружественный Юнит получил урон
-        Unit.OnAnyFriendlyUnitHealing += Unit_OnAnyFriendlyUnitHealing;//Любой дружественный Юнит получил исциление
+        UnitActionSystem.Instance.OnActionStarted += UnitActionSystem_OnActionStarted; // Действие Начато// подписываемся на Event// Будет выполняться каждый раз при старте действия. //       
         //2//3//{ Еще несколько способов скрыть кнопки когда занят действием
         UnitActionSystem.Instance.OnBusyChanged += UnitActionSystem_OnBusyChanged; // Занятость Изменена Подписываюсь на Event и выполним UnitActionSystem_OnBusyChanged, эта фунуция получит от события булевый аргумент //
         //2//3//}
@@ -44,8 +37,7 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
         Unit.OnAnyActionPointsChanged += Unit_OnAnyActionPointsChanged; //Изменении очков действий у ЛЮБОГО(Any) юнитаподписываемся на статический Event // Буудет выполняться каждый раз при изменении очков действий у ЛЮБОГО(Any) юнита а не только у выбранного.
         // РЕШЕНИЕ 2 //}             
 
-        CreateUnitActionButtons();
-        CreateFriendlyUnitButtons();
+        CreateUnitActionButtons();       
         UpdateSelectedVisual();
         UpdateActionPoints();
     }
@@ -54,22 +46,7 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
     private void TurnSystem_OnTurnChanged(object sender, EventArgs e)
     {
         UpdateButtonVisibility();
-    }
-    private void Unit_OnAnyFriendlyUnitHealing(object sender, EventArgs e)
-    {
-        foreach (FriendlyUnitButtonUI friendlyUnitButonUI in _friendlyUnitButonUIList)
-        {
-            friendlyUnitButonUI.UpdateHealthBar();
-        }
-    }
-
-    private void Unit_OnAnyFriendlyUnitDamage(object sender, EventArgs e)
-    {
-        foreach (FriendlyUnitButtonUI friendlyUnitButonUI in _friendlyUnitButonUIList)
-        {
-            friendlyUnitButonUI.UpdateHealthBar();
-        }
-    }
+    }   
 
     private void UpdateButtonVisibility() // Обновление визуализации кнопок в зависимости от того ЧЕЙ ХОД (прятать во время врага)
     {
@@ -79,21 +56,15 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
         {
             actionButtonUI.HandleStateButton(isBusy);
         }
-        foreach (FriendlyUnitButtonUI friendlyUnitButonUI in _friendlyUnitButonUIList)
-        {
-            friendlyUnitButonUI.HandleStateButton(isBusy);
-        }
+       
         _actionPointsText.gameObject.SetActive(TurnSystem.Instance.IsPlayerTurn()); // Показываем только во время МОЕГО ХОДА
         _actionPointImage.gameObject.SetActive(TurnSystem.Instance.IsPlayerTurn());
     }
 
-    private void UnitManager_OnAnyUnitDeadAndRemoveList(object sender, EventArgs e)
-    {
-        CreateFriendlyUnitButtons();
-    }
+   
 
     /*//2//{ Второй способ скрыть кнопки когда занят действием
-    private void ShowShortTooltips() // Показать
+    private void ShowTooltipsFollowMouse() // Показать
     {
         gameObject.SetActive(true);
     }
@@ -111,7 +82,7 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
         }
         else
         {
-            ShowShortTooltips();
+            ShowTooltipsFollowMouse();
         }
     } //2//}*/
 
@@ -119,7 +90,7 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
     private void UnitActionSystem_OnBusyChanged(object sender, OnUnitSystemEventArgs e)
     {
         if (e.selectedAction is GrappleAction comboAction) // Если выполняется Комбо Сделаем проверку состояний комбо
-        {        
+        {
             switch (comboAction.GetState())
             {
                 case GrappleAction.State.ComboSearchEnemy: // Если ишу врага то кнопки должны быть скрытыми
@@ -131,11 +102,7 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
         foreach (ActionButtonUI actionButtonUI in _actionButtonUIList) // В цикле обработаем состояние кнопок
         {
             actionButtonUI.HandleStateButton(e.isBusy);
-        }
-        foreach (FriendlyUnitButtonUI friendlyUnitButonUI in _friendlyUnitButonUIList)
-        {
-            friendlyUnitButonUI.HandleStateButton(e.isBusy);
-        }
+        }       
     } //3//}
 
 
@@ -159,7 +126,7 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
             MouseEnterExitEventsUI mouseEnterExitEvents = actionButtonTransform.GetComponent<MouseEnterExitEventsUI>(); // Найдем на кнопке компонент - События входа и выхода мышью 
             mouseEnterExitEvents.OnMouseEnter += (object sender, EventArgs e) => // Подпишемся на событие - ПРИ ВХОДЕ мыши на кнопку. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
             {
-                _tooltipUI.ShowShortTooltips(baseAction.GetToolTip()); // При наведении на кнопку покажем подсказку и передадим текст
+                _tooltipUI.ShowAnchoredTooltip(baseAction.GetToolTip(), (RectTransform)actionButtonTransform); // При наведении на кнопку покажем подсказку и передадим текст
             };
             mouseEnterExitEvents.OnMouseExit += (object sender, EventArgs e) => // Подпишемся на событие - ПРИ ВЫХОДЕ мыши из кнопки.
             {
@@ -170,24 +137,7 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
         }
     }
 
-    private void CreateFriendlyUnitButtons() // Создать Кнопки для Дружественныйх Юнитов
-    {
-        foreach (Transform buttonTransform in _friendlyUnitButonContainerTransform) // Очистим контейнер с кнопками
-        {
-            Destroy(buttonTransform.gameObject); // Удалим игровой объект прикрипленный к Transform
-        }
-
-        _friendlyUnitButonUIList.Clear(); // Очистим сисок кнопок
-
-        foreach (Unit unit in UnitManager.Instance.GetFriendlyUnitList())// Переберем дружественных юнитов
-        {
-            Transform actionButtonTransform = Instantiate(_friendlyUnitButonPrefab, _friendlyUnitButonContainerTransform); // Для каждого ЮНИТА создадим префаб кнопки и назначим родителя - Контейнер для кнопок
-            FriendlyUnitButtonUI friendlyUnitButonUI = actionButtonTransform.GetComponent<FriendlyUnitButtonUI>();// У кнопки найдем компонент FriendlyUnitButtonUI
-            friendlyUnitButonUI.SetUnit(unit);//Назвать и Присвоить
-
-            _friendlyUnitButonUIList.Add(friendlyUnitButonUI);// Добавим в список нашу кнопку
-        }
-    }
+   
     private void UnitActionSystem_OnSelectedUnitChanged(object sender, EventArgs empty) //sender - отправитель // Подписка должна иметь туже сигнатуру что и функция отправителя OnSelectedUnitChanged
     {
         CreateUnitActionButtons(); // Создать Кнопки для Действий Юнита 
@@ -209,11 +159,7 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
         foreach (ActionButtonUI actionButtonUI in _actionButtonUIList)
         {
             actionButtonUI.UpdateSelectedVisual();
-        }
-        foreach (FriendlyUnitButtonUI friendlyUnitButonUI in _friendlyUnitButonUIList)
-        {
-            friendlyUnitButonUI.UpdateSelectedVisual();
-        }
+        }        
     }
 
     private void UpdateActionPoints() // Обнавление очков действий (над кнопками действий)
@@ -222,14 +168,7 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
 
         _actionPointsText.text = " " + selectedUnit.GetActionPoints(); //Изменим текст добавив в него количество очков
     }
-
-    private void UpdateActionPointsFriendlyUnitButon() // Обнавление очков действий 
-    {
-        foreach (FriendlyUnitButtonUI friendlyUnitButonUI in _friendlyUnitButonUIList)
-        {
-            friendlyUnitButonUI.UpdateActionPoints();
-        }
-    }
+       
     // ВНИМАНИЕ // Может возникнуть ошибка. Сброс очков в классе Unit и обновление текста очков в этом классе, СЛУШАЮТ одно и тоже событие. Что выполниться позже или раньше неизвестно, текст может обновиться раньше и показывать еще не сброшенные очки действий "0" а по факту их "2".
     // РЕШЕНИЕ 1 //- НАСТРОИМ ПОРЯДОК ВЫПОЛНЕНИЯ СКРИПТА UnitActionSystemUI , добавим в Project Settings/ Script Execution Order и поместим НИЖЕ Deafault Time в конец
     /* private void TurnSystem_OnTurnChanged(object sender, EventArgs empty) // Номер хода изменен - это означает что очки действий восстановились, обновим их.
@@ -242,7 +181,6 @@ public class UnitActionSystemUI : MonoBehaviour // Система действий UI юнита // 
     // РЕШЕНИЕ 2 //{
     private void Unit_OnAnyActionPointsChanged(object sender, EventArgs empty) //Произошло изменение очков действий у ЛЮБОГО(Any) юнита а не только у выбранного. обновим их.
     {
-        UpdateActionPoints();
-        UpdateActionPointsFriendlyUnitButon();
+        UpdateActionPoints();        
     }// РЕШЕНИЕ 2 //}
 }

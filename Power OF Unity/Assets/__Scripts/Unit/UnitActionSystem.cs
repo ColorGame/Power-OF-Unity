@@ -31,7 +31,7 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
     private GameInput _gameInput;
     private BaseAction _selectedAction; // Выбранное Действие// Будем передовать в Button
     private bool _isBusy; // Занят (булевая переменная для исключения одновременных действий)
-
+    private UnitManager _unitManager;
 
     private void Awake() //Для избежания ошибок Awake Лучше использовать только для инициализации и настроийки объектов
     {
@@ -45,9 +45,10 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
         Instance = this;
     }
 
-    public void Initialize(GameInput gameInput)
+    public void Initialize(GameInput gameInput, UnitManager unitManager )
     {
         _gameInput = gameInput;
+        _unitManager = unitManager;
     }
 
     private void Start()
@@ -57,14 +58,14 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
 
         // Пока сделала в старте так как возникает гонка
         _gameInput.OnClickAction += GameInput_OnClickAction; // Подпишемся на событие клик по мыши или геймпаду
-        UnitManager.OnAnyUnitDeadAndRemoveList += UnitManager_OnAnyUnitDeadAndRemoveList; //Подпишемся на событие Любой Юнит Умер И Удален из Списка
+        _unitManager.OnAnyUnitDeadAndRemoveList += UnitManager_OnAnyUnitDeadAndRemoveList; //Подпишемся на событие Любой Юнит Умер И Удален из Списка
         TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged; // Подпишемся Ход Изменен
     }
 
 
     private void OnDisable()
     {
-        UnitManager.OnAnyUnitDeadAndRemoveList -= UnitManager_OnAnyUnitDeadAndRemoveList; //Подпишемся на событие Любой Юнит Умер И Удален из Списка
+        _unitManager.OnAnyUnitDeadAndRemoveList -= UnitManager_OnAnyUnitDeadAndRemoveList; //Подпишемся на событие Любой Юнит Умер И Удален из Списка
         TurnSystem.Instance.OnTurnChanged -= TurnSystem_OnTurnChanged; // Подпишемся Ход Изменен
         _gameInput.OnClickAction -= GameInput_OnClickAction; // Подпишемся на событие клик по мыши или геймпаду
     }
@@ -73,10 +74,10 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
     {
         if (TurnSystem.Instance.IsPlayerTurn()) // Если ход Игрока то
         {
-            List<Unit> friendlyUnitList = UnitManager.Instance.GetFriendlyUnitList(); // Вернем список дружественных юнитов
-            if (friendlyUnitList.Count > 0) // Если есть живые то передаем выделению первому по списку юниту
+            List<Unit> myUnitList = _unitManager.GetMyUnitList(); // Вернем список моих юнитов
+            if (myUnitList.Count > 0) // Если есть живые то передаем выделению первому по списку юниту
             {
-                SetSelectedUnit(friendlyUnitList[0], friendlyUnitList[0].GetAction<MoveAction>());
+                SetSelectedUnit(myUnitList[0], myUnitList[0].GetAction<MoveAction>());
             }
         };
     }
@@ -85,7 +86,7 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
     {
         if (_selectedUnit.IsDead()) // Если выделенный юнит отъехал то ...
         {
-            List<Unit> friendlyUnitList = UnitManager.Instance.GetFriendlyUnitList(); // Вернем список дружественных юнитов
+            List<Unit> friendlyUnitList = _unitManager.GetMyUnitList(); // Вернем список дружественных юнитов
             if (friendlyUnitList.Count > 0) // Если есть живые то передаем выделению первому по списку юниту
             {
                 SetSelectedUnit(friendlyUnitList[0], friendlyUnitList[0].GetAction<MoveAction>());

@@ -4,9 +4,9 @@ using UnityEngine;
 
 
 public class InventoryGrid : MonoBehaviour // Сетка инверторя
-{  
+{
 
-    public static float cellSize;  // Размер ячейки
+    private static float cellSize;  // Размер ячейки
 
     [SerializeField] private GridParameters[] _gridParametersArray; // Массив параметров сеток ЗАДАТЬ в ИНСПЕКТОРЕ
     [SerializeField] private Transform _gridDebugObjectPrefab; // Префаб отладки сетки 
@@ -261,7 +261,7 @@ public class InventoryGrid : MonoBehaviour // Сетка инверторя
                 if (!_pickUpDrop.TryDrop(gridSystemXY, addPlacedObject.gridPositioAnchor, placedObject)) // Если не удалось сбросить объект на сетку то
                 {
                     placedObject.DestroySelf(); // Уничтожим этот объект
-                    _tooltipUI.ShowShortTooltips("не удалось загрузить сохранение", new TooltipUI.TooltipTimer { timer = 3f }); // Покажем подсказку и зададим новый таймер отображения подсказки                   
+                    _tooltipUI.ShowTooltipsFollowMouse("не удалось загрузить сохранение", new TooltipUI.TooltipTimer { timer = 3f }); // Покажем подсказку и зададим новый таймер отображения подсказки                   
                 }
             }
         }

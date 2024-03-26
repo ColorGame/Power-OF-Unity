@@ -10,7 +10,7 @@ public static class Bootstrapper // Загрузчик
     public static void Execute()
     {
         Object bootstrapEntryPoint = Object.Instantiate(Resources.Load("CoreEntryPoint"));// Создать префаб CoreEntryPoint
-        Object.DontDestroyOnLoad(bootstrapEntryPoint); // и не уничтожать при загрузке другой сцены
+      //  Object.DontDestroyOnLoad(bootstrapEntryPoint); // и не уничтожать при загрузке другой сцены
     }
 
     /*public static void Execute()

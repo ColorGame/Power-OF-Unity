@@ -13,14 +13,16 @@ public class PlacedObjectTypeButton : MonoBehaviour // Кнопка  Типа Размещаемого
     [SerializeField] private Button _moduleButtonPanel;  // Кнопка для включения панели модуля
     [SerializeField] private List<PlacedObjectTypeSO> _ignorePlacedObjectList; // Список Объектов которые надо игнорировать при создании кнопок выделения
 
-    private Camera _cameraInventoryUI;
-    private TooltipUI _tooltipUI;
-    private PickUpDrop _pickUpDrop;
-
+    
     private Transform[] _typeSelectContainerArray; // массив контейнеров для выбора оружия предметов и модулей
     private Dictionary<PlacedObjectTypeSO, Transform> _buttonTransformDictionary; // Словарь (Тип Размещаемого Объекта - ключ, Transform- -значение)
     private PlacedObjectTypeListSO _placedObjectTypeListSO; // Список типов Размещаемого Объекта    
     private ScrollRect _scrollRect; //Компонент прокрутки кнопок
+
+    private Camera _cameraInventoryUI;
+    private TooltipUI _tooltipUI;
+    private PickUpDrop _pickUpDrop;
+
 
     public void Initialize(TooltipUI tooltipUI, PickUpDrop pickUpDrop)
     {

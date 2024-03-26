@@ -36,18 +36,7 @@ public abstract class PlacedObjectTypeSO : ScriptableObject,  ISerializationCall
     public virtual PlacedObjectTooltip GetPlacedObjectTooltip() // Получить всплывающую подсказку длф данного размещенного объекта // virtual- переопределим в наследуемых классах
     {
         return PlacedObjectTypeBaseStatsSO.Instance.GetTooltipPlacedObject(_placedObjectType);
-    }
-       
-    /// <summary>
-    /// Смещение визуальной части относительно родителя
-    /// </summary>
-    public Vector3 GetOffsetVisualFromParent()
-    {        
-        float x = InventoryGrid.GetCellSize() * _widthX / 2; // Размер ячейки умножим на количество ячеек, которое занимает наш объект по Х и делим пополам
-        float y = InventoryGrid.GetCellSize() * _heightY / 2;
-
-        return new Vector3(x, y, 0);
-    }
+    }       
 
     /// <summary>
     /// Список сеточных позиций которые занимает объект относительно переданной сеточной позиции
@@ -74,6 +63,27 @@ public abstract class PlacedObjectTypeSO : ScriptableObject,  ISerializationCall
     public Transform GetPrefab()
     {
         return _prefab;
+    }
+
+    /// <summary>
+    /// Вычислить смещение визуала относительно родителя
+    /// </summary>  
+    public Vector3 GetOffsetVisualFromParent()
+    {       
+        float cellSize = InventoryGrid.GetCellSize();
+
+        float x = cellSize * _widthX / 2; // Размер ячейки умножим на количество ячеек, которое занимает наш объект по Х и делим пополам
+        float y = cellSize * _heightY / 2;
+
+        return new Vector3(x, y, 0);
+    }
+
+    /// <summary>
+    /// Получить количество ЯЧЕЕК которое занимает объект в ширину Х и высоту Ую
+    /// /// </summary>    
+    public Vector2Int GetWidthXHeightYInCells()
+    {
+        return new Vector2Int(_widthX, _heightY);
     }
 
     public Transform GetVisual()
