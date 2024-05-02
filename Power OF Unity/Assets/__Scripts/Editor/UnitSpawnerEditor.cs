@@ -1,14 +1,14 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(UnitSpawner))] // создание пользовательского редактора для созданного вами скрипта.
+[CustomEditor(typeof(UnitSpawnerOnLevel))] // создание пользовательского редактора для созданного вами скрипта.
 
 public class UnitSpawnerEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        UnitSpawner unitSpawner = (UnitSpawner)target;
+        UnitSpawnerOnLevel unitSpawner = (UnitSpawnerOnLevel)target;
         if (GUILayout.Button("Заполнить таблицы Автоматически")) // Отрисуем кнопку
         {
             unitSpawner.AutomaticCompleteTable();

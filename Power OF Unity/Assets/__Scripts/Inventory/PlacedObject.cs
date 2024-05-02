@@ -66,6 +66,15 @@ public class PlacedObject : MonoBehaviour
     private BaseAction _baseAction; // Базовое действие которое выполняет наш объект
     private List<GridName> _canPlacedOnGridList;// Сетки где можно разместить наш объект
 
+    protected virtual void Setup()
+    {
+        _canPlacedOnGridList = _placedObjectTypeSO.GetCanPlacedOnGridList();
+        _visual = transform.GetChild(0); //Получим визуальный объект   
+        _visual.localPosition = _offsetVisualFromParent;    // Установим в середину занимаемых ячеек наш визуальный объект (Если забыли установить вручную в префабе инвенторя)           
+        _scaleOriginal = transform.localScale; // Сохраним оригинальный масштаб
+        _startPosition = transform.position;  // Запомним стартовую позицию        
+    }
+
     private void Start()
     {
         if(TryGetComponent(out BaseAction baseAction)) // Если на объекте есть Базовое действие то вернем его
@@ -98,14 +107,7 @@ public class PlacedObject : MonoBehaviour
         }
     }
 
-    protected virtual void Setup()
-    {
-        _canPlacedOnGridList = _placedObjectTypeSO.GetCanPlacedOnGridList();
-        _visual = transform.GetChild(0); //Получим визуальный объект   
-        _visual.localPosition = _offsetVisualFromParent;    // Установим в середину занимаемых ячеек наш визуальный объект (Если забыли установить вручную в префабе инвенторя)           
-        _scaleOriginal = transform.localScale; // Сохраним оригинальный масштаб
-        _startPosition = transform.position;  // Запомним стартовую позицию        
-    }  
+   
 
     public Vector3 GetOffsetVisualFromParent()
     {

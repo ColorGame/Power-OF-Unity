@@ -2,11 +2,18 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class InventoryGrid : MonoBehaviour // Сетка инверторя
+/// <summary>
+/// Создает сетку инверторя
+/// </summary>
+/// <remarks>
+/// Добавляет Размещаемый объект в Позицию Сетки (Прокладка между PickUpDrop и GridObjectInventoryXY)
+/// </remarks>
+public class InventoryGrid : MonoBehaviour 
 {
 
     private static float cellSize;  // Размер ячейки
+
+   
 
     [SerializeField] private GridParameters[] _gridParametersArray; // Массив параметров сеток ЗАДАТЬ в ИНСПЕКТОРЕ
     [SerializeField] private Transform _gridDebugObjectPrefab; // Префаб отладки сетки 
@@ -58,18 +65,6 @@ public class InventoryGrid : MonoBehaviour // Сетка инверторя
          }*/
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            Save();
-        }
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            Load();
-        }
-    }
     /// <summary>
     /// Попробуем Получим сеточную систему для заданной позиции Мыши и в случае удачи вернем ее и сеточную позицию
     /// </summary>   
@@ -100,11 +95,16 @@ public class InventoryGrid : MonoBehaviour // Сетка инверторя
         }
     }
 
-    public bool TryAddPlacedObjectAtGridPosition(Vector2Int gridPositionMouse, PlacedObject placedObject, GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY)//Попробую Добавить Размещаемый объект в Позицию Сетки
+
+    /// <summary>
+    /// Попробую Добавить Размещаемый объект в Позицию Сетки
+    /// </summary>   
+    /// <remarks>Верну false если - Разместить нельзя. Если могу то добавлю  Размещаемый объект в GridObjectInventoryXY</remarks>
+    public bool TryAddPlacedObjectAtGridPosition(Vector2Int gridPositionMouse, PlacedObject placedObject, GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY)
     {
         List<Vector2Int> gridPositionList = placedObject.GetTryOccupiesGridPositionList(gridPositionMouse); // Получим список сеточных позиций которые хочет занять объект
         bool canPlace = true;
-        foreach (Vector2Int gridPosition in gridPositionList)
+        foreach (Vector2Int gridPosition in gridPositionList) // Сначало надо проверить каждую ячейку
         {
             if (!gridSystemXY.IsValidGridPosition(gridPosition)) // Если есть хоть одна НЕ допустимая позиция то 
             {
@@ -124,14 +124,10 @@ public class InventoryGrid : MonoBehaviour // Сетка инверторя
             {
                 GridObjectInventoryXY gridObject = gridSystemXY.GetGridObject(gridPosition); // Получим GridObjectInventoryXY который находится в gridPosition
                 gridObject.AddPlacedObject(placedObject); // Добавить Размещаемый объект 
-            }
-            return true;
+            }    
         }
-        else
-        {
-            return false;
-        }
-    }   
+        return canPlace;        
+    }    
 
     public void RemovePlacedObjectAtGrid(PlacedObject placedObject) // Удаление Размещаемый объект из сетки (предпологается что он уже размещен в сетке)
     {

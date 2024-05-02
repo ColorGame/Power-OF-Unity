@@ -83,8 +83,8 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
             }
         }
 
-        _pickUpDrop.OnAddPlacedObjectAtGrid += PickUpDropSystem_OnAddPlacedObjectAtGrid;
-        _pickUpDrop.OnRemovePlacedObjectAtGrid += PickUpDropSystem_OnRemovePlacedObjectAtGrid;
+        _pickUpDrop.OnAddPlacedObjectAtInventoryGrid += PickUpDropSystem_OnAddPlacedObjectAtGrid;
+        _pickUpDrop.OnRemovePlacedObjectAtInventoryGrid += PickUpDropSystem_OnRemovePlacedObjectAtGrid;
         _pickUpDrop.OnGrabbedObjectGridPositionChanged += PickUpDropManager_OnGrabbedObjectGridPositionChanged;
         _pickUpDrop.OnGrabbedObjectGridExits += PickUpDropManager_OnGrabbedObjectGridExits;
     }

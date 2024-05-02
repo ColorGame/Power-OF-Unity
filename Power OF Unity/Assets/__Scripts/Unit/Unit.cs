@@ -1,5 +1,6 @@
 using Pathfinding;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетке и очки действий, получение урона
@@ -14,15 +15,16 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
     public static event EventHandler OnAnyActionPointsChanged;  // изменении очков действий у ЛЮБОГО(Any) юнита а не только у выбранного.                                                           
     public static event EventHandler OnAnyFriendlyChangeHealth; //У Любого дружественного Юнита изменилось здоровье   
     public static event EventHandler OnAnyEnemyUnitSpawned; // Событие Любой Вражеский Рожденный(созданный) Юнит
-    public static event EventHandler OnAnyUnitDead; // Событие Любой Юнит Умер
+    public static event EventHandler OnAnyUnitDead; // Событие Любой Юнит Умер    
 
 
     [SerializeField] private bool _isEnemy; //В инспекторе у префаба Врага поставить галочку
 
     // Частные случаи
     private GridPositionXZ _gridPosition;
-    private Health _healthSystem;
+    private Health _healthSystem; 
     private BaseAction[] _baseActionsArray; // Массив базовых действий // Будем использовать при создании кнопок   
+    private List<BaseAction> _baseActionsOnEquipmentList; // Список базовых действий которые на ЭКИПЕРОВКЕ
     private Rope _unitRope;
     private int _actionPoints = ACTION_POINTS_MAX; // Очки действия
     private float _penaltyStunPercent;  // Штрафной процент оглушения (будем применять в след ход)
@@ -31,19 +33,37 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
     /*private int _startStunTurnNumber; //Номер очереди (хода) при старте события оглушения
     private int _durationStunEffectTurnNumber; // Продолжительность оглушающего эффекта Количество ходов*/
 
+    private TurnSystem _turnSystem;
+    private LevelGrid _levelGrid;
+    private bool _onLevel = false; // На уровне
+
 
     /// <summary>
-    /// Настройка ЮНИТА при запуске Миссии. (Настроим transform и gridPosition)
+    /// Настройка ЮНИТА при спанвне на Уровня. (Настроим transform и gridPosition ...)
     /// </summary>   
-    public void SetupTransformAndGridPosition(Transform PointSpawnTRansform)
+    public void SetupUnitForSpawn(Transform PointSpawnTRansform, TurnSystem turnSystem, LevelGrid levelGrid)
     {
         // Когда Unit спавниться, настроим его положение в сетке и добовим к GridObjectUnitXZ(объектам сетки) в данной ячейки
         transform.position = PointSpawnTRansform.position;
         transform.rotation = PointSpawnTRansform.rotation;
-        _gridPosition = LevelGrid.Instance.GetGridPosition(PointSpawnTRansform.position); //Получим сеточную позицию в месте спавна
-        LevelGrid.Instance.AddUnitAtGridPosition(_gridPosition, this); // Зайдем в LevelGrid получим доступ к статическому экземпляру и вызовим AddUnitAtGridPosition
-    }
 
+        _turnSystem = turnSystem;
+        _levelGrid = levelGrid;
+
+        _gridPosition = _levelGrid.GetGridPosition(PointSpawnTRansform.position); //Получим сеточную позицию в месте спавна
+        _levelGrid.AddUnitAtGridPosition(_gridPosition, this); //Добавим юнита в нашу сетку
+        _turnSystem.OnTurnChanged += TurnSystem_OnTurnChanged; // Подпиш. на событие Ход Изменен     
+
+        GetComponent<FloorVisibility>().SetupUnitForSpawn();
+        _onLevel = true;
+    }
+    /// <summary>
+    ///  Настройка ЮНИТА при покидании Уровня.
+    /// </summary>
+    public void SetupEndLevel()
+    {
+        _turnSystem.OnTurnChanged -= TurnSystem_OnTurnChanged;
+    }
 
     private void Awake()
     {
@@ -54,37 +74,36 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
             _unitRope = unitRope;
         }
 
-        _singleNodeBlocker = GetComponent<SingleNodeBlocker>();
-
+        _singleNodeBlocker = GetComponent<SingleNodeBlocker>();      
         _baseActionsArray = GetComponents<BaseAction>(); // _moveAction и _spinAction также будут храниться внутри этого массива
     }
 
     private void OnEnable()
-    {
-        TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged; // Подпиш. на событие Ход Изменен        
+    {          
         _healthSystem.OnDead += HealthSystem_OnDead; // подписываемся на Event. Будет выполняться при смерти юнита
 
         if (_isEnemy)
             OnAnyEnemyUnitSpawned?.Invoke(this, EventArgs.Empty); // Запустим событие Любой Рожденный(созданный) Вражеский Юнит. Событие статичное поэтому будет выполняться для всех вражеских созданных Юнитов
     }
 
-    private void OnDisable()
-    {
-        TurnSystem.Instance.OnTurnChanged -= TurnSystem_OnTurnChanged;
+    private void OnDestroy()
+    {       
         _healthSystem.OnDead -= HealthSystem_OnDead;
+        _turnSystem.OnTurnChanged -= TurnSystem_OnTurnChanged;
     }
 
     private void Update()
     {
-        // Можно оптимизировать если добавить условие только когда активно MoveAction или GrappleAction
-        GridPositionXZ newGridPosition = LevelGrid.Instance.GetGridPosition(transform.position); //Получим новую позицию юнита на сетке.
+        if (!_onLevel) return; // Если НЕ на игровом уровне то выходим
+        // Можно оптимизировать если добавить события в MoveAction и GrappleAction
+        GridPositionXZ newGridPosition = _levelGrid.GetGridPosition(transform.position); //Получим новую позицию юнита на сетке.
         if (newGridPosition != _gridPosition) // Если новая позиция на сетке отличается от последней то ...
         {
             // Изменем положение юнита на сетке
             GridPositionXZ oldGridPosition = _gridPosition; // Сохраним старую позицию что бы передать в event
             _gridPosition = newGridPosition; //Обновим позицию - Новая позиция становиться текущей
 
-            LevelGrid.Instance.UnitMovedGridPosition(this, oldGridPosition, newGridPosition); //в UnitMovedGridPosition запускаем Событие. Поэтому эту строку поместим в КОНЦЕЦ . Иначе мы запускаем событие сетка обнавляется а юнит еще не перемещен
+            _levelGrid.UnitMovedGridPosition(this, oldGridPosition, newGridPosition); //в UnitMovedGridPosition запускаем Событие. Поэтому эту строку поместим в КОНЦЕЦ . Иначе мы запускаем событие сетка обнавляется а юнит еще не перемещен
         }
     }
 
@@ -102,7 +121,7 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
 
     public GridPositionXZ GetGridPosition() // Получить сеточную позицию
     {
-        return _gridPosition;
+        return _gridPosition;         
     }
 
 
@@ -159,8 +178,8 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
 
     public void TurnSystem_OnTurnChanged(object sender, EventArgs empty) //Ход изменен Сбросим очки действий до максимальных
     {
-        if ((IsEnemy() && !TurnSystem.Instance.IsPlayerTurn()) || // Если это враг И его очередь (НЕ очередь игрока) ИЛИ это НЕ враг(игрок) и очередь игрока то...
-            (!IsEnemy() && TurnSystem.Instance.IsPlayerTurn()))
+        if ((IsEnemy() && !_turnSystem.IsPlayerTurn()) || // Если это враг И его очередь (НЕ очередь игрока) ИЛИ это НЕ враг(игрок) и очередь игрока то...
+            (!IsEnemy() && _turnSystem.IsPlayerTurn()))
         {
             _actionPoints = ACTION_POINTS_MAX;
 
@@ -172,7 +191,7 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
             }
 
             //  БОлее сложная распространяется на след ход
-            /*int passedTurnNumber = TurnSystem.Instance.GetTurnNumber() - _startStunTurnNumber;// прошло ходов от начала Оглушения
+            /*int passedTurnNumber = _turnSystem.GetTurnNumber() - _startStunTurnNumber;// прошло ходов от начала Оглушения
             if (passedTurnNumber <= _durationStunEffectTurnNumber) // Если ходов прошло меньше или равно длительности ОГЛУШЕНИЯ (Значит оглушение еще действует)
             {
                 _actionPoints -= Mathf.RoundToInt(_actionPoints * _penaltyStunPercent); // Применим штраф
@@ -217,7 +236,7 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
         _penaltyStunPercent = stunPercent; // Установим Процента Оглушения
 
         /*// БОлее сложная распространяется на след ход
-        _startStunTurnNumber = TurnSystem.Instance.GetTurnNumber(); // Получим стартовый номер хода              
+        _startStunTurnNumber = _turnSystem.GetTurnNumber(); // Получим стартовый номер хода              
         if (_actionPoints > 0) // Если очков хода больше нуля
         {
             _durationStunEffectTurnNumber = 1; //Нужно НАСТРОИТЬ// Оглушение будет длиться весь следующий ход
@@ -231,13 +250,12 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
 
 
     private void HealthSystem_OnDead(object sender, EventArgs e) // Будет выполняться при смерти юнита
-
     {
-        LevelGrid.Instance.RemoveUnitAtGridPosition(_gridPosition, this); // Удалим из сеточной позиции умершего юнита
+        _levelGrid.RemoveUnitAtGridPosition(_gridPosition, this); // Удалим из сеточной позиции умершего юнита
 
         Destroy(gameObject); // Уничтожим игровой объект к которому прикриплен данный скрипт
 
-        // Вслучае смерти активного Юнита надо предать ход следующему юниту        
+        // Вслучае смерти активного Юнита надо предать ход следующему юниту это происходит в UnitActionSystem    
 
         OnAnyUnitDead?.Invoke(this, EventArgs.Empty); // Запустим событие Любой Мертвый Юнит. Событие статичное поэтому будет выполняться для любого мертвого Юнита      
     }
@@ -280,6 +298,4 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
     {
         return _singleNodeBlocker;
     }
-
-
 }

@@ -1,15 +1,14 @@
 
 using System;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 
 public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание объектовЫ
 {
 
     public event EventHandler OnGrabbedObjectGridExits; // Захваченый объект покинул сетку
-    public event EventHandler<PlacedObject> OnAddPlacedObjectAtGrid; // Объект добавлен в сетку 
-    public event EventHandler<PlacedObject> OnRemovePlacedObjectAtGrid; // Объект удален из сетки       
+    public event EventHandler<PlacedObject> OnAddPlacedObjectAtInventoryGrid; // Объект добавлен в сетку Интвенторя
+    public event EventHandler<PlacedObject> OnRemovePlacedObjectAtInventoryGrid; // Объект удален из сетки Интвенторя   
     public event EventHandler<OnGrabbedObjectGridPositionChangedEventArgs> OnGrabbedObjectGridPositionChanged; // позиция захваченного объекта на сетке изменилась
     public class OnGrabbedObjectGridPositionChangedEventArgs : EventArgs // Расширим класс событий, чтобы в аргументе события передать
     {
@@ -21,40 +20,41 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
     private LayerMask _inventoryLayerMask; // Для инвенторя настроить слой как Inventory // Настроим на объекте где есть коллайдер 
     private Transform _canvasInventoryWorld;
     private Camera _cameraInventoryUI;
-    private GameInput _gameInput;
-    private TooltipUI _tooltipUI;
-    private InventoryGrid _inventoryGrid;
 
     private PlacedObject _placedObject; // Размещенный объект    
-    private Vector3 _offset; // Смещение от мышки
-    private PlacedObjectTypeSO _placedObjectTypeSO;
+    private Vector3 _offset; // Смещение от мышки 
     private Plane _plane; // плоскость по которой будем перемещять захваченные объекты    
     private Vector2Int _mouseGridPosition;  // сеточная позиция мыши
-    private bool _startEventOnGrabbedObjectGridExits = false; // Запущено событие (Захваченый объект покинул сетку), чтобы не запускать событие каждый кадр сделал переключатель
+
+    /// <summary>
+    /// Запущено событие (Захваченый объект покинул сетку), чтобы не запускать событие каждый кадр сделал переключатель
+    /// </summary>
+    private bool _startEventOnGrabbedObjectGridExits = false; 
+
+    private GameInput _gameInput;
+    private TooltipUI _tooltipUI;
+    private InventoryGrid _inventoryGrid;   
 
     public void Initialize(GameInput gameInput, TooltipUI tooltipUI, InventoryGrid inventoryGrid)
     {
         _gameInput = gameInput;
         _tooltipUI = tooltipUI;
-        _inventoryGrid = inventoryGrid;
+        _inventoryGrid = inventoryGrid;    
     }
 
     private void Awake()
-    {    
+    {
         _canvasInventoryWorld = GetComponentInParent<Canvas>().transform;
         _cameraInventoryUI = GetComponentInParent<Camera>();
     }
 
 
     private void Start()
-    {
-        Camera.main.GetUniversalAdditionalCameraData().cameraStack.Add(_cameraInventoryUI); //Добавим в стек основной камеры нашу камеру инвенторя
+    {      
         _plane = new Plane(_canvasInventoryWorld.forward, _canvasInventoryWorld.position); // Создадим плоскость в позиции canvasInventory
-        _inventoryLayerMask = LayerMask.GetMask("Inventory");
-        _canvasInventoryWorld.GetComponent<Canvas>().worldCamera = _cameraInventoryUI; // Установим для холста камеру которая будет его рендерить
+        _inventoryLayerMask = LayerMask.GetMask("Inventory");       
 
-        CoreEntryPoint.Instance.gameInput.OnClickAction += GameInput_OnClickAction;
-        // _gameInput.OnClickAction += GameInput_OnClickAction;
+        _gameInput.OnClickAction += GameInput_OnClickAction;
     }
 
     private void GameInput_OnClickAction(object sender, EventArgs e) // Если мыш нажата 
@@ -89,7 +89,9 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
             SetTargetPosition();
         }
     }
-
+    /// <summary>
+    /// Попробуем СХВАТИТЬ предмет
+    /// </summary>
     public void TryGrab()
     {
         Ray ray = _cameraInventoryUI.ScreenPointToRay(_gameInput.GetMouseScreenPosition()); //Возвращает луч, идущий от камеры через точку экрана где находиться курсор мыши 
@@ -99,15 +101,16 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
             if (_placedObject != null) // Если у родителя объекта в который попали есть PlacedObject то можно его схватить (на кнопка висит просто визуал и там нет род объекта)
             {
                 _placedObject.Grab(); // Схватим его
-                _inventoryGrid.RemovePlacedObjectAtGrid(_placedObject);// Удалим из текущей сеточной позиции
-                _placedObjectTypeSO = _placedObject.GetPlacedObjectTypeSO();
+                _inventoryGrid.RemovePlacedObjectAtGrid(_placedObject);// Удалим из текущей сеточной позиции               
 
                 // Звук поднятия
-                OnRemovePlacedObjectAtGrid?.Invoke(this, _placedObject); // Запустим событие
+                OnRemovePlacedObjectAtInventoryGrid?.Invoke(this, _placedObject); // Запустим событие
             }
         }
     }
-
+    /// <summary>
+    /// Попробуем СБРОСИТЬ захваченный предмет
+    /// </summary>
     public bool TryDrop(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY, Vector2Int gridPositionMouse, PlacedObject placedObject)
     {
         // Попробуем сбросить и разместить на сетке       
@@ -125,50 +128,44 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
         switch (gridName)
         {
             case GridName.BagGrid1:
-                if (_inventoryGrid.TryAddPlacedObjectAtGridPosition(gridPositionMouse, placedObject, gridSystemXY))
-                {
-                    placedObject.Drop();  // Бросить
-                    placedObject.SetGridPositionAnchor(gridPositionMouse); // Установим новую сеточную позицию якоря
-                    placedObject.SetGridSystemXY(gridSystemXY); //Установим сетку на которую добавили наш оббъект
 
-                    // Звук удачного размещения
-                    OnAddPlacedObjectAtGrid?.Invoke(this, placedObject); // Запустим событие
-                    ResetPlacedObject(); // Обнулим взятый размещяемый объект
-
-                    drop = true;
-                }
-                else
-                {
-                    _tooltipUI.ShowTooltipsFollowMouse("не удалось разместить", new TooltipUI.TooltipTimer { timer = 2f }); // Покажем подсказку и зададим новый таймер отображения подсказки
-
-                    // Звук неудачи
-                    drop = false;
-                }
+                drop = TryAddPlacedObjectAtGridPosition(gridPositionMouse, placedObject, gridSystemXY);
                 break;
 
             // для сетки Основного и Доп. оружия установим newMouseGridPosition (0,0)
             case GridName.MainWeaponGrid2:
             case GridName.OtherWeaponGrid3:
-                if (_inventoryGrid.TryAddPlacedObjectAtGridPosition(new Vector2Int(0, 0), placedObject, gridSystemXY))
-                {
-                    placedObject.Drop();  // Бросить
-                    placedObject.SetGridPositionAnchor(new Vector2Int(0, 0)); // Установим новую сеточную позицию якоря
-                    placedObject.SetGridSystemXY(gridSystemXY); //Установим сетку на которую добавили наш оббъект
 
-                    // Звук удачного размещения
-                    OnAddPlacedObjectAtGrid?.Invoke(this, placedObject); // Запустим событие
-                    ResetPlacedObject(); // Обнулим взятый размещяемый объект
-
-                    drop = true;
-                }
-                else
-                {
-                    _tooltipUI.ShowTooltipsFollowMouse("не удалось разместить", new TooltipUI.TooltipTimer { timer = 2f }); // Покажем подсказку и зададим новый таймер отображения подсказки
-
-                    // Звук неудачи
-                    drop = false;
-                }
+                gridPositionMouse = new Vector2Int(0, 0);
+                drop = TryAddPlacedObjectAtGridPosition(gridPositionMouse, placedObject, gridSystemXY);
                 break;
+        }
+        return drop;
+    }
+    /// <summary>
+    /// Попробую Добавить Размещаемый объект в Позицию Сетки
+    /// </summary>   
+    private bool TryAddPlacedObjectAtGridPosition(Vector2Int gridPositionMouse, PlacedObject placedObject, GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY)
+    {
+        bool drop = false;
+        if (_inventoryGrid.TryAddPlacedObjectAtGridPosition(gridPositionMouse, placedObject, gridSystemXY))
+        {
+            placedObject.Drop();  // Бросить
+            placedObject.SetGridPositionAnchor(gridPositionMouse); // Установим новую сеточную позицию якоря
+            placedObject.SetGridSystemXY(gridSystemXY); //Установим сетку на которую добавили наш оббъект
+
+            // Звук удачного размещения
+            OnAddPlacedObjectAtInventoryGrid?.Invoke(this, placedObject); // Запустим событие (запускаю здесь а не в InventoryGrid т.к. placedObject еще надо настроить кодом выше)
+            ResetPlacedObject(); // Обнулим взятый размещяемый объект
+
+            drop = true;
+        }
+        else
+        {
+            _tooltipUI.ShowTooltipsFollowMouse("не удалось разместить", new TooltipUI.TooltipTimer { timer = 2f }); // Покажем подсказку и зададим новый таймер отображения подсказки
+
+            // Звук неудачи
+            drop = false;
         }
         return drop;
     }
@@ -247,8 +244,7 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
         {
             _placedObject = PlacedObject.CreateInWorld(worldPosition, placedObjectTypeSO, _canvasInventoryWorld); // Создадим объект
             _placedObject.Grab(); // Схватим его
-            _offset = _placedObject.GetOffsetVisualFromParent(); // Чтобы объект был по центру мышки надо вычесть смещение визуала относительно родителя
-            _placedObjectTypeSO = _placedObject.GetPlacedObjectTypeSO();
+            _offset = _placedObject.GetOffsetVisualFromParent(); // Чтобы объект был по центру мышки надо вычесть смещение визуала относительно родителя          
         }
     }
 

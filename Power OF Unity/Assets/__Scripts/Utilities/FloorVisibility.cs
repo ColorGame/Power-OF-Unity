@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,8 +10,9 @@ public class FloorVisibility : MonoBehaviour // Видимость этажа // Должна висеть
     private Renderer[] _rendererArray; // Массив Renderer дочерних объектов
     private Canvas _canvas;
     private int floor; // Этаж    
-    private bool _cameraZoomActionStarted; // Началось действие увеличения камеры
+    private bool _cameraZoomActionStarted = false; // Началось действие увеличения камеры
     private float _cameraHeight;
+    private bool _isUnit = false; //  проверим Это юнит или предмет
 
     private void Awake()
     {
@@ -20,9 +22,27 @@ public class FloorVisibility : MonoBehaviour // Видимость этажа // Должна висеть
         {
             moveAction.OnChangedFloorsStarted += MoveAction_OnChangedFloorsStarted;
         }
+
+        if (TryGetComponent(out Unit unit)) //Если на объекте есть этот компонент
+        {
+            _isUnit = true;           
+        }
+    }
+
+    public void SetupUnitForSpawn()
+    {
+        SetupOnStart();
     }
 
     private void Start()
+    {
+        if (!_isUnit)  // Если это предмет то сделаем настройки в  Start
+        {
+            SetupOnStart();
+        }
+
+    }
+    private void SetupOnStart()
     {
         floor = LevelGrid.Instance.GetFloor(transform.position); // Получим этаж для нашей позиции(объект на котором висит скрипт) 
 
@@ -30,11 +50,9 @@ public class FloorVisibility : MonoBehaviour // Видимость этажа // Должна висеть
         {
             Destroy(this); // Уничтожим этот скрипт что бы он просто так не занимал Update
         }
-
         CameraFollow.OnCameraZoomStarted += CameraFollow_OnCameraZoomStarted;
         CameraFollow.OnCameraZoomCompleted += CameraFollow_OnCameraZoomCompleted;
     }
-       
 
     private void OnDestroy()
     {

@@ -16,11 +16,13 @@ public class CoreEntryPoint : PersistentSingleton<CoreEntryPoint> // Пока этот о
     public JsonSavingSystem jsonSavingSystem { get; private set; }
     public TooltipUI tooltipUI { get; private set; }
     public OptionsMenuUI optionsMenuUI { get; private set; }
-    public PickUpDrop pickUpDrop { get; private set; }
-    public InventoryGridVisual inventoryGridVisual { get; private set; }
     public PlacedObjectTypeButton placedObjectTypeButton { get; private set; }
+    public PickUpDrop pickUpDrop { get; private set; }
     public InventoryGrid inventoryGrid { get; private set; }
+    public InventoryGridVisual inventoryGridVisual { get; private set; }
     public UnitManager unitManager { get; private set; }
+    public UnitSelectedForEquip unitSelectedForEquip { get; private set; }
+    public UnitFriendSpawnerOnCore myUnits { get; private set; }
 
 
     protected override void Awake()
@@ -30,6 +32,7 @@ public class CoreEntryPoint : PersistentSingleton<CoreEntryPoint> // Пока этот о
         gameInput = new GameInput(); // Создадим экземпляр       
         jsonSavingSystem = new JsonSavingSystem();
         unitManager = new UnitManager();
+        unitSelectedForEquip = new UnitSelectedForEquip();
 
 
 
@@ -41,10 +44,10 @@ public class CoreEntryPoint : PersistentSingleton<CoreEntryPoint> // Пока этот о
         pickUpDrop = GetComponentInChildren<PickUpDrop>(true);
         placedObjectTypeButton = GetComponentInChildren<PlacedObjectTypeButton>(true);
         inventoryGrid = GetComponentInChildren<InventoryGrid>(true);
-        inventoryGridVisual = GetComponentInChildren<InventoryGridVisual>(true);       
+        inventoryGridVisual = GetComponentInChildren<InventoryGridVisual>(true);
+        myUnits = GetComponentInChildren<UnitFriendSpawnerOnCore>(true);
 
-
-        if(gameInput!=null)
+        if (gameInput != null)
             gameInput.Initialize(); // Инициализируем поля и сделаем подписки
         else Debug.Log("Нет GameInput");
 
@@ -61,7 +64,7 @@ public class CoreEntryPoint : PersistentSingleton<CoreEntryPoint> // Пока этот о
         else Debug.Log("Нет TooltipUI");
 
         if (pickUpDrop != null)
-            pickUpDrop.Initialize(gameInput, tooltipUI,inventoryGrid);
+            pickUpDrop.Initialize(gameInput, tooltipUI, inventoryGrid);
         else Debug.Log("Нет PickUpDrop");
 
         if (placedObjectTypeButton)
@@ -69,7 +72,7 @@ public class CoreEntryPoint : PersistentSingleton<CoreEntryPoint> // Пока этот о
         else Debug.Log("Нет PlacedObjectTypeButton");
 
         if (inventoryGrid != null)
-            inventoryGrid.Initialize(pickUpDrop,tooltipUI);
+            inventoryGrid.Initialize(pickUpDrop, tooltipUI);
         else Debug.Log("Нет InventoryGrid");
 
         if (inventoryGridVisual != null)
@@ -80,9 +83,23 @@ public class CoreEntryPoint : PersistentSingleton<CoreEntryPoint> // Пока этот о
             unitManager.Initialize(tooltipUI);
         else Debug.Log("Нет UnitManager");
 
+        if(myUnits!=null)
+            myUnits.Initialize(unitManager);
+        else Debug.Log("Нет UnitFriendSpawnerOnCore");
+
+        if (unitSelectedForEquip != null)
+            unitSelectedForEquip.Initialize(pickUpDrop);
+        else Debug.Log("Нет UnitSelectedForEquip");
+
+
+        Unit unit = unitManager.GetMyUnitList()[0];
+        unit.gameObject.SetActive(true);
+
+        unitSelectedForEquip.SetSelectedUnit(unit.GetComponent<UnitInventory>());
+
         Debug.Log("CoreEntryPoint  Awake_CANCALED");
     }
 
-       
+
 }
 

@@ -42,19 +42,8 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
     private SingleNodeBlocker _singleNodeBlocker; // Блокирующий узел на самом юните
     private Seeker _seeker; 
 
-
-
-    protected override void Awake()
+    public void SetupUnitForSpawn()
     {
-        base.Awake();        
-        _seeker = GetComponent<Seeker>();
-        
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-
         // Установите провайдера обхода так, чтобы он блокировал все узлы, которые заблокированы SingleNodeBlocker
         // за исключением SingleNodeBlocker, принадлежащего этому ЮНИТУ (мы не хотим, блокировать самих себя).
         _singleNodeBlocker = _unit.GetSingleNodeBlocker();
@@ -62,12 +51,14 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
         _obstaclesIgnoreList = new List<SingleNodeBlocker>() { _singleNodeBlocker };
         _traversalProvider = new TraversalProvider(BlockManager.Instance, BlockMode.AllExceptSelector, _obstaclesIgnoreList);
 
+        _seeker = GetComponent<Seeker>();
         _seeker.pathCallback += Seeker_OnPathComplete; // Подпишемся путь вычислен
         UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged;  //подпишемся Выбранный Юнит Изменен
         UnitActionSystem.Instance.OnBusyChanged += Instance_OnBusyChanged; //подпишемся на событие Занятость Изменена 
 
         GeneratePossibleMoves(_unit); // Сгенерируем возможные ходы с помощью (A* Pathfinding Project4.2.18) для нашего юнита
-    }   
+    }
+   
 #endif
 
     private void Update()

@@ -6,11 +6,12 @@ public class GameSceneEntryPoint : MonoBehaviour
     public CameraFollow cameraFollow { get; private set; }
     public MouseOnGameGrid mouseOnGameGrid { get; private set; }
     public UnitActionSystem unitActionSystem { get; private set; }
-    public UnitSpawner unitSpawner { get; private set; }
+    public UnitSpawnerOnLevel unitSpawner { get; private set; }
     public SelectUnitButtonUI selectUnitButtonUI { get; private set; }
     public OptionsMenagerUI optionsMenagerUI { get; private set; }
     public EnemyAI enemyAI { get; private set; }
     public TurnSystem turnSystem { get; private set; }
+    public LevelGrid levelGrid { get; private set; }
 
     private CoreEntryPoint _coreEntryPoint;
 
@@ -20,11 +21,12 @@ public class GameSceneEntryPoint : MonoBehaviour
         cameraFollow = GetComponentInChildren<CameraFollow>(true);
         mouseOnGameGrid = GetComponentInChildren<MouseOnGameGrid>(true);
         unitActionSystem = GetComponentInChildren<UnitActionSystem>(true);
-        unitSpawner = GetComponentInChildren<UnitSpawner>(true);
+        unitSpawner = GetComponentInChildren<UnitSpawnerOnLevel>(true);
         selectUnitButtonUI = GetComponentInChildren<SelectUnitButtonUI>(true);
         optionsMenagerUI = GetComponentInChildren<OptionsMenagerUI>(true);
         enemyAI = GetComponentInChildren<EnemyAI>(true);
         turnSystem = GetComponentInChildren<TurnSystem>(true);
+        levelGrid = GetComponentInChildren<LevelGrid>(true);
 
         _coreEntryPoint = CoreEntryPoint.Instance;
 
@@ -41,8 +43,8 @@ public class GameSceneEntryPoint : MonoBehaviour
         else Debug.Log("Нет UnitActionSystem");
         
         if (unitSpawner != null)
-            unitSpawner.Initialize(_coreEntryPoint.unitManager);
-        else Debug.Log("Нет UnitSpawner");
+            unitSpawner.Initialize(_coreEntryPoint.unitManager, turnSystem, levelGrid);
+        else Debug.Log("Нет UnitSpawnerOnLevel");
 
         if (selectUnitButtonUI != null)
             selectUnitButtonUI.Initialize(_coreEntryPoint.unitManager, turnSystem, unitActionSystem);

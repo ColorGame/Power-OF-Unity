@@ -1,8 +1,6 @@
-
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static PlacedObjectTypeBaseStatsSO;
 
 [CreateAssetMenu(fileName = "GameAssets", menuName = "ScriptableObjects/GameAssets")]
 public class GameAssets : ScriptableObject //Игровые Активы
@@ -26,7 +24,7 @@ public class GameAssets : ScriptableObject //Игровые Активы
     /// <summary>
     ///Структура: Тип вражеского юнита и ЕГО ПРЕФАБ
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public struct EnemyTypePrefabUnit
     {
         public EnemyUnitType enemyType;

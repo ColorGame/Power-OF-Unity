@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3656954414905745779}
   - component: {fileID: 4100025684031183867}
+  - component: {fileID: 2371712339469796608}
   m_Layer: 12
   m_Name: Pistol1Prefab
   m_TagString: Untagged
@@ -45,6 +46,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 860b89c9c62a4c64b9bba88335d03aee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2371712339469796608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2003745223332866795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4181afa80d6fdb4cab8ce82b6220ff4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _numberShoot: 3
+  _delayShoot: 0.2
+  _shootPointTransform: {fileID: 0}
+  _HeadTransform: {fileID: 0}
+  _targetAnimationAim: {fileID: 0}
+  _aimRig: {fileID: 0}
 --- !u!1001 &664001232167345138
 PrefabInstance:
   m_ObjectHideFlags: 0

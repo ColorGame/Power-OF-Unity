@@ -65,7 +65,7 @@ public class UnitAnimator : MonoBehaviour // Анимация юнита(ПЛАНЫ: в дальнейшем 
     }
     private void Start()
     {
-        EquipRifleHand_R(); // Включим винтовку
+       // EquipRifleHand_R(); // Включим винтовку
     }
 
     private void SpotterFireAction_OnSpotterFireActionStarted(object sender, EventArgs e)

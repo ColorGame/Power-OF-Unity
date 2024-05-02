@@ -40,7 +40,7 @@ public class GridSystemTiltedXY<TGridObject> : GridSystemXY<TGridObject>
     }
 
     /// <summary>
-    /// Получим мировые координаты нижнего левого угола ячейки (относительно  нашей _anchorGridTransform)
+    /// Получим мировые координаты нижнего левого угола ячейки (относительно нашей _anchorGridTransform)
     /// </summary>  
     /// <returns></returns>
     public override Vector3 GetWorldPositionLowerLeftСornerCell(Vector2Int gridPosition) 
