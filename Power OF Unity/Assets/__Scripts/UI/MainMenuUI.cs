@@ -1,24 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenuUI : MonoBehaviour // Главное меню
 {
+    [SerializeField] private Button _resumeGameButton;
+    [SerializeField] private Button _startGameButton;
+    [SerializeField] private Button _loadGameButton;
+    [SerializeField] private Button _setupGameButton;
+    [SerializeField] private Button _quitGameButton;
 
     private void Awake()
     {
+        
 
-        // Найдем кнопки и Добавим событие при нажатии на наши кнопки
-        // AddListener() в аргумент должен получить делегат- ссылку на функцию. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
-        transform.Find("playButton").GetComponent<Button>().onClick.AddListener(() =>
-        {
-            SceneLoader.Load(SceneName.GameScene_MultiFloors);
-        });
+        _resumeGameButton.onClick.AddListener(() => { Debug.Log("ЗАГЛУШКА"); });
+        _loadGameButton.onClick.AddListener(() => { Debug.Log("ЗАГЛУШКА"); });
+        _setupGameButton.onClick.AddListener(() => { CoreEntryPoint.Instance.optionsMenuUI.ToggleVisible(); });
+        _startGameButton.onClick.AddListener(() => { SceneManager.LoadSceneAsync(SceneName.UnitMenuScene.GetHashCode()); });
+        _quitGameButton.onClick.AddListener(() => { Application.Quit(); });// Кнопка будет работать тоько после сборки  
 
-        transform.Find("quitButton").GetComponent<Button>().onClick.AddListener(() =>
-        {
-            Application.Quit(); // Кнопка будет работать тоько после сборки
-        });
     }
 }

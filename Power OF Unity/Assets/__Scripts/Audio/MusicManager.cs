@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class MusicManager : MonoBehaviour   // Менеджер Фоновой музыки 
                                             // В настроиках поставить галочку возле Play On Awake
@@ -100,23 +101,15 @@ public class MusicManager : MonoBehaviour   // Менеджер Фоновой �
     {
         _audioSource.PlayOneShot(_musicAudioClipDictionary[music], _volume);// Воспроизводит аудиоклип и масштабирует громкость аудиоисточника по шкале громкости.
     }
-    public void IncreaseVolume() // Увеличить громкость
+
+    public void SetVolume(float Value) // Установить громкость
     {
-        _volume += .1f;
-        _volume = Mathf.Clamp01(_volume); // Ограничем между 0 и 1
+        _volume = Mathf.Clamp01(Value); // Ограничем между 0 и 1
         _audioSource.volume = _volume; // Установим громкость
         PlayerPrefs.SetFloat("musicVolume", _volume); // Сохраним установленную громкость
-    }
+    }   
 
-    public void DecreaseVolume() // Уменьшить громкость
-    {
-        _volume -= .1f;
-        _volume = Mathf.Clamp01(_volume); // Ограничем между 0 и 1
-        _audioSource.volume = _volume; // Установим громкость
-        PlayerPrefs.SetFloat("musicVolume", _volume); // Сохраним установленную громкость
-    }
-
-    public float GetVolume() // Получить громкость
+    public float GetNormalizedVolume() // Получить громкость
     {
         return _volume;
     }

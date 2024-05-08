@@ -18,10 +18,23 @@ public class UnitEquipment : MonoBehaviour
 
 
     /// <summary>
-    ///  Экиперовать БРОНЕЙ, юнита к которому прикриплен этот скрипт
+    ///  Экиперовать ОРУЖИЕМ, юнита к которому прикриплен этот скрипт
     /// </summary>
-    public void EquipArmor(PlacedObject placedObject)
+    public void EquipWeapon(PlacedObject placedObject)
     {
         //Получить из PlacedObject  SO а из него на какую руку и префаб
+    }
+
+    /// <summary>
+    ///  Экиперовать БРОНЕЙ, юнита к которому прикриплен этот скрипт
+    /// </summary>
+    public void EquipArmor()
+    {
+
+    }
+
+    public void FreeHands() // Освободить руки
+    {
+
     }
 }

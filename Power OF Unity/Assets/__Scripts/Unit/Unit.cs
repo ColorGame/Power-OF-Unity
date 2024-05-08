@@ -6,7 +6,9 @@ using UnityEngine;
 public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетке и очки действий, получение урона
 {
 
-    private const int ACTION_POINTS_MAX = 5; //НАДО НАСТРОИТЬ//
+    
+
+   private const int ACTION_POINTS_MAX = 5; //НАДО НАСТРОИТЬ//
 
     // для // РЕШЕНИЕ 2 //в UnitActionSystemUI
     // static - обозначает что event будет существовать для всего класса не зависимо от того скольго у нас созданно Юнитов.
@@ -22,6 +24,7 @@ public class Unit : MonoBehaviour // Этот клас будет отвечать за позицию на сетк
 
     // Частные случаи
     private GridPositionXZ _gridPosition;
+    private UnitTypeSO _unitTypeSO;
     private Health _healthSystem; 
     private BaseAction[] _baseActionsArray; // Массив базовых действий // Будем использовать при создании кнопок   
     private List<BaseAction> _baseActionsOnEquipmentList; // Список базовых действий которые на ЭКИПЕРОВКЕ

@@ -20,8 +20,11 @@ public class SetupCameraAndAttachedCanvasesUI : MonoBehaviour
 
     private void Start()
     {
+        // При смене сцены надо вновь добавлять в стек текущей камеры
         Camera.main.GetUniversalAdditionalCameraData().cameraStack.Add(_cameraInventoryUI); //Добавим в стек основной камеры нашу камеру инвенторя
-        _cameraInventoryUI.cullingMask = LayerMask.GetMask("UI","Inventory","InventoryHidden");
+
+
+        _cameraInventoryUI.cullingMask = LayerMask.GetMask("UI","Inventory","InventoryHidden"); // Настроим слои маски для отображения
 
         foreach (Canvas canvas in _canvasAttachedArray)
         {

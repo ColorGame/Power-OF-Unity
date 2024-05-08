@@ -121,7 +121,7 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
     {
         _isOpen = true;        
         _animator.CrossFade(_animBase.DoorOpen, 0.2f);
-        //_animator.SetBool("IsOpen", _isOpen); // Настроим булевую переменную "GetIsOpen". Передадим ей значение _isOpen        
+        //_animation.SetBool("IsOpen", _isOpen); // Настроим булевую переменную "GetIsOpen". Передадим ей значение _isOpen        
 
         foreach (GridPositionXZ gridPosition in _doorGridPositionList) // Переберем список сеточных позиции которые занимает Дверь
         {
@@ -160,7 +160,7 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
 
         _isOpen = false;
         _animator.CrossFade(_animBase.DoorClose, 0.2f);
-        // _animator.SetBool("IsOpen", _isOpen); // Настроим булевую переменную "GetIsOpen". Передадим ей значение _isOpen
+        // _animation.SetBool("IsOpen", _isOpen); // Настроим булевую переменную "GetIsOpen". Передадим ей значение _isOpen
         _soundManager.PlaySoundOneShot(SoundName.DoorOpen);
     }
 

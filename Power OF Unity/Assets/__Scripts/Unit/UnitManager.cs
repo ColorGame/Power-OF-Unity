@@ -1,26 +1,27 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-// РЕШЕНИЕ //- НАСТРОИМ ПОРЯДОК ВЫПОЛНЕНИЯ СКРИПТА UnitManager и Unit , добавим в Project Settings/ Script Execution Order и поместим выполнение UnitManager выше Default Time), чтобы UnitManager запустился раньше чем сценарий Unit
+// НАСТРОИМ  CoreEntryPoint ПОРЯДОК ВЫПОЛНЕНИЯ СКРИПТА UnitManager и Unit , чтобы UnitManager запустился раньше чем сценарий Unit
 // (что бы сначала запустить слушателя в UnitManager а потом запустить само событие в Unit)
 // Иначе если скрипт Unit проснется раньше то юнит не добавиться в СПИСОК ЮНИТОВ т.к. тот еще не запустился
 public class UnitManager // Менеджер (администратор) Юнитов
 {
     private const int MAX_COUNT_UNIT_ON_MISSION = 12;// Максимальное количество юнитов на миссии
 
-    public UnitManager() // Конструктор что бы отследить количество созданных new T() ОН ДОЛЖЕН БЫТЬ ОДИН
-    {
-    }
+    public UnitManager() { }// Конструктор что бы отследить количество созданных new T() ОН ДОЛЖЕН БЫТЬ ОДИН
 
-    public  event EventHandler OnAnyUnitDeadAndRemoveList; // Событие Любой Юнит Умер И Удален из Списка
-    public  event EventHandler OnAnyEnemyUnitSpawnedAndAddList; // Событие Любой вражеский юнит ражден и добавлен в Списка      
+
+    public event EventHandler OnAnyUnitDeadAndRemoveList; // Событие Любой Юнит Умер И Удален из Списка
+    public event EventHandler OnAnyEnemyUnitSpawnedAndAddList; // Событие Любой вражеский юнит ражден и добавлен в Списка      
 
     private List<Unit> _myUnitList;// список  моих юнитов
     private List<Unit> _myUnitOnMissionList;// список моих юнитов на Миссии
     private List<Unit> _myDeadUnitnList;// список моих погибших юнитов 
     private List<Unit> _enemyUnitList;  // список Вражеских юнитов
 
-    private TooltipUI _tooltipUI;      
+    private UnitTypeBasicListSO _unitTypeBasicListSO; // список для создания базовых юнитов
+    private TooltipUI _tooltipUI;
 
     public void Initialize(TooltipUI tooltipUI)
     {
@@ -32,17 +33,20 @@ public class UnitManager // Менеджер (администратор) Юнитов
         _myDeadUnitnList = new List<Unit>();
         _enemyUnitList = new List<Unit>();
 
+        _unitTypeBasicListSO = Resources.Load<UnitTypeBasicListSO>(typeof(UnitTypeBasicListSO).Name);    // Загружает ресурс запрошенного типа, хранящийся по адресу path(путь) в папке Resources(эту папку я создал в папке ScriptableObjects).
+                                                                                                         // Что бы не ошибиться в имени пойдем другим путем. Создадим экземпляр UnitTypeBasicListSO и назавем также как и класс, потом для поиска SO будем извлекать имя класса которое совпадает с именем экземпляра
+
         Unit.OnAnyEnemyUnitSpawned += Unit_OnAnyEnemyUnitSpawned; // Подпишемся на событие (Любой Рожденный(созданный) Вражеский Юнит)
         Unit.OnAnyUnitDead += Unit_OnAnyUnitDead;  // Подпишемся на событие (Любой Мертвый Юнит)
-    }       
+    }
 
 
-    private void Unit_OnAnyEnemyUnitSpawned(object sender, EventArgs e) 
+    private void Unit_OnAnyEnemyUnitSpawned(object sender, EventArgs e)
     {
         Unit unit = sender as Unit; // (Unit)sender - другая запись// Получим Юнита который является отправителем
 
         _enemyUnitList.Add(unit); // Добавим его в список Вражеских Юнитов
-        OnAnyEnemyUnitSpawnedAndAddList?.Invoke(this, EventArgs.Empty);    
+        OnAnyEnemyUnitSpawnedAndAddList?.Invoke(this, EventArgs.Empty);
     }
 
     private void Unit_OnAnyUnitDead(object sender, EventArgs e)
@@ -77,7 +81,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
     {
         if (_myUnitOnMissionList.Count <= Constant.MAX_COUNT_UNIT_ON_MISSION) // Проверим если количество юнитов в списке меньше МАКСТМАЛЬНОГО то добавим в список переданного юнита
         {
-            _myUnitOnMissionList.Add(unit); 
+            _myUnitOnMissionList.Add(unit);
         }
         else
         {
@@ -112,4 +116,5 @@ public class UnitManager // Менеджер (администратор) Юнитов
     public int GetMaxCountUnitOnMission()
     {
         return MAX_COUNT_UNIT_ON_MISSION;
-    }}
+    }
+}

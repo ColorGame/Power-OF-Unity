@@ -12,7 +12,7 @@ public class GameEndUI : MonoBehaviour
 
         transform.Find("mainMenuButton").GetComponent<Button>().onClick.AddListener(() =>
         {            
-            SceneLoader.Load(SceneName.MainMenuScene);
+            SceneLoader.Load(SceneName.UnitMenuScene);
         });
 
         transform.Find("againButton").GetComponent<Button>().onClick.AddListener(() =>

@@ -93,7 +93,7 @@ public class UnitSpawnerOnLevel : MonoBehaviour
             Transform enemyPrefab = Instantiate(GameAssets.Instance.GetEnemyPrefab(enemyUnitType)); // Создадим из префаба
             Unit enemyUnit = enemyPrefab.GetComponent<Unit>();//найдем на созданном префабе компонент Unit. Позицию настроим в след строке
             enemyUnit.SetupUnitForSpawn(pointSpawner, _turnSystem, _levelGrid);
-
+            enemyUnit.GetAction<MoveAction>().SetupUnitForSpawn();
             // можно спавн сделать дочерним к enemyUnit и сохранять его последнее положение, или удалять после спавна юнита
         }
 

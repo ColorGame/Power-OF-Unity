@@ -9,15 +9,15 @@ using UnityEngine;
 /// Компонент должен быть прикриплен к юниту
 /// </remarks>
 public class UnitInventory : MonoBehaviour // Инвентарь юнита
-{   
+{
 
-   
+
 
     [Header("ЗАПОЛНЯТЬ ТОЛЬКО ДЛЯ ВРАГА\n(Список оружия которым владеет ЮНИТ)")]
     [SerializeField] private List<PlacedObject> _placedObjectList; // Список Размещенных Объектов в Сетке Инвенторя.
-   
 
-   
+
+
     private Unit _unit;
     private UnitEquipment _unitEquipment;
 
@@ -33,7 +33,7 @@ public class UnitInventory : MonoBehaviour // Инвентарь юнита
         {
             foreach (PlacedObject placedObject in _placedObjectList)
             {
-                _unitEquipment.EquipArmor(placedObject);
+                _unitEquipment.EquipWeapon(placedObject);
             }
         }
     }
@@ -43,14 +43,24 @@ public class UnitInventory : MonoBehaviour // Инвентарь юнита
     /// </summary>  
     public void AddPlacedObjectList(PlacedObject placedObject)
     {
-        _placedObjectList.Add(placedObject);       
+        _placedObjectList.Add(placedObject);
+
+        if (GridName.MainWeaponGrid2 == placedObject.GetGridSystemXY().GetGridName())//Если добавлена в Сетку Основного Оружия
+        {
+            _unitEquipment.EquipWeapon(placedObject);
+        }
     }
     /// <summary>
     /// Удалить полученный объект из Списока "Размещенных Объектов в Сетке Инвенторя".
     /// </summary>  
     public void RemovePlacedObjectList(PlacedObject placedObject)
     {
-        _placedObjectList.Remove(placedObject);     
+        _placedObjectList.Remove(placedObject);
+
+        if (GridName.MainWeaponGrid2 == placedObject.GetGridSystemXY().GetGridName())//Если удален из Сетки Основного Оружия
+        {
+            _unitEquipment.FreeHands();// Убрать экипировку
+        }
     }
 
 
