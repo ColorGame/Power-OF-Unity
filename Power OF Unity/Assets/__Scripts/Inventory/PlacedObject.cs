@@ -62,26 +62,19 @@ public class PlacedObject : MonoBehaviour
     private bool _grabbed; // Схвачен   
     private bool _moveStartPosition = false; // Переместить в начальную позицию    
     private Transform _visual;
-    private Vector3 _offsetVisualFromParent;
-    private BaseAction _baseAction; // Базовое действие которое выполняет наш объект
-    private List<GridName> _canPlacedOnGridList;// Сетки где можно разместить наш объект
+    private Vector3 _offsetVisualFromParent;  
+    private List<InventorySlot> _canPlacedOnSlotList;// Слоты инвенторя где можно разместить наш объект
 
     protected virtual void Setup()
     {
-        _canPlacedOnGridList = _placedObjectTypeSO.GetCanPlacedOnGridList();
+        _canPlacedOnSlotList = _placedObjectTypeSO.GetCanPlacedOnSlotList();
         _visual = transform.GetChild(0); //Получим визуальный объект   
         _visual.localPosition = _offsetVisualFromParent;    // Установим в середину занимаемых ячеек наш визуальный объект (Если забыли установить вручную в префабе инвенторя)           
         _scaleOriginal = transform.localScale; // Сохраним оригинальный масштаб
         _startPosition = transform.position;  // Запомним стартовую позицию        
     }
 
-    private void Start()
-    {
-        if(TryGetComponent(out BaseAction baseAction)) // Если на объекте есть Базовое действие то вернем его
-        {
-            _baseAction = baseAction;
-        }
-    }
+   
 
     private void LateUpdate()
     {
@@ -200,13 +193,13 @@ public class PlacedObject : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public BaseAction GetBaseAction() // Получить Базовое действие предмета 
+    public List<InventorySlot> GetCanPlacedOnGridList() //Получить Сетки где можно разместить наш объект
     {
-        return _baseAction;
-    }
-
-    public List<GridName> GetCanPlacedOnGridList() //Получить Сетки где можно разместить наш объект
-    {
-        return _canPlacedOnGridList;
+        return _canPlacedOnSlotList;
     }    
+
+    public PlacedObjectParameters GetPlacedObjectParameters()
+    {
+        return new PlacedObjectParameters(_gridSystemXY.GetGridSlot(), _placedObjectTypeSO, _gridPositioAnchor);
+    }
 }

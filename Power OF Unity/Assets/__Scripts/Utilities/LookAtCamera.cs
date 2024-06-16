@@ -7,6 +7,18 @@ public class LookAtCamera : MonoBehaviour // Ўкала здоровь€ будет смотреть в сто
 
     private Transform _cameraTransform;
     private bool _updateTransformStarted;
+    private CameraFollow _cameraFollow;
+
+    public void SetupForSpawn(CameraFollow cameraFollow)
+    {
+        _cameraFollow = cameraFollow;
+
+        _cameraFollow.OnCameraRotateStarted += CameraMove_OnCameraRotateZoomStarted;
+        _cameraFollow.OnCameraRotateCompleted += CameraMove_OnCameraRotateZoomCompleted;
+        
+        _cameraFollow.OnCameraZoomStarted += CameraMove_OnCameraRotateZoomStarted;
+        _cameraFollow.OnCameraZoomCompleted += CameraMove_OnCameraRotateZoomCompleted;
+    }
 
     private void Awake()
     {
@@ -15,22 +27,16 @@ public class LookAtCamera : MonoBehaviour // Ўкала здоровь€ будет смотреть в сто
 
     private void Start()
     {
-        UpdateTransform();
-
-        CameraFollow.OnCameraRotateStarted += CameraMove_OnCameraRotateZoomStarted;
-        CameraFollow.OnCameraRotateCompleted += CameraMove_OnCameraRotateZoomCompleted;
-
-        CameraFollow.OnCameraZoomStarted += CameraMove_OnCameraRotateZoomStarted;
-        CameraFollow.OnCameraZoomCompleted += CameraMove_OnCameraRotateZoomCompleted;
+        UpdateTransform();       
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        CameraFollow.OnCameraRotateStarted -= CameraMove_OnCameraRotateZoomStarted;
-        CameraFollow.OnCameraRotateCompleted -= CameraMove_OnCameraRotateZoomCompleted;
-
-        CameraFollow.OnCameraZoomStarted -= CameraMove_OnCameraRotateZoomStarted;
-        CameraFollow.OnCameraZoomCompleted -= CameraMove_OnCameraRotateZoomCompleted;
+        _cameraFollow.OnCameraRotateStarted -= CameraMove_OnCameraRotateZoomStarted;
+        _cameraFollow.OnCameraRotateCompleted -= CameraMove_OnCameraRotateZoomCompleted;
+        
+        _cameraFollow.OnCameraZoomStarted -= CameraMove_OnCameraRotateZoomStarted;
+        _cameraFollow.OnCameraZoomCompleted -= CameraMove_OnCameraRotateZoomCompleted;
     }
     private void CameraMove_OnCameraRotateZoomCompleted(object sender, System.EventArgs e) { _updateTransformStarted = false; }
     private void CameraMove_OnCameraRotateZoomStarted(object sender, float e) { _updateTransformStarted = true; }

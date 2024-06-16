@@ -1,24 +1,36 @@
-using Pathfinding;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static LevelGridVisual;
-// ВАЖНО // Скрипт и маску слоя Cover закидываем только на объекты ниже 1,4м. (это условие НЕраспространяется на Smoke)
-// Если объект выше 1,4м (это высота точки выстрела у стоящего юнита), то он становиться OBSTACLES-препядствием, т.к. объект не простреливается (точность падает до 0%). 
-// CoverFull -1,4м 
-// CoverHalf -0,7м 
-public class CoverSmokeObject : MonoBehaviour//  Объект Укрытия или Дым 
+/// <summary>
+/// Объект Укрытия или Дым.
+/// ВАЖНО // Скрипт и маску слоя Cover закидываем только на объекты ниже 1,4м. (это условие НЕраспространяется на Smoke)
+/// </summary>
+/// <remarks>
+/// Если объект выше 1,4м (это высота точки выстрела у стоящего юнита), то он становиться OBSTACLES-препядствием, т.к. объект не простреливается (точность падает до 0%). 
+/// CoverFull -1,4м 
+/// CoverHalf -0,7м 
+/// </remarks>
+public class CoverSmokeObject : MonoBehaviour// 
 {
-    [SerializeField] private LayerMask _coverLayerMask; // маска слоя Укрытия (появится в ИНСПЕКТОРЕ)
-    [SerializeField] private LayerMask _smokeLayerMask; // маска слоя Дыма (появится в ИНСПЕКТОРЕ)
+    public enum CoverSmokeType
+    {
+        None,       //Нету
+        CoverHalf,  //Укрытие На половину
+        CoverFull,  //Укрытие Полное
+        SmokeHalf,  //Дым На половину
+        SmokeFull   //Дым Полный
+    }
+
     [SerializeField] private CoverSmokeType _coverSmokeType;
     [SerializeField] private float _penaltyAccuracy;  // Штраф прицеливания сделаем Сериализованным что бы во время Игры смотреть процент Штрафа
+    private LayerMask _coverLayerMask; // маска слоя Укрытия (появится в ИНСПЕКТОРЕ)
+    private LayerMask _smokeLayerMask; // маска слоя Дыма (появится в ИНСПЕКТОРЕ)
     
     private void Start()
     {
         //Сделаем предварительные настройки.
         //Выстрелим ЛУЧ. ЛУч не может стрелять внутри колайдера(внутри стены), поэтому сместим его наружу
+
+        _coverLayerMask = LayerMask.GetMask("Cover");
+        _smokeLayerMask = LayerMask.GetMask("Smoke");
 
         float raycastOffsetDistance = 1.5f; // Дистанция смещения луча
         float raycastDistance = 0.5f; // Дистанция выстрела луча
@@ -85,11 +97,4 @@ public class CoverSmokeObject : MonoBehaviour//  Объект Укрытия или Дым
     }
 }
 
-public enum CoverSmokeType
-{
-    None,       //Нету
-    CoverHalf,  //Укрытие На половину
-    CoverFull,  //Укрытие Полное
-    SmokeHalf,  //Дым На половину
-    SmokeFull   //Дым Полный
-}
+

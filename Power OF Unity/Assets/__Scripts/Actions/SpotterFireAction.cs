@@ -28,14 +28,14 @@ public class SpotterFireAction : BaseAction // Действие Корректировщик огня НАСЛ
     {
         base.Start();
 
-        UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged; // Выбранный юнит изменен
+        _unitActionSystem.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged; // Выбранный юнит изменен
     }
 
     private void UnitActionSystem_OnSelectedUnitChanged(object sender, EventArgs e)
     {
         if (_partnerUnit != null) // Если есть партнер
         {
-            Unit selectedUnit = UnitActionSystem.Instance.GetSelectedUnit();
+            Unit selectedUnit = _unitActionSystem.GetSelectedUnit();
             if (selectedUnit != _partnerUnit) // Если выделенный юнит НЕ ПАРТНЕР то
             {
                 _partnerUnit.GetAction<ShootAction>().СlearSpotterFireUnit(); // Очистить у партнера поле корректировщика огня
@@ -120,18 +120,18 @@ public class SpotterFireAction : BaseAction // Действие Корректировщик огня НАСЛ
                 GridPositionXZ offsetGridPosition = new GridPositionXZ(x, z, 0); // Смещенная сеточная позиция. Где началом координат(0,0, 0-этаж) является сам юнит 
                 GridPositionXZ testGridPosition = unitGridPosition + offsetGridPosition; // Тестируемая Сеточная позиция
 
-                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
+                if (!_levelGrid.IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
                 {
                     continue; // continue заставляет программу переходить к следующей итерации цикла 'for' игнорируя код ниже
                 }
 
-                if (!LevelGrid.Instance.HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточное позицию где нет юнитов (нам нужны ячейки с юнитами мы будем их исцелять)
+                if (!_levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточное позицию где нет юнитов (нам нужны ячейки с юнитами мы будем их исцелять)
                 {
                     // Позиция сетки пуста, нет Юнитов
                     continue;
                 }
 
-                Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции 
+                Unit targetUnit = _levelGrid.GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции 
                                                                                                 // GetUnitAtGridPosition может вернуть null но в коде выше мы исключаем нулевые позиции, так что проверка не нужна
                 if (targetUnit.IsEnemy() != _unit.IsEnemy()) // Если тестируемый юнит враг а наш юнит нет (игнорируем чужаков)
                 {
@@ -140,7 +140,7 @@ public class SpotterFireAction : BaseAction // Действие Корректировщик огня НАСЛ
                 }
 
                 // Проверим партнера на достаточность очков
-                int actionPoint = targetUnit.GetActionPoints(); // Получить очки действия у проверяемого юнита                
+                int actionPoint = targetUnit.GetActionPointsSystem().GetActionPointsCount(); // Получить очки действия у проверяемого юнита                
                 if (actionPoint == 0)
                 {
                     // Он пустой нам не поможет
@@ -167,7 +167,7 @@ public class SpotterFireAction : BaseAction // Действие Корректировщик огня НАСЛ
                                                                                         // тогда запишем - public override void TakeAction(BaseParameters baseParameters ,Action onActionComplete){
                                                                                         // SpinBaseParameters spinBaseParameters = (SpinBaseParameters)baseParameters;}
     {
-        _partnerUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition); // Получим юнита у которого хотим Корректировать Огонь
+        _partnerUnit = _levelGrid.GetUnitAtGridPosition(gridPosition); // Получим юнита у которого хотим Корректировать Огонь
         _state = State.SpotterFireBefore; // Активируем состояние Подготовки 
 
         // Найдем точки прицеливания у юнитов
@@ -179,10 +179,10 @@ public class SpotterFireAction : BaseAction // Действие Корректировщик огня НАСЛ
             Instantiate(GameAssets.Instance.spotterFireFXPrefab, partnerAimPoinTransform.position, Quaternion.identity ,partnerAimPoinTransform)
         };
 
-        _soundManager.PlaySoundOneShot(SoundName.Spotter);
+        _soundManager.PlayOneShot(SoundName.Spotter);
 
         _partnerUnit.GetAction<ShootAction>().SetSpotterFireUnit(_unit); // Установим партнеру, Себя, как коррект. огня
-        UnitActionSystem.Instance.SetSelectedUnit(_partnerUnit, _partnerUnit.GetAction<ShootAction>()); //Сделаем Партнера выделенным и выберем действие стрелять
+        _unitActionSystem.SetSelectedUnit(_partnerUnit, _partnerUnit.GetAction<ShootAction>()); //Сделаем Партнера выделенным и выберем действие стрелять
 
 
         OnSpotterFireActionStarted?.Invoke(this, EventArgs.Empty); // Запустим событие Действие Корректировки Началось Подписчик UnitAnimator (ВЫКЛЮЧАЕМ ОРУЖИЕ)
@@ -200,7 +200,7 @@ public class SpotterFireAction : BaseAction // Действие Корректировщик огня НАСЛ
 
     private void OnDestroy()
     {
-        UnitActionSystem.Instance.OnSelectedUnitChanged -= UnitActionSystem_OnSelectedUnitChanged; // Выбранный юнит изменен
+        _unitActionSystem.OnSelectedUnitChanged -= UnitActionSystem_OnSelectedUnitChanged; // Выбранный юнит изменен
     }
 
     public override string GetToolTip()

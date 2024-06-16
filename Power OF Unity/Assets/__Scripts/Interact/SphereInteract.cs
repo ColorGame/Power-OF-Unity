@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SphereInteract : MonoBehaviour, IInteractable // Взаимодействие с Сферой // Расширим класс интерфейсом 
@@ -15,6 +13,9 @@ public class SphereInteract : MonoBehaviour, IInteractable // Взаимодействие с С
 
     [SerializeField] private bool _isGreen; //Он зеленый (для отслеживания состояния шара)
 
+    private static SoundManager _soundManager;
+    private static LevelGrid _levelGrid;
+
     private GridPositionXZ _gridPosition; // Сеточная позиция шара    
     private Action _onInteractionComplete; // Делегат Взаимодействие Завершено// Объявляю делегат в пространстве имен - using System;
                                            //Сохраним наш делегат как обыкновенную переменную (в ней будет храниться функия которую мы передадим).
@@ -24,7 +25,11 @@ public class SphereInteract : MonoBehaviour, IInteractable // Взаимодействие с С
     private bool _isActive;
     private float _timer; // Таймер который не будет позволять непрерывно взаимодействовать с шаром
 
-
+    public static void Init(SoundManager soundManager, LevelGrid levelGrid)
+    {
+        _soundManager = soundManager;
+        _levelGrid = levelGrid;
+    }
 
     private void Start()
     {
@@ -45,8 +50,8 @@ public class SphereInteract : MonoBehaviour, IInteractable // Взаимодействие с С
 
     public void UpdateInteractableAtGridPosition() // Обновить Взаимодействие с Сеточной позицией
     {
-        _gridPosition = LevelGrid.Instance.GetGridPosition(transform.position); // Определим сеточную позицию шара
-        LevelGrid.Instance.SetInteractableAtGridPosition(_gridPosition, this); // И в полученную сеточную позицию установим наш Шар с Интерфейсом Interactable(взаимодействия)
+        _gridPosition = _levelGrid.GetGridPosition(transform.position); // Определим сеточную позицию шара
+        _levelGrid.SetInteractableAtGridPosition(_gridPosition, this); // И в полученную сеточную позицию установим наш Шар с Интерфейсом Interactable(взаимодействия)
     }
 
 
@@ -92,6 +97,7 @@ public class SphereInteract : MonoBehaviour, IInteractable // Взаимодействие с С
         else
         {
             SetColorGreen();
+            _soundManager.PlayOneShot(SoundName.Interact);
             OnInteractSphereActivated?.Invoke(this, EventArgs.Empty); // Запустим событие - Сфера Взаимодействия Активированна
         }
 

@@ -40,10 +40,10 @@ public abstract class GrenadeAction : BaseAction // Граната ДЕйствие. Наследует 
     {
         base.Start();
 
-        _handleAnimationEvents.OnAnimationTossGrenadeEventStarted += _handleAnimationEvents_OnAnimationTossGrenadeEventStarted; // Подпишемся на событие "В анимации "Бросок гранаты" стартовало событие"
+        _handleAnimationEvents.OnAnimationTossGrenadeEventStarted += HandleAnimationEvents_OnAnimationTossGrenadeEventStarted; // Подпишемся на событие "В анимации "Бросок гранаты" стартовало событие"
     }
 
-    public abstract void _handleAnimationEvents_OnAnimationTossGrenadeEventStarted(object sender, EventArgs e); // abstract - вынуждает реализовывать в каждом подклассе и в базовом должно иметь пустое тело.
+    public abstract void HandleAnimationEvents_OnAnimationTossGrenadeEventStarted(object sender, EventArgs e); // abstract - вынуждает реализовывать в каждом подклассе и в базовом должно иметь пустое тело.
     public abstract int GetGrenadeDamage(); // повреждения от гранаты
     protected void Update()
     {
@@ -62,7 +62,7 @@ public abstract class GrenadeAction : BaseAction // Граната ДЕйствие. Наследует 
         {
             case State.GrenadeBefore:
 
-                Vector3 targetPositin = LevelGrid.Instance.GetWorldPosition(_targetGridPositin);
+                Vector3 targetPositin = _levelGrid.GetWorldPosition(_targetGridPositin);
                 Vector3 targetDirection = (targetPositin - transform.position).normalized; // Направление к целивой ячейки, еденичный вектор
                 targetDirection.y = 0; // Чтобы юнит не наклонялся пли броске (т.к. вектор будет поворачиваться только по плоскости x,y)
 
@@ -91,9 +91,9 @@ public abstract class GrenadeAction : BaseAction // Граната ДЕйствие. Наследует 
             case State.GrenadeBefore:
 
                 _state = State.GrenadeInstantiate;
-                _soundManager.PlaySoundOneShot(SoundName.GrenadeThrow);
+                _soundManager.PlayOneShot(SoundName.GrenadeThrow);
                 //float grenadeInstantiateStateTime = 0.5f; // Для избежания магических чисель введем переменную  Продолжительность Состояния Создание Гранаты //НУЖНО НАСТРОИТЬ// Можно ЗДЕСЬ настроить время создания ГРАНАТЫ (сейчас использую AnimationEvent)
-                //_musicTimer = grenadeInstantiateStateTime;                               
+                //_soundTimer = grenadeInstantiateStateTime;                               
 
                 break;
 
@@ -123,7 +123,7 @@ public abstract class GrenadeAction : BaseAction // Граната ДЕйствие. Наследует 
                     GridPositionXZ offsetGridPosition = new GridPositionXZ(x, z, floor); // Смещенная сеточная позиция. Где началом координат(0,0, 0-этаж) является сам юнит 
                     GridPositionXZ testGridPosition = unitGridPosition + offsetGridPosition; // Тестируемая Сеточная позиция
 
-                    if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
+                    if (!_levelGrid.IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
                     {
                         continue; // continue заставляет программу переходить к следующей итерации цикла 'for' игнорируя код ниже
                     }
@@ -135,7 +135,7 @@ public abstract class GrenadeAction : BaseAction // Граната ДЕйствие. Наследует 
                         continue;
                     }
 
-                    LevelGridNode levelGridNode = LevelGrid.Instance.GetGridNode(testGridPosition);
+                    LevelGridNode levelGridNode = _levelGrid.GetGridNode(testGridPosition);
 
                     //если в этой позиции нет узла пути значит эта GridPositionXZ висит в воздухе  
                     if (levelGridNode == null)
@@ -157,8 +157,8 @@ public abstract class GrenadeAction : BaseAction // Граната ДЕйствие. Наследует 
                     }*/
 
                     // ПРОВЕРИМ НА возможность броска через препятствия 
-                    Vector3 worldTestGridPosition = LevelGrid.Instance.GetWorldPosition(testGridPosition);   // Получим мировые координаты тестируемой сеточной позиции 
-                    Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition); // Переведем в мировые координаты переданную нам сеточную позицию Юнита  
+                    Vector3 worldTestGridPosition = _levelGrid.GetWorldPosition(testGridPosition);   // Получим мировые координаты тестируемой сеточной позиции 
+                    Vector3 unitWorldPosition = _levelGrid.GetWorldPosition(unitGridPosition); // Переведем в мировые координаты переданную нам сеточную позицию Юнита  
                     Vector3 grenadeDirection = (worldTestGridPosition - unitWorldPosition).normalized; //Нормализованный Вектор Направления броска Гранаты
 
                     float heightRaycast = 2f; // Высота выстрела луча (делаю высоким что бы игнорировать низкие препядствия т.к. через них можно бросать гранатой) Через препятствия выше 2,5м бросать грнату НЕЛЬЗЯ (высота потолка 3м)
@@ -223,7 +223,7 @@ public abstract class GrenadeAction : BaseAction // Граната ДЕйствие. Наследует 
     }
     protected void OnDestroy()
     {
-        _handleAnimationEvents.OnAnimationTossGrenadeEventStarted -= _handleAnimationEvents_OnAnimationTossGrenadeEventStarted; // Отпишемя от события чтобы не вызывались функции в удаленных объектах.
+        _handleAnimationEvents.OnAnimationTossGrenadeEventStarted -= HandleAnimationEvents_OnAnimationTossGrenadeEventStarted; // Отпишемя от события чтобы не вызывались функции в удаленных объектах.
     }
 }
 

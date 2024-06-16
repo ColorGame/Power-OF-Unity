@@ -89,7 +89,7 @@ public class LevelScripting : MonoBehaviour // Сенарий уровня. Отвечает за взаим
 
     private void Start()
     {
-        //LevelGrid.Instance.OnAnyUnitMovedGridPosition += LevelGrid_OnAnyUnitMovedGridPosition; // Подпишемся на событие Любой Юнит Перемещен в Сеточной позиции
+       
 
         // Отключим взаимодействие с дверьми которые открываются от Сферы
         _doorSphere5.SetIsInteractable(false);
@@ -199,13 +199,4 @@ public class LevelScripting : MonoBehaviour // Сенарий уровня. Отвечает за взаим
 
 
 
-    /* private void LevelGrid_OnAnyUnitMovedGridPosition(object sender, LevelGrid.OnPlacedObjectOverGridPositionEventArgs e)
-     {
-         if (e.toGridPosition.y == 5 && !_hasShownFirstHider) // Если игрок пройдет вверх 5 клеток(ячеек) и Еще не были показаны первые враги то...
-         {
-             _hasShownFirstHider = true; // Можем показать первый скрытый отряд врагов
-             SetActiveGameObjectList(_hider1List, false); // Выключим полотно которое скрывает
-             SetActiveGameObjectList(_enemy1List, true); // Включим 1 лист врагов
-         }
-     }*/
 }

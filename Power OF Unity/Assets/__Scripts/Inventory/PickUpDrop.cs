@@ -35,19 +35,19 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
     private TooltipUI _tooltipUI;
     private InventoryGrid _inventoryGrid;   
 
-    public void Initialize(GameInput gameInput, TooltipUI tooltipUI, InventoryGrid inventoryGrid)
-    {
-        _gameInput = gameInput;
-        _tooltipUI = tooltipUI;
-        _inventoryGrid = inventoryGrid;    
-    }
-
+   
     private void Awake()
     {
         _canvasInventoryWorld = GetComponentInParent<Canvas>().transform;
         _cameraInventoryUI = GetComponentInParent<Camera>();
     }
 
+    public void Init(GameInput gameInput, TooltipUI tooltipUI, InventoryGrid inventoryGrid)
+    {
+        _gameInput = gameInput;
+        _tooltipUI = tooltipUI;
+        _inventoryGrid = inventoryGrid;
+    }
 
     private void Start()
     {      
@@ -114,7 +114,7 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
     public bool TryDrop(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY, Vector2Int gridPositionMouse, PlacedObject placedObject)
     {
         // Попробуем сбросить и разместить на сетке       
-        GridName gridName = gridSystemXY.GetGridName(); // Получим имя сетки
+        InventorySlot gridName = gridSystemXY.GetGridSlot(); // Получим имя сетки
 
         if (!placedObject.GetCanPlacedOnGridList().Contains(gridName)) //Если нашей сетки НЕТ в списке сеток где можно разместить наш объект то
         {
@@ -127,14 +127,14 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
         bool drop = false;
         switch (gridName)
         {
-            case GridName.BagGrid1:
+            case InventorySlot.BagSlot:
 
                 drop = TryAddPlacedObjectAtGridPosition(gridPositionMouse, placedObject, gridSystemXY);
                 break;
 
             // для сетки Основного и Доп. оружия установим newMouseGridPosition (0,0)
-            case GridName.MainWeaponGrid2:
-            case GridName.OtherWeaponGrid3:
+            case InventorySlot.MainWeaponSlot:
+            case InventorySlot.OtherWeaponSlot:
 
                 gridPositionMouse = new Vector2Int(0, 0);
                 drop = TryAddPlacedObjectAtGridPosition(gridPositionMouse, placedObject, gridSystemXY);
@@ -178,10 +178,10 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
 
         if (tryGetGridSystemGridPosition) // Если над сеткой то попробуем получить ее
         {
-            GridName gridName = gridSystemXY.GetGridName(); // Получим имя сетки
+            InventorySlot gridName = gridSystemXY.GetGridSlot(); // Получим имя сетки
             switch (gridName)
             {
-                case GridName.BagGrid1:
+                case InventorySlot.BagSlot:
                     _placedObject.SetTargetPosition(_inventoryGrid.GetWorldPositionLowerLeftСornerCell(newMouseGridPosition, gridSystemXY));
                     _placedObject.SetTargetRotation(_inventoryGrid.GetRotationAnchorGrid(gridSystemXY));
 
@@ -199,8 +199,8 @@ public class PickUpDrop : MonoBehaviour // Поднятие Перетаскивание и Бросание об
                     break;
 
                 // для сетки Основного и Доп. оружия установим TargetPosition в центре сетки
-                case GridName.MainWeaponGrid2:
-                case GridName.OtherWeaponGrid3:
+                case InventorySlot.MainWeaponSlot:
+                case InventorySlot.OtherWeaponSlot:
 
                     _placedObject.SetTargetPosition(_inventoryGrid.GetWorldPositionGridCenter(gridSystemXY) - _offset); //Чтобы объект был по центру сетки надо вычесть смещение визуала относительно родителя
                     _placedObject.SetTargetRotation(_inventoryGrid.GetRotationAnchorGrid(gridSystemXY));

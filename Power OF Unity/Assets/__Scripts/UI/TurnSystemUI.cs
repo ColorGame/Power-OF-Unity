@@ -11,16 +11,23 @@ public class TurnSystemUI : MonoBehaviour // Система Ходов UI обрабатывает нажат
     [SerializeField] private Button _endTurnButton; // В инспекторе закинем кнопку
     [SerializeField] private GameObject _enemyTurnVisualGameObject; // В инспекторе закинуть лэйбел "Ход ВРАГА"
 
+    private TurnSystem _turnSystem;
+
+    public void Init(TurnSystem turnSystem)
+    {
+        _turnSystem = turnSystem;
+    }
+
     private void Start()
     {
         //Добавим событие при нажатии на нашу кнопку// AddListener() в аргумент должен получить делегат- ссылку на функцию. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
         _endTurnButton.onClick.AddListener(() =>
         {
-            TurnSystem.Instance.NextTurn();
+            _turnSystem.NextTurn();
 
         });
 
-        TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged; // подписываемся на Event // Будет выполняться (обновлять текст хода) каждый раз когда изменен номер хода.
+        _turnSystem.OnTurnChanged += TurnSystem_OnTurnChanged; // подписываемся на Event // Будет выполняться (обновлять текст хода) каждый раз когда изменен номер хода.
 
         UpdateNamberTurnText();
         UpdateEnemyTurnVisual();
@@ -38,17 +45,17 @@ public class TurnSystemUI : MonoBehaviour // Система Ходов UI обрабатывает нажат
 
     private void UpdateNamberTurnText() // Обнавление очков действий
     {
-        _turnNumberText.text = ("" + TurnSystem.Instance.GetTurnNumber()).ToUpper();
+        _turnNumberText.text = ("" + _turnSystem.GetTurnNumber()).ToUpper();
     }
 
     private void UpdateEnemyTurnVisual() //Обновление Визуальной таблички ход врага
     {
-        _enemyTurnVisualGameObject.SetActive(!TurnSystem.Instance.IsPlayerTurn()); // Деактивируем на ход игрока и включим на ход врага
+        _enemyTurnVisualGameObject.SetActive(!_turnSystem.IsPlayerTurn()); // Деактивируем на ход игрока и включим на ход врага
     }
 
     private void UpdateEndTurnButtonVisibility() // Обновить видимость кнопки End Turn
     {
-        _endTurnButton.gameObject.SetActive(TurnSystem.Instance.IsPlayerTurn()); // Показываем только во время хода игрока
+        _endTurnButton.gameObject.SetActive(_turnSystem.IsPlayerTurn()); // Показываем только во время хода игрока
 
     }
 }

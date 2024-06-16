@@ -1,21 +1,19 @@
-using Cinemachine.Utility;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitRagdoll : MonoBehaviour //  Юнит Тряпичная кукла// Висит на Тряпичной кукле . Отвечает за преобразовании куклы из положения Т в нормальное. Откидывание из за взрыва
 {
     [SerializeField] private Transform _ragdollRootBone; // Тряпичная кукла Корневая Кость
 
-    private float _explosionForce = 300; // Сила взрыва. У каждого экшн она будет настраиваться в Setup() //НУЖНО НАСТРОИТЬ//
+    private float _explosionForce = 300; // Сила взрыва. У каждого экшн она будет настраиваться в Init() //НУЖНО НАСТРОИТЬ//
 
-    public void Setup(Transform originalRootBone, Unit keelerUnit) // Настройка тряпичной куклы (в аргумент передаем Оригинальную Корневую Кость(юнита) и Юнита который хочет нас убить - Киллер)
+
+    public void Setup(UnitActionSystem unitActionSystem, Transform originalRootBone, Unit keelerUnit) // Настройка тряпичной куклы (в аргумент передаем Оригинальную Корневую Кость(юнита) и Юнита который хочет нас убить - Киллер)
     {
         MatchAllChildrenTransform(originalRootBone, _ragdollRootBone);
 
         Vector3 explosionPosition; //Иниацилизируем переменную Позиция Взрыва
 
-        BaseAction selectedAction = UnitActionSystem.Instance.GetSelectedAction(); // Получим Выбранное Действие
+        BaseAction selectedAction = unitActionSystem.GetSelectedAction(); // Получим Выбранное Действие
                 
         switch (selectedAction)
         {
@@ -29,14 +27,14 @@ public class UnitRagdoll : MonoBehaviour //  Юнит Тряпичная кукла// Висит на Тря
 
             case ShootAction shootAction:
                 
-                Vector3 directionKeeler = (keelerUnit.transform.position - transform.position).normalized; //Направление к киллеру , что бы узнать с какой стороны нанесен урон
+                Vector3 directionKeeler = (keelerUnit.GetTransformPosition() - transform.position).normalized; //Направление к киллеру , что бы узнать с какой стороны нанесен урон
                 explosionPosition = transform.position + directionKeeler; // Сместим точку взрыва в сторону киллера            
                 _explosionForce = 300f; //НУЖНО НАСТРОИТЬ//
                 break;
 
             case SwordAction swordAction:
 
-                directionKeeler = (keelerUnit.transform.position - transform.position).normalized; //Направление к киллеру , что бы узнать с какой стороны нанесен урон
+                directionKeeler = (keelerUnit.GetTransformPosition() - transform.position).normalized; //Направление к киллеру , что бы узнать с какой стороны нанесен урон
                 explosionPosition = transform.position + directionKeeler; // Сместим точку взрыва в сторону киллера    
                 _explosionForce = 500f; //НУЖНО НАСТРОИТЬ//
                 break;

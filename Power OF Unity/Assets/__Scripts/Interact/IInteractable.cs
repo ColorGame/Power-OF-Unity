@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public interface IInteractable // Интерфейс взаимодействия (общий для всех взаимодействуюших объектов)
                                // Интерфейс представляет ссылочный тип, который может определять некоторый функционал - набор методов и свойств без реализации (как абстарктные методы в BaseAction).

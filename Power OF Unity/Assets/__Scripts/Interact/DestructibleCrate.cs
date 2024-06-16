@@ -10,8 +10,17 @@ public class DestructibleCrate : MonoBehaviour // Разрушаемый ящик
     [SerializeField] private Transform _crate; // целый ящик //Откючение Рендер не подойдет т.к. при смене этажа камерой, рендер проверяется и включается заново
     [SerializeField] private Transform _crateDestroyed; // Разрушенный ящик     
 
+    private static SoundManager _soundManager;
+    private static LevelGrid _levelGrid;
+
     private GridPositionXZ _gridPosition; // Позиция сетки нашего ящика
     private SingleNodeBlocker _singleNodeBlocker;
+
+    public static void Init(SoundManager soundManager, LevelGrid levelGrid)
+    {
+        _soundManager = soundManager;
+        _levelGrid = levelGrid;
+    }
 
     private void Awake()
     {      
@@ -21,7 +30,7 @@ public class DestructibleCrate : MonoBehaviour // Разрушаемый ящик
     private void Start()
     {
         _crateDestroyed.gameObject.SetActive(false); // Скрыть Разрушенный ящик (на всякий случай если забыли скрыть в инспекторе)
-        _gridPosition = LevelGrid.Instance.GetGridPosition(transform.position); //Получим сеточную позицию ящика
+        _gridPosition = _levelGrid.GetGridPosition(transform.position); //Получим сеточную позицию ящика
         _singleNodeBlocker.BlockAtCurrentPosition();// Заблокирую узел
     }
     public void Damage(Vector3 explosionPosition)
@@ -34,7 +43,9 @@ public class DestructibleCrate : MonoBehaviour // Разрушаемый ящик
         BlockManager.Instance.InternalUnblock(graphNode, _singleNodeBlocker); // Разблокируем узел
 
         ApplyExplosionToChildren(_crateDestroyed, 150f, explosionPosition, 10f); // Применим взрыв к разрушенному ящику, с силой 150, в той же позиции, и радиус действия 10
-               
+        
+        _soundManager.Play(SoundName.DestructionCrate);
+
         OnAnyDestroyed?.Invoke(this, EventArgs.Empty);
     }
 

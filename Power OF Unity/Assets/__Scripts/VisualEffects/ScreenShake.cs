@@ -1,6 +1,4 @@
-using Cinemachine; // добавим для работы с Cinemachine
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 
 //ПРЕДВАРИТЕЛЬНАЯ НАСТРОИКА - у CinemachineVirtualCamera во вкладке Add Extension добавили Cinemachine Impulse Listener //https://docs.unity3d.com/Packages/com.unity.cinemachine@2.9/manual/CinemachineImpulseListener.html

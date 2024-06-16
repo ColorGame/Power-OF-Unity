@@ -15,7 +15,7 @@ public class InventoryGrid : MonoBehaviour
 
    
 
-    [SerializeField] private GridParameters[] _gridParametersArray; // Массив параметров сеток ЗАДАТЬ в ИНСПЕКТОРЕ
+    [SerializeField] private InventoryGridParameters[] _gridParametersArray; // Массив параметров сеток ЗАДАТЬ в ИНСПЕКТОРЕ
     [SerializeField] private Transform _gridDebugObjectPrefab; // Префаб отладки сетки 
 
     private TooltipUI _tooltipUI;
@@ -25,17 +25,12 @@ public class InventoryGrid : MonoBehaviour
     private List<GridSystemTiltedXY<GridObjectInventoryXY>> _gridSystemTiltedXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectInventoryXY    
 
 
-    public void Initialize(PickUpDrop pickUpDrop, TooltipUI tooltipUI)
-    {
-        _pickUpDrop = pickUpDrop;
-        _tooltipUI = tooltipUI;
-    }
-
+    
     private void Awake()
     {      
         _gridSystemTiltedXYList = new List<GridSystemTiltedXY<GridObjectInventoryXY>>(); // Инициализируем список              
 
-        foreach (GridParameters gridParameters in _gridParametersArray)
+        foreach (InventoryGridParameters gridParameters in _gridParametersArray)
         {
             GridSystemTiltedXY<GridObjectInventoryXY> gridSystem = new GridSystemTiltedXY<GridObjectInventoryXY>(gridParameters,   // ПОСТРОИМ СЕТКУ  и в каждой ячейки создадим объект типа GridObjectInventoryXY
                 (GridSystemXY<GridObjectInventoryXY> g, Vector2Int gridPosition) => new GridObjectInventoryXY(g, gridPosition)); //в четвертом параметре аргумента зададим функцию ананимно через лямбду => new GridObjectUnitXZ(g, _gridPositioAnchor) И ПЕРЕДАДИМ ЕЕ ДЕЛЕГАТУ. (лямбда выражение можно вынести в отдельный метод)
@@ -48,6 +43,12 @@ public class InventoryGrid : MonoBehaviour
         cellSize = _gridSystemTiltedXYList[0].GetCellSize(); // Для всех сеток масштаб ячейки одинвковый  
     }
 
+    public void Init(PickUpDrop pickUpDrop, TooltipUI tooltipUI)
+    {
+        _pickUpDrop = pickUpDrop;
+        _tooltipUI = tooltipUI;
+    }
+
     private void Start()
     {
         // Задодим размер и тайлинг материала заднего фона
@@ -56,7 +57,7 @@ public class InventoryGrid : MonoBehaviour
         // _background.localScale = new Vector3(_widthBag, _heightBag, 0) * _cellSize;
         //_background.GetComponent<Material>().mainTextureScale = new Vector2(_widthBag, _heightBag);// Сдеалем количество тайлов равным количеству ячеек по высоте и ширине   
 
-        /* foreach (GridParameters gridParameters in _gridParametersArray)
+        /* foreach (InventoryGridParameters gridParameters in _gridParametersArray)
          {
              RectTransform bagBackground = (RectTransform)gridParameters.anchorGridTransform.GetChild(0); //Получим задний фон сетки
              bagBackground.sizeDelta = new Vector2(gridParameters.width, gridParameters.height);
@@ -169,11 +170,11 @@ public class InventoryGrid : MonoBehaviour
         return cellSize;
     }
 
-    public GridSystemTiltedXY<GridObjectInventoryXY> GetGridSystemTiltedXY(GridName gridName) // Получить сетку по имени
+    public GridSystemTiltedXY<GridObjectInventoryXY> GetGridSystemTiltedXY(InventorySlot inventorySlot) // Получить сетку для этого слота
     {
         foreach (GridSystemTiltedXY<GridObjectInventoryXY> localGridSystem in _gridSystemTiltedXYList) // перберем список сеток
         {
-            if (localGridSystem.GetGridName() == gridName)
+            if (localGridSystem.GetGridSlot() == inventorySlot)
             {
                 return localGridSystem;
             }
@@ -186,7 +187,7 @@ public class InventoryGrid : MonoBehaviour
     [Serializable]
     public struct AddPlacedObject // Добаленный Размещенный объект
     {
-        public GridName gridName; //Имя Сетка на которой добавили размещенный объект
+        public InventorySlot gridName; //Имя Сетка на которой добавили размещенный объект
         public Vector2Int gridPositioAnchor; // Сеточная позиция Якоря
         public PlacedObjectTypeSO placedObjectTypeSO;
     }
@@ -226,7 +227,7 @@ public class InventoryGrid : MonoBehaviour
         {
             addPlacedObjectList.Add(new AddPlacedObject
             {
-                gridName = placedObject.GetGridSystemXY().GetGridName(),
+                gridName = placedObject.GetGridSystemXY().GetGridSlot(),
                 gridPositioAnchor = placedObject.GetGridPositionAnchor(),
                 placedObjectTypeSO = placedObject.GetPlacedObjectTypeSO(),
             });
@@ -265,7 +266,7 @@ public class InventoryGrid : MonoBehaviour
     }
 
 
-    /*public GridParameters[] GetGridParametersArray() //Получить Массив параметров сеток
+    /*public InventoryGridParameters[] GetGridParametersArray() //Получить Массив параметров сеток
     {
         return _gridParametersArray;
     }

@@ -5,62 +5,41 @@ using UnityEngine;
 /// <summary>
 /// Инвентарь юнита (Хранилище для предметов, которыми оснащен игрок). 
 /// </summary>
-/// <remarks>
-/// Компонент должен быть прикриплен к юниту
-/// </remarks>
-public class UnitInventory : MonoBehaviour // Инвентарь юнита
+public class UnitInventory
 {
+    public UnitInventory(Unit unit)
+    {
+        _unit = unit;
+        _placedObjectList = new List<PlacedObjectParameters>(); 
+    }
 
-
-
-    [Header("ЗАПОЛНЯТЬ ТОЛЬКО ДЛЯ ВРАГА\n(Список оружия которым владеет ЮНИТ)")]
-    [SerializeField] private List<PlacedObject> _placedObjectList; // Список Размещенных Объектов в Сетке Инвенторя.
-
-
+    public event EventHandler<PlacedObject> OnAddPlacedObjectList; // Событие Добавлен предмет в инвентарь
+    public event EventHandler<PlacedObject> OnRemovePlacedObjectList; // Событие Удален предмет из инвенторя
 
     private Unit _unit;
-    private UnitEquipment _unitEquipment;
+    private List<PlacedObjectParameters> _placedObjectList; // Список предметов инвентаря
 
-    private void Awake()
-    {
-        _unit = GetComponent<Unit>();
-        _unitEquipment = GetComponent<UnitEquipment>();
-    }
-
-    private void Start()
-    {
-        if (_unit.IsEnemy()) // Если наш юнит враг то экипируем его объектами из списка
-        {
-            foreach (PlacedObject placedObject in _placedObjectList)
-            {
-                _unitEquipment.EquipWeapon(placedObject);
-            }
-        }
-    }
 
     /// <summary>
     /// Добавить полученный объект в Список "Размещенных Объектов в Сетке Инвенторя".
     /// </summary>  
     public void AddPlacedObjectList(PlacedObject placedObject)
-    {
-        _placedObjectList.Add(placedObject);
-
-        if (GridName.MainWeaponGrid2 == placedObject.GetGridSystemXY().GetGridName())//Если добавлена в Сетку Основного Оружия
+    {       
+        _placedObjectList.Add(placedObject.GetPlacedObjectParameters());
+        foreach (BaseAction baseAction in placedObject.GetPlacedObjectTypeSO().GetBaseActionsArray())
         {
-            _unitEquipment.EquipWeapon(placedObject);
+            _unit.AddBaseActionsList(baseAction);
         }
+        OnAddPlacedObjectList?.Invoke(this, placedObject);
     }
     /// <summary>
     /// Удалить полученный объект из Списока "Размещенных Объектов в Сетке Инвенторя".
     /// </summary>  
     public void RemovePlacedObjectList(PlacedObject placedObject)
     {
-        _placedObjectList.Remove(placedObject);
+        //_placedObjectList.Remove(placedObject);
 
-        if (GridName.MainWeaponGrid2 == placedObject.GetGridSystemXY().GetGridName())//Если удален из Сетки Основного Оружия
-        {
-            _unitEquipment.FreeHands();// Убрать экипировку
-        }
+        OnRemovePlacedObjectList?.Invoke(this, placedObject);
     }
 
 

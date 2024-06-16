@@ -17,15 +17,15 @@ public class GridSystemXY<TGridObject>
     protected Transform _anchorGridTransform; // Якорь сетки
     protected TGridObject[,] _gridObjectArray; // Двумерный массив объектов сетки
     protected Vector3 _offsetСenterCell;// Сделаем смещение что бы центр ячейки не совподал  с (0.0) transform.position родителя 
-    protected GridName _gridName;
+    protected InventorySlot _slot;
 
-    public GridSystemXY(GridParameters gridParameters, Func<GridSystemXY<TGridObject>, Vector2Int, TGridObject> createGridObject)  // Конструктор // Func - это встроенный ДЕЛЕГАТ (третий параметр в аргументе это тип<TGridObject> который возвращает наш делегат и назавем его createGridObject)
+    public GridSystemXY(InventoryGridParameters gridParameters, Func<GridSystemXY<TGridObject>, Vector2Int, TGridObject> createGridObject)  // Конструктор // Func - это встроенный ДЕЛЕГАТ (третий параметр в аргументе это тип<TGridObject> который возвращает наш делегат и назавем его createGridObject)
     {
         _width = gridParameters.width;
         _height = gridParameters.height;
         _cellSize = gridParameters.cellSize;
         _anchorGridTransform = gridParameters.anchorGridTransform;
-        _gridName = gridParameters.gridName;
+        _slot = gridParameters.slot;
         _offsetСenterCell = new Vector3(0.5f, 0.5f, 0) * _cellSize; // Расчитаем смещение для нашей сетки , чтобы начало сетки (0,0) было в центре нулевой ячейки
 
         _gridObjectArray = new TGridObject[_width, _height]; // создаем массив сетки определенного размером width на height
@@ -41,7 +41,7 @@ public class GridSystemXY<TGridObject>
         }       
     }
 
-    public GridName GetGridName() { return _gridName; } // получит Имя сетки
+    public InventorySlot GetGridSlot() { return _slot; } // получит слот сетки
 
     public virtual Vector2Int GetGridPosition(Vector3 worldPosition)
     {

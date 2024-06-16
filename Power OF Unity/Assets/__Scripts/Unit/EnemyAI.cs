@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyAI : MonoBehaviour // Искуственный интелект юнита
@@ -17,11 +15,13 @@ public class EnemyAI : MonoBehaviour // Искуственный интелект юнита
     private float _timer;
     private UnitManager _unitManager;
     private TurnSystem _turnSystem;
+    private UnitActionSystem _unitActionSystem;
 
-    public void Initialize(UnitManager unitManager, TurnSystem turnSystem)
+    public void Init(UnitManager unitManager, TurnSystem turnSystem, UnitActionSystem unitActionSystem)
     {
         _unitManager = unitManager;
         _turnSystem = turnSystem;
+        _unitActionSystem = unitActionSystem;
     }
 
     private void Awake()
@@ -85,7 +85,7 @@ public class EnemyAI : MonoBehaviour // Искуственный интелект юнита
     private bool TryTakeEnemyAIAction(Action onEnemyAIActionComplete)   // ПОПРОБОВАТЬ Выполнить Действие Вражеского Искуственного Интелекта. В аргумент передаем делегат onEnemyAIActionComplete (Действие Вражеского Искуственного Интелекта завершено)
                                                                         // Проидем по списку врагов и выполним возможные действия
     {        
-        foreach (Unit enemyUnit in _unitManager.GetEnemyUnitList()) // В цикле переберем врагов в списке Врагов
+        foreach (Unit enemyUnit in _unitManager.GetUnitEnemyList()) // В цикле переберем врагов в списке Врагов
         {
             if (TryTakeEnemyAIAction(enemyUnit, onEnemyAIActionComplete))  // Проверим можем ли мы попробовать Выполним действие ИИ
             {
@@ -101,9 +101,9 @@ public class EnemyAI : MonoBehaviour // Искуственный интелект юнита
         EnemyAIAction bestEnemyAIAction = null; // Лучшего действия вражеского ИИ по умолчпнию = null 
         BaseAction bestBaseAction = null; // Лучшее базовое действие по умолчпнию = null 
 
-        foreach (BaseAction baseAction in enemyUnit.GetBaseActionsArray()) // Переберем массив базовых действий и НАЙДЕМ ЛУЧШЕЕ
+        foreach (BaseAction baseAction in enemyUnit.GetBaseActionsList()) // Переберем массив базовых действий и НАЙДЕМ ЛУЧШЕЕ
         {
-            if (!enemyUnit.CanSpendActionPointsToTakeAction(baseAction)) // Спросим у enemyUnit мы МОЖЕМ Потратить Очки Действия, Чтобы Выполнить Действие ? Если НЕ можем то...
+            if (!enemyUnit.GetActionPointsSystem().CanSpendActionPointsToTakeAction(baseAction)) // Спросим у enemyUnit мы МОЖЕМ Потратить Очки Действия, Чтобы Выполнить Действие ? Если НЕ можем то...
             {
                 // Враг не может позволить себе выполнить это действие
                 continue; // continue заставляет программу переходить к следующей итерации цикла 'for' игнорируя код ниже
@@ -125,10 +125,10 @@ public class EnemyAI : MonoBehaviour // Искуственный интелект юнита
             }
         }
         //ПОПРОБУЕМ РАСКРУТИТЬ ТОЧКИ ДЕЙСТВИЯ
-        if (bestEnemyAIAction != null && enemyUnit.TrySpendActionPointsToTakeAction(bestBaseAction)) // ПОПРОБУЕМ Потратить Очки Действия, Чтобы Выполнить Действие 
+        if (bestEnemyAIAction != null && enemyUnit.GetActionPointsSystem().TrySpendActionPointsToTakeAction(bestBaseAction)) // ПОПРОБУЕМ Потратить Очки Действия, Чтобы Выполнить Действие 
         {
             bestBaseAction.TakeAction(bestEnemyAIAction.gridPosition, onEnemyAIActionComplete); //У выбранного действия вызовим метод "Применить Действие (Действовать)" и передадим в делегат функцию SetStateTakingTurn  который вернет нас опять в исходное состояние TakingTurn
-            UnitActionSystem.Instance.SetSelectedAction(bestBaseAction); // Сделаем это действие выделенным
+            _unitActionSystem.SetSelectedAction(bestBaseAction); // Сделаем это действие выделенным
             return true; // Если можем что то сделать то вернем ИСТИНА
         }
         else

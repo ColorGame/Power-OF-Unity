@@ -84,8 +84,8 @@ public class HealAction : BaseAction // Действие Лечение НАСЛЕДУЕТ класс BaseAct
 
     private void Heal() // Лечение
     {
-        _soundManager.PlaySoundOneShot(SoundName.Heal);
-        _targetUnit.Healing(_healAmount);
+        _soundManager.PlayOneShot(SoundName.Heal);
+        _targetUnit.GetHealthSystem().Healing(_healAmount);
     }
 
     public override string GetActionName() // Присвоить базовое действие //целиком переопределим базовую функцию
@@ -95,7 +95,7 @@ public class HealAction : BaseAction // Действие Лечение НАСЛЕДУЕТ класс BaseAct
 
     public override EnemyAIAction GetEnemyAIAction(GridPositionXZ gridPosition) //Получить действие вражеского ИИ // Переопределим абстрактный базовый метод
     {
-        float HealthNormalized = _unit.GetHealthNormalized(); // Получим нормализованное здоровье юнита
+        float HealthNormalized = _unit.GetHealthSystem().GetHealthNormalized(); // Получим нормализованное здоровье юнита
 
         if (HealthNormalized <= 0.3) //Если здоровье меньше или равно 30% то
         {
@@ -130,18 +130,18 @@ public class HealAction : BaseAction // Действие Лечение НАСЛЕДУЕТ класс BaseAct
                 GridPositionXZ offsetGridPosition = new GridPositionXZ(x, z, 0); // Смещенная сеточная позиция. Где началом координат(0,0, 0-этаж) является сам юнит 
                 GridPositionXZ testGridPosition = unitGridPosition + offsetGridPosition; // Тестируемая Сеточная позиция
 
-                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
+                if (!_levelGrid.IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
                 {
                     continue; // continue заставляет программу переходить к следующей итерации цикла 'for' игнорируя код ниже
                 }
 
-                if (!LevelGrid.Instance.HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточное позицию где нет юнитов (нам нужны ячейки с юнитами мы будем их исцелять)
+                if (!_levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточное позицию где нет юнитов (нам нужны ячейки с юнитами мы будем их исцелять)
                 {
                     // Позиция сетки пуста, нет Юнитов
                     continue;
                 }
 
-                Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции 
+                Unit targetUnit = _levelGrid.GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции 
                                                                                                 // GetUnitAtGridPosition может вернуть null но в коде выше мы исключаем нулевые позиции, так что проверка не нужна
                 if (targetUnit.IsEnemy() != _unit.IsEnemy()) // Если тестируемый юнит враг а наш юнит нет (игнорируем чужаков)
                 {
@@ -166,7 +166,7 @@ public class HealAction : BaseAction // Действие Лечение НАСЛЕДУЕТ класс BaseAct
                                                                                         // тогда запишем - public override void TakeAction(BaseParameters baseParameters ,Action onActionComplete){
                                                                                         // SpinBaseParameters spinBaseParameters = (SpinBaseParameters)baseParameters;}
     {
-        _targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition); // Получим юнита которого хотим исцелить (это может быть и сам юнит)
+        _targetUnit = _levelGrid.GetUnitAtGridPosition(gridPosition); // Получим юнита которого хотим исцелить (это может быть и сам юнит)
 
         _state = State.HealBefore; // Активируем состояние Подготовки до лечения
         float beforeHealStateTime = 0.5f; //До Лечения.  Для избежания магических чисель введем переменную  Продолжительность Состояния подготовки перед лечением ..//НУЖНО НАСТРОИТЬ//

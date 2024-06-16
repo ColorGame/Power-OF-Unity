@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitSelectedVisual : MonoBehaviour // Визуализация выбора юнита
@@ -9,14 +7,17 @@ public class UnitSelectedVisual : MonoBehaviour // Визуализация выбора юнита
 
     private MeshRenderer _meshRenderer; // Будем включать и выкл. MeshRenderer что бы скрыть или показать наш визуальный объект
 
+    private UnitActionSystem _unitActionSystem;
+
     private void Awake() //Для избежания ошибок Awake() Лучше использовать только для инициализации и настроийки объектов
     {
-        _meshRenderer = GetComponent<MeshRenderer>(); 
+        _meshRenderer = GetComponent<MeshRenderer>();
+        _unitActionSystem = _unit.GetUnitActionSystem();
     }
 
-    private void Start() // А в методе Start() использовать для взаимодествия и получения внешних ссылок
+    private void Start() // А в методе StartScene() использовать для взаимодествия и получения внешних ссылок
     {
-        UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged; // подписываемся на Event из UnitActionSystem (становимся слушателями). Обозначает что мы выполняем функцию UnitActionSystem_OnSelectedUnitChanged()
+        _unitActionSystem.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged; // подписываемся на Event из UnitActionSystem (становимся слушателями). Обозначает что мы выполняем функцию UnitActionSystem_OnSelectedUnitChanged()
                                                                                                    // Будет выполняться каждый раз когда мы меняем выбранного юнита.
         UpdateVisual(); // Что бы при старте визуал был включен только у выбранного игрока
     }
@@ -29,7 +30,7 @@ public class UnitSelectedVisual : MonoBehaviour // Визуализация выбора юнита
 
     private void UpdateVisual() // (Обновление визуала) Включение и выключение визуализации выбора.
     {
-        if (UnitActionSystem.Instance.GetSelectedUnit() == _unit) // Если выбранный юнит равен юниту на котором лежит этот скрипт то
+        if (_unitActionSystem.GetSelectedUnit() == _unit) // Если выбранный юнит равен юниту на котором лежит этот скрипт то
         {
             _meshRenderer.enabled = true; // включим круг
         }
@@ -41,6 +42,6 @@ public class UnitSelectedVisual : MonoBehaviour // Визуализация выбора юнита
 
     private void OnDestroy() // Встроенная функция в MonoBehaviour и вызывается при уничтожении игрового объекта
     {
-        UnitActionSystem.Instance.OnSelectedUnitChanged -= UnitActionSystem_OnSelectedUnitChanged; // Отпишемя от события чтобы не вызывались функции в удаленных объектах.(Исключение MissingReferenceException: Объект типа 'MeshRenderer' был уничтожен, но вы все еще пытаетесь получить к нему доступ.)
+        _unitActionSystem.OnSelectedUnitChanged -= UnitActionSystem_OnSelectedUnitChanged; // Отпишемя от события чтобы не вызывались функции в удаленных объектах.(Исключение MissingReferenceException: Объект типа 'MeshRenderer' был уничтожен, но вы все еще пытаетесь получить к нему доступ.)
     }
 }

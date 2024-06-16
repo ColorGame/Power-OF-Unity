@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static GrenadeProjectile;
 
 public class ScreenChromaticAberrationActions : MonoBehaviour //Независимый класс который реализует хроматическую абберацию экрана (связующее звено) 
 {
@@ -24,9 +21,9 @@ public class ScreenChromaticAberrationActions : MonoBehaviour //Независимый клас
     {
         ScreenChromaticAberration.Instance.SetWeight(1f);
     }
-    private void GrenadeProjectile_OnAnyGrenadeExploded(object sender, TypeGrenade typeGrenade)
+    private void GrenadeProjectile_OnAnyGrenadeExploded(object sender, GrenadeProjectile.TypeGrenade typeGrenade)
     {
-        if (typeGrenade != TypeGrenade.Smoke) // Если не дымовая то 
+        if (typeGrenade != GrenadeProjectile.TypeGrenade.Smoke) // Если не дымовая то 
         {
             ScreenChromaticAberration.Instance.SetWeight(1f, 0.5f);
         }

@@ -9,14 +9,11 @@ using UnityEngine.UI;
 /// вкладка находящияся внизу отрисовывается поверх всех - поэтому всплывающ. подсказку держим внизу списка Canvas)
 /// </summary>
 /// <remarks>
+/// Должен быть прикриплен к PersistentEntryPoint
 ///  У background и text подсказки надо убрать галочку Raycast target - что бы подсказка не мерцала
 /// </remarks>
 public class TooltipUI : MonoBehaviour
-{
-    /// <summary>
-    /// Ширина подсказки для PlacedObjectTooltip
-    /// </summary>
-    private const float WIDTH_PLACED_OBJECTP_TOOLTIP = 450f;
+{   
 
     private RectTransform _canvasTooltipRectTransform; // Трансформ холста 
     private RectTransform _tooltipRectTransform; // Трансформ всплывающей подсказки TooltipUI // В ИНСПЕКТОРЕ НАСТРОИТЬ ЯКОРЬ НА НИЖНИЙ ЛЕВЫЙ УГОЛ, это координаты (0, 0) что бы он правильно следовал за мышью 
@@ -29,16 +26,19 @@ public class TooltipUI : MonoBehaviour
     //private RectTransform _backgroundRectTransform; // Трансформ заднего фона
     private TooltipTimer _tooltipTimer; // Время отображения подсказки (расширяющий класс)
     private bool _followMouse; // Следовать за мышью   
+    private float _widthTooltip; // Ширина подсказки для PlacedObjectTooltip (когда включается всплывающуая подсказка, которая следует за мышью. ширина сбивается)
+
+
     private VirtualMouseCustom _virtualMouseCustom;
     private GameInput _gameInput;
 
-    public void Initialize(VirtualMouseCustom virtualMouseCustom, GameInput gameInput) 
+    public void Init( GameInput gameInput, VirtualMouseCustom virtualMouseCustom) 
     {
         _virtualMouseCustom = virtualMouseCustom;
         _gameInput = gameInput;
     }
 
-    private void Awake()
+    private void Start()
     {
         Canvas canvas = GetComponentInParent<Canvas>();
         canvas.sortingOrder = 100; // Установим большой слой сортировки что бы подсказки отображались повер всех канвасов
@@ -51,6 +51,7 @@ public class TooltipUI : MonoBehaviour
         _descriptionText = transform.Find("descriptionText").GetComponent<TextMeshProUGUI>();
         _detailsText = transform.Find("detailsText").GetComponent<TextMeshProUGUI>();
         _sideEffectsTooltipsText = transform.Find("sideEffectsTooltipsText").GetComponent<TextMeshProUGUI>();
+        _widthTooltip = _tooltipRectTransform.sizeDelta.x; // сохраним оригинальную ширину
         //_backgroundRectTransform = transform.Find("background").GetComponent<RectTransform>();
 
         Hide(); // скроем подсказки
@@ -144,7 +145,7 @@ public class TooltipUI : MonoBehaviour
     {
         gameObject.SetActive(true);
         _contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained; // Отключим автоматическое выставление ширины
-        _tooltipRectTransform.sizeDelta = new Vector2(WIDTH_PLACED_OBJECTP_TOOLTIP, 0); // Установим ширину подсказки (высота - будет выставляться автоматически)
+        _tooltipRectTransform.sizeDelta = new Vector2(_widthTooltip, 0); // Установим ширину подсказки (высота - будет выставляться автоматически) 
 
         EnablePlacedObjectTooltip();
 
@@ -175,7 +176,7 @@ public class TooltipUI : MonoBehaviour
     {
         gameObject.SetActive(true);
         _contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained; // Отключим автоматическое выставление ширины
-        _tooltipRectTransform.sizeDelta = new Vector2(WIDTH_PLACED_OBJECTP_TOOLTIP, 0); // Установим ширину подсказки (высота - будет выставляться автоматически)
+        _tooltipRectTransform.sizeDelta = new Vector2(_widthTooltip, 0); // Установим ширину подсказки (высота - будет выставляться автоматически)
 
         EnableShortTooltipsText();
 

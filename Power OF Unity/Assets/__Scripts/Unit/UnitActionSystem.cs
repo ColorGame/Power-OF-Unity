@@ -7,13 +7,8 @@ using UnityEngine.EventSystems;
 // Этот клас важен и он должен просыпаться самым первым. Настроим его, добавим в Project Settings/ Script Execution Order и поместим выше Deafault Time
 public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТКА ВЫБОРА ДЕЙСТВИЯ ЮНИТА)
 {
-
-    public static UnitActionSystem Instance { get; private set; }   //(ПАТТЕРН SINGLETON) Это свойство которое может быть заданно (SET-присвоено) только этим классом, но может быть прочитан GET любым другим классом
-                                                                    // _instance - экземпляр, У нас будет один экземпляр UnitActionSystem можно сдел его static. Instance нужен для того чтобы другие методы, через него, могли подписаться на Event.
-
     public event EventHandler OnSelectedUnitChanged; // Выбранный Юнит Изменен (когда поменяется выбранный юнит мы запустим событие Event) <Unit>-новый выбранный юнит
-    public event EventHandler OnSelectedActionChanged; // Выбранное Действие Изменено (когда меняется активное действие в блоке кнопок мы запустим событие Event)
-    public event EventHandler OnActionStarted; // Действие Начато ( мы запустим событие Event при старте действия)
+    public event EventHandler OnSelectedActionChanged; // Выбранное Действие Изменено (когда меняется активное действие в блоке кнопок мы запустим событие Event)  
     public event EventHandler OnGameOver; // Конец игры
 
     public event EventHandler<OnUnitSystemEventArgs> OnBusyChanged; // Занятость Изменена (когда меняется значение _isBusy, мы запустим событие Event, и передаем ее в аргументе) в <> -generic этот тип будем вторым аргументом
@@ -32,23 +27,17 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
     private BaseAction _selectedAction; // Выбранное Действие// Будем передовать в Button
     private bool _isBusy; // Занят (булевая переменная для исключения одновременных действий)
     private UnitManager _unitManager;
-
-    private void Awake() //Для избежания ошибок Awake Лучше использовать только для инициализации и настроийки объектов
-    {
-        // Если ты акуратем в инспекторе то проверка не нужна
-        if (Instance != null) // Сделаем проверку что этот объект существует в еденичном екземпляре
-        {
-            Debug.LogError("There's more than one UnitActionSystem!(Там больше, чем один UnitActionSystem!) " + transform + " - " + Instance);
-            Destroy(gameObject); // Уничтожим этот дубликат
-            return; // т.к. у нас уже есть экземпляр UnitActionSystem прекратим выполнение, что бы не выполнить строку ниже
-        }
-        Instance = this;
-    }
-
-    public void Initialize(GameInput gameInput, UnitManager unitManager )
+    private TurnSystem _turnSystem;
+    private LevelGrid _levelGrid;
+    private MouseOnGameGrid _mouseOnGameGrid;
+      
+    public void Init(GameInput gameInput, UnitManager unitManager, TurnSystem turnSystem, LevelGrid levelGrid, MouseOnGameGrid mouseOnGameGrid)
     {
         _gameInput = gameInput;
         _unitManager = unitManager;
+        _turnSystem = turnSystem;
+        _levelGrid = levelGrid;
+        _mouseOnGameGrid = mouseOnGameGrid;
     }
 
     private void Start()
@@ -59,22 +48,22 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
         // Пока сделала в старте так как возникает гонка
         _gameInput.OnClickAction += GameInput_OnClickAction; // Подпишемся на событие клик по мыши или геймпаду
         _unitManager.OnAnyUnitDeadAndRemoveList += UnitManager_OnAnyUnitDeadAndRemoveList; //Подпишемся на событие Любой Юнит Умер И Удален из Списка
-        TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged; // Подпишемся Ход Изменен
+        _turnSystem.OnTurnChanged += TurnSystem_OnTurnChanged; // Подпишемся Ход Изменен
     }
 
 
     private void OnDisable()
     {
         _unitManager.OnAnyUnitDeadAndRemoveList -= UnitManager_OnAnyUnitDeadAndRemoveList; //Подпишемся на событие Любой Юнит Умер И Удален из Списка
-        TurnSystem.Instance.OnTurnChanged -= TurnSystem_OnTurnChanged; // Подпишемся Ход Изменен
+        _turnSystem.OnTurnChanged -= TurnSystem_OnTurnChanged; // Подпишемся Ход Изменен
         _gameInput.OnClickAction -= GameInput_OnClickAction; // Подпишемся на событие клик по мыши или геймпаду
     }
 
     private void TurnSystem_OnTurnChanged(object sender, EventArgs e)
     {
-        if (TurnSystem.Instance.IsPlayerTurn()) // Если ход Игрока то
+        if (_turnSystem.IsPlayerTurn()) // Если ход Игрока то
         {
-            List<Unit> myUnitList = _unitManager.GetMyUnitList(); // Вернем список моих юнитов
+            List<Unit> myUnitList = _unitManager.GetUnitFriendList(); // Вернем список моих юнитов
             if (myUnitList.Count > 0) // Если есть живые то передаем выделению первому по списку юниту
             {
                 SetSelectedUnit(myUnitList[0], myUnitList[0].GetAction<MoveAction>());
@@ -84,9 +73,9 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
 
     private void UnitManager_OnAnyUnitDeadAndRemoveList(object sender, EventArgs e)
     {
-        if (_selectedUnit.IsDead()) // Если выделенный юнит отъехал то ...
+        if (_selectedUnit.GetHealthSystem().IsDead()) // Если выделенный юнит отъехал то ...
         {
-            List<Unit> friendlyUnitList = _unitManager.GetMyUnitList(); // Вернем список дружественных юнитов
+            List<Unit> friendlyUnitList = _unitManager.GetUnitFriendList(); // Вернем список дружественных юнитов
             if (friendlyUnitList.Count > 0) // Если есть живые то передаем выделению первому по списку юниту
             {
                 SetSelectedUnit(friendlyUnitList[0], friendlyUnitList[0].GetAction<MoveAction>());
@@ -99,13 +88,13 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
     }
 
     private void GameInput_OnClickAction(object sender, EventArgs e)
-    {      
+    {
         if (_isBusy) // Если занят ... то остановить выполнение
         {
             return;
         }
 
-        if (!TurnSystem.Instance.IsPlayerTurn()) // Проверяем это очередь игрока если нет то остановить выполнение
+        if (!_turnSystem.IsPlayerTurn()) // Проверяем это очередь игрока если нет то остановить выполнение
         {
             return;
         }
@@ -125,22 +114,20 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
 
     public void HandleSelectedAction() // Обработать выбранное действие
     {
-        GridPositionXZ mouseGridPosition = LevelGrid.Instance.GetGridPosition(MouseOnGameGrid.GetPositionOnlyHitVisible()); // Преобразуем позицию мыши из мирового в сеточную.
+        GridPositionXZ mouseGridPosition = _levelGrid.GetGridPosition(_mouseOnGameGrid.GetPositionOnlyHitVisible()); // Преобразуем позицию мыши из мирового в сеточную.
 
         if (!_selectedAction.IsValidActionGridPosition(mouseGridPosition)) // Проверяем для нашего выбранного действия, сеточную позицию мыши на допустимость действий . Если не допустимо то...
         {
             return; // Остановить выполнение  //Добавление ! и return; помогает раскрвть скобки if()
         }
 
-        if (!_selectedUnit.TrySpendActionPointsToTakeAction(_selectedAction)) // для Выбранного Юнита ПОПРОБУЕМ Потратить Очки Действия, Чтобы Выполнить выбранное Действие. Если не можем то...
+        if (!_selectedUnit.GetActionPointsSystem().TrySpendActionPointsToTakeAction(_selectedAction)) // для Выбранного Юнита ПОПРОБУЕМ Потратить Очки Действия, Чтобы Выполнить выбранное Действие. Если не можем то...
         {
             return; // Остановить выполнение
         }
 
         SetBusy(); // Установить Занятый
         _selectedAction.TakeAction(mouseGridPosition, ClearBusy); //У выбранного действия вызовим метод "Применить Действие (Действовать)" и передадим в делегат функцию ClearBusy
-
-        OnActionStarted?.Invoke(this, EventArgs.Empty); // "?"- проверяем что !=0. Invoke вызвать (this-ссылка на объект который запускает событие "отправитель" а класс UnitActionSystemUI будет его прослушивать "обрабатывать"                     
     }
 
     private void SetBusy() // Установить Занятый
@@ -206,14 +193,14 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
 
         SetSelectedAction(baseAction); // Получим компонент "MoveAction"  нашего Выбранного юнита (по умолчанию при старте базовым действием бедет MoveAction). Сохраним в переменную _selectedAction через функцию SetSelectedAction()
 
-        OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty); // "?"- проверяем что !=0. Invoke вызвать (this-ссылка на объект который запускает событие "отправитель" а класс UnitSelectedVisual и UnitActionSystemUI будет его прослушивать "обрабатывать" для этого ему нужна ссылка на _targetUnit)
+        OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty); // "?"- проверяем что !=0. Invoke вызвать (this-ссылка на объект который запускает событие "отправитель" а класс UnitSelectedVisual и ActionButtonSystemUI будет его прослушивать "обрабатывать" для этого ему нужна ссылка на _targetUnit)
     }
 
     public void SetSelectedAction(BaseAction baseAction) //Установить Выбранное Действие, И запускаем событие  
     {
         _selectedAction = baseAction;
 
-        OnSelectedActionChanged?.Invoke(this, EventArgs.Empty); // "?"- проверяем что !=0. Invoke вызвать (this-ссылка на объект который запускает событие "отправитель" а класс UnitActionSystemUI  LevelGridVisual будет его прослушивать "обрабатывать")
+        OnSelectedActionChanged?.Invoke(this, EventArgs.Empty); // "?"- проверяем что !=0. Invoke вызвать (this-ссылка на объект который запускает событие "отправитель" а класс ActionButtonSystemUI  LevelGridVisual будет его прослушивать "обрабатывать")
     }
     public BaseAction GetSelectedAction() // Вернуть выбранное действие
     {

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenuUI : MonoBehaviour // Главное меню
@@ -10,15 +9,21 @@ public class MainMenuUI : MonoBehaviour // Главное меню
     [SerializeField] private Button _setupGameButton;
     [SerializeField] private Button _quitGameButton;
 
-    private void Awake()
-    {
-        
+    private OptionsMenuUI _optionsMenuUI;
+    private ScenesService _scenesService;
 
+    public void Init(OptionsMenuUI optionsMenuUI, ScenesService scenesService)
+    {
+        _optionsMenuUI = optionsMenuUI;
+        _scenesService = scenesService;
+    }
+
+    private void Start()
+    {
         _resumeGameButton.onClick.AddListener(() => { Debug.Log("ЗАГЛУШКА"); });
         _loadGameButton.onClick.AddListener(() => { Debug.Log("ЗАГЛУШКА"); });
-        _setupGameButton.onClick.AddListener(() => { CoreEntryPoint.Instance.optionsMenuUI.ToggleVisible(); });
-        _startGameButton.onClick.AddListener(() => { SceneManager.LoadSceneAsync(SceneName.UnitMenuScene.GetHashCode()); });
-        _quitGameButton.onClick.AddListener(() => { Application.Quit(); });// Кнопка будет работать тоько после сборки  
-
+        _setupGameButton.onClick.AddListener(() => { _optionsMenuUI.ToggleVisible(); });
+        _startGameButton.onClick.AddListener(() => { _scenesService.Load(SceneName.UnitSetupMenu); });
+        _quitGameButton.onClick.AddListener(() => { Application.Quit(); });// Кнопка будет работать тоько после сборки  kd
     }
 }

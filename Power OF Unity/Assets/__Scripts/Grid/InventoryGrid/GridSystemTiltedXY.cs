@@ -11,7 +11,7 @@ using UnityEngine;
 /// </remarks>
 public class GridSystemTiltedXY<TGridObject> : GridSystemXY<TGridObject>
 {
-    public GridSystemTiltedXY(GridParameters gridParameters, Func<GridSystemXY<TGridObject>, Vector2Int, TGridObject> createGridObject) : base(gridParameters, createGridObject)
+    public GridSystemTiltedXY(InventoryGridParameters gridParameters, Func<GridSystemXY<TGridObject>, Vector2Int, TGridObject> createGridObject) : base(gridParameters, createGridObject)
     {
     }
 

@@ -2,7 +2,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ActionButtonUI : MonoBehaviour // Обрабатываем логику нажатия на кнопку. Лежит на самой кнопке
+/// <summary>
+/// Кнопка ДЕЙСТВИЯ. Обрабатываем логику нажатия на кнопку.
+/// </summary>
+/// <remarks>
+/// Прикриплена к кнопке
+/// </remarks>
+public class ActionButtonUI : MonoBehaviour 
 {
     [SerializeField] private TextMeshProUGUI _textMeshPro; // TextMeshProUGUI для пользовательского интерфейса
     [SerializeField] private Button _button;
@@ -19,27 +25,22 @@ public class ActionButtonUI : MonoBehaviour // Обрабатываем логику нажатия на кн
     [SerializeField] private Sprite _spriteHook;
 
 
-    private BaseAction _baseAction;
-    //3//{ Третий способ скрыть кнопки когда занят действием
+    private BaseAction _baseAction;   
     private Color _textColor;
-    //3//}
-
-
-    public void SetBaseAction(BaseAction baseAction) // Присвоить базовое действие на кнопку (в аргумент передаем наше baseAction)
+    private UnitActionSystem _unitActionSystem;
+   
+    public void SetBaseAction(BaseAction baseAction, UnitActionSystem unitActionSystem) // Присвоить базовое действие на кнопку (в аргумент передаем наше baseAction)
     {
         _baseAction = baseAction; // Сохраним переданное нам базовое действие
-
-        _textMeshPro.text = baseAction.GetActionName().ToUpper(); // В название кнопки запишем Полученное имя Активного Действия  //ToUpper()- В верхнем регистре
-
-        //3//{ Третий способ скрыть кнопки когда занят действием
+        _textMeshPro.text = baseAction.GetActionName().ToUpper(); // В название кнопки запишем Полученное имя Активного Действия  //ToUpper()- В верхнем регистре               
         _textColor = _textMeshPro.color; // Сохраним цвет текста
-        //3//}
 
-        // т.к. кнопки создаются динамически то и события настраиваем в скрипте а не в инспекторе
-        //Добавим событие при нажатии на нашу кнопку// AddListener() в аргумент должен получить делегат- ссылку на функцию. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
+        _unitActionSystem = unitActionSystem;
+
+        //Добавим событие при нажатии на нашу кнопку
         _button.onClick.AddListener(() =>
         {
-            UnitActionSystem.Instance.SetSelectedAction(baseAction); //Установить Выбранное Действие
+            _unitActionSystem.SetSelectedAction(baseAction); //Установить Выбранное Действие
         });
 
         switch (_baseAction) // В зависимости от выбранного базового действия присвоить спрайт кнопке
@@ -73,16 +74,11 @@ public class ActionButtonUI : MonoBehaviour // Обрабатываем логику нажатия на кн
                 break;
 
         }
-    }
-    // Функцию передоваемую в AddListener() будем определять ананимно поэтому закоментируем код ниже
-    /*private void MoveActionButton_Click() //
-    {
-
-    }*/
+    }    
 
     public void UpdateSelectedVisual() // (Обновление визуала) Включение и выключение визуализации выбора.(вызывается событием при выборе кнопки базового действия)
     {
-        BaseAction selectedBaseAction = UnitActionSystem.Instance.GetSelectedAction(); // Получим выбраное действие
+        BaseAction selectedBaseAction = _unitActionSystem.GetSelectedAction(); // Получим выбраное действие
         _selectedButtonVisualUI.SetActive(selectedBaseAction == _baseAction);   // Включить рамку если выбранное действие совподает с действием которое мы назначили на нашу кнопку
                                                                                 // Если не совподает то получим false и рамка отключиться
 
@@ -98,7 +94,7 @@ public class ActionButtonUI : MonoBehaviour // Обрабатываем логику нажатия на кн
     }
 
 
-    //3//{ Третий способ скрыть кнопки когда занят действием
+    //способ скрыть кнопки когда занят действием
     private void InteractableEnable() // Включить взаимодействие
     {
         _button.interactable = true;
@@ -127,5 +123,5 @@ public class ActionButtonUI : MonoBehaviour // Обрабатываем логику нажатия на кн
         {
             InteractableEnable(); // Включить взаимодействие
         }
-    }//3//}
+    }
 }

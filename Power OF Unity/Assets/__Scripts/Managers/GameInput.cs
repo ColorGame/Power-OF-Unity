@@ -9,22 +9,20 @@ public class GameInput
 {
     private const string PLAYER_PREFS_BINDINGS = "InputBindings";
 
-    public GameInput() // Конструктор что бы отследить количество созданных new T() ОН ДОЛЖЕН БЫТЬ ОДИН
+    public GameInput()
     {
+        Init();
     }
+    /*
+        private GameInput() { Init(); } // Конструктор private что бы нельзя было создать  new GameInput() 
 
+        // Тип Lazy потокобезопасная. Ленивая загрузка. Все, что вам нужно сделать, это передать делегат конструктору, который вызывает конструктор Singleton, которому передается лямбда-выражение:
+        private static readonly Lazy<GameInput> lazy =
+            new Lazy<GameInput>(() => new GameInput());
 
-    /* private GameInput() // Конструктор private что бы нельзя было создать  new GameInput() 
-     {
-     }
+        public static GameInput Instance { get { return lazy.Value; } }
+    */
 
-     // Тип Lazy потокобезопасная. Ленивая загрузка. Все, что вам нужно сделать, это передать делегат конструктору, который вызывает конструктор Singleton, которому передается лямбда-выражение:
-     private static readonly Lazy<GameInput> lazy =
-         new Lazy<GameInput>(() => new GameInput());
-
-     public static GameInput Instance { get { return lazy.Value; } }
-
- */
     public event EventHandler OnClickAction;
     public event EventHandler OnMenuAlternate;
     public event EventHandler OnCameraMovementStarted;
@@ -56,9 +54,9 @@ public class GameInput
 
     private PlayerInputActions _playerInpytActions; // Объявим - Действия, вводимые игроком (NEW INPUT SYSTEM)
     private GameDevice _activeGameDevice = GameDevice.KeyboardMouse;
-           
 
-    public void Initialize()
+
+    private void Init()
     {
         _playerInpytActions = new PlayerInputActions(); //Создадим и сохраним новый экземпляр Ввода 
 
@@ -76,9 +74,7 @@ public class GameInput
         _playerInpytActions.Player.CameraRotate.performed += (Context) => { OnCameraRotateAction?.Invoke(this, Context.ReadValue<float>()); };
 
         _playerInpytActions.Player.CameraMovement.started += (Context) => { OnCameraMovementStarted?.Invoke(this, EventArgs.Empty); };
-        _playerInpytActions.Player.CameraMovement.canceled += (Context) => { OnCameraMovementCanceled?.Invoke(this, EventArgs.Empty); };
-
-        Debug.Log("Создан и Инициализирован GameInput");
+        _playerInpytActions.Player.CameraMovement.canceled += (Context) => { OnCameraMovementCanceled?.Invoke(this, EventArgs.Empty); };      
     }
 
     private void InputSystem_onActionChange(object arg1, InputActionChange inputActionChange)

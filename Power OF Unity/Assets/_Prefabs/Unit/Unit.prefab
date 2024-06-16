@@ -165,15 +165,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 0
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -416,15 +418,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 0
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -569,8 +573,6 @@ MonoBehaviour:
   _aimImage: {fileID: 4897724447002639272}
   _stunnedImage: {fileID: 7436088241424677958}
   _healthBarImage: {fileID: 4917000171070677983}
-  _unit: {fileID: 3013477999232598452}
-  _healthSystem: {fileID: 3460450167430738910}
 --- !u!114 &7542379765395182030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634,13 +636,10 @@ GameObject:
   - component: {fileID: 2245190387780501782}
   - component: {fileID: 7574804518558064477}
   - component: {fileID: 1934392247483854235}
-  - component: {fileID: 3013477999232598452}
   - component: {fileID: 6995008053834411764}
   - component: {fileID: 4830986332008438710}
-  - component: {fileID: 3460450167430738910}
   - component: {fileID: 4233964869486218640}
   - component: {fileID: -4672128768459207291}
-  - component: {fileID: 2092770731573479723}
   - component: {fileID: -3717358109818683237}
   - component: {fileID: 1529445506410105176}
   m_Layer: 7
@@ -701,7 +700,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f33bb5ca79f4684c95d38397898cf56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxMoveDistance: 3
 --- !u!114 &-322991841617350137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -834,19 +832,6 @@ MonoBehaviour:
   _obstaclesDoorMousePlaneCoverLayerMask:
     serializedVersion: 2
     m_Bits: 2880
---- !u!114 &3013477999232598452
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3013477999232598442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 710fd380c56835c419635351765d0673, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isEnemy: 0
 --- !u!114 &6995008053834411764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -876,19 +861,6 @@ MonoBehaviour:
   _rifleTransformHand_L: {fileID: 2108006252176003363}
   _swordTransform: {fileID: 4262246980154383821}
   _binocularsTransform: {fileID: 3634715769727178440}
---- !u!114 &3460450167430738910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3013477999232598442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f0f48de79b4f4b459cce33c0c312972, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _health: 100
 --- !u!114 &4233964869486218640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -901,9 +873,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17ce0015e9672b7429ac86a62d6f8ef3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dynamicFloorPosition: 1
-  ignoreRendererList:
-  - {fileID: 9071752244597524968}
+  _dynamicFloorPosition: 0
+  _ignoreRendererList: []
 --- !u!114 &-4672128768459207291
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -919,18 +890,6 @@ MonoBehaviour:
   _ragdollPrefab: {fileID: 3013477999232598443, guid: 6a2a0287dcd8d6d47879a07c82fd7818,
     type: 3}
   _originalRootBone: {fileID: 3009427759357829087}
---- !u!114 &2092770731573479723
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3013477999232598442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41abe237772a1ae4ea9c9f996ae7f466, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-3717358109818683237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1308,6 +1267,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1345,7 +1307,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33bb62b65122b8e46bf8e8a773a65b5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _unit: {fileID: 3013477999232598452}
 --- !u!1 &6122841187967363379
 GameObject:
   m_ObjectHideFlags: 0
@@ -1892,15 +1853,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 0
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -3579,11 +3542,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -185
       objectReference: {fileID: 0}
-    - target: {fileID: 9052874676761353846, guid: 2f3e27eecb190e44a9af50723c394274,
-        type: 3}
-      propertyPath: _unit
-      value: 
-      objectReference: {fileID: 3013477999232598452}
     - target: {fileID: 9052874676761353846, guid: 2f3e27eecb190e44a9af50723c394274,
         type: 3}
       propertyPath: _healFXPrefab

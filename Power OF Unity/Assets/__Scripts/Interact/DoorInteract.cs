@@ -5,11 +5,7 @@ using UnityEngine;
 
 public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия Расширим класс интерфейсом 
 {
-    public static event EventHandler OnAnyDoorOpened; // Мы запустим событие Event ЛЮБАЯ(Any) Дверь открыта.
-                                                      // static - обозначает что event будет существовать для всего класса, а не для оттдельной ДВЕРИ.
-                                                      // Поэтому для прослушивания этого события слушателю не нужна ссылка на конкретный объект, они могут получить доступ к событию
-                                                      // через класс, который затем запускает одно и то же событие для каждого объекта. 
-
+   
     public static event EventHandler OnAnyDoorIsLocked; //Запутим событие когда -Любая Дверь Заперта(нельзя открыть вручную)
                                                         // static - обозначает что event будет существовать для всего класса, а не для оттдельной ДВЕРИ.
 
@@ -21,9 +17,10 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
     [SerializeField] private bool _isOpen; //Открыта (дверь)
     [SerializeField] private bool _isInteractable = true; //Можно взаимодействовать (по умолчанию true)
 
-    private SoundManager _soundManager;
+    private static SoundManager _soundManager;
+    private static LevelGrid _levelGrid;
 
-    private HashAnimationName _animBase = new HashAnimationName(); 
+    private HashAnimationName _animBase = new HashAnimationName();
     private bool _isActive;
     private float _timer; // Таймер который не будет позволять непрерывно взаимодействовать с дверью
     private Transform[] _transformChildrenDoorArray;  //Массив Дочерних объектов двери (это сама дверь[0] левая[1] b правая[2] дверь)
@@ -38,16 +35,17 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
 
     private List<GridPositionXZ> _doorGridPositionList = new List<GridPositionXZ>();
 
-
+    public static void Init(SoundManager soundManager, LevelGrid levelGrid)
+    {
+        _soundManager = soundManager;
+        _levelGrid = levelGrid;
+    }
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         _transformChildrenDoorArray = GetComponentsInChildren<Transform>();
         _singleNodeBlocker = GetComponent<SingleNodeBlocker>();
-
-        _soundManager = CoreEntryPoint.Instance.soundManager;
-        //Debug.Log($"Старт ДВЕРЬ" + "_Инициализация-" + _soundManager);
     }
 
 
@@ -55,11 +53,11 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
     {
         foreach (GridPositionXZ gridPosition in GetDoorGridPositionList()) // Переберем список сеточных позиции которые занимает Дверь
         {
-            LevelGrid.Instance.SetInteractableAtGridPosition(gridPosition, this); // в полученную сеточную позицию установим наш дочерний объект Дверь с Интерфейсом Interactable(взаимодействия)            
-        }        
+            _levelGrid.SetInteractableAtGridPosition(gridPosition, this); // в полученную сеточную позицию установим наш дочерний объект Дверь с Интерфейсом Interactable(взаимодействия)            
+        }
         UpdateStateDoor(_isOpen);
 
-       
+
     }
 
     private void Update()
@@ -112,56 +110,55 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
         else
         {
             // МОЖНО РЕАЛИЗОВАТЬ ЗВУК НЕУДАЧНОГО ОТКРЫВАНИЯ или запустить событие
-            _soundManager.PlaySoundOneShot(SoundName.DoorClosed);
+            _soundManager.PlayOneShot(SoundName.DoorClosed);
             OnAnyDoorIsLocked?.Invoke(this, EventArgs.Empty); // Запустим событие любая дверь заперта (для реализации надписи)
         }
     }
 
     private void OpenDoor() // Открыть дверь
     {
-        _isOpen = true;        
+        _isOpen = true;
         _animator.CrossFade(_animBase.DoorOpen, 0.2f);
         //_animation.SetBool("IsOpen", _isOpen); // Настроим булевую переменную "GetIsOpen". Передадим ей значение _isOpen        
 
         foreach (GridPositionXZ gridPosition in _doorGridPositionList) // Переберем список сеточных позиции которые занимает Дверь
         {
             // PathfindingMonkey.Instance.SetIsWalkableGridPosition(_gridPositioAnchor, true); // Установим что Можно ходить по этой сеточной позиции
-            GraphNode graphNode = LevelGrid.Instance.GetGridNode(gridPosition); // Получим проверяемый узел
+            GraphNode graphNode = _levelGrid.GetGridNode(gridPosition); // Получим проверяемый узел
             BlockManager.Instance.InternalUnblock(graphNode, _singleNodeBlocker); // Разблокируем узлы
         }
-        _soundManager.PlaySoundOneShot(SoundName.DoorOpen);
+        _soundManager.PlayOneShot(SoundName.DoorOpen);
 
         // Запустим события
-        OnDoorOpened?.Invoke(this, EventArgs.Empty);
-        OnAnyDoorOpened?.Invoke(this, EventArgs.Empty);
+        OnDoorOpened?.Invoke(this, EventArgs.Empty);       
     }
 
     private void CloseDoor() // Закрыть дверь
-    {        
+    {
         var selectorList = new List<SingleNodeBlocker>() { _singleNodeBlocker };   // Список препядсвтий которые будем игнорировать. Закинем туда саму дверь
 
         // Проверим проем дверей вдруг там ЮНИТ
         foreach (GridPositionXZ gridPosition in _doorGridPositionList) // Переберем список сеточных позиции которые занимает Дверь
-        {           
-            GraphNode graphNode = LevelGrid.Instance.GetGridNode(gridPosition); // Получим проверяемый узел
+        {
+            GraphNode graphNode = _levelGrid.GetGridNode(gridPosition); // Получим проверяемый узел
             if (BlockManager.Instance.NodeContainsAnyExcept(graphNode, selectorList)) // Если это узел заблокированна Юнитом. Есть другой (SingleNodeBlocker), занимающий тот же узел, что и дверь
-            {                
+            {
                 _animator.CrossFade(_animBase.DoorBlocked, 0.2f); // Дверь заблокирована
                 return; // выходим и игнорируем код ниже
-            }           
+            }
         }
-               
+
         foreach (GridPositionXZ gridPosition in _doorGridPositionList) // Переберем список сеточных позиции которые занимает Дверь
         {
             //  PathfindingMonkey.Instance.SetIsWalkableGridPosition(_gridPositioAnchor, false); // Установим что Нельзя ходить по этой сеточной позиции
-            GraphNode graphNode = LevelGrid.Instance.GetGridNode(gridPosition); // Получим проверяемый узел
+            GraphNode graphNode = _levelGrid.GetGridNode(gridPosition); // Получим проверяемый узел
             BlockManager.Instance.InternalBlock(graphNode, _singleNodeBlocker); // Заблокируем узел
         }
 
         _isOpen = false;
         _animator.CrossFade(_animBase.DoorClose, 0.2f);
         // _animation.SetBool("IsOpen", _isOpen); // Настроим булевую переменную "GetIsOpen". Передадим ей значение _isOpen
-        _soundManager.PlaySoundOneShot(SoundName.DoorOpen);
+        _soundManager.PlayOneShot(SoundName.DoorOpen);
     }
 
     private List<GridPositionXZ> GetDoorGridPositionList() //Получить Список Сеточных позиций двери  
@@ -170,8 +167,8 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
 
         float offsetFromEdgeGrid = 0.01f; // Смещение от Края Сетки (ячейки) //НУЖНО НАСТРОИТЬ//
 
-        GridPositionXZ childreGridPositionLeft = LevelGrid.Instance.GetGridPosition(_transformChildrenDoorArray[1].position + _transformChildrenDoorArray[1].right * offsetFromEdgeGrid); // Определим сеточную позицию Дочернего объекта двери Левая створока двери (сместимся от границы ячейки что бы не попасть на соседнию слева)
-        GridPositionXZ childreGridPositionRight = LevelGrid.Instance.GetGridPosition(_transformChildrenDoorArray[2].position - _transformChildrenDoorArray[2].right * offsetFromEdgeGrid); // Определим сеточную позицию Дочернего объекта двери Правая створока двери (сместимся от границы ячейки что бы не попасть на соседнию справа)
+        GridPositionXZ childreGridPositionLeft = _levelGrid.GetGridPosition(_transformChildrenDoorArray[1].position + _transformChildrenDoorArray[1].right * offsetFromEdgeGrid); // Определим сеточную позицию Дочернего объекта двери Левая створока двери (сместимся от границы ячейки что бы не попасть на соседнию слева)
+        GridPositionXZ childreGridPositionRight = _levelGrid.GetGridPosition(_transformChildrenDoorArray[2].position - _transformChildrenDoorArray[2].right * offsetFromEdgeGrid); // Определим сеточную позицию Дочернего объекта двери Правая створока двери (сместимся от границы ячейки что бы не попасть на соседнию справа)
 
         //_doorGridPositionList = PathfindingMonkey.Instance.FindPath(childreGridPositionRight, childreGridPositionLeft, out int pathLength); // Зависимость от поиска пути
 

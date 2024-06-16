@@ -1,5 +1,6 @@
 public enum SoundName // Перечесление звуков, что бы избежать строки (ПРОВЕРИТЬ НАЗВАНИЕ аудио клипов В ИЕРАРХИИ)
 {
+    DefaultEmpty,
     DeathCry,
     DestructionCrate,
     DoorClosed,

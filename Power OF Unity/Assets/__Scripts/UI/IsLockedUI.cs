@@ -1,16 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using static UnitActionSystem;
 
 public class IsLockedUI : MonoBehaviour // При взаимодействии с дверью, если ее нельзя открыть, появить надпись "Заперта"
 {
-    
+    private UnitActionSystem _unitActionSystem;
+    private void Awake()
+    {
+        _unitActionSystem = FindObjectOfType<UnitActionSystem>();
+    }
+
     private void Start()
     {
         DoorInteract.OnAnyDoorIsLocked += DoorInteract_OnAnyDoorIsLocked; //Подпишемся на событие Любая Дверь Заперта(нельзя открыть вручную)
-        
-        UnitActionSystem.Instance.OnBusyChanged += UnitActionSystem_OnBusyChanged; // Подписываюсь на Event Занятость Изменена  и выполним UnitActionSystem_OnBusyChanged, эта фунуция получит от события булевый аргумент
+
+        _unitActionSystem.OnBusyChanged += UnitActionSystem_OnBusyChanged; // Подписываюсь на Event Занятость Изменена  и выполним UnitActionSystem_OnBusyChanged, эта фунуция получит от события булевый аргумент
 
 
         Hide(); // Скроем при старте

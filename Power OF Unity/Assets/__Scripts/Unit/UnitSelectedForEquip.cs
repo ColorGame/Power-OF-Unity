@@ -1,21 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+
 /// <summary>
 ///  Юнит которого ВЫБРАЛИ для экипировки и настройки инвенторя
 /// </summary>
 public class UnitSelectedForEquip 
 {
-    public UnitSelectedForEquip()// Конструктор что бы отследить количество созданных new T() ОН ДОЛЖЕН БЫТЬ ОДИН
-    {
-    }
 
-   [SerializeField] private UnitInventory _selectedUnitEquipment; // Временно установим через инспектор или выбрать из UnitManager первый в списке
-
-
+    private Unit _selectedUnit; //
     private PickUpDrop _pickUpDrop;
 
-    public void Initialize(PickUpDrop pickUpDrop)
+    public void Init(PickUpDrop pickUpDrop)
     {       
         _pickUpDrop = pickUpDrop;
 
@@ -29,20 +24,20 @@ public class UnitSelectedForEquip
     /// </summary>
     private void PickUpDrop_OnAddPlacedObjectAtInventoryGrid(object sender, PlacedObject placedObject)
     {
-        _selectedUnitEquipment.AddPlacedObjectList(placedObject);
+        _selectedUnit.GetUnitInventory().AddPlacedObjectList(placedObject);
     }
     /// <summary>
     /// Удалим полученный объект из Список "Размещенных Объектов в Сетке Инвенторя".
     /// </summary>
     private void PickUpDrop_OnRemovePlacedObjectAtInventoryGrid(object sender, PlacedObject placedObject)
     {
-        _selectedUnitEquipment.RemovePlacedObjectList(placedObject);
+        _selectedUnit.GetUnitInventory().RemovePlacedObjectList(placedObject);
     }
 
 
-    public void SetSelectedUnit(UnitInventory unitEquipment)
+    public void SetSelectedUnit(Unit selectedUnit)
     {
-        _selectedUnitEquipment = unitEquipment;
-        Debug.Log($"Выбрал -{_selectedUnitEquipment.name} ");
+        _selectedUnit = selectedUnit;
+        Debug.Log($"Выбрал -{_selectedUnit.GetUnitTypeSO<UnitTypeSO>().GetName()} ");
     }
 }

@@ -8,14 +8,20 @@ public class PathfindingLinkMonoBehaviour : MonoBehaviour // Ссылка для поиска п
     public Vector3 linkPositionA;
     public Vector3 linkPositionB;
 
+    private static LevelGrid _levelGrid;
 
     public PathfindingLink GetPathfindingLink() //Получить Ссылку для поиска пути
     {
         return new PathfindingLink
         {// получим сеточные позиции по мировым координатам
-            gridPositionA = LevelGrid.Instance.GetGridPosition(linkPositionA),
-            gridPositionB = LevelGrid.Instance.GetGridPosition(linkPositionB)
+            gridPositionA = _levelGrid.GetGridPosition(linkPositionA),
+            gridPositionB = _levelGrid.GetGridPosition(linkPositionB)
         };
+    }
+
+    public static void Init(LevelGrid levelGrid)
+    {
+        _levelGrid = levelGrid;
     }
 
     private void Start()

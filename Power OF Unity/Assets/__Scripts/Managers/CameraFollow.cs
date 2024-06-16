@@ -1,6 +1,6 @@
-using UnityEngine;
-using Cinemachine;
 using System;
+using Unity.Cinemachine;
+using UnityEngine;
 
 
 public class CameraFollow: MonoBehaviour
@@ -9,10 +9,10 @@ public class CameraFollow: MonoBehaviour
     private const float MIN_FOLLOW_Y_OFFSET = 2f;
     private const float MAX_FOLLOW_Y_OFFSET = 15f;
 
-    public static event EventHandler OnCameraRotateStarted; // События На камере Поворот начался или завершен. Будет подписываться LookAtCamera 
-    public static event EventHandler OnCameraRotateCompleted; 
-    public static event EventHandler<float> OnCameraZoomStarted; // События На камере Масштабирование началось или завершено. Будет подписываться LookAtCamera 
-    public static event EventHandler OnCameraZoomCompleted;
+    public event EventHandler OnCameraRotateStarted; // События На камере Поворот начался или завершен. Будет подписываться LookAtCamera 
+    public event EventHandler OnCameraRotateCompleted; 
+    public event EventHandler<float> OnCameraZoomStarted; // События На камере Масштабирование началось или завершено. Будет подписываться LookAtCamera 
+    public event EventHandler OnCameraZoomCompleted;
 
     [SerializeField] private CinemachineVirtualCamera _cinemachineVirtualCamera;
     [SerializeField] private Collider cameraBoundsCollider; //Ссылка на коллайдер который ограничивает виртуальную камеру
@@ -26,7 +26,7 @@ public class CameraFollow: MonoBehaviour
 
     private Unit _targetUnit;
     private Vector3 _targetRotate; // Целевой поворот
-    private static Vector3 _targetZoomFollowOffset; // Целевое Увеличение Смещение следования       
+    private Vector3 _targetZoomFollowOffset; // Целевое Увеличение Смещение следования       
 
     private int _rotateAngle = 45; // Угол поворота камеры
     private int _deltaOffsetZoom = 3; // дельта смещения при увеличении
@@ -38,33 +38,9 @@ public class CameraFollow: MonoBehaviour
 
     private float _moveSpeed = 10f; // Скорость камеры
     private float _rotationSpeed = 5f;
-    private float _zoomSpeed = 5f;
-
-    private void Awake() // protected override void Awake()
-    {
-       // base.Awake(); //Выполним присваивание в базовом методе
-
-        _edgeScrolling = PlayerPrefs.GetInt("edgeScrolling", 1) == 1; // Загрузим сохраненый параметр _edgeScrolling и если это 1 то будет истина если не=1 то будет ложь (из PlayerPrefs.GetInt нельзя тегать булевые параметры поэтому используем строку)
-    }    
-
-    /*private void Start()
-    {
-        _cinemachineTransposer = _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>(); // Получим и сохраним компонент CinemachineTransposer из виртуальной камеры, чтобы в дальнейшем изменять ее параметры для ZOOM камеры
-
-        _targetZoomFollowOffset = _cinemachineTransposer.m_FollowOffset; // Смещение следования
-
-        FriendlyUnitButtonUI.OnAnyFriendlyUnitButtonPressed += UpdateSelectedUnit; //подпишемся Нажата любая кнопка дружественного юнита 
-        EnemyUnitButtonUI.OnAnyEnemylyUnitButtonPressed += UpdateSelectedUnit; //подпишемся Нажата любая кнопка вражественного юнита
-
-        GameInput.Instance.OnCameraMovementStarted += GameInput_OnCameraMovementStarted;
-        GameInput.Instance.OnCameraMovementCanceled += GameInput_OnCameraMovementCanceled;
-
-        GameInput.Instance.OnCameraRotateAction += GameInput_OnCameraRotateAction;
-        GameInput.Instance.OnCameraZoomAction += GameInput_OnCameraZoomAction;
-
-    }*/
-
-    public void Initialize(GameInput gameInput, OptionsMenuUI optionsMenuUI)
+    private float _zoomSpeed = 5f;       
+       
+    public void Init(GameInput gameInput, OptionsMenuUI optionsMenuUI)
     {
         _gameInput = gameInput;
         _optionsMenuUI = optionsMenuUI;
@@ -72,8 +48,8 @@ public class CameraFollow: MonoBehaviour
         _cinemachineTransposer = _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>(); // Получим и сохраним компонент CinemachineTransposer из виртуальной камеры, чтобы в дальнейшем изменять ее параметры для ZOOM камеры
         _targetZoomFollowOffset = _cinemachineTransposer.m_FollowOffset; // Смещение следования
 
-        FriendlyUnitButtonUI.OnAnyFriendlyUnitButtonPressed += UpdateSelectedUnit; //подпишемся Нажата любая кнопка дружественного юнита 
-        EnemyUnitButtonUI.OnAnyEnemylyUnitButtonPressed += UpdateSelectedUnit; //подпишемся Нажата любая кнопка вражественного юнита
+        SelectUnitFriendlyButtonUI.OnAnyFriendlyUnitButtonPressed += UpdateSelectedUnit; //подпишемся Нажата любая кнопка дружественного юнита 
+        SelectUnitEnemyButtonUI.OnAnyEnemylyUnitButtonPressed += UpdateSelectedUnit; //подпишемся Нажата любая кнопка вражественного юнита
 
         _gameInput.OnCameraMovementStarted += GameInput_OnCameraMovementStarted;
         _gameInput.OnCameraMovementCanceled += GameInput_OnCameraMovementCanceled;
@@ -82,6 +58,8 @@ public class CameraFollow: MonoBehaviour
         _gameInput.OnCameraZoomAction += GameInput_OnCameraZoomAction;
 
         _optionsMenuUI.OnEdgeScrollingChange += OptionsMenuUI_OnEdgeScrollingChange;
+
+        _edgeScrolling = PlayerPrefs.GetInt("edgeScrolling", 1) == 1; // Загрузим сохраненый параметр _edgeScrolling и если это 1 то будет истина если не=1 то будет ложь (из PlayerPrefs.GetInt нельзя тегать булевые параметры поэтому используем строку)
     }
 
     private void OptionsMenuUI_OnEdgeScrollingChange(object sender, bool e)
@@ -231,10 +209,10 @@ public class CameraFollow: MonoBehaviour
     {
         if (_targetMoveStarted)
         {
-            transform.position = Vector3.Lerp(transform.position, _targetUnit.transform.position, Time.deltaTime * _moveSpeed);
+            transform.position = Vector3.Lerp(transform.position, _targetUnit.GetTransformPosition(), Time.deltaTime * _moveSpeed);
 
             float stoppingDistance = 0.2f; // Дистанция остановки //НУЖНО НАСТРОИТЬ//
-            if (Vector3.Distance(transform.position, _targetUnit.transform.position) < stoppingDistance)  // Если растояние до целевой позиции меньше чем Дистанция остановки // Мы достигли цели        
+            if (Vector3.Distance(transform.position, _targetUnit.GetTransformPosition()) < stoppingDistance)  // Если растояние до целевой позиции меньше чем Дистанция остановки // Мы достигли цели        
             {
                 _targetMoveStarted = false;
             }

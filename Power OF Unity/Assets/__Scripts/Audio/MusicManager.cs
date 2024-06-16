@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class MusicManager : MonoBehaviour   // Менеджер Фоновой музыки 
                                             // В настроиках поставить галочку возле Play On Awake
@@ -46,7 +44,7 @@ public class MusicManager : MonoBehaviour   // Менеджер Фоновой �
     {
         _musicTimer -= Time.deltaTime; // Запустим таймер для переключения состояний
         
-        if (_musicTimer <= 0) // По истечению времени _musicTimer вызовим NextMusic() которая в свою очередь переключит состояние. Например - у меня было TypeGrenade.Aiming: тогда в case TypeGrenade.Aiming: переключу на TypeGrenade.Shooting;
+        if (_musicTimer <= 0) // По истечению времени _soundTimer вызовим NextMusic() которая в свою очередь переключит состояние. Например - у меня было TypeGrenade.Aiming: тогда в case TypeGrenade.Aiming: переключу на TypeGrenade.Shooting;
         {
             NextMusic(); //Следующая композиция
         }

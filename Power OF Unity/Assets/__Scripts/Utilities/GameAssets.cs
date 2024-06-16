@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "GameAssets", menuName = "ScriptableObjects/GameAssets")]
@@ -20,28 +18,13 @@ public class GameAssets : ScriptableObject //Игровые Активы
             return _instance; //Вернем поле экземпляра (если оно не нулевое то вернем существующее)
         }
     }
-
-    /// <summary>
-    ///Структура: Тип вражеского юнита и ЕГО ПРЕФАБ
-    /// </summary>
-    [Serializable]
-    public struct EnemyTypePrefabUnit
-    {
-        public EnemyUnitType enemyType;
-        public Transform transformPrefab;
-
-        public EnemyTypePrefabUnit(EnemyUnitType enemyType, Transform transformPrefab)
-        {
-            this.enemyType = enemyType;
-            this.transformPrefab = transformPrefab;
-        }
-    }
-
+     
     public Transform grenadeProjectilePrefab; // Префаб граната
     public Transform bulletProjectilePrefab; // Префаб пули
     public Transform placedObjectTypeButtonPrefab; // Кнопка выбора оружия
     public Transform levelGridSystemVisualSinglePrefab; // Префаб визуализации узла сетки
     public Transform inventoryGridSystemVisualSinglePrefab; // Префаб визуализации узла сетки Инвенторя
+    public Transform actionButtonUIPrefab; // Префаб кнопки выбора действия
     [Header("ПРЕФАБЫ FX-система частиц")]
     public Transform grenadeExplosionFXPrefab; // Префаб частички взрыва гранаты //НЕЗАБУДЬ ПОСТАВИТЬ ГАЛОЧКУ У TRAIL самоуничтожение(Destroy) после проигрывания
     public Transform grenadeSmokeFXPrefab; // Префаб дыма от гранаты // Уничтожать дым будет скрипт прикрипленный к нему
@@ -50,59 +33,8 @@ public class GameAssets : ScriptableObject //Игровые Активы
     public Transform bulletHitFXPrefab; // Префаб частиц от поппадания пули
     public Transform healFXPrefab; // Префаб Частички исцеления
     public Transform spotterFireFXPrefab; // Префаб Частички волны при наблюдении
-
-    [Header("Совместим Тип вражеского юнита и ЕГО ПРЕФАБ")]
-    [SerializeField] private List<EnemyTypePrefabUnit> _enemyTypePrefabUnitList;
-
-    /// <summary>
-    /// Словарь (КЛЮЧ - Тип вражеского юнита; ЗНАЧЕНИЕ - ЕГО ПРЕФАБ)
-    /// </summary>
-    private Dictionary<EnemyUnitType, Transform> _enemyTypePrefabUnitDictionary = null;
-
-    /// <summary>
-    /// Заполнить первую часть таблицы ПРЕФАБЫ ВРАГА
-    /// </summary>
-    public void CompleteFirstPartTableEnemyPrefab()
-    {
-        if (_enemyTypePrefabUnitList.Count == 0)
-        {
-            _enemyTypePrefabUnitList = new List<EnemyTypePrefabUnit>();           
-            foreach (EnemyUnitType enemyType  in Enum.GetValues(typeof(EnemyUnitType)))
-            {
-                _enemyTypePrefabUnitList.Add(new EnemyTypePrefabUnit(enemyType, null));
-            }        
-        }
-        else{Debug.Log("ТАБЛИЦА -- Enemy Type Prefab Unit List -- уже заполнена!!!");}
-    }
-
-    public Transform GetEnemyPrefab(EnemyUnitType enemyType)
-    {
-        BuildLookup();
-        return _enemyTypePrefabUnitDictionary[enemyType];
-    }
-
-    /// <summary>
-    /// Поиск по сборке
-    /// </summary>    
-    private void BuildLookup()
-    {
-        if (_enemyTypePrefabUnitDictionary != null) return; // Выходим если Dictionary уже заполнен
-        _enemyTypePrefabUnitDictionary = GetEnemyTypePrefabUnitDictionary();
-    }
-
-    private Dictionary<EnemyUnitType, Transform> GetEnemyTypePrefabUnitDictionary()
-    {
-        //Инициализируем возвращаемый словарь
-        Dictionary<EnemyUnitType, Transform> enemyTypePrefabUnitDictionary = new Dictionary<EnemyUnitType, Transform>();
-
-        for (int index = 0; index < _enemyTypePrefabUnitList.Count; index++)
-        {
-            EnemyTypePrefabUnit enemyTypePrefabUnit = _enemyTypePrefabUnitList[index];
-            //Заполним словарь
-            enemyTypePrefabUnitDictionary[enemyTypePrefabUnit.enemyType] = enemyTypePrefabUnit.transformPrefab;
-        }
-        return enemyTypePrefabUnitDictionary;
-    }
+    
+      
 
 
 

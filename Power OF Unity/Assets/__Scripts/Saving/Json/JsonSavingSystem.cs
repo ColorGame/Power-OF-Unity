@@ -13,8 +13,13 @@ using UnityEngine.SceneManagement;
 public class JsonSavingSystem //: MonoBehaviour
 {
     private const string EXTENSION = ".json";
+    private JsonSavingSystem() { } // Конструктор private что бы нельзя было создать  new JsonSavingSystem() 
 
-    public JsonSavingSystem() { } // Конструктор что бы отследить количество созданных new T() ОН ДОЛЖЕН БЫТЬ ОДИН
+    // Тип Lazy потокобезопасная. Ленивая загрузка. Все, что вам нужно сделать, это передать делегат конструктору, который вызывает конструктор Singleton, которому передается лямбда-выражение:
+    private static readonly Lazy<JsonSavingSystem> lazy =
+        new Lazy<JsonSavingSystem>(() => new JsonSavingSystem());
+
+    public static JsonSavingSystem Instance { get { return lazy.Value; } }
 
     /// <summary>
     /// Загрузит последнюю сохраненную сцену и восстановит состояние.
@@ -30,7 +35,7 @@ public class JsonSavingSystem //: MonoBehaviour
         {
             buildIndex = (int)stateDict["lastSceneBuildIndex"]; //Изменим Индекс сцены  на индекс последней сохраненой сцены
         }
-        yield return SceneManager.LoadSceneAsync(buildIndex); // Загрузим эту сцену ассинхроно (это происходит между Awake и Start)
+        yield return SceneManager.LoadSceneAsync(buildIndex); // Загрузим эту сцену ассинхроно (это происходит между Awake и StartScene)
         RestoreFromToken(state); // Восстановим сохраненное состояние этой сцены
     }
 
@@ -126,7 +131,7 @@ public class JsonSavingSystem //: MonoBehaviour
         throw new NotImplementedException();
     }
 
-    private void RestoreFromToken(JObject state) // Восстановление из токена (для избежания гонки помни что этот метод вызывается мжду Awakw и Start)
+    private void RestoreFromToken(JObject state) // Восстановление из токена (для избежания гонки помни что этот метод вызывается мжду Awakw и StartScene)
     {
         IDictionary<string, JToken> stateDict = state;  //сопоставляет  Dictionary<string, JToken> прямо с JObject.
                                                         // Найдем и переберем все сущности которые должны сохраняться

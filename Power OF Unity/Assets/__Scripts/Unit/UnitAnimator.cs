@@ -6,7 +6,7 @@ using UnityEngine;
 public class UnitAnimator : MonoBehaviour // Анимация юнита(ПЛАНЫ: в дальнейшем можно создать класс оружие Arms и расширять его, тогда в этих классах и будем создавать пули)
 {
     [SerializeField] private Animator _animator;
-        
+
 
     // Если сложная система оружий то лучше создать отдельный скрипт который отвечает за смену оружия
     // Менеджер по оружию описание логики https://community.gamedev.tv/t/weapon-manager/213840
@@ -41,22 +41,22 @@ public class UnitAnimator : MonoBehaviour // Анимация юнита(ПЛАНЫ: в дальнейшем 
             healAction.OnHealActionStarted += HealAction_OnHealActionStarted;// Подпишемся на событие
             healAction.OnHealActionCompleted += HealAction_OnHealActionCompleted;
         }
-        if (TryGetComponent <GrenadeFragmentationAction>(out GrenadeFragmentationAction grenadeFragmentationAction))// Попробуем получить компонент GrenadeAction и если получиться сохраним в grenadeAction
+        if (TryGetComponent<GrenadeFragmentationAction>(out GrenadeFragmentationAction grenadeFragmentationAction))// Попробуем получить компонент GrenadeAction и если получиться сохраним в grenadeAction
         {
             grenadeFragmentationAction.OnGrenadeActionStarted += GrenadeAction_OnGrenadeActionStarted;// Подпишемся на событие
-            grenadeFragmentationAction.OnGrenadeActionCompleted += GrenadeAction_OnGrenadeActionCompleted;         
-        }          
-        if (TryGetComponent <GrenadeSmokeAction>(out GrenadeSmokeAction grenadeSmokeAction))// Попробуем получить компонент GrenadeAction и если получиться сохраним в grenadeAction
+            grenadeFragmentationAction.OnGrenadeActionCompleted += GrenadeAction_OnGrenadeActionCompleted;
+        }
+        if (TryGetComponent<GrenadeSmokeAction>(out GrenadeSmokeAction grenadeSmokeAction))// Попробуем получить компонент GrenadeAction и если получиться сохраним в grenadeAction
         {
             grenadeSmokeAction.OnGrenadeActionStarted += GrenadeAction_OnGrenadeActionStarted;// Подпишемся на событие
-            grenadeSmokeAction.OnGrenadeActionCompleted += GrenadeAction_OnGrenadeActionCompleted;         
+            grenadeSmokeAction.OnGrenadeActionCompleted += GrenadeAction_OnGrenadeActionCompleted;
         }
         if (TryGetComponent<GrenadeStunAction>(out GrenadeStunAction grenadeStunAction))// Попробуем получить компонент GrenadeAction и если получиться сохраним в grenadeAction
         {
             grenadeStunAction.OnGrenadeActionStarted += GrenadeAction_OnGrenadeActionStarted;// Подпишемся на событие
             grenadeStunAction.OnGrenadeActionCompleted += GrenadeAction_OnGrenadeActionCompleted;
         }
-        if (TryGetComponent <SpotterFireAction>(out SpotterFireAction spotterFireAction))
+        if (TryGetComponent<SpotterFireAction>(out SpotterFireAction spotterFireAction))
         {
             spotterFireAction.OnSpotterFireActionStarted += SpotterFireAction_OnSpotterFireActionStarted;
             spotterFireAction.OnSpotterFireActionCompleted += SpotterFireAction_OnSpotterFireActionCompleted;
@@ -65,7 +65,7 @@ public class UnitAnimator : MonoBehaviour // Анимация юнита(ПЛАНЫ: в дальнейшем 
     }
     private void Start()
     {
-       // EquipRifleHand_R(); // Включим винтовку
+        // EquipRifleHand_R(); // Включим винтовку
     }
 
     private void SpotterFireAction_OnSpotterFireActionStarted(object sender, EventArgs e)
@@ -94,16 +94,16 @@ public class UnitAnimator : MonoBehaviour // Анимация юнита(ПЛАНЫ: в дальнейшем 
     }
 
     private void GrenadeAction_OnGrenadeActionStarted(object sender, EventArgs e)
-    {        
+    {
         EquipRifleHand_L(); //Установим винтовку на ЛЕВУЮ руку
         _animator.SetTrigger("Grenady");// Установить тригер( нажать спусковой крючок)
     }
     private void GrenadeAction_OnGrenadeActionCompleted(object sender, EventArgs e)
-    {        
+    {
         EquipRifleHand_R(); // Включим винтовку
     }
 
-    private void HealAction_OnHealActionStarted(object sender, Unit unit) 
+    private void HealAction_OnHealActionStarted(object sender, Unit unit)
     {
         HideAllEquip(); // выключим экипировку
         _animator.SetTrigger("Heal");// Установить тригер( нажать спусковой крючок)
@@ -125,7 +125,7 @@ public class UnitAnimator : MonoBehaviour // Анимация юнита(ПЛАНЫ: в дальнейшем 
     private void SwordAction_OnSwordActionCompleted(object sender, EventArgs e) // Когда действие завершено поменяем меч на винтовку
     {
         EquipRifleHand_R(); // Включим винтовку
-    }       
+    }
 
     private void MoveAction_OnStartMoving(object sender, EventArgs empty)
     {
@@ -144,7 +144,7 @@ public class UnitAnimator : MonoBehaviour // Анимация юнита(ПЛАНЫ: в дальнейшем 
     private void EquipSword() // Экипировка меч
     {
         HideAllEquip(); // выключим экипировку
-        _swordTransform.gameObject.SetActive(true);        
+        _swordTransform.gameObject.SetActive(true);
     }
 
     private void EquipRifleHand_R() // Экипировка винтовка Правой Руки
@@ -173,10 +173,10 @@ public class UnitAnimator : MonoBehaviour // Анимация юнита(ПЛАНЫ: в дальнейшем 
         _binocularsTransform.gameObject.SetActive(false);
     }
 
-   /* private void SaveStateEquip() // Сохраним активное оружие
-    {
-        _swordActive = _swordTransform.gameObject.activeSelf;
-        _rifleActive = _rifleTransformHand_R.gameObject.activeSelf;
-    }*/
+    /* private void SaveStateEquip() // Сохраним активное оружие
+     {
+         _swordActive = _swordTransform.gameObject.activeSelf;
+         _rifleActive = _rifleTransformHand_R.gameObject.activeSelf;
+     }*/
 
 }

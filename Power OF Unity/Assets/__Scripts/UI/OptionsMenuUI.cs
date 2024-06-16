@@ -1,11 +1,17 @@
 ﻿
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+/// <summary>
+/// Меню настроек звука видео... 
+/// </summary>
+/// <remarks>
+/// Должен быть прикриплен к PersistentEntryPoint
+/// </remarks>
 public class OptionsMenuUI : MonoBehaviour // Меню настроик 
 {
     public event EventHandler<bool> OnEdgeScrollingChange;
@@ -53,48 +59,22 @@ public class OptionsMenuUI : MonoBehaviour // Меню настроик
     private int _stateHashNameAnimation;
     private bool _animationStart;
 
-    public void Initialize(GameInput gameInput, SoundManager soundManager, MusicManager musicManager)
+    public void Init(GameInput gameInput, SoundManager soundManager, MusicManager musicManager)
     {
         _soundManager = soundManager;
         _musicManager = musicManager;
-        _gameInput = gameInput;
-    }
+        _gameInput = gameInput;       
+    }   
 
-    private void Awake()
+    private void Start()
     {
         _panelList = new List<GameObject>() { _videoPanel, _soundPanel, _controlPanel };
         _animator = GetComponent<Animator>();
 
-        _videoPanelButton.onClick.AddListener(() => { ShowPanel(_videoPanel); });
-        _soundPanelButton.onClick.AddListener(() => { ShowPanel(_soundPanel); });
-        _controlPanelButton.onClick.AddListener(() => { ShowPanel(_controlPanel); });
-
-
-        _soundSlider.onValueChanged.AddListener((v) =>
-        {
-            _soundManager.SetVolume(_soundSlider.value);
-            UpdateText();
-        });
-
-        _musicSlider.onValueChanged.AddListener((v) =>
-        {
-            _musicManager.SetVolume(_musicSlider.value);
-            UpdateText();
-        });
-
-        _musicNextButton.onClick.AddListener(() => { _musicManager.NextMusic(); });
-
-        _edgeScrollingToggle.onValueChanged.AddListener((bool set) => { SetEdgeScrolling(set); });
-
-        _optionsButton.onClick.AddListener(() => { ToggleVisible(); });
-        _quitButton.onClick.AddListener(() => { ToggleVisible(); });
-        _resetButton.onClick.AddListener(() => { Debug.Log("ЗАГЛУШКА"); });
+        InitButtons();
 
         _gameInput.OnMenuAlternate += GameInput_OnMenuAlternate;
-    }
 
-    private void Start()
-    {
         HideOptionsMenu();
         _toggleBool= false;
 
@@ -105,7 +85,7 @@ public class OptionsMenuUI : MonoBehaviour // Меню настроик
         _musicSlider.value = _musicManager.GetNormalizedVolume();
 
         UpdateText();
-    }
+    }       
 
     private void Update()
     {
@@ -126,6 +106,31 @@ public class OptionsMenuUI : MonoBehaviour // Меню настроик
     private void GameInput_OnMenuAlternate(object sender, System.EventArgs e)
     {
         ToggleVisible();
+    }
+
+    private void InitButtons()
+    {
+        _videoPanelButton.onClick.AddListener(() => { ShowPanel(_videoPanel); });
+        _soundPanelButton.onClick.AddListener(() => { ShowPanel(_soundPanel); });
+        _controlPanelButton.onClick.AddListener(() => { ShowPanel(_controlPanel); });
+
+        _soundSlider.onValueChanged.AddListener((v) =>
+        {
+            _soundManager.SetVolume(_soundSlider.value);
+            UpdateText();
+        });
+
+        _musicSlider.onValueChanged.AddListener((v) =>
+        {
+            _musicManager.SetVolume(_musicSlider.value);
+            UpdateText();
+        });
+
+        _musicNextButton.onClick.AddListener(() => { _musicManager.NextMusic(); });
+        _edgeScrollingToggle.onValueChanged.AddListener((bool set) => { SetEdgeScrolling(set); });
+        _optionsButton.onClick.AddListener(() => { ToggleVisible(); });
+        _quitButton.onClick.AddListener(() => { ToggleVisible(); });
+        _resetButton.onClick.AddListener(() => { Debug.Log("ЗАГЛУШКА"); });
     }
 
     private void UpdateText() // Обновим текс громкости

@@ -1,33 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 
-public class DestroyNextTurn : MonoBehaviour // ДЕактивация объектов через несколько ходов
+/// <summary>
+/// Удаление или отключение переданного объекта через заданное количество ходов
+/// </summary>
+public class DestroyNextTurn 
 {
-    [SerializeField] private int _turnAmountToDestroy = 2; // Количество ходов до уничтожения
-    [SerializeField] private State _state; // ВЫбрать уничтожить или отключить
-
-    private enum State
+    public enum State
     {
         Destroy,
         SetActive
     }
 
+    private readonly int _turnAmountToDestroy = 2; // Количество ходов до уничтожения
+    private readonly State _state; // ВЫбрать уничтожить или отключить
+    private readonly TurnSystem _turnSystem;
+    private readonly GameObject _gameObject;
 
     private int _startTurnNumber; // Номер очереди (хода) при старте 
     private int _currentTurnNumber; // Текущий номер очереди (хода) 
 
-    private void Start()
+    /// <summary>
+    /// Удаление или отключение переданного объекта через заданное количество ходов
+    /// </summary>
+    public DestroyNextTurn(GameObject gameObject, int turnAmountToDestroy, State state, TurnSystem turnSystem)
     {
-        _startTurnNumber = TurnSystem.Instance.GetTurnNumber(); // Получим номер хода
+        _gameObject = gameObject;
+        _turnAmountToDestroy = turnAmountToDestroy;
+        _state = state;
+        _turnSystem = turnSystem;
 
-        TurnSystem.Instance.OnTurnChanged += TurnSystem_OnTurnChanged; // Подпиш. на событие Ход Изменен
-    }
+        _startTurnNumber = _turnSystem.GetTurnNumber(); // Получим номер хода
+
+        _turnSystem.OnTurnChanged += TurnSystem_OnTurnChanged; // Подпиш. на событие Ход Изменен
+    }      
 
     private void TurnSystem_OnTurnChanged(object sender, System.EventArgs e)
     {
-        _currentTurnNumber = TurnSystem.Instance.GetTurnNumber(); // Получим ТЕКУЩИЙ номер хода;
+        _currentTurnNumber = _turnSystem.GetTurnNumber(); // Получим ТЕКУЩИЙ номер хода;
 
         if (_currentTurnNumber - _startTurnNumber == _turnAmountToDestroy)
         {
@@ -36,18 +45,19 @@ public class DestroyNextTurn : MonoBehaviour // ДЕактивация объектов через неско
             switch (_state)
             {
                 case State.Destroy:
-                    Destroy(gameObject);
+                    OnDestroy();
                     break;
                 case State.SetActive:
-                    gameObject.SetActive(false);
+                    _gameObject.SetActive(false);
                     break;
             }
-           
+
         }
     }
 
     private void OnDestroy()
     {
-        TurnSystem.Instance.OnTurnChanged -= TurnSystem_OnTurnChanged;
+        Object.Destroy(_gameObject);
+        _turnSystem.OnTurnChanged -= TurnSystem_OnTurnChanged;
     }
 }

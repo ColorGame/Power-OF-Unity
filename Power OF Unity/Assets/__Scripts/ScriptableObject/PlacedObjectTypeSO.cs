@@ -5,13 +5,13 @@ using UnityEngine;
 
 
 /// <summary>
-/// ScriptableObject, представляющий любой предмет, который можно поместить в инвентарь. 
+/// ScriptableObject, хранит всю информацию о предмете, который можно создать и поместить в инвентарь. 
 /// </summary>
 /// <remarks>
 /// abstract - НЕЛЬЗЯ создать экземпляр данного класса.
 /// На практике вы, скорее всего, будете использовать подкласс, такой как "WeaponPlacedObjectSO"  "ItemPlacedObjectSO" или "ModulePlacedObjectSO" "EquipmentPlacedObjectSO".
 /// </remarks>
-public abstract class PlacedObjectTypeSO : ScriptableObject,  ISerializationCallbackReceiver//ISerializationCallbackReceiver Интерфейс для получения обратных вызовов при сериализации и десериализации.Будем использовать для создания ID при сериализации
+public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallbackReceiver//ISerializationCallbackReceiver Интерфейс для получения обратных вызовов при сериализации и десериализации.Будем использовать для создания ID при сериализации
                                                                                            //Сериализацией называется процесс записи состояния объекта (с возможной последующей передачей) в поток. Десериализация это процесс обратный сериализации – из данных,
                                                                                            //которые находятся в потоке, мы можем восстановить состояние объекта и использовать этот объект в другом месте.
 {
@@ -24,19 +24,24 @@ public abstract class PlacedObjectTypeSO : ScriptableObject,  ISerializationCall
     [Tooltip("Визуальная часть размещаемого объекта")]
     [SerializeField] private Transform _visual;
     [Tooltip("Сколько занимает клеток в ширину Х")]
-    [SerializeField] private int _widthX; 
+    [SerializeField] private int _widthX;
     [Tooltip("Сколько занимает клеток в высоту У")]
     [SerializeField] private int _heightY;
-    [Tooltip("Список сеток на которые можно разместить наш объект")]
-    [SerializeField] private List<GridName> _canPlacedOnGridList; 
+    [Tooltip("Список слотов инвенторя на которые можно разместить наш объект")]
+    [SerializeField] private List<InventorySlot> _canPlacedOnSlotList;
     [Tooltip("Вес размещаемого объекта в килограммах")]
-    [Range(0, 50)][SerializeField] private int _weight; 
-       
+    [Range(0, 50)][SerializeField] private int _weight;
+
+    private BaseAction[] _baseActionArray; // Список базовых действий прикрипленных к данному предмету их может быть несколько (например GrappleComboAction и GrappleAction)
+
+    // КЭШИРОВАННОЕ СОСТАЯНИЕ
+    static Dictionary<string, PlacedObjectTypeSO> placedObjectLookupCache; //кэшированный словарь поиска предмта типа PlacedObjectTypeSO// Статический словарь (Ключ-ID номер предмета, Значение)
+
 
     public virtual PlacedObjectTooltip GetPlacedObjectTooltip() // Получить всплывающую подсказку длф данного размещенного объекта // virtual- переопределим в наследуемых классах
     {
         return PlacedObjectTypeBaseStatsSO.Instance.GetTooltipPlacedObject(_placedObjectType);
-    }       
+    }
 
     /// <summary>
     /// Список сеточных позиций которые занимает объект относительно переданной сеточной позиции
@@ -44,7 +49,7 @@ public abstract class PlacedObjectTypeSO : ScriptableObject,  ISerializationCall
     public List<Vector2Int> GetGridPositionList(Vector2Int gridPosition)
     {
         List<Vector2Int> gridPositionList = new List<Vector2Int>();
-       
+
         for (int x = 0; x < _widthX; x++)
         {
             for (int y = 0; y < _heightY; y++)
@@ -54,22 +59,16 @@ public abstract class PlacedObjectTypeSO : ScriptableObject,  ISerializationCall
         }
         return gridPositionList;
     }
-       
-    public PlacedObjectType GetPlacedObjectType()
-    {
-        return _placedObjectType;
-    }
 
-    public Transform GetPrefab()
-    {
-        return _prefab;
-    }
+    public PlacedObjectType GetPlacedObjectType() { return _placedObjectType; }
+
+    public Transform GetPrefab() { return _prefab; }
 
     /// <summary>
     /// Вычислить смещение визуала относительно родителя
     /// </summary>  
     public Vector3 GetOffsetVisualFromParent()
-    {       
+    {
         float cellSize = InventoryGrid.GetCellSize();
 
         float x = cellSize * _widthX / 2; // Размер ячейки умножим на количество ячеек, которое занимает наш объект по Х и делим пополам
@@ -81,22 +80,22 @@ public abstract class PlacedObjectTypeSO : ScriptableObject,  ISerializationCall
     /// <summary>
     /// Получить количество ЯЧЕЕК которое занимает объект в ширину Х и высоту Ую
     /// /// </summary>    
-    public Vector2Int GetWidthXHeightYInCells()
-    {
-        return new Vector2Int(_widthX, _heightY);
-    }
+    public Vector2Int GetWidthXHeightYInCells() { return new Vector2Int(_widthX, _heightY); }
 
-    public Transform GetVisual()
-    {
-        return _visual;
-    }
+    public Transform GetVisual() { return _visual; }
 
     /// <summary>
-    /// Список сеток на которые можно разместить наш объект
+    /// Список слотов на которые можно разместить наш объект
     /// </summary>
-    public List<GridName> GetCanPlacedOnGridList()
+    public List<InventorySlot> GetCanPlacedOnSlotList() { return _canPlacedOnSlotList; }
+
+    public BaseAction[] GetBaseActionsArray()
     {
-        return _canPlacedOnGridList;
+        if(_baseActionArray.Length == 0) // Если еще не заполнена то 
+        {
+          return  _baseActionArray = _prefab.GetComponents<BaseAction>();
+        }
+        return _baseActionArray;
     }
 
     void ISerializationCallbackReceiver.OnBeforeSerialize()

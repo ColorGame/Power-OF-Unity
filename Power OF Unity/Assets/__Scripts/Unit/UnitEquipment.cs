@@ -6,14 +6,27 @@ using UnityEngine;
 /// <remarks>
 /// Компонент должен быть прикриплен к юниту
 /// </remarks>
-public class UnitEquipment : MonoBehaviour
+public class UnitEquipment 
 {
+    public UnitEquipment(Unit unit)
+    {
+        _unit = unit;
+    }
+
+    private Unit _unit;
     private Transform _rightHandTransform = null;
     private Transform _leftHandTransform = null;
 
-    private void Start()
+    public void SetupForSpawn()
     {
         // подписаться на событие смена визуала юнита для получения АКТУАЛЬНЫХ rightHandTransform и leftHandTransform т.к. для разной брони разные скелеты
+        if (_unit.IsEnemy())
+        {
+            PlacedObjectTypeSO mainPlacedObjectTypeSO =  _unit.GetUnitTypeSO<UnitEnemySO>().GetMainPlacedObjectTypeSO(); // Получим основное оружие для экиперовки врага
+            // Сделать
+            PlacedObject placedObject = PlacedObject.CreateInWorld(_rightHandTransform.position, mainPlacedObjectTypeSO, _unit.GetTransform());
+            EquipWeapon(placedObject);
+        }
     }
 
 
@@ -23,6 +36,7 @@ public class UnitEquipment : MonoBehaviour
     public void EquipWeapon(PlacedObject placedObject)
     {
         //Получить из PlacedObject  SO а из него на какую руку и префаб
+
     }
 
     /// <summary>
@@ -35,6 +49,9 @@ public class UnitEquipment : MonoBehaviour
 
     public void FreeHands() // Освободить руки
     {
-
+       /* if (InventorySlot.MainWeaponSlot == placedObject.GetGridSystemXY().GetGridSlot())//Если удален из Сетки Основного Оружия
+        {
+           // Убрать экипировку
+        }*/
     }
 }

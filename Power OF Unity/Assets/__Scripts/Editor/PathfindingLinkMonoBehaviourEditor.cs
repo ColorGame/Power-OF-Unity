@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 [CustomEditor(typeof(PathfindingLinkMonoBehaviour))] // создание пользовательского редактора для созданного вами скрипта.
                                                      // Когда вы создаете скрипт в Unity, по умолчанию он наследуется от MonoBehaviour и, следовательно, является компонентом, который вы можете присоединить к GameObject.

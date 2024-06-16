@@ -1,9 +1,9 @@
 #define PATHFINDING
 
+using Pathfinding;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Pathfinding;
 using static Pathfinding.BlockManager;
 
 // Обратите внимание на эту строку, если она опущена, скрипт не будет знать, что класс 'Path' существует, и он выдаст ошибки компилятора
@@ -17,7 +17,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
                                                             // Поэтому для прослушивания этого события слушателю не нужна ссылка на какую-либо конкретную единицу, они могут получить доступ к событию через класс, который затем запускает одно и то же событие для каждой единицы. 
 
     public event EventHandler OnStartMoving; // Начал двигаться (когда юнит начнет движение мы запустим событие Event)
-    public event EventHandler OnStopMoving; // Прекратил движение (когда юнит законсит движение мы запустим событие Event)
+    public event EventHandler OnStopMoving; // Прекратил движение (когда юнит законсит движение мы запустим событие Event)  
     public event EventHandler<OnChangeFloorsStartedEventArgs> OnChangedFloorsStarted; // Начали менять этажи 
     public class OnChangeFloorsStartedEventArgs : EventArgs // Расширим класс событий, чтобы в аргументе события передать Сеточную позицию Юнита и Целевой позиции
     {
@@ -25,7 +25,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
         public GridPositionXZ targetGridPosition; // КУда прыгаем
     }
 
-    [SerializeField] private int maxMoveDistance = 5; // Максимальная дистанция движения в сетке
+    private int _moveDistance ; // Максимальная дистанция движения в сетке
 
     private List<Vector3> _positionList; // Позиции которые должен преодолеть Юнит (в определенном порядке)
     private int _currentPositionIndex; // Текущая Позиция Индекс
@@ -33,6 +33,9 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
     private float _differentFloorsTeleportTimer; // Таймер телепортации на разные этажи
     private float _differentFloorsTeleportTimerMax = .5f; // Максимальный таймер телепортации на разные этажи (это время воспроизведения анимации прыжка или падения)
     private List<GridPositionXZ> _validGridPositionList = new List<GridPositionXZ>(); // Список Допустимых Сеточных Позиция для Действий
+
+    private UnitActionSystem _unitActionSystem;
+    
 
 #if PATHFINDING
     private BlockManager.TraversalProvider _traversalProvider; // Поставщик(провайдер) обхода
@@ -42,19 +45,24 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
     private SingleNodeBlocker _singleNodeBlocker; // Блокирующий узел на самом юните
     private Seeker _seeker; 
 
-    public void SetupUnitForSpawn()
+    public void SetupForSpawn(Unit unit, UnitActionSystem unitActionSystem, int basicMoveDistance)
     {
         // Установите провайдера обхода так, чтобы он блокировал все узлы, которые заблокированы SingleNodeBlocker
         // за исключением SingleNodeBlocker, принадлежащего этому ЮНИТУ (мы не хотим, блокировать самих себя).
-        _singleNodeBlocker = _unit.GetSingleNodeBlocker();
+        _singleNodeBlocker = GetComponent<SingleNodeBlocker>();
         _singleNodeBlocker.BlockAtCurrentPosition(); // Заблокирую узел где стою
         _obstaclesIgnoreList = new List<SingleNodeBlocker>() { _singleNodeBlocker };
         _traversalProvider = new TraversalProvider(BlockManager.Instance, BlockMode.AllExceptSelector, _obstaclesIgnoreList);
 
+        _moveDistance = basicMoveDistance;
+
         _seeker = GetComponent<Seeker>();
         _seeker.pathCallback += Seeker_OnPathComplete; // Подпишемся путь вычислен
-        UnitActionSystem.Instance.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged;  //подпишемся Выбранный Юнит Изменен
-        UnitActionSystem.Instance.OnBusyChanged += Instance_OnBusyChanged; //подпишемся на событие Занятость Изменена 
+
+        _unit = unit;
+        _unitActionSystem = unitActionSystem;
+        _unitActionSystem.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged;  //подпишемся Выбранный Юнит Изменен
+        _unitActionSystem.OnBusyChanged += UnitActionSystem_OnBusyChanged; //подпишемся на событие Занятость Изменена 
 
         GeneratePossibleMoves(_unit); // Сгенерируем возможные ходы с помощью (A* Pathfinding Project4.2.18) для нашего юнита
     }
@@ -95,6 +103,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
             {
                 _isChangingFloors = false;
                 transform.position = targetPosition;
+                _unit.UpdateGridPosition();
             }
         }
         else
@@ -114,6 +123,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
         if (Vector3.Distance(transform.position, targetPosition) < stoppingDistance)  // Если растояние до целевой позиции меньше чем Дистанция остановки // Мы достигли цели        
         {
             _currentPositionIndex++; // Увеличим индекс на еденицу
+            _unit.UpdateGridPosition();
 
             if (_currentPositionIndex >= _positionList.Count) // Если мы дошли до конца списка тогда...
             {
@@ -128,8 +138,8 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
             {
                 targetPosition = _positionList[_currentPositionIndex]; // Целевой позицией будет позиция из листа с заданным индексом
 
-                GridPositionXZ targetGridPosition = LevelGrid.Instance.GetGridPosition(targetPosition); // Получим сеточную позицию Целевой позиции
-                GridPositionXZ unitGridPosition = LevelGrid.Instance.GetGridPosition(transform.position); // Получим сеточную позицию Юнита                               
+                GridPositionXZ targetGridPosition = _levelGrid.GetGridPosition(targetPosition); // Получим сеточную позицию Целевой позиции
+                GridPositionXZ unitGridPosition = _levelGrid.GetGridPosition(transform.position); // Получим сеточную позицию Юнита                               
                 
                 if (targetGridPosition.floor != unitGridPosition.floor) // Если этаж Целевой позииции не совпадает с этажом Юнита то ...              
                 {
@@ -151,7 +161,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
     public override void TakeAction(GridPositionXZ gridPosition, Action onActionComplete) // Движение к целевой позиции. В аргумент передаем сеточную позицию  и делегат. Вызываю ее для передачи новой целевой позиции
     {
 #if PATHFINDING
-        _path = ABPath.Construct(transform.position, LevelGrid.Instance.GetWorldPosition(gridPosition)); // построим
+        _path = ABPath.Construct(transform.position, _levelGrid.GetWorldPosition(gridPosition)); // построим
         _path.traversalProvider = _traversalProvider; // Установим объекты для обхода
         // Запланируйте путь для расчета
         _seeker.StartPath(_path);   // вычислим
@@ -163,7 +173,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
 
         foreach (GridPosition pathGridPosition in pathGridPositionList) // переберем компоненты списка pathGridPositionList, преобразуем их в мировые координаты и добавим в _positionList
         {
-            _positionList.Add(LevelGrid.Instance.GetWorldPosition(pathGridPosition)); // преобразуем pathGridPosition в мировую и добавим в _positionList
+            _positionList.Add(_levelGrid.GetWorldPosition(pathGridPosition)); // преобразуем pathGridPosition в мировую и добавим в _positionList
         }
 #endif
         _soundManager.SetLoop(true);
@@ -190,7 +200,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
                     continue;
                 }
 
-                GridPositionXZ nodeGridPosition = LevelGrid.Instance.GetGridPosition((Vector3)node.position);
+                GridPositionXZ nodeGridPosition = _levelGrid.GetGridPosition((Vector3)node.position);
                 _validGridPositionList.Add(nodeGridPosition); // Добавляем в список те позиции которые прошли все тесты
 
                 OnAnyUnitPathComplete?.Invoke(this, _unit); // Запустим событие
@@ -207,14 +217,14 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
 
     private void UnitActionSystem_OnSelectedUnitChanged(object sender, EventArgs e)
     {
-        if (UnitActionSystem.Instance.GetSelectedUnit() == _unit) // Если выбран этот юнит
+        if (_unitActionSystem.GetSelectedUnit() == _unit) // Если выбран этот юнит
         {
           GeneratePossibleMoves(_unit); // Сгенерируем возможные ходы с помощью (A* Pathfinding Project4.2.18) для нашего юнита
         }
     }
-    private void Instance_OnBusyChanged(object sender, EventArgs e)
+    private void UnitActionSystem_OnBusyChanged(object sender, EventArgs e)
     {
-        if (UnitActionSystem.Instance.GetSelectedUnit() == _unit) // Если выбран этот юнит
+        if (_unitActionSystem.GetSelectedUnit() == _unit) // Если выбран этот юнит
         {
             GeneratePossibleMoves(_unit); // Сгенерируем возможные ходы с помощью (A* Pathfinding Project4.2.18) для нашего юнита
         }
@@ -227,14 +237,14 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
 
     public void GeneratePossibleMoves(Unit unit) // Сгенерируем возможные ходы с помощью (A* Pathfinding Project4.2.18) для нашего юнита
     {
-        _constantPath = ConstantPath.Construct(unit.transform.position, maxMoveDistance * 1000 * Mathf.RoundToInt(LevelGrid.Instance.GetCellSize()));
+        _constantPath = ConstantPath.Construct(transform.position, _moveDistance * 1000 * Mathf.RoundToInt(_levelGrid.GetCellSize()));
         _constantPath.traversalProvider = _traversalProvider; // Установим объекты для обхода
         // Запланируйте путь для расчета
         _seeker.StartPath(_constantPath);
 
         // Получим прямоугольник узлов вокруг Юнита
         /*GraphNode unitNode = AstarPath.active.GetNearest(unit.transform.position).node; // Получим узел Юнита
-        List<GraphNode> graphNodes = PathUtilities.BFS(unitNode, maxMoveDistance);
+        List<GraphNode> graphNodes = PathUtilities.BFS(unitNode, _moveDistance);
 
              _validGridPositionList.Clear(); // Очистим сисок путей
         foreach (GraphNode node in graphNodes)
@@ -245,7 +255,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
                 continue;
             }
 
-            GridPositionXZ nodeGridPosition = LevelGrid.Instance.GetGridPosition((Vector3)node.position);
+            GridPositionXZ nodeGridPosition = _levelGrid.GetGridPosition((Vector3)node.position);
             _validGridPositionList.Add(nodeGridPosition); // Добавляем в список те позиции которые прошли все тесты
 
             OnAnyUnitPathComplete?.Invoke(this, _unit); // Запустим событие
@@ -269,7 +279,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
                     GridPosition offsetGridPosition = new GridPosition(x, z, floor); // Смещенная сеточная позиция. Где началом координат(0,0, floor-этаж) является сам юнит 
                     GridPosition testGridPosition = unitGridPosition + offsetGridPosition; // Тестируемая Сеточная позиция
 
-                    if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
+                    if (!_levelGrid.IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
                     {
                         continue; // continue заставляет программу переходить к следующей итерации цикла 'for' игнорируя код ниже
                     }
@@ -290,7 +300,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
                         continue;
                     }
 
-                    if (LevelGrid.Instance.HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточную позицию где находиться другие юниты
+                    if (_levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточную позицию где находиться другие юниты
                     {
                         // Позиция занята другим юнитом :(
                         continue;
@@ -341,7 +351,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
 
     public override int GetMaxActionDistance()
     {
-        return maxMoveDistance;
+        return _moveDistance;
     }
 
 
@@ -349,7 +359,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
     private void OnDestroy()
     {
         _seeker.pathCallback -= Seeker_OnPathComplete; 
-        UnitActionSystem.Instance.OnSelectedUnitChanged -= UnitActionSystem_OnSelectedUnitChanged;  
+        _unitActionSystem.OnSelectedUnitChanged -= UnitActionSystem_OnSelectedUnitChanged;  
     }
 #endif
 }

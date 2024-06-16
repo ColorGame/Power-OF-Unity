@@ -2,74 +2,67 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FloorVisibility : MonoBehaviour // Видимость этажа // Должна висеть на всех объектах которые хотим скрыть // Если изменить материал который поддерживает альфа канал то можно изменять прозрачность объектов
+/// <summary>
+/// Видимость этажа // Должна висеть на всех объектах которые хотим скрыть
+/// </summary>
+/// <remarks>
+/// Если изменить материал который поддерживает альфа канал то можно изменять прозрачность объектов
+/// </remarks>
+public class FloorVisibility : MonoBehaviour  
 {
-    [SerializeField] private bool dynamicFloorPosition = false; // Динамическая позиция этажа (для объектов которые могут перемещаться и менять этаж нахождения) // Для юнита в ИНСПЕКТОРЕ надо поставить галочку
-    [SerializeField] private List<Renderer> ignoreRendererList; // Список Renderer который надо игнорировать при включении и отключении визуализации объектов // Это относиться к зеленому кругу на юните у которого своя логика отключения и включения
+    [Header("Динамическое изминение этажа. \nДля ЮНИТА поставить галочку")]
+    [SerializeField] private bool _dynamicFloorPosition = false; // Динамическая позиция этажа (для объектов которые могут перемещаться и менять этаж нахождения)
+    [Header("Renderer который надо игнорировать \nпри включении и отключении визуализации объектов.")]
+    [SerializeField] private List<Renderer> _ignoreRendererList; // Список Renderer который надо игнорировать при включении и отключении визуализации объектов // Это относиться к зеленому кругу на юните у которого своя логика отключения и включения
+
+    private static LevelGrid _levelGrid;
+    private static CameraFollow _cameraFollow;
 
     private Renderer[] _rendererArray; // Массив Renderer дочерних объектов
     private Canvas _canvas;
-    private int floor; // Этаж    
+    private int _floor; // Этаж    
     private bool _cameraZoomActionStarted = false; // Началось действие увеличения камеры
     private float _cameraHeight;
-    private bool _isUnit = false; //  проверим Это юнит или предмет
 
-    private void Awake()
+    public static void Init(LevelGrid levelGrid, CameraFollow cameraFollow)
     {
-        _rendererArray = GetComponentsInChildren<Renderer>(true); // Вернем компонент Renderer у всех дочерних объектов даже неактивных и сохраним в массив
-        _canvas = GetComponentInChildren<Canvas>(true); // Если на объекте нет то вернет null, ниже делаю проверку    
-        if (TryGetComponent(out MoveAction moveAction)) // Если на объекте есть этот компонент то подпишемся на событие
-        {
-            moveAction.OnChangedFloorsStarted += MoveAction_OnChangedFloorsStarted;
-        }
-
-        if (TryGetComponent(out Unit unit)) //Если на объекте есть этот компонент
-        {
-            _isUnit = true;           
-        }
-    }
-
-    public void SetupUnitForSpawn()
-    {
-        SetupOnStart();
+        _levelGrid = levelGrid;
+        _cameraFollow = cameraFollow;
     }
 
     private void Start()
     {
-        if (!_isUnit)  // Если это предмет то сделаем настройки в  Start
-        {
-            SetupOnStart();
-        }
-
+        SetupOnStart();
     }
+
     private void SetupOnStart()
     {
-        floor = LevelGrid.Instance.GetFloor(transform.position); // Получим этаж для нашей позиции(объект на котором висит скрипт) 
+        _floor = _levelGrid.GetFloor(transform.position); // Получим этаж для нашей позиции(объекта на котором висит скрипт) 
 
-        if (floor == 0 && !dynamicFloorPosition) // Если этаж на котором находяться объекты к которым прикриплен скрипт нулевой  и  этажность динамически НЕ изменяется (это касается юнитов) то...
+        if (_floor == 0 && !_dynamicFloorPosition) // Если этаж на котором находяться объекты к которым прикриплен скрипт нулевой  и  этажность динамически НЕ изменяется (это касается юнитов) то...
         {
             Destroy(this); // Уничтожим этот скрипт что бы он просто так не занимал Update
         }
-        CameraFollow.OnCameraZoomStarted += CameraFollow_OnCameraZoomStarted;
-        CameraFollow.OnCameraZoomCompleted += CameraFollow_OnCameraZoomCompleted;
+        _cameraFollow.OnCameraZoomStarted += CameraFollow_OnCameraZoomStarted;
+        _cameraFollow.OnCameraZoomCompleted += CameraFollow_OnCameraZoomCompleted;
     }
 
     private void OnDestroy()
     {
-        CameraFollow.OnCameraZoomStarted -= CameraFollow_OnCameraZoomStarted;
-        CameraFollow.OnCameraZoomCompleted -= CameraFollow_OnCameraZoomCompleted;
+        _cameraFollow.OnCameraZoomStarted -= CameraFollow_OnCameraZoomStarted;
+        _cameraFollow.OnCameraZoomCompleted -= CameraFollow_OnCameraZoomCompleted;
     }
     private void CameraFollow_OnCameraZoomStarted(object sender, float e) { _cameraZoomActionStarted = true; _cameraHeight = e; }
     private void CameraFollow_OnCameraZoomCompleted(object sender, System.EventArgs e) { _cameraZoomActionStarted = false; }
 
     private void Update()
     {
-        if (!_cameraZoomActionStarted) return; // Если камера не начала Zoom то выходим из апдейта
+        if (!_cameraZoomActionStarted) return; // Если камера не начала Zoom то выходим из апдейта (отключение объектов происходит при изминенеии ZOOM)
 
         float floorHeightOffset = 3f; // смещение высоты этажа // Для удобства отображения камеры
-        bool showObject = _cameraHeight > LevelGrid.FLOOR_HEIGHT * floor + floorHeightOffset; // Показываемый объект при условии ( если Высота камеры больше Высоты этажа * на номер этажа + смещение)
+        bool showObject = _cameraHeight > LevelGrid.FLOOR_HEIGHT * _floor + floorHeightOffset; // Показываемый объект при условии ( если Высота камеры больше Высоты этажа * на номер этажа + смещение)
 
-        if (showObject || floor == 0) // Если можно показать объект или этаж нулевой (что бы если высота камера окажеться меньше cameraHeight, униты на нулевом этаже не отключались)
+        if (showObject || _floor == 0) // Если можно показать объект или этаж нулевой (что бы если высота камера окажеться меньше cameraHeight, униты на нулевом этаже не отключались)
         {
             Show();
         }
@@ -83,7 +76,7 @@ public class FloorVisibility : MonoBehaviour // Видимость этажа // Должна висеть
     {
         foreach (Renderer renderer in _rendererArray) // Переберем массив
         {
-            if (ignoreRendererList.Contains(renderer)) continue; // Если объект в списке исключения то пропустим его
+            if (_ignoreRendererList.Contains(renderer)) continue; // Если объект в списке исключения то пропустим его
             renderer.enabled = true;
         }
         if (_canvas != null)
@@ -96,7 +89,7 @@ public class FloorVisibility : MonoBehaviour // Видимость этажа // Должна висеть
     {
         foreach (Renderer renderer in _rendererArray)
         {
-            if (ignoreRendererList.Contains(renderer)) continue; // Если объект в списке исключения то пропустим его
+            if (_ignoreRendererList.Contains(renderer)) continue; // Если объект в списке исключения то пропустим его
             renderer.enabled = false;
         }
         if (_canvas != null)
@@ -107,6 +100,7 @@ public class FloorVisibility : MonoBehaviour // Видимость этажа // Должна висеть
 
     private void MoveAction_OnChangedFloorsStarted(object sender, MoveAction.OnChangeFloorsStartedEventArgs e)
     {
-        floor = e.targetGridPosition.floor; // Изменим этаж у нашего Юнита
+        _floor = e.targetGridPosition.floor; // Изменим этаж у нашего Юнита
     }
+
 }

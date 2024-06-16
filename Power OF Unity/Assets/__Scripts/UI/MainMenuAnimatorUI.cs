@@ -70,7 +70,7 @@ public class MainMenuAnimatorUI : MonoBehaviour
             break;
         }
 
-        if (_stateTimer <= 0) // По истечению времени _musicTimer вызовим NextMusic() которая в свою очередь переключит состояние. Например - у меня было TypeGrenade.Aiming: тогда в case TypeGrenade.Aiming: переключу на TypeGrenade.Shooting;
+        if (_stateTimer <= 0) // По истечению времени _soundTimer вызовим NextMusic() которая в свою очередь переключит состояние. Например - у меня было TypeGrenade.Aiming: тогда в case TypeGrenade.Aiming: переключу на TypeGrenade.Shooting;
         {
             NextState(); //Следующие состояние
         }

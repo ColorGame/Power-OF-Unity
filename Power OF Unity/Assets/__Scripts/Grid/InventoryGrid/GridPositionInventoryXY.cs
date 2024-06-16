@@ -6,9 +6,9 @@ public struct GridPositionInventoryXY : IEquatable<GridPositionInventoryXY> //Ин
 {
     public int x;
     public int z;
-    public GridName gridName;
+    public InventorySlot gridName;
 
-    public GridPositionInventoryXY(int x, int z, GridName gridName) // вспомогательный конструктор
+    public GridPositionInventoryXY(int x, int z, InventorySlot gridName) // вспомогательный конструктор
     {
         this.x = x;
         this.z = z;
@@ -18,7 +18,7 @@ public struct GridPositionInventoryXY : IEquatable<GridPositionInventoryXY> //Ин
 
     public override string ToString() // Переопределим ToString(). Хотим увидеть в отладке Debug.Log внутренее состояние X Z и этаж
     {
-        return $"x: {x}; z: {z}; floor: {gridName}";
+        return $"x: {x}; z: {z}; _floor: {gridName}";
     }
 
     public static bool operator ==(GridPositionInventoryXY a, GridPositionInventoryXY b) // Расширение для булевых операций сравнения

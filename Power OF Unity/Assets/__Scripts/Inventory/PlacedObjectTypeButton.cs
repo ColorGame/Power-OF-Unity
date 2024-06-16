@@ -22,13 +22,7 @@ public class PlacedObjectTypeButton : MonoBehaviour // Кнопка  Типа Размещаемого
     private Camera _cameraInventoryUI;
     private TooltipUI _tooltipUI;
     private PickUpDrop _pickUpDrop;
-
-
-    public void Initialize(TooltipUI tooltipUI, PickUpDrop pickUpDrop)
-    {
-        _tooltipUI = tooltipUI;
-        _pickUpDrop = pickUpDrop;
-    }
+       
 
     private void Awake()
     {
@@ -40,7 +34,13 @@ public class PlacedObjectTypeButton : MonoBehaviour // Кнопка  Типа Размещаемого
         _buttonTransformDictionary = new Dictionary<PlacedObjectTypeSO, Transform>(); // Инициализируем новый словарь
         _typeSelectContainerArray = new Transform[] { _weaponSelectContainer, _itemSelectContainer, _moduleSelectContainer };
     }
-   
+
+    public void Init(TooltipUI tooltipUI, PickUpDrop pickUpDrop)
+    {
+        _tooltipUI = tooltipUI;
+        _pickUpDrop = pickUpDrop;
+    }
+
     private void Start()
     {
         CreateTypePlacedObjectButton(); // Создать Кнопки типов Размещаемых объектов

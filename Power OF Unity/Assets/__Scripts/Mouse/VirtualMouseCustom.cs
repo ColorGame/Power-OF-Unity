@@ -263,14 +263,14 @@ namespace UnityEngine.InputSystem.UI
             set => SetAction(ref m_ScrollWheelAction, value);
         }
         
-        public void Initialize(GameInput gameInput)
+        public void Init(GameInput gameInput)
         {
             _gameInput = gameInput;
+            Setup();
         }
 
-
-        private void OnEnable()
-        {   
+        private void Setup()
+        {
             // Перехватывать системную мышь, если она включена.
             if (m_CursorMode == CursorMode.HardwareCursorIfAvailable)
                 TryEnableHardwareCursor();
@@ -317,12 +317,17 @@ namespace UnityEngine.InputSystem.UI
             m_ScrollWheelAction.action.canceled += ScrollWheelAction_canceled;
 
             m_Canvas.sortingOrder = 100; //Canvas с более высоким порядком сортировки всегда будет отображаться над Canvas с более низким порядком сортировки. 
-            
-            if(_gameInput!= null)
-                _gameInput.OnGameDeviceChanged += GameInput_OnGameDeviceChanged;            
+
+            _gameInput.OnGameDeviceChanged += GameInput_OnGameDeviceChanged;
 
             ResetMouseToCenter();
             UpdateVisibility();
+        }
+
+        private void OnEnable()
+        {   
+            if(_gameInput!=null)
+                Setup();            
         }       
 
         protected void OnDisable()

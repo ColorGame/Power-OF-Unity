@@ -29,7 +29,7 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
     [SerializeField] private LayerMask _floorLayerMask; // маска слоя пола (появится в ИНСПЕКТОРЕ) НАДО ВЫБРАТЬ MousePlane -это пол и есть
     [SerializeField] private Transform _pathfindingLinkContainer; // контейнер ссылок для поиска пути // В инспекторе закинуть из сцены PathfindingLinkContainer
     
-    private GridParameters _gridParameters;
+    private LevelGridParameters _gridParameters;
     private int _width;     // Ширина
     private int _height;    // Высота
     private float _cellSize;// Размер ячейки
@@ -38,6 +38,8 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
     private List<GridSystemXZ<PathNode>> _gridSystemList; //Список частных сеточных систем с типом PathNode
     private List<PathfindingLink> _pathfindingLinkList; //Список ссылок для поиска пути (т.к. ссылок на одной позиции может быть несколько - например угл здания с которого можно спуститься в 2 направления)
     private List<GridPositionXZ> _gridPositionInAirList; // Список позиций в воздухе
+
+    private LevelGrid _levelGrid;
 
     private void Awake()
     {
@@ -51,7 +53,12 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
         Instance = this;
     }
 
-    public void Setup(GridParameters gridParameters, int floorAmount) // Настроим Узлы поиска путей
+    public void Init(LevelGrid levelGrid)
+    {
+        _levelGrid = levelGrid;
+    }
+
+    public void Setup(LevelGridParameters gridParameters, int floorAmount) // Настроим Узлы поиска путей
     {
         _width = gridParameters.width;
         _height = gridParameters.height;
@@ -63,7 +70,7 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
 
         for (int floor = 0; floor < floorAmount; floor++)
         {
-            GridSystemXZ<PathNode> gridSystem = new GridSystemXZ<PathNode>(_gridParameters, // ПОСТРОИМ СЕТКУ 10 на 10 и размером 2 еденицы на этаже floor c заданной высотою этажа и в каждой ячейки создадим объект типа PathNode
+            GridSystemXZ<PathNode> gridSystem = new GridSystemXZ<PathNode>(_gridParameters, // ПОСТРОИМ СЕТКУ 10 на 10 и размером 2 еденицы на этаже _floor c заданной высотою этажа и в каждой ячейки создадим объект типа PathNode
                     (GridSystemXZ<PathNode> g, GridPositionXZ gridPosition) => new PathNode(gridPosition), floor, LevelGrid.FLOOR_HEIGHT);   //в 5 параметре аргумента зададим функцию ананимно через лямбду => new PathNode(_gridPositioAnchor) И ПЕРЕДАДИМ ЕЕ ДЕЛЕГАТУ. (лямбда выражение можно вынести в отдельный метод)
 
            // gridSystem.CreateDebugObject(_pathfindingGridDebugObject); // Создадим наш префаб в каждой ячейки// Отладочный объект можно убирать т.к. настроика завершена
@@ -79,7 +86,7 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
                 for (int flooor = 0; flooor < floorAmount; flooor++)
                 {
                     GridPositionXZ gridPosition = new GridPositionXZ(x, z, flooor); // Позиция сетке
-                    Vector3 worldPosition = LevelGrid.Instance.GetWorldPosition(gridPosition); // Получим мировые координаты
+                    Vector3 worldPosition = _levelGrid.GetWorldPosition(gridPosition); // Получим мировые координаты
                     float raycastOffsetDistance = 1f; // Дистанция смещения луча
 
                     GetNode(x, z, flooor).SetIsWalkable(false); //для начала Сделаем все узлы непроходимыми

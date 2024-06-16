@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.ProBuilder.Shapes;
 
 public class InteractAction : BaseAction // Действие взаимодействия
 {
@@ -18,7 +16,7 @@ public class InteractAction : BaseAction // Действие взаимодействия
             return; // выходим и игнорируем код ниже
         }
 
-        Vector3 targetDirection = (LevelGrid.Instance.GetWorldPosition(_targetGridPosition) - transform.position).normalized; // Направление к целивой позиции, еденичный вектор
+        Vector3 targetDirection = (_levelGrid.GetWorldPosition(_targetGridPosition) - transform.position).normalized; // Направление к целивой позиции, еденичный вектор
         float rotateSpeed = 10f; //НУЖНО НАСТРОИТЬ//
 
         transform.forward = Vector3.Slerp(transform.forward, targetDirection, Time.deltaTime * rotateSpeed); // поворт юнита.
@@ -56,13 +54,13 @@ public class InteractAction : BaseAction // Действие взаимодействия
                 GridPositionXZ offsetGridPosition = new GridPositionXZ(x, z, 0);  // Смещенная сеточная позиция. Где началом координат(0,0, 0-этаж) является сам юнит 
                 GridPositionXZ testGridPosition = unitGridPosition + offsetGridPosition;  // Тестируемая Сеточная позиция
 
-                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
+                if (!_levelGrid.IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
                 {
                     continue;
                 }
 
                 /*//Проверим тестируемую сеточную позицию на наличие двери
-                DoorInteract door = LevelGrid.Instance.GetDoorAtGridPosition(testGridPosition);
+                DoorInteract door = _levelGrid.GetDoorAtGridPosition(testGridPosition);
 
                 if (door == null)
                 {
@@ -70,7 +68,7 @@ public class InteractAction : BaseAction // Действие взаимодействия
                     continue;
                 }*/
                 // Применим интерфейс ВЗАИМОДЕЙСТВИЯ что бы мы могли взимодействовать не только с дверью
-                IInteractable interactable = LevelGrid.Instance.GetInteractableAtGridPosition(testGridPosition);
+                IInteractable interactable = _levelGrid.GetInteractableAtGridPosition(testGridPosition);
 
                 if (interactable == null)
                 {
@@ -88,8 +86,7 @@ public class InteractAction : BaseAction // Действие взаимодействия
 
     public override void TakeAction(GridPositionXZ gridPosition, Action onActionComplete) // Переопределим TakeAction (Применить Действие (Действовать). (Делегат onActionComplete - по завершении действия). в нашем случае делегату передаем функцию ClearBusy - очистить занятость
     {
-        IInteractable interactable = LevelGrid.Instance.GetInteractableAtGridPosition(gridPosition); // Получим IInteractable(интерфейс взаимодействия) из переданной сеточной позиции // НАМ БЕЗ РАЗНИЦЫ КАКОЙ ОБЪЕКТ МЫ ПОЛУЧИМ (дверь, сфера, кнопка...) - лиш бы он реализовал этот интерфейс
-        _soundManager.PlaySoundOneShot(SoundName.Interact);
+        IInteractable interactable = _levelGrid.GetInteractableAtGridPosition(gridPosition); // Получим IInteractable(интерфейс взаимодействия) из переданной сеточной позиции // НАМ БЕЗ РАЗНИЦЫ КАКОЙ ОБЪЕКТ МЫ ПОЛУЧИМ (дверь, сфера, кнопка...) - лиш бы он реализовал этот интерфейс
         interactable.Interact(OnInteractComplete); //Произведем Взаимодействие с полученной IInteractable(интерфейс взаимодействия) и Передадим делгат - При завершении взаимодействия (этот делегат будет вызывать сама дверь)
         _targetGridPosition = gridPosition;
         ActionStart(onActionComplete); // Вызовим базовую функцию СТАРТ ДЕЙСТВИЯ // Вызываем этот метод в конце после всех настроек т.к. в этом методе есть EVENT и он должен запускаться после всех настроек

@@ -9,5 +9,4 @@ public class HashAnimationName
     public int OptionsMenuOpen = Animator.StringToHash("OptionsMenuOpen");    
     public int DoorBlocked = Animator.StringToHash("DoorBlocked");
 
-
 }

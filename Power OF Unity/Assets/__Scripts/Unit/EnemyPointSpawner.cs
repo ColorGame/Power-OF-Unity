@@ -1,9 +1,12 @@
 using UnityEngine;
-
+/// <summary>
+/// Точка спавна ВРАГА
+/// </summary>
 public class EnemyPointSpawner : MonoBehaviour
 {
-    [Header("Установим тип вражеского юнита \nкоторый будет здесь спавниться")]
-    [SerializeField] private EnemyUnitType _enemyType;
-
-    public EnemyUnitType GetEnemyUnitType() { return _enemyType; }
+    [Header("Закинем UnitEnemySO вражеского юнита \nкоторый будет здесь спавниться")]
+    [SerializeField] private UnitEnemySO _unitEnemySO;
+    
+   
+    public UnitEnemySO GetUnitEnemySO() {  return _unitEnemySO; }
 }

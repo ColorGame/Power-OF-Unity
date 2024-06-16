@@ -1,7 +1,6 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public abstract class BaseAction : MonoBehaviour    //Базовое Действие Этот клас будут наследовать другие классы 
                                                     // Мы хотим создавать ЭЕКЗЕМПЛЯРЫ ДЕЙСТВИЕ которые расширяют этот класс. Что-бы случайно не создать экземпляр BaseAction сделаем его
@@ -15,6 +14,9 @@ public abstract class BaseAction : MonoBehaviour    //Базовое Действие Этот клас
     protected bool _isActive; // Булевая переменная. Что бы исключить паралельное выполнение нескольких действий
 
     protected SoundManager _soundManager;
+    protected UnitActionSystem _unitActionSystem;
+    protected LevelGrid _levelGrid;
+    protected TurnSystem _turnSystem;
 
     //Буду использовать встроенный делегат Action вместо - //public delegate void ActionCompleteDelegate(); //завершение действия // Объявляем делегат который не принимает аргумент и возвращает пустоту
     protected Action _onActionComplete; //(по завершении действия)// Объявляю делегат в пространстве имен - using System;
@@ -23,14 +25,23 @@ public abstract class BaseAction : MonoBehaviour    //Базовое Действие Этот клас
                                         //СВОЙСТВО Делегата. После выполнения функции в которую мы передали делегата, можно ПОЗЖЕ, в определенном месте кода, выполниться сохраненный делегат.
                                         //СВОЙСТВО Делегата. Может вызывать закрытую функцию из другого класса
 
-    protected virtual void Awake() // protected virtual- обозначает что можно переопределить в дочерних классах
+    public void Init(Unit unit)
     {
-        _unit = GetComponent<Unit>();
+        _unit = unit;
+
+        _soundManager = _unit.GetSoundManager();
+        _unitActionSystem = _unit.GetUnitActionSystem();
+        _levelGrid = _unit.GetLevelGrid();
+        _turnSystem = _unit.GetTurnSystem();
+    }
+    protected virtual void Awake() // protected virtual- обозначает что можно переопределить в дочерних классах
+    {        
+        
     }
 
     protected virtual void Start()
     {
-        _soundManager = CoreEntryPoint.Instance.soundManager;
+        
     }
 
     public abstract string GetActionName(); // Вернуть имя действия // abstract - вынуждает реализовывать в каждом подклассе и в базовом должно иметь пустое тело.

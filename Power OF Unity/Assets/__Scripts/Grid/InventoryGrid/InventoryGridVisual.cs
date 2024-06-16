@@ -32,27 +32,23 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
     [SerializeField] private List<GridVisualTypeMaterial> _gridVisualTypeMaterialList; // Список тип материала визуального состояния сетки Квадрат (Список из кастомного типа данных) визуального состояния сетки // В инспекторе под каждое состояние перетащить соответствующий материал сетки
 
     private InventoryGridVisualSingle[][,] _inventoryGridSystemVisualSingleArray; // Массив масивов [количество сеток][длина (Х), высота (У)]
-    private Dictionary<GridName, int> _gridNameIndexDictionary; // Словарь (GridName - ключ, int(индекс) -значение)
+    private Dictionary<InventorySlot, int> _gridNameIndexDictionary; // Словарь (InventorySlot - ключ, int(индекс) -значение)
     private List<GridSystemTiltedXY<GridObjectInventoryXY>> _gridSystemTiltedXYList; // список сеток
 
     private PickUpDrop _pickUpDrop;
     private InventoryGrid _inventoryGrid;
 
     
-    public void Initialize(PickUpDrop pickUpDrop, InventoryGrid inventoryGrid)
+    public void Init(PickUpDrop pickUpDrop, InventoryGrid inventoryGrid)
     {
         _pickUpDrop = pickUpDrop;
-        _inventoryGrid = inventoryGrid;
+        _inventoryGrid = inventoryGrid;        
     }
 
-    private void Awake() //Для избежания ошибок Awake Лучше использовать только для инициализации и настроийки объектов
-    {
-
-    }
 
     private void Start()
     {
-        _gridNameIndexDictionary = new Dictionary<GridName, int>();
+        _gridNameIndexDictionary = new Dictionary<InventorySlot, int>();
 
         // Инициализируем сначала первую часть массива - Количество сеток
         _gridSystemTiltedXYList = _inventoryGrid.GetGridSystemTiltedXYList(); // Получим список сеток
@@ -77,7 +73,7 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
 
                     Transform gridSystemVisualSingleTransform = Instantiate(GameAssets.Instance.inventoryGridSystemVisualSinglePrefab, _inventoryGrid.GetWorldPositionCenterСornerCell(gridPosition, _gridSystemTiltedXYList[i]), Quaternion.Euler(rotation), AnchorGridTransform); // Создадим наш префаб в каждой позиции сетки
 
-                    _gridNameIndexDictionary[_gridSystemTiltedXYList[i].GetGridName()] = i; // Присвоим ключу(имя Сетки под этим индексом) значение (индекс массива)
+                    _gridNameIndexDictionary[_gridSystemTiltedXYList[i].GetGridSlot()] = i; // Присвоим ключу(имя Сетки под этим индексом) значение (индекс массива)
                     _inventoryGridSystemVisualSingleArray[i][x, y] = gridSystemVisualSingleTransform.GetComponent<InventoryGridVisualSingle>(); // Сохраняем компонент LevelGridVisualSingle в трехмерный массив где x,y,y это будут индексы массива.
                 }
             }
@@ -135,12 +131,12 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
     {
         GridSystemTiltedXY<GridObjectInventoryXY> gridSystemTiltedXY = placedObject.GetGridSystemXY(); // Сеточная система которую занимает объект
         List<Vector2Int> OccupiesGridPositionList = placedObject.GetOccupiesGridPositionList(); // Список занимаемых сеточных позиций
-        GridName gridName = gridSystemTiltedXY.GetGridName(); // Имя сетки
+        InventorySlot inventorySlot = gridSystemTiltedXY.GetGridSlot(); // Слот сетки
 
-        switch (gridName)
+        switch (inventorySlot)
         {
-            case GridName.BagGrid1:
-                int index = _gridNameIndexDictionary[gridName]; //получу из словоря Индекс сетки в _inventoryGridSystemVisualSingleArray
+            case InventorySlot.BagSlot:
+                int index = _gridNameIndexDictionary[inventorySlot]; //получу из словоря Индекс сетки в _inventoryGridSystemVisualSingleArray
 
                 foreach (Vector2Int gridPosition in OccupiesGridPositionList) // Переберем заниммаемые объектом позиции сетки
                 {
@@ -150,10 +146,10 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
                 break;
 
             //Визуал, Основной и Доп. сетки оружия, будем менять сразу у всех ячеек, т.к. там может размещаться только один предмет
-            case GridName.MainWeaponGrid2:
-            case GridName.OtherWeaponGrid3:
+            case InventorySlot.MainWeaponSlot:
+            case InventorySlot.OtherWeaponSlot:
 
-                index = _gridNameIndexDictionary[gridName]; //получу из словоря Индекс сетки в _inventoryGridSystemVisualSingleArray
+                index = _gridNameIndexDictionary[inventorySlot]; //получу из словоря Индекс сетки в _inventoryGridSystemVisualSingleArray
 
                 for (int x = 0; x < _gridSystemTiltedXYList[index].GetWidth(); x++) // для полученной сетки переберем длину
                 {
@@ -172,10 +168,10 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
     // показать возможные сеточные позиции
     private void ShowPossibleGridPositions(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY, PlacedObject placedObject, Vector2Int mouseGridPosition, GridVisualType gridVisualType)
     {
-        GridName gridName = gridSystemXY.GetGridName(); // Имя сетки где находиться мыш с захваченным объектом
+        InventorySlot gridName = gridSystemXY.GetGridSlot(); // Имя сетки где находиться мыш с захваченным объектом
         switch (gridName)
         {
-            case GridName.BagGrid1:
+            case InventorySlot.BagSlot:
 
                 int index = _gridNameIndexDictionary[gridName]; //получу из словоря Индекс сетки в _inventoryGridSystemVisualSingleArray
                 List<Vector2Int> TryOccupiesGridPositionList = placedObject.GetTryOccupiesGridPositionList(mouseGridPosition); // Список сеточных позиций которые хотим занять
@@ -191,8 +187,8 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
                 }
                 break;
             //Когда объект над Основной и Доп. сетки оружия, будем показывать что он может занять сразу всю сетку, даже если он размером с одной ячейку
-            case GridName.MainWeaponGrid2:
-            case GridName.OtherWeaponGrid3:
+            case InventorySlot.MainWeaponSlot:
+            case InventorySlot.OtherWeaponSlot:
 
                 index = _gridNameIndexDictionary[gridName]; //получу из словоря Индекс сетки в _inventoryGridSystemVisualSingleArray
 

@@ -74,7 +74,7 @@ public class ShootAction : BaseAction
         }
 
         _hitPercent = 1f; //Установим Процент попадания МАКСИМАЛЬНЫМ 100%
-        _cellSize = LevelGrid.Instance.GetCellSize();
+        _cellSize = _levelGrid.GetCellSize();
         _targetAnimationAim.position = _shootPointTransform.position; // при старте Цель для анимации прицеливания  будет точка прицеливания на самом юните, что бы не было лишних поворотов направлений
     }
     private void Update()
@@ -91,7 +91,7 @@ public class ShootAction : BaseAction
         {
             case State.Aiming:
 
-                Vector3 aimDirection = (_targetUnit.transform.position - transform.position).normalized; // Направление прицеливания, еденичный вектор
+                Vector3 aimDirection = (_targetUnit.GetTransformPosition() - transform.position).normalized; // Направление прицеливания, еденичный вектор
                 aimDirection.y = 0; // Чтобы юнит не наклонялся пли стрельбе (т.к. вектор будет поворачиваться только по плоскости x,y)
 
                 float rotateSpeed = 10f; //НУЖНО НАСТРОИТЬ// чем больше тем быстрее
@@ -101,10 +101,10 @@ public class ShootAction : BaseAction
 
                 if (_haveSpotterFire) // Если есть корректировщик то развернем и его
                 {
-                    Vector3 SpotterUnitEnemyDirection = (_targetUnit.transform.position - _spotterFireUnit.transform.position).normalized; // Направление От корректировщика к врагу
+                    Vector3 SpotterUnitEnemyDirection = (_targetUnit.GetTransformPosition() - _spotterFireUnit.GetTransformPosition()).normalized; // Направление От корректировщика к врагу
                     SpotterUnitEnemyDirection.y = 0;
 
-                    _spotterFireUnit.transform.forward = Vector3.Slerp(_spotterFireUnit.transform.forward, SpotterUnitEnemyDirection, Time.deltaTime * rotateSpeed); // поворт корректировщика.    
+                    _spotterFireUnit.GetTransform().forward = Vector3.Slerp(_spotterFireUnit.GetTransform().forward, SpotterUnitEnemyDirection, Time.deltaTime * rotateSpeed); // поворт корректировщика.    
                 }               
                     break;
 
@@ -117,7 +117,7 @@ public class ShootAction : BaseAction
                     _counterShoot += 1; // Прибавим к счетчику выстрелов 1 
                 }
 
-                if (_counterShoot >= _numberShoot || _targetUnit.IsDead()) //После выпуска 3 пуль или когда враг СДОХ
+                if (_counterShoot >= _numberShoot || _targetUnit.GetHealthSystem().IsDead()) //После выпуска 3 пуль или когда враг СДОХ
                 {
                     _canShootBullet = false;
                     _counterShoot = 0; //Обнулим счетчик пуль
@@ -163,7 +163,7 @@ public class ShootAction : BaseAction
 
     public override void TakeAction(GridPositionXZ targetGridPosition, Action onActionComplete) // Выполнение действий
     {
-        _targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(targetGridPosition); // Получим юнита в которого целимся и сохраним его                               
+        _targetUnit = _levelGrid.GetUnitAtGridPosition(targetGridPosition); // Получим юнита в которого целимся и сохраним его                               
         _targetUnitAimPointPosition = _targetUnit.GetAction<ShootAction>().GetAimPoinTransform().position; // позицию Прицеливания целевого юнита. 
 
         _state = State.Aiming; // Активируем состояние Прицеливания 
@@ -199,11 +199,11 @@ public class ShootAction : BaseAction
         Transform bulletProjectilePrefabTransform = Instantiate(GameAssets.Instance.bulletProjectilePrefab, _shootPointTransform.position, Quaternion.identity); // Создадим префаб пули в точке выстрела
         BulletProjectile bulletProjectile = bulletProjectilePrefabTransform.GetComponent<BulletProjectile>(); // Вернем компонент BulletProjectile созданной пули
         
-        _soundManager.PlaySoundOneShot(SoundName.Shoot); // Воспроизведем звук 
+        _soundManager.PlayOneShot(SoundName.Shoot); // Воспроизведем звук 
         if (_hit) // Если попали то
         {
             bulletProjectile.Setup(_targetUnitAimPointPosition, _hit); // В аргумент предали позицию Прицеливания целевого юнита
-            _targetUnit.Damage(GetShootDamage()); // ДЛЯ ТЕСТА УЩЕРБ БУДЕТ 5. В дальнейшем будем брать этот показатель из оружия //НАДО НАСТРОИТЬ//
+            _targetUnit.GetHealthSystem().Damage(GetShootDamage()); // ДЛЯ ТЕСТА УЩЕРБ БУДЕТ 5. В дальнейшем будем брать этот показатель из оружия //НАДО НАСТРОИТЬ//
         }
         else // Если промах
         {
@@ -322,7 +322,7 @@ public class ShootAction : BaseAction
                     GridPositionXZ offsetGridPosition = new GridPositionXZ(x, z, floor); // Смещенная сеточная позиция. Где началом координат(0,0, 0-этаж) является сам юнит 
                     GridPositionXZ testGridPosition = unitGridPosition + offsetGridPosition; // Тестируемая Сеточная позиция
 
-                    if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
+                    if (!_levelGrid.IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
                     {
                         continue; // continue заставляет программу переходить к следующей итерации цикла 'for' игнорируя код ниже
                     }
@@ -333,13 +333,13 @@ public class ShootAction : BaseAction
                         continue;
                     }
 
-                    if (!LevelGrid.Instance.HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточное позицию где нет юнитов (нам нужны ячейки с юнитами мы будем по ним шмалять)
+                    if (!_levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточное позицию где нет юнитов (нам нужны ячейки с юнитами мы будем по ним шмалять)
                     {
                         // Позиция сетки пуста, нет Юнитов
                         continue;
                     }
 
-                    Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции 
+                    Unit targetUnit = _levelGrid.GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции 
                                                                                                     // GetUnitAtGridPosition может вернуть null но в коде выше мы исключаем нулевые позиции, так что проверка не нужна
                     if (targetUnit.IsEnemy() == _unit.IsEnemy()) // Если тестируемый юнит враг и наш юнит тоже враг то (если они оба в одной команде то будем игнорировать этих юнитов)
                     {
@@ -348,7 +348,7 @@ public class ShootAction : BaseAction
                     }
 
                     // ПРОВЕРИМ НА ПРОСТРЕЛИВАЕМОСТЬ до цели , Cover нельзя простреливать если точка выстрела ниже укрытия (надо проверять все объекты Cover)
-                    Vector3 unitWorldPosition = LevelGrid.Instance.GetWorldPosition(unitGridPosition); // Переведем в мировые координаты переданную нам сеточную позицию Юнита  
+                    Vector3 unitWorldPosition = _levelGrid.GetWorldPosition(unitGridPosition); // Переведем в мировые координаты переданную нам сеточную позицию Юнита  
                     Vector3 shototDirection = (targetUnit.GetWorldPosition() - unitWorldPosition).normalized; //Нормализованный Вектор Направления стрельбы
                     Vector3 shootPoint = _shootPointTransform.position - unitWorldPosition; // Получим расстояние от точки выстрела до основания юнита (актуально для 2 этажа)
 
@@ -379,7 +379,7 @@ public class ShootAction : BaseAction
 
     public override EnemyAIAction GetEnemyAIAction(GridPositionXZ gridPosition) //Получить действие вражеского ИИ  для переданной нам сеточной позиции// Переопределим абстрактный базовый метод //EnemyAIAction создан в каждой Допустимой Сеточнй Позиции, наша задача - настроить каждую ячейку в зависимости от состоянии юнита который там стоит
     {
-        Unit targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition); // Получим юнита для этой позиции это наша цель
+        Unit targetUnit = _levelGrid.GetUnitAtGridPosition(gridPosition); // Получим юнита для этой позиции это наша цель
 
         return new EnemyAIAction
         {
@@ -395,8 +395,8 @@ public class ShootAction : BaseAction
 
     public float AttackScore(Unit unit) // Оценка атаки // В первую очередь Бьем слабых, но потом при равных значениях здоровья, добиваем тех кто был самым сильным
     {
-        int health = unit.GetHealth();
-        int healthMax = unit.GetHealthMax();
+        int health = unit.GetHealthSystem().GetHealth();
+        int healthMax = unit.GetHealthSystem().GetHealthMax();
 
         float unitPerHealthPoint = 100 / healthMax;  //чем выше здоровье, тем ниже будет этот балл
         return (healthMax - health) * unitPerHealthPoint + unitPerHealthPoint; // Итак… если у всех целей максимальное здоровье (health=healthMax), то БОЛЬШЕ очков получит юнит с меньшим максимальным здоровьем (самому хилому наваляют в первую очередь).
