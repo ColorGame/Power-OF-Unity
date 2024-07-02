@@ -1,10 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Добавим InventoryGridVisual для запуска после времени по умолчанию, поскольку мы хотим, чтобы визуальные эффекты запускались после всего остального.
-// (Project Settings/ Script Execution Order и поместим выполнение InventoryGridVisual НИЖЕ Default Time)
+/// <summary>
+/// Визуализация размещения в сетке инвенторя
+/// </summary>
+/// <remarks>Работает с типом PlacedObject</remarks>
 public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализации инвенторя
 {
     
@@ -33,56 +34,58 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
 
     private InventoryGridVisualSingle[][,] _inventoryGridSystemVisualSingleArray; // Массив масивов [количество сеток][длина (Х), высота (У)]
     private Dictionary<InventorySlot, int> _gridNameIndexDictionary; // Словарь (InventorySlot - ключ, int(индекс) -значение)
-    private List<GridSystemTiltedXY<GridObjectInventoryXY>> _gridSystemTiltedXYList; // список сеток
+    private List<GridSystemXY<GridObjectInventoryXY>> _gridSystemXYList; // список сеток
 
-    private PickUpDrop _pickUpDrop;
+    private PickUpDropPlacedObject _pickUpDropPlacedObject;
     private InventoryGrid _inventoryGrid;
 
     
-    public void Init(PickUpDrop pickUpDrop, InventoryGrid inventoryGrid)
+    public void Init(PickUpDropPlacedObject pickUpDrop, InventoryGrid inventoryGrid)
     {
-        _pickUpDrop = pickUpDrop;
-        _inventoryGrid = inventoryGrid;        
+        _pickUpDropPlacedObject = pickUpDrop;
+        _inventoryGrid = inventoryGrid;
+
+        Setup();
     }
 
 
-    private void Start()
+    private void Setup()
     {
         _gridNameIndexDictionary = new Dictionary<InventorySlot, int>();
 
         // Инициализируем сначала первую часть массива - Количество сеток
-        _gridSystemTiltedXYList = _inventoryGrid.GetGridSystemTiltedXYList(); // Получим список сеток
-        _inventoryGridSystemVisualSingleArray = new InventoryGridVisualSingle[_gridSystemTiltedXYList.Count][,];
+        _gridSystemXYList = _inventoryGrid.GetGridSystemXYList(); // Получим список сеток
+        _inventoryGridSystemVisualSingleArray = new InventoryGridVisualSingle[_gridSystemXYList.Count][,];
 
         // Для каждой сетки реализуем двумерный массив координат
-        for (int i = 0; i < _gridSystemTiltedXYList.Count; i++)
+        for (int i = 0; i < _gridSystemXYList.Count; i++)
         {
-            _inventoryGridSystemVisualSingleArray[i] = new InventoryGridVisualSingle[_gridSystemTiltedXYList[i].GetWidth(), _gridSystemTiltedXYList[i].GetHeight()];
+            _inventoryGridSystemVisualSingleArray[i] = new InventoryGridVisualSingle[_gridSystemXYList[i].GetWidth(), _gridSystemXYList[i].GetHeight()];
         }
 
 
-        for (int i = 0; i < _gridSystemTiltedXYList.Count; i++) // переберем все сетки
+        for (int i = 0; i < _gridSystemXYList.Count; i++) // переберем все сетки
         {
-            for (int x = 0; x < _gridSystemTiltedXYList[i].GetWidth(); x++) // для каждой сетки переберем длину
+            for (int x = 0; x < _gridSystemXYList[i].GetWidth(); x++) // для каждой сетки переберем длину
             {
-                for (int y = 0; y < _gridSystemTiltedXYList[i].GetHeight(); y++)  // и высоту
+                for (int y = 0; y < _gridSystemXYList[i].GetHeight(); y++)  // и высоту
                 {
                     Vector2Int gridPosition = new Vector2Int(x, y); // позиция сетки
-                    Vector3 rotation = _inventoryGrid.GetRotationAnchorGrid(_gridSystemTiltedXYList[i]);
-                    Transform AnchorGridTransform = _inventoryGrid.GetAnchorGrid(_gridSystemTiltedXYList[i]);
+                    Vector3 rotation = _inventoryGrid.GetRotationAnchorGrid(_gridSystemXYList[i]);
+                    Transform AnchorGridTransform = _inventoryGrid.GetAnchorGrid(_gridSystemXYList[i]);
 
-                    Transform gridSystemVisualSingleTransform = Instantiate(GameAssets.Instance.inventoryGridSystemVisualSinglePrefab, _inventoryGrid.GetWorldPositionCenterСornerCell(gridPosition, _gridSystemTiltedXYList[i]), Quaternion.Euler(rotation), AnchorGridTransform); // Создадим наш префаб в каждой позиции сетки
+                    Transform gridSystemVisualSingleTransform = Instantiate(GameAssets.Instance.inventoryGridSystemVisualSinglePrefab, _inventoryGrid.GetWorldPositionCenterСornerCell(gridPosition, _gridSystemXYList[i]), Quaternion.Euler(rotation), AnchorGridTransform); // Создадим наш префаб в каждой позиции сетки
 
-                    _gridNameIndexDictionary[_gridSystemTiltedXYList[i].GetGridSlot()] = i; // Присвоим ключу(имя Сетки под этим индексом) значение (индекс массива)
+                    _gridNameIndexDictionary[_gridSystemXYList[i].GetGridSlot()] = i; // Присвоим ключу(имя Сетки под этим индексом) значение (индекс массива)
                     _inventoryGridSystemVisualSingleArray[i][x, y] = gridSystemVisualSingleTransform.GetComponent<InventoryGridVisualSingle>(); // Сохраняем компонент LevelGridVisualSingle в трехмерный массив где x,y,y это будут индексы массива.
                 }
             }
         }
 
-        _pickUpDrop.OnAddPlacedObjectAtInventoryGrid += PickUpDropSystem_OnAddPlacedObjectAtGrid;
-        _pickUpDrop.OnRemovePlacedObjectAtInventoryGrid += PickUpDropSystem_OnRemovePlacedObjectAtGrid;
-        _pickUpDrop.OnGrabbedObjectGridPositionChanged += PickUpDropManager_OnGrabbedObjectGridPositionChanged;
-        _pickUpDrop.OnGrabbedObjectGridExits += PickUpDropManager_OnGrabbedObjectGridExits;
+        _pickUpDropPlacedObject.OnAddPlacedObjectAtInventoryGrid += PickUpDropSystem_OnAddPlacedObjectAtGrid;
+        _pickUpDropPlacedObject.OnRemovePlacedObjectAtInventoryGrid += PickUpDropSystem_OnRemovePlacedObjectAtGrid;
+        _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged += PickUpDropManager_OnGrabbedObjectGridPositionChanged;
+        _pickUpDropPlacedObject.OnGrabbedObjectGridExits += PickUpDropManager_OnGrabbedObjectGridExits;
     }
 
     // Захваченый объект покинул сетку
@@ -92,10 +95,10 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
     }
 
     // позиция захваченного объекта на сетке изменилась
-    private void PickUpDropManager_OnGrabbedObjectGridPositionChanged(object sender, PickUpDrop.OnGrabbedObjectGridPositionChangedEventArgs e)
+    private void PickUpDropManager_OnGrabbedObjectGridPositionChanged(object sender, PlacedObjectParameters e)
     {
         SetDefaultState(); // Установим дефолтное состояние всех сеток
-        ShowPossibleGridPositions(e.gridSystemXY, e.placedObject, e.newMouseGridPosition, GridVisualType.Yellow); //показать возможные сеточные позиции
+        ShowPossibleGridPositions(e.slot, e.placedObject, e.gridPositioAnchor, GridVisualType.Yellow); //показать возможные сеточные позиции
     }
 
     // Объект удален из сетки
@@ -112,11 +115,11 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
 
     private void SetDefaultState() // Установить дефолтное состояние сеток
     {
-        for (int i = 0; i < _gridSystemTiltedXYList.Count; i++) // переберем все сетки
+        for (int i = 0; i < _gridSystemXYList.Count; i++) // переберем все сетки
         {
-            for (int x = 0; x < _gridSystemTiltedXYList[i].GetWidth(); x++) // для каждой сетки переберем длину
+            for (int x = 0; x < _gridSystemXYList[i].GetWidth(); x++) // для каждой сетки переберем длину
             {
-                for (int y = 0; y < _gridSystemTiltedXYList[i].GetHeight(); y++)  // и высоту
+                for (int y = 0; y < _gridSystemXYList[i].GetHeight(); y++)  // и высоту
                 {
                     if (!_inventoryGridSystemVisualSingleArray[i][x, y].GetIsBusy()) // Если позиция не занята
                     {
@@ -129,9 +132,9 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
 
     private void SetIsBusyAndMaterial(PlacedObject placedObject, bool isBusy, GridVisualType gridVisualType = 0)
     {
-        GridSystemTiltedXY<GridObjectInventoryXY> gridSystemTiltedXY = placedObject.GetGridSystemXY(); // Сеточная система которую занимает объект
+        GridSystemXY<GridObjectInventoryXY> gridSystemXY = placedObject.GetGridSystemXY(); // Сеточная система которую занимает объект
         List<Vector2Int> OccupiesGridPositionList = placedObject.GetOccupiesGridPositionList(); // Список занимаемых сеточных позиций
-        InventorySlot inventorySlot = gridSystemTiltedXY.GetGridSlot(); // Слот сетки
+        InventorySlot inventorySlot = gridSystemXY.GetGridSlot(); // Слот сетки
 
         switch (inventorySlot)
         {
@@ -147,13 +150,13 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
 
             //Визуал, Основной и Доп. сетки оружия, будем менять сразу у всех ячеек, т.к. там может размещаться только один предмет
             case InventorySlot.MainWeaponSlot:
-            case InventorySlot.OtherWeaponSlot:
+            case InventorySlot.OtherWeaponsSlot:
 
                 index = _gridNameIndexDictionary[inventorySlot]; //получу из словоря Индекс сетки в _inventoryGridSystemVisualSingleArray
 
-                for (int x = 0; x < _gridSystemTiltedXYList[index].GetWidth(); x++) // для полученной сетки переберем длину
+                for (int x = 0; x < _gridSystemXYList[index].GetWidth(); x++) // для полученной сетки переберем длину
                 {
-                    for (int y = 0; y < _gridSystemTiltedXYList[index].GetHeight(); y++)  // и высоту
+                    for (int y = 0; y < _gridSystemXYList[index].GetHeight(); y++)  // и высоту
                     {
                         //Установим занятость ячеек (и если isBusy = false(ячейка свободна) то установим переданный материал)
                         _inventoryGridSystemVisualSingleArray[index][x, y].SetIsBusyAndMaterial(isBusy, GetGridVisualTypeMaterial(gridVisualType));
@@ -164,17 +167,19 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
         }
 
     }
-
-    // показать возможные сеточные позиции
-    private void ShowPossibleGridPositions(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY, PlacedObject placedObject, Vector2Int mouseGridPosition, GridVisualType gridVisualType)
-    {
-        InventorySlot gridName = gridSystemXY.GetGridSlot(); // Имя сетки где находиться мыш с захваченным объектом
-        switch (gridName)
+        
+    /// <summary>
+    /// Показать возможные сеточные позиции
+    /// </summary>
+    private void ShowPossibleGridPositions(InventorySlot inventorySlot, PlacedObject placedObject, Vector2Int gridPositioAnchor, GridVisualType gridVisualType)
+    {       
+        GridSystemXY<GridObjectInventoryXY> gridSystemXY = _inventoryGrid.GetGridSystemXY(inventorySlot); // Получим сетку для данного слота
+        switch (inventorySlot)
         {
             case InventorySlot.BagSlot:
 
-                int index = _gridNameIndexDictionary[gridName]; //получу из словоря Индекс сетки в _inventoryGridSystemVisualSingleArray
-                List<Vector2Int> TryOccupiesGridPositionList = placedObject.GetTryOccupiesGridPositionList(mouseGridPosition); // Список сеточных позиций которые хотим занять
+                int index = _gridNameIndexDictionary[inventorySlot]; //получу из словоря Индекс сетки в _inventoryGridSystemVisualSingleArray                
+                List<Vector2Int> TryOccupiesGridPositionList = placedObject.GetTryOccupiesGridPositionList(gridPositioAnchor); // Список сеточных позиций которые хотим занять
                 foreach (Vector2Int gridPosition in TryOccupiesGridPositionList) // Переберем список позиций которые хоти занять
                 {
                     if (gridSystemXY.IsValidGridPosition(gridPosition)) // Если позиция допустима то...
@@ -188,13 +193,13 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
                 break;
             //Когда объект над Основной и Доп. сетки оружия, будем показывать что он может занять сразу всю сетку, даже если он размером с одной ячейку
             case InventorySlot.MainWeaponSlot:
-            case InventorySlot.OtherWeaponSlot:
+            case InventorySlot.OtherWeaponsSlot:
 
-                index = _gridNameIndexDictionary[gridName]; //получу из словоря Индекс сетки в _inventoryGridSystemVisualSingleArray
+                index = _gridNameIndexDictionary[inventorySlot]; //получу из словоря Индекс сетки в _inventoryGridSystemVisualSingleArray
 
-                for (int x = 0; x < _gridSystemTiltedXYList[index].GetWidth(); x++) // для полученной сетки переберем длину
+                for (int x = 0; x < _gridSystemXYList[index].GetWidth(); x++) // для полученной сетки переберем длину
                 {
-                    for (int y = 0; y < _gridSystemTiltedXYList[index].GetHeight(); y++)  // и высоту
+                    for (int y = 0; y < _gridSystemXYList[index].GetHeight(); y++)  // и высоту
                     {
                         if (_inventoryGridSystemVisualSingleArray[index][x, y].GetIsBusy()) // Если хотябы одна позиция занята то выходим из цикла и игнор. код ниже
                         {
@@ -206,8 +211,6 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
                 }
                 break;
         }
-
-
     }
 
     private Material GetGridVisualTypeMaterial(GridVisualType gridVisualType) //(Вернуть Материал в зависимости от Состояния) Получить Тип Материала для Сеточной Визуализации в зависимости от переданного в аргумент Состояния Сеточной Визуализации

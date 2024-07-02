@@ -33,10 +33,10 @@ public enum PlacedObjectType
     SwordStun,
 
 
-    FragGrenade,
-    SmokeGrenade,
-    ElectroshockGrenade,
-    PlasmaGrenade,
+    GrenadeFrag,
+    GrenadeSmoke,
+    GrenadeElectroshock,
+    GrenadePlasma,
 
     Binoculars,             // Бинокль
     Medipack,               //Медицинский пакет

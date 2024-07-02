@@ -3,53 +3,53 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Создает сетку инверторя
+/// Создает сетку инверторя. В каждой позиции создается GridObjectInventoryXY который хранит информ о размещенном на сетке объекте
 /// </summary>
 /// <remarks>
-/// Добавляет Размещаемый объект в Позицию Сетки (Прокладка между PickUpDrop и GridObjectInventoryXY)
+/// Взаимодействие сторонних систем с InventoryGrid, рекомендую через PickUpDropPlacedObject. 
 /// </remarks>
-public class InventoryGrid : MonoBehaviour 
+public class InventoryGrid : MonoBehaviour
 {
 
     private static float cellSize;  // Размер ячейки
-
-   
 
     [SerializeField] private InventoryGridParameters[] _gridParametersArray; // Массив параметров сеток ЗАДАТЬ в ИНСПЕКТОРЕ
     [SerializeField] private Transform _gridDebugObjectPrefab; // Префаб отладки сетки 
 
     private TooltipUI _tooltipUI;
-    private PickUpDrop _pickUpDrop;
+    private PickUpDropPlacedObject _pickUpDrop;
     private Transform _canvasInventoryWorld;
+    private List<PlacedObject> _placedObjectList = new List<PlacedObject>(); // Список размещенных объектов    
+    private List<GridSystemXY<GridObjectInventoryXY>> _gridSystemXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectInventoryXY    
 
-    private List<GridSystemTiltedXY<GridObjectInventoryXY>> _gridSystemTiltedXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectInventoryXY    
 
 
-    
     private void Awake()
-    {      
-        _gridSystemTiltedXYList = new List<GridSystemTiltedXY<GridObjectInventoryXY>>(); // Инициализируем список              
+    {
+        _gridSystemXYList = new List<GridSystemXY<GridObjectInventoryXY>>(); // Инициализируем список              
 
         foreach (InventoryGridParameters gridParameters in _gridParametersArray)
         {
-            GridSystemTiltedXY<GridObjectInventoryXY> gridSystem = new GridSystemTiltedXY<GridObjectInventoryXY>(gridParameters,   // ПОСТРОИМ СЕТКУ  и в каждой ячейки создадим объект типа GridObjectInventoryXY
+            GridSystemXY<GridObjectInventoryXY> gridSystem = new GridSystemXY<GridObjectInventoryXY>(gridParameters,   // ПОСТРОИМ СЕТКУ  и в каждой ячейки создадим объект типа GridObjectInventoryXY
                 (GridSystemXY<GridObjectInventoryXY> g, Vector2Int gridPosition) => new GridObjectInventoryXY(g, gridPosition)); //в четвертом параметре аргумента зададим функцию ананимно через лямбду => new GridObjectUnitXZ(g, _gridPositioAnchor) И ПЕРЕДАДИМ ЕЕ ДЕЛЕГАТУ. (лямбда выражение можно вынести в отдельный метод)
 
             //gridSystem.CreateDebugObject(_gridDebugObjectPrefab); // Создадим наш префаб в каждой ячейки
-            _gridSystemTiltedXYList.Add(gridSystem); // Добавим в список созданную сетку
+            _gridSystemXYList.Add(gridSystem); // Добавим в список созданную сетку          
         }
 
         _canvasInventoryWorld = GetComponentInParent<Canvas>().transform;
-        cellSize = _gridSystemTiltedXYList[0].GetCellSize(); // Для всех сеток масштаб ячейки одинвковый  
+        cellSize = _gridSystemXYList[0].GetCellSize(); // Для всех сеток масштаб ячейки одинвковый  
     }
 
-    public void Init(PickUpDrop pickUpDrop, TooltipUI tooltipUI)
+    public void Init(PickUpDropPlacedObject pickUpDrop, TooltipUI tooltipUI)
     {
         _pickUpDrop = pickUpDrop;
         _tooltipUI = tooltipUI;
+
+        Setup();
     }
 
-    private void Start()
+    private void Setup()
     {
         // Задодим размер и тайлинг материала заднего фона
 
@@ -67,23 +67,54 @@ public class InventoryGrid : MonoBehaviour
     }
 
     /// <summary>
-    /// Попробуем Получим сеточную систему для заданной позиции Мыши и в случае удачи вернем ее и сеточную позицию
+    /// Попробуем, для заданной позиции Мыши, получим сеточную систему на Кэнвасе и в случае удачи вернем ее и сеточную позицию
     /// </summary>   
-    public bool TryGetGridSystemGridPosition(Vector3 worldPositionMouse, out GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY, out Vector2Int gridPositionMouse)
+    public bool TryGetGridSystemGridPosition(Vector3 mousePosition, RenderMode canvasRenderMode, Camera camera, out GridSystemXY<GridObjectInventoryXY> gridSystemXY, out Vector2Int mouseGridPosition)
     {
         gridSystemXY = null;
-        gridPositionMouse = new Vector2Int(0, 0);
+        mouseGridPosition = new Vector2Int(0, 0);
 
-        foreach (GridSystemTiltedXY<GridObjectInventoryXY> localGridSystem in _gridSystemTiltedXYList) // перберем список сеток
+        switch (canvasRenderMode)
         {
-            Vector2Int testGridPositionMouse = localGridSystem.GetGridPosition(worldPositionMouse); //для данной localGridSystem получим сеточную позицию мышки
-
-            if (localGridSystem.IsValidGridPosition(testGridPositionMouse)) // Если тестируемая сеточная позиция допустима, вернем ее и саму сеточную систему
-            {
-                gridSystemXY = localGridSystem;
-                gridPositionMouse = testGridPositionMouse;
+            case RenderMode.ScreenSpaceOverlay:
+                foreach (InventoryGridParameters inventoryGridParameter in _gridParametersArray)
+                {
+                    Vector2 mouseLocalPosition;
+                    RectTransform rectTransformGrid = (RectTransform)inventoryGridParameter.anchorGridTransform;
+                    if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransformGrid, mousePosition, null, out mouseLocalPosition)) // Если мы попали на трансформ сетки, то вернем локальную позицию мыши на этом трансформе
+                    {
+                        gridSystemXY = GetGridSystemXY(inventoryGridParameter.slot);
+                        mouseGridPosition = gridSystemXY.GetGridPosition(mouseLocalPosition);
+                    }
+                }
                 break;
-            }
+
+            case RenderMode.ScreenSpaceCamera:
+                foreach (InventoryGridParameters inventoryGridParameter in _gridParametersArray)
+                {
+                    Vector2 localPositionMouse;
+                    RectTransform rectTransformGrid = (RectTransform)inventoryGridParameter.anchorGridTransform;
+                    if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransformGrid, mousePosition, camera, out localPositionMouse)) // Если мы попали на трансформ сетки, то вернем локальную позицию мыши на этом трансформе
+                    {
+                        gridSystemXY = GetGridSystemXY(inventoryGridParameter.slot);
+                        mouseGridPosition = gridSystemXY.GetGridPosition(localPositionMouse);
+                    }
+                }
+                break;
+
+            case RenderMode.WorldSpace:
+                foreach (GridSystemXY<GridObjectInventoryXY> localGridSystem in _gridSystemXYList) // перберем список сеток
+                {
+                    Vector2Int testGridPositionMouse = localGridSystem.GetGridPosition(mousePosition); //для данной localGridSystem получим сеточную позицию мышки
+
+                    if (localGridSystem.IsValidGridPosition(testGridPositionMouse)) // Если тестируемая сеточная позиция допустима, вернем ее и саму сеточную систему
+                    {
+                        gridSystemXY = localGridSystem;
+                        mouseGridPosition = testGridPositionMouse;
+                        break;
+                    }
+                }
+                break;
         }
 
         if (gridSystemXY == null)
@@ -94,16 +125,15 @@ public class InventoryGrid : MonoBehaviour
         {
             return true;
         }
-    }
-
+    }   
 
     /// <summary>
     /// Попробую Добавить Размещаемый объект в Позицию Сетки
     /// </summary>   
     /// <remarks>Верну false если - Разместить нельзя. Если могу то добавлю  Размещаемый объект в GridObjectInventoryXY</remarks>
-    public bool TryAddPlacedObjectAtGridPosition(Vector2Int gridPositionMouse, PlacedObject placedObject, GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY)
+    public bool TryAddPlacedObjectAtGridPosition(Vector2Int gridPositionPlace, PlacedObject placedObject, GridSystemXY<GridObjectInventoryXY> gridSystemXY)
     {
-        List<Vector2Int> gridPositionList = placedObject.GetTryOccupiesGridPositionList(gridPositionMouse); // Получим список сеточных позиций которые хочет занять объект
+        List<Vector2Int> gridPositionList = placedObject.GetTryOccupiesGridPositionList(gridPositionPlace); // Получим список сеточных позиций которые хочет занять объект
         bool canPlace = true;
         foreach (Vector2Int gridPosition in gridPositionList) // Сначало надо проверить каждую ячейку
         {
@@ -115,7 +145,7 @@ public class InventoryGrid : MonoBehaviour
             if (gridSystemXY.GetGridObject(gridPosition).HasPlacedObject()) // Если хоть на одной позиции уже есть размещенный объект то
             {
                 canPlace = false; // Разместить нельзя
-                break;
+                break; //break завершит цикл полностью, continue просто пропустит текущую итерацию.
             }
         }
 
@@ -125,54 +155,67 @@ public class InventoryGrid : MonoBehaviour
             {
                 GridObjectInventoryXY gridObject = gridSystemXY.GetGridObject(gridPosition); // Получим GridObjectInventoryXY который находится в gridPosition
                 gridObject.AddPlacedObject(placedObject); // Добавить Размещаемый объект 
-            }    
+            }
+            _placedObjectList.Add(placedObject);
         }
-        return canPlace;        
-    }    
-
-    public void RemovePlacedObjectAtGrid(PlacedObject placedObject) // Удаление Размещаемый объект из сетки (предпологается что он уже размещен в сетке)
+        return canPlace;
+    }
+    /// <summary>
+    /// Удаление Размещаемый объект из сетки (предпологается что он уже размещен в сетке)
+    /// </summary>
+    public void RemovePlacedObjectAtGrid(PlacedObject placedObject)
     {
         List<Vector2Int> gridPositionList = placedObject.GetOccupiesGridPositionList(); // Получим список сеточных позиций которые занимает объект
-        GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY = placedObject.GetGridSystemXY(); // Получим сетку на которой он размещен 
+        GridSystemXY<GridObjectInventoryXY> gridSystemXY = placedObject.GetGridSystemXY(); // Получим сетку на которой он размещен 
         foreach (Vector2Int gridPosition in gridPositionList)
         {
             GridObjectInventoryXY gridObject = gridSystemXY.GetGridObject(gridPosition); // Получим GridObjectInventoryXY для сетки в которой он находится
             gridObject.RemovePlacedObject(placedObject); // удалим Размещаемый объект 
         }
+        _placedObjectList.Remove(placedObject);
     }
 
-    public List<GridSystemTiltedXY<GridObjectInventoryXY>> GetGridSystemTiltedXYList()
+    /// <summary>
+    /// Очистить инвентарь и удалить размещенные предметы
+    /// </summary>
+    public void ClearInventoryGridAndDestroyPlacedObjects()
     {
-        return _gridSystemTiltedXYList;
+        foreach (PlacedObject placedObject in _placedObjectList)
+        {
+            RemovePlacedObjectAtGrid(placedObject);
+            Destroy(placedObject.gameObject);
+        }
     }
+
+    public List<GridSystemXY<GridObjectInventoryXY>> GetGridSystemXYList() { return _gridSystemXYList; }
 
     // Получить сеточную позицию
-    public Vector2Int GetGridPosition(Vector3 worldPosition, GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetGridPosition(worldPosition);
+    public Vector2Int GetGridPosition(Vector3 worldPosition, GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetGridPosition(worldPosition);
 
     // Получим мировые координаты центра ячейки (относительно  нашей ***GridTransform)
-    public Vector3 GetWorldPositionCenterСornerCell(Vector2Int gridPosition, GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWorldPositionCenterСornerCell(gridPosition);
+    public Vector3 GetWorldPositionCenterСornerCell(Vector2Int gridPosition, GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWorldPositionCenterСornerCell(gridPosition);
 
     //  Получим мировые координаты центра Сетки (относительно  нашей ***GridTransform)
-    public Vector3 GetWorldPositionGridCenter(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWorldPositionGridCenter();
+    public Vector3 GetWorldPositionGridCenter(GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWorldPositionGridCenter();
 
     /// <summary>
     /// Получим мировые координаты нижнего левого угола ячейки (относительно  нашей ***GridTransform)
     /// </summary>   
     /// <returns></returns>
-    public Vector3 GetWorldPositionLowerLeftСornerCell(Vector2Int gridPosition, GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWorldPositionLowerLeftСornerCell(gridPosition);
+    public Vector3 GetWorldPositionLowerLeftСornerCell(Vector2Int gridPosition, GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWorldPositionLowerLeftСornerCell(gridPosition);
 
-    public Vector3 GetRotationAnchorGrid(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetRotationAnchorGrid();
-    public Transform GetAnchorGrid(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetAnchorGrid();
-    public int GetWidth(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWidth();
-    public int GetHeight(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetHeight();
+    public Vector3 GetRotationAnchorGrid(GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetRotationAnchorGrid();
+    public Transform GetAnchorGrid(GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetAnchorGrid();
+    public int GetWidth(GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWidth();
+    public int GetHeight(GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetHeight();
     public static float GetCellSize()// (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру)
     {
         return cellSize;
     }
 
-    public GridSystemTiltedXY<GridObjectInventoryXY> GetGridSystemTiltedXY(InventorySlot inventorySlot) // Получить сетку для этого слота
+    public GridSystemXY<GridObjectInventoryXY> GetGridSystemXY(InventorySlot inventorySlot) // Получить сетку для этого слота
     {
-        foreach (GridSystemTiltedXY<GridObjectInventoryXY> localGridSystem in _gridSystemTiltedXYList) // перберем список сеток
+        foreach (GridSystemXY<GridObjectInventoryXY> localGridSystem in _gridSystemXYList) // перберем список сеток
         {
             if (localGridSystem.GetGridSlot() == inventorySlot)
             {
@@ -183,87 +226,76 @@ public class InventoryGrid : MonoBehaviour
         return null;
     }
 
-
-    [Serializable]
-    public struct AddPlacedObject // Добаленный Размещенный объект
-    {
-        public InventorySlot gridName; //Имя Сетка на которой добавили размещенный объект
-        public Vector2Int gridPositioAnchor; // Сеточная позиция Якоря
-        public PlacedObjectTypeSO placedObjectTypeSO;
-    }
-
-    [Serializable]
-    public struct ListAddPlacedObject // Список Добавленных Размещенных объектов
-    {
-        public List<AddPlacedObject> addPlacedObjectList;
-    }
-
-    public void Save()
-    {
-        List<PlacedObject> placedObjectList = new List<PlacedObject>();
-        for (int i = 0; i < _gridSystemTiltedXYList.Count; i++) // переберем все сетки
+    /*
+        public void Save()
         {
-            for (int x = 0; x < _gridSystemTiltedXYList[i].GetWidth(); x++) // для каждой сетки переберем длину
+            _placedObjectList = new List<PlacedObjectParameters>();
+            for (int i = 0; i < _gridSystemXYList.Count; i++) // переберем все сетки
             {
-                for (int y = 0; y < _gridSystemTiltedXYList[i].GetHeight(); y++)  // и высоту
+                for (int x = 0; x < _gridSystemXYList[i].GetWidth(); x++) // для каждой сетки переберем длину
                 {
-                    Vector2Int gridPosition = new Vector2Int(x, y);
-                    GridObjectInventoryXY gridObject = _gridSystemTiltedXYList[i].GetGridObject(gridPosition); // Получим сеточный объект для нашей позиции
-
-                    if (gridObject.HasPlacedObject()) // Если в этой позиции есть размещенный объект то 
+                    for (int y = 0; y < _gridSystemXYList[i].GetHeight(); y++)  // и высоту
                     {
-                        if (!placedObjectList.Contains(gridObject.GetPlacedObject())) // Если этот объект еще не содержиться в списке то добавим его (PlacedObject может одновременно размещаться на нескольких GridObject, поэтому нужна проверка)
+                        Vector2Int gridPosition = new Vector2Int(x, y);
+                        GridObjectInventoryXY gridObject = _gridSystemXYList[i].GetGridObject(gridPosition); // Получим сеточный объект для нашей позиции
+
+                        if (gridObject.HasPlacedObject()) // Если в этой позиции есть размещенный объект то 
                         {
-                            placedObjectList.Add(gridObject.GetPlacedObject());
+                            PlacedObjectParameters placedObjectParameters = new PlacedObjectParameters(
+                                slot = _gridSystemXYList[i]
+                                );
+                            if (!_placedObjectList.Contains(gridObject.GetPlacedObject())) // Если этот объект еще не содержиться в списке то добавим его (PlacedObject может одновременно размещаться на нескольких GridObject, поэтому нужна проверка)
+                            {
+                                _placedObjectList.Add(gridObject.GetPlacedObject());
+                            }
                         }
                     }
                 }
             }
-        }
 
-        // Создадим Список Добавленных Размещенных объектов
-        List<AddPlacedObject> addPlacedObjectList = new List<AddPlacedObject>();
-        foreach (PlacedObject placedObject in placedObjectList)
-        {
-            addPlacedObjectList.Add(new AddPlacedObject
+            // Создадим Список Добавленных Размещенных объектов
+            List<PlacedObjectParameters> addPlacedObjectList = new List<PlacedObjectParameters>();
+            foreach (PlacedObjectParameters placedObject in placedObjectList)
             {
-                gridName = placedObject.GetGridSystemXY().GetGridSlot(),
-                gridPositioAnchor = placedObject.GetGridPositionAnchor(),
-                placedObjectTypeSO = placedObject.GetPlacedObjectTypeSO(),
-            });
-        }
-
-        string json = JsonUtility.ToJson(new ListAddPlacedObject { addPlacedObjectList = addPlacedObjectList });
-
-        PlayerPrefs.SetString("InventoryGridSystemSave", json); // Устанавливает единственное строковое значение для предпочтения, определяемого данным ключом. Вы можете использовать PlayerPrefs.getString для получения этого значени
-        SaveSystem.Save("InventoryGridSystemSave", json, true); // Сохраним и перепишем последнее
-
-        Debug.Log("Save!");
-    }
-
-    public void Load()
-    {
-        if (PlayerPrefs.HasKey("InventoryGridSystemSave")) // Возвращает true, если заданное значение key существует в PlayerPrefs, в противном случае возвращает false.
-        {
-            string json = PlayerPrefs.GetString("InventoryGridSystemSave");
-            json = SaveSystem.Load("InventoryGridSystemSave");
-
-            ListAddPlacedObject listAddPlacedObject = JsonUtility.FromJson<ListAddPlacedObject>(json); // Загрузим список Добавленных Размещенных объектов
-
-            foreach (AddPlacedObject addPlacedObject in listAddPlacedObject.addPlacedObjectList) // Переберем каждый Добавленный Размещенный объект в списке
-            {
-                // Создадим и разместим сохраненный объект               
-                GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY = GetGridSystemTiltedXY(addPlacedObject.gridName); // Получим сетку для размещения
-                PlacedObject placedObject = PlacedObject.CreateInGrid(gridSystemXY, addPlacedObject.gridPositioAnchor, addPlacedObject.placedObjectTypeSO, _canvasInventoryWorld , this);
-                if (!_pickUpDrop.TryDrop(gridSystemXY, addPlacedObject.gridPositioAnchor, placedObject)) // Если не удалось сбросить объект на сетку то
+                addPlacedObjectList.Add(new AddPlacedObject
                 {
-                    placedObject.DestroySelf(); // Уничтожим этот объект
-                    _tooltipUI.ShowTooltipsFollowMouse("не удалось загрузить сохранение", new TooltipUI.TooltipTimer { timer = 3f }); // Покажем подсказку и зададим новый таймер отображения подсказки                   
+                    gridName = placedObject.GetGridSystemXY().GetGridSlot(),
+                    gridPositioAnchor = placedObject.GetGridPositionAnchor(),
+                    placedObject = placedObject.GetPlacedObjectTypeSO(),
+                });
+            }
+
+            string json = JsonUtility.ToJson(new ListAddPlacedObject { addPlacedObjectList = addPlacedObjectList });
+
+            PlayerPrefs.SetString("InventoryGridSystemSave", json); // Устанавливает единственное строковое значение для предпочтения, определяемого данным ключом. Вы можете использовать PlayerPrefs.getString для получения этого значени
+            SaveSystem.Save("InventoryGridSystemSave", json, true); // Сохраним и перепишем последнее
+
+            Debug.Log("Save!");
+        }
+
+        public void Load()
+        {
+            if (PlayerPrefs.HasKey("InventoryGridSystemSave")) // Возвращает true, если заданное значение key существует в PlayerPrefs, в противном случае возвращает false.
+            {
+                string json = PlayerPrefs.GetString("InventoryGridSystemSave");
+                json = SaveSystem.Load("InventoryGridSystemSave");
+
+                ListAddPlacedObject listAddPlacedObject = JsonUtility.FromJson<ListAddPlacedObject>(json); // Загрузим список Добавленных Размещенных объектов
+
+                foreach (AddPlacedObject addPlacedObject in listAddPlacedObject.addPlacedObjectList) // Переберем каждый Добавленный Размещенный объект в списке
+                {
+                    // Создадим и разместим сохраненный объект               
+                    GridSystemXY<GridObjectInventoryXY> gridSystemXY = GetGridSystemXY(addPlacedObject.gridName); // Получим сетку для размещения
+                    PlacedObject placedObject = PlacedObject.CreateInGrid(gridSystemXY, addPlacedObject.gridPositioAnchor, addPlacedObject.placedObject, _canvasInventory, this);
+                    if (!_pickUpDropPlacedObject.TryDrop(gridSystemXY, addPlacedObject.gridPositioAnchor, placedObject)) // Если не удалось сбросить объект на сетку то
+                    {
+                        placedObject.DestroySelf(); // Уничтожим этот объект
+                        _tooltipUI.ShowTooltipsFollowMouse("не удалось загрузить сохранение", new TooltipUI.TooltipTimer { timer = 3f }); // Покажем подсказку и зададим новый таймер отображения подсказки                   
+                    }
                 }
             }
-        }
-        Debug.Log("Load!");
-    }
+            Debug.Log("Load!");
+        }*/
 
 
     /*public InventoryGridParameters[] GetGridParametersArray() //Получить Массив параметров сеток
@@ -271,9 +303,9 @@ public class InventoryGrid : MonoBehaviour
         return _gridParametersArray;
     }
 
-    public PlacedObject GetPlacedObjectAtGridPosition(Vector2Int gridPosition, GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY) // Получить Размещаемый объект в этой сеточной позиции
+    public PlacedObject GetPlacedObjectAtGridPosition(Vector2Int gridPosition, GridSystemXY<GridObjectInventoryXY> gridSystemXY) // Получить Размещаемый объект в этой сеточной позиции
     {
-        GridObjectInventoryXY gridObject = gridSystemXY.GetGridObject(gridPosition); // Получим GridObjectInventoryXY который находится в gridPositionMouse
+        GridObjectInventoryXY gridObject = gridSystemXY.GetGridObject(gridPosition); // Получим GridObjectInventoryXY который находится в gridPositionPlace
         return gridObject.GetPlacedObject();
     }*/
 }

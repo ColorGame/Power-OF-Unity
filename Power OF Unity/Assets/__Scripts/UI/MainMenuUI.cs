@@ -16,9 +16,11 @@ public class MainMenuUI : MonoBehaviour // Главное меню
     {
         _optionsMenuUI = optionsMenuUI;
         _scenesService = scenesService;
+
+        Setup();
     }
 
-    private void Start()
+    private void Setup()
     {
         _resumeGameButton.onClick.AddListener(() => { Debug.Log("ЗАГЛУШКА"); });
         _loadGameButton.onClick.AddListener(() => { Debug.Log("ЗАГЛУШКА"); });

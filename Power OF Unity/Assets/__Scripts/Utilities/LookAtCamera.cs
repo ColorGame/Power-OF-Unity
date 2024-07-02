@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-public class LookAtCamera : MonoBehaviour // Шкала здоровья будет смотреть в сторону камеры
+public class LookAtCamera : MonoBehaviour, ISetupForSpawn // Шкала здоровья будет смотреть в сторону камеры
 {
     //[SerializeField] private bool _invert; // для 1 МЕТОДА поворота (ставим галочку если надо инвертировать)
 
@@ -9,9 +9,9 @@ public class LookAtCamera : MonoBehaviour // Шкала здоровья будет смотреть в сто
     private bool _updateTransformStarted;
     private CameraFollow _cameraFollow;
 
-    public void SetupForSpawn(CameraFollow cameraFollow)
+    public void SetupForSpawn(Unit unit)
     {
-        _cameraFollow = cameraFollow;
+        _cameraFollow = unit.GetCameraFollow();
 
         _cameraFollow.OnCameraRotateStarted += CameraMove_OnCameraRotateZoomStarted;
         _cameraFollow.OnCameraRotateCompleted += CameraMove_OnCameraRotateZoomCompleted;

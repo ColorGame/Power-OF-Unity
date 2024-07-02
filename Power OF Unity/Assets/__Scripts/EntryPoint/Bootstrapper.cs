@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 /// <summary>
@@ -43,7 +42,7 @@ public class Bootstrapper
          _uiRoot = Object.Instantiate(prefabUIRoot);
          Object.DontDestroyOnLoad(_uiRoot.gameObject);*/
 
-        SceneManager.sceneLoaded += SceneManager_OnSceneLoaded; // Подпишемся СЦЕНА ЗАНРУЖЕНА для настройки EntryPoint при переходе на другую сцену. SceneManager.sceneLoaded вызывается после Awake() и OnEnable() объектов.
+        SceneManager.sceneLoaded += SceneManager_OnSceneLoaded; // Подпишемся СЦЕНА ЗАНРУЖЕНА для настройки EntryPoint при переходе на другую сцену. SceneManager.sceneLoaded вызывается после Awake() и OnEnable() объектов (!!!бывает сбои запкскается позже Start().)
 
         _rootContainer = new DIContainer();
         _scenesService = _rootContainer.RegisterSingleton(_ => new ScenesService()).CreateInstance();

@@ -93,7 +93,7 @@ public class SwordAction : BaseAction // Базовое действие Меч
             hittingUnit = _unit
         }); // Запустим событие ЛЮБОЙ Начал удар мечом и в аргумент передадим в кого ударяем и кто нанносит удар (Подписчики ScreenShakeActions ДЛЯ РЕАЛИЗАЦИИ ТРЯСКИ ЭКРАНА и UnitRagdollSpawner- для определения направления поражения)
 
-        _soundManager.PlayOneShot(SoundName.Sword);
+        _unit.GetSoundManager().PlayOneShot(SoundName.Sword);
 
         if (_targetUnit.GetActionPointsSystem().GetStunned() && !_unit.GetActionPointsSystem().GetStunned()) // Если враг оглушенный а я нет
         {
@@ -134,18 +134,18 @@ public class SwordAction : BaseAction // Базовое действие Меч
                 GridPositionXZ offsetGridPosition = new GridPositionXZ(x, z, 0); // Смещенная сеточная позиция. Где началом координат(0,0) является сам юнит 
                 GridPositionXZ testGridPosition = unitGridPosition + offsetGridPosition; // Тестируемая Сеточная позиция
 
-                if (!_levelGrid.IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
+                if (!_unit.GetLevelGrid().IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
                 {
                     continue; // continue заставляет программу переходить к следующей итерации цикла 'for' игнорируя код ниже
                 }
 
-                if (!_levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточное позицию где нет юнитов (нам нужны ячейки с юнитами мы будем по ним шмалять)
+                if (!_unit.GetLevelGrid().HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточное позицию где нет юнитов (нам нужны ячейки с юнитами мы будем по ним шмалять)
                 {
                     // Позиция сетки пуста, нет Юнитов
                     continue;
                 }
 
-                Unit targetUnit = _levelGrid.GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции 
+                Unit targetUnit = _unit.GetLevelGrid().GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции 
                                                                                                 // GetUnitAtGridPosition может вернуть null но в коде выше мы исключаем нулевые позиции, так что проверка не нужна
                 if (targetUnit.IsEnemy() == _unit.IsEnemy()) // Если тестируемый юнит враг и наш юнит тоже враг то (если они оба в одной команде то будем игнорировать этих юнитов)
                 {
@@ -162,7 +162,7 @@ public class SwordAction : BaseAction // Базовое действие Меч
 
     public override void TakeAction(GridPositionXZ gridPosition, Action onActionComplete)  // Переопределим TakeAction (Применить Действие (Действовать). (Делегат onActionComplete - по завершении действия). в нашем случае делегату передаем функцию ClearBusy - очистить занятость
     {
-        _targetUnit = _levelGrid.GetUnitAtGridPosition(gridPosition); // Получим юнита в которого целимся и сохраним его
+        _targetUnit = _unit.GetLevelGrid().GetUnitAtGridPosition(gridPosition); // Получим юнита в которого целимся и сохраним его
 
         _state = State.SwingingSwordBeforeHit; // Активируем состояние Прицеливания  Взмах мечом перед ударом
         float beforeHitStateTime = 0.7f; //До Удара.  Для избежания магических чисель введем переменную  Продолжительность Состояния Взмах мечом перед ударом ..//НУЖНО НАСТРОИТЬ//

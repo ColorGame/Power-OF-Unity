@@ -27,23 +27,23 @@ public class ShootAction : BaseAction
         Shooting,   // Стрельба
         Cooloff,    // Остывание (небольшая задержка прежде чем мы закончим действие)
     }
-       
-    [SerializeField] private int _numberShoot = 3; // Количество выстрелов
-    [SerializeField] private float _delayShoot = 0.2f; //задержка между выстрелами
-    [SerializeField] private Transform _shootPointTransform; // в инспекторе закинуть точку выстрела лежит на автомате
-    [SerializeField] private Transform _HeadTransform; // в инспекторе закинуть точку прицеливания лежит на голове (нужна если враг присел или это маленький персонаж)
+
+    
+    [SerializeField] private Transform _shootPointTransform; // в инспекторе закинуть точку выстрела лежит на автомате    
     [SerializeField] private Transform _targetAnimationAim; //Цель для анимации прицеливания 
     [SerializeField] private Rig _aimRig; // Анимация прицеливания взлом
 
     private LayerMask _obstaclesDoorMousePlaneCoverLayerMask;//маска слоя препятствия НАДО ВЫБРАТЬ Obstacles и Door и MousePlane(пол) Cover// ВАЖНО НА ВСЕХ СТЕНАХ В ИГРЕ УСТАНОВИТЬ МАСКУ СЛОЕВ -Obstacles, а на дверях -DoorInteract //для полов верхних этажей поменять колайдер на Box collider иначе снизу можно будет простреливать верхний этаж // Cover нельзя простреливать если точка выстрела ниже укрытия (надо проверять все объекты Cover)
-    private LayerMask _smokeCoverLayerMask ; //маска слоя ДЫМА и ПРИКРЫТИЯ (появится в ИНСПЕКТОРЕ) НАДО ВЫБРАТЬ Smoke и Cover // ВАЖНО НА ВСЕХ ПРИКРЫТИЯ и ДЫМЕ от гранаты,  УСТАНОВИТЬ СООТВЕТСТВУЮЩУЮ МАСКУ СЛОЕВt 
-    private LayerMask _coverLayerMask ; // маска слоя Укрытие
-    private LayerMask _smokeLayerMask ; // маска слоя Дым   
+    private LayerMask _smokeCoverLayerMask; //маска слоя ДЫМА и ПРИКРЫТИЯ (появится в ИНСПЕКТОРЕ) НАДО ВЫБРАТЬ Smoke и Cover // ВАЖНО НА ВСЕХ ПРИКРЫТИЯ и ДЫМЕ от гранаты,  УСТАНОВИТЬ СООТВЕТСТВУЮЩУЮ МАСКУ СЛОЕВt 
+    private LayerMask _coverLayerMask; // маска слоя Укрытие
+    private LayerMask _smokeLayerMask; // маска слоя Дым   
 
-    private int _maxShootDistance = 7;
-    private float _percentageShootDistanceIncrease = 0.5f;// Процент увеличения дальности выстрела 
-    private int _shootDamage = 6; // Величина уронв
-    private float _percentageShootDamageIncrease = 0.5f;//Процент увеличения урона от выстрела 
+    private int _numberShotInOneAction; // Количество выстрелов за одно действие
+    private float _delayShoot; //задержка между выстрелами
+    private int _maxShootDistance ;
+    private float _percentageShootDistanceIncrease;// Процент увеличения дальности выстрела 
+    private int _shootDamage; // Величина уронв
+    private float _percentageShootDamageIncrease;//Процент увеличения урона от выстрела 
     private State _state; // Состояние юнита
     private float _stateTimer; //Таймер состояния
     private Unit _targetUnit; // Юнит в которого стреляем целимся
@@ -64,19 +64,21 @@ public class ShootAction : BaseAction
         base.Start();
 
         _obstaclesDoorMousePlaneCoverLayerMask = LayerMask.GetMask("Obstacles", "Door", "MousePlane", "Cover");
-        _smokeCoverLayerMask = LayerMask.GetMask("Smoke", "Cover"); 
-        _coverLayerMask = LayerMask.GetMask("Cover"); 
+        _smokeCoverLayerMask = LayerMask.GetMask("Smoke", "Cover");
+        _coverLayerMask = LayerMask.GetMask("Cover");
         _smokeLayerMask = LayerMask.GetMask("Smoke");
 
-        if (_HeadTransform == null)
-        {
-        _HeadTransform = transform.Find("Head"); // Если забыл закинуть в инспекторе
-        }
-
         _hitPercent = 1f; //Установим Процент попадания МАКСИМАЛЬНЫМ 100%
-        _cellSize = _levelGrid.GetCellSize();
+        _cellSize = _unit.GetLevelGrid().GetCellSize();
         _targetAnimationAim.position = _shootPointTransform.position; // при старте Цель для анимации прицеливания  будет точка прицеливания на самом юните, что бы не было лишних поворотов направлений
     }
+
+    public override void SetPlacedObjectTypeSO(PlacedObjectTypeSO placedObjectTypeSO)
+    {
+        base.SetPlacedObjectTypeSO (placedObjectTypeSO);
+        _numberShotInOneAction = ((ShootingWeaponTypeSO)placedObjectTypeSO).GetNumberShotInOneAction();
+    }
+
     private void Update()
     {
         if (!_isActive) // Если не активны то ...
@@ -105,10 +107,10 @@ public class ShootAction : BaseAction
                     SpotterUnitEnemyDirection.y = 0;
 
                     _spotterFireUnit.GetTransform().forward = Vector3.Slerp(_spotterFireUnit.GetTransform().forward, SpotterUnitEnemyDirection, Time.deltaTime * rotateSpeed); // поворт корректировщика.    
-                }               
-                    break;
+                }
+                break;
 
-            case State.Shooting:               
+            case State.Shooting:
 
                 if (_canShootBullet && _timerShoot <= 0) // Если могу стрелять пулей и таймер истек ...
                 {
@@ -117,7 +119,7 @@ public class ShootAction : BaseAction
                     _counterShoot += 1; // Прибавим к счетчику выстрелов 1 
                 }
 
-                if (_counterShoot >= _numberShoot || _targetUnit.GetHealthSystem().IsDead()) //После выпуска 3 пуль или когда враг СДОХ
+                if (_counterShoot >= _numberShotInOneAction || _targetUnit.GetHealthSystem().IsDead()) //После выпуска 3 пуль или когда враг СДОХ
                 {
                     _canShootBullet = false;
                     _counterShoot = 0; //Обнулим счетчик пуль
@@ -136,13 +138,15 @@ public class ShootAction : BaseAction
         }
     }
 
+    
+
     private void NextState() //Автомат переключения состояний
     {
         switch (_state)
         {
             case State.Aiming:
                 _state = State.Shooting;
-                float shootingStateTime = _numberShoot * _delayShoot + 0.5f; // Для избежания магических чисель введем переменную  Продолжительность Состояния Выстрел = Количество выстрелов * время выстрела
+                float shootingStateTime = _numberShotInOneAction * _delayShoot + 0.5f; // Для избежания магических чисель введем переменную  Продолжительность Состояния Выстрел = Количество выстрелов * время выстрела
                 _stateTimer = shootingStateTime;
                 _targetAnimationAim.position = _targetUnitAimPointPosition; //Цель для анимации прицеливания  будет точка прицеливания на враге
                 break;
@@ -163,15 +167,15 @@ public class ShootAction : BaseAction
 
     public override void TakeAction(GridPositionXZ targetGridPosition, Action onActionComplete) // Выполнение действий
     {
-        _targetUnit = _levelGrid.GetUnitAtGridPosition(targetGridPosition); // Получим юнита в которого целимся и сохраним его                               
-        _targetUnitAimPointPosition = _targetUnit.GetAction<ShootAction>().GetAimPoinTransform().position; // позицию Прицеливания целевого юнита. 
+        _targetUnit = _unit.GetLevelGrid().GetUnitAtGridPosition(targetGridPosition); // Получим юнита в которого целимся и сохраним его                               
+        _targetUnitAimPointPosition = _targetUnit.GetHeadTransform().position; // позицию Прицеливания целевого юнита. 
 
         _state = State.Aiming; // Активируем состояние Прицеливания 
         float aimingStateTime = 0.5f; //Продолжительность Состояния Прицеливания //НУЖНО НАСТРОИТЬ//
         _stateTimer = aimingStateTime;
 
-        _canShootBullet = true;                
-              
+        _canShootBullet = true;
+
         _aimRigWeight = 1; // Увеличим вес для анимации прицеливания           
 
         ActionStart(onActionComplete); // Вызовим базовую функцию СТАРТ ДЕЙСТВИЯ и передадим делегат // Вызываем этот метод в конце после всех настроек т.к. в этом методе есть EVENT и он должен запускаться после всех настроек
@@ -198,8 +202,8 @@ public class ShootAction : BaseAction
 
         Transform bulletProjectilePrefabTransform = Instantiate(GameAssets.Instance.bulletProjectilePrefab, _shootPointTransform.position, Quaternion.identity); // Создадим префаб пули в точке выстрела
         BulletProjectile bulletProjectile = bulletProjectilePrefabTransform.GetComponent<BulletProjectile>(); // Вернем компонент BulletProjectile созданной пули
-        
-        _soundManager.PlayOneShot(SoundName.Shoot); // Воспроизведем звук 
+
+        _unit.GetSoundManager().PlayOneShot(SoundName.Shoot); // Воспроизведем звук 
         if (_hit) // Если попали то
         {
             bulletProjectile.Setup(_targetUnitAimPointPosition, _hit); // В аргумент предали позицию Прицеливания целевого юнита
@@ -208,7 +212,7 @@ public class ShootAction : BaseAction
         else // Если промах
         {
             //Рандомно сместим по X Y Z
-           _targetUnitAimPointPosition += Vector3.one * UnityEngine.Random.Range(-0.8f, 0.8f);
+            _targetUnitAimPointPosition += Vector3.one * UnityEngine.Random.Range(-0.8f, 0.8f);
             bulletProjectile.Setup(_targetUnitAimPointPosition, _hit); // В аргумент предали Мировую позицию целевого юнита. 
         }
     }
@@ -219,7 +223,6 @@ public class ShootAction : BaseAction
 
         if (_haveSpotterFire) // Если есть корректировщик то ПОМЕХ НЕТУ
         {
-
             return _hitPercent;
         }
         // ПРОВЕРИМ ВСЕ CoverSmokeObject НА ПУТИ ВЫСТРЕЛА
@@ -306,8 +309,8 @@ public class ShootAction : BaseAction
 
     //Отличается от метода выше сигнатурой.
     public List<GridPositionXZ> GetValidActionGridPositionList(GridPositionXZ unitGridPosition) //Получить Список Допустимых Сеточных Позиция для Действий.
-                                                                                            //Получить Список Допустимых целей вокруг позиции Юнита
-                                                                                            //В аргумент передаем сеточную позицию Юнита                                                                                            
+                                                                                                //Получить Список Допустимых целей вокруг позиции Юнита
+                                                                                                //В аргумент передаем сеточную позицию Юнита                                                                                            
     {
         List<GridPositionXZ> validGridPositionList = new List<GridPositionXZ>();
 
@@ -322,7 +325,7 @@ public class ShootAction : BaseAction
                     GridPositionXZ offsetGridPosition = new GridPositionXZ(x, z, floor); // Смещенная сеточная позиция. Где началом координат(0,0, 0-этаж) является сам юнит 
                     GridPositionXZ testGridPosition = unitGridPosition + offsetGridPosition; // Тестируемая Сеточная позиция
 
-                    if (!_levelGrid.IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
+                    if (!_unit.GetLevelGrid().IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
                     {
                         continue; // continue заставляет программу переходить к следующей итерации цикла 'for' игнорируя код ниже
                     }
@@ -333,14 +336,14 @@ public class ShootAction : BaseAction
                         continue;
                     }
 
-                    if (!_levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточное позицию где нет юнитов (нам нужны ячейки с юнитами мы будем по ним шмалять)
+                    if (!_unit.GetLevelGrid().HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточное позицию где нет юнитов (нам нужны ячейки с юнитами мы будем по ним шмалять)
                     {
                         // Позиция сетки пуста, нет Юнитов
                         continue;
                     }
 
-                    Unit targetUnit = _levelGrid.GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции 
-                                                                                                    // GetUnitAtGridPosition может вернуть null но в коде выше мы исключаем нулевые позиции, так что проверка не нужна
+                    Unit targetUnit = _unit.GetLevelGrid().GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции 
+                                                                                                      // GetUnitAtGridPosition может вернуть null но в коде выше мы исключаем нулевые позиции, так что проверка не нужна
                     if (targetUnit.IsEnemy() == _unit.IsEnemy()) // Если тестируемый юнит враг и наш юнит тоже враг то (если они оба в одной команде то будем игнорировать этих юнитов)
                     {
                         // Оба подразделения в одной "команде"
@@ -348,13 +351,14 @@ public class ShootAction : BaseAction
                     }
 
                     // ПРОВЕРИМ НА ПРОСТРЕЛИВАЕМОСТЬ до цели , Cover нельзя простреливать если точка выстрела ниже укрытия (надо проверять все объекты Cover)
-                    Vector3 unitWorldPosition = _levelGrid.GetWorldPosition(unitGridPosition); // Переведем в мировые координаты переданную нам сеточную позицию Юнита  
+                    Vector3 unitWorldPosition = _unit.GetLevelGrid().GetWorldPosition(unitGridPosition); // Переведем в мировые координаты переданную нам сеточную позицию Юнита  
                     Vector3 shototDirection = (targetUnit.GetWorldPosition() - unitWorldPosition).normalized; //Нормализованный Вектор Направления стрельбы
                     Vector3 shootPoint = _shootPointTransform.position - unitWorldPosition; // Получим расстояние от точки выстрела до основания юнита (актуально для 2 этажа)
 
                     float reserveHeight = 0.15f; // Резерв по высоте чуть выше точки выстрела ()
                     if (Physics.Raycast(
-                            unitWorldPosition + Vector3.up * (shootPoint.y + reserveHeight),
+                            //_shootPointTransform.position + Vector3.up * reserveHeight,
+                            unitWorldPosition + Vector3.up * (shootPoint.y + reserveHeight), 
                             shototDirection,
                             Vector3.Distance(unitWorldPosition, targetUnit.GetWorldPosition()),
                             _obstaclesDoorMousePlaneCoverLayerMask)) // Если луч попал в препятствие то (Raycast -вернет bool переменную)
@@ -379,7 +383,7 @@ public class ShootAction : BaseAction
 
     public override EnemyAIAction GetEnemyAIAction(GridPositionXZ gridPosition) //Получить действие вражеского ИИ  для переданной нам сеточной позиции// Переопределим абстрактный базовый метод //EnemyAIAction создан в каждой Допустимой Сеточнй Позиции, наша задача - настроить каждую ячейку в зависимости от состоянии юнита который там стоит
     {
-        Unit targetUnit = _levelGrid.GetUnitAtGridPosition(gridPosition); // Получим юнита для этой позиции это наша цель
+        Unit targetUnit = _unit.GetLevelGrid().GetUnitAtGridPosition(gridPosition); // Получим юнита для этой позиции это наша цель
 
         return new EnemyAIAction
         {
@@ -420,14 +424,7 @@ public class ShootAction : BaseAction
     {
         return GetValidActionGridPositionList(gridPosition).Count; // Получим количество целей из списка Допустимых целей
     }
-    public Transform GetAimPoinTransform() // Получить точку прицеливания
-    {
-        return _HeadTransform;
-    }
-    public Transform GetShootPoinTransform() // Получить точку выстрела
-    {
-        return _shootPointTransform;
-    }
+
     public Unit GetTargetUnit() // Раскроем _targetUnit
     {
         return _targetUnit;
@@ -435,7 +432,7 @@ public class ShootAction : BaseAction
     public override int GetMaxActionDistance() // Раскроем maxShootDistance
     {
         if (_haveSpotterFire)
-        {           
+        {
             return _maxShootDistance + Mathf.RoundToInt(_maxShootDistance * _percentageShootDistanceIncrease);
         }
         else

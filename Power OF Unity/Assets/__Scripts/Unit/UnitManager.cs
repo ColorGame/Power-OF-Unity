@@ -4,38 +4,51 @@ using UnityEngine;
 
 public class UnitManager // Менеджер (администратор) Юнитов
 { 
-    public UnitManager(TooltipUI tooltipUI) 
+    public UnitManager(TooltipUI tooltipUI, SoundManager soundManager) 
     {
-        Init(tooltipUI);
+        Init(tooltipUI, soundManager);
     }
 
 
     public event EventHandler OnAnyUnitDeadAndRemoveList; // Событие Любой Юнит Умер И Удален из Списка
     public event EventHandler OnAnyEnemyUnitSpawnedAndAddList; // Событие Любой вражеский юнит ражден и добавлен в Списка      
 
-    private List<Unit> _unitFriendList;// список  моих юнитов
-    private List<Unit> _unitFriendOnMissionList;// список моих юнитов на Миссии
-    private List<Unit> _unitFriendDeadList;// список моих погибших юнитов 
-    private List<Unit> _unitEnemyList;  // список Вражеских юнитов
-
-    private UnitTypeBasicListSO _unitTypeBasicListSO; // список для создания базовых юнитов
+    private List<Unit> _unitFriendList = new List<Unit>();// список  моих юнитов
+    private List<Unit> _unitFriendOnMissionList = new List<Unit>();// список моих юнитов на Миссии
+    private List<Unit> _unitFriendDeadList = new List<Unit>();// список моих погибших юнитов 
+    private List<Unit> _unitEnemyList = new List<Unit>();  // список Вражеских юнитов
+       
     private TooltipUI _tooltipUI;
+    private SoundManager _soundManager;
+   
 
-    private void Init(TooltipUI tooltipUI)
+    private void Init(TooltipUI tooltipUI, SoundManager soundManager)
     {
         _tooltipUI = tooltipUI;
-
-        // Проведем инициализацию списков        
-        _unitFriendList = new List<Unit>();
-        _unitFriendOnMissionList = new List<Unit>();
-        _unitFriendDeadList = new List<Unit>();
-        _unitEnemyList = new List<Unit>();
-
-        _unitTypeBasicListSO = Resources.Load<UnitTypeBasicListSO>(typeof(UnitTypeBasicListSO).Name);    // Загружает ресурс запрошенного типа, хранящийся по адресу path(путь) в папке Resources(эту папку я создал в папке ScriptableObjects).
-                                                                                                         // Что бы не ошибиться в имени пойдем другим путем. Создадим экземпляр UnitTypeBasicListSO и назавем также как и класс, потом для поиска SO будем извлекать имя класса которое совпадает с именем экземпляра
+        _soundManager = soundManager;        
+                
+        InitUnits(firstStart: true);
 
         Unit.OnAnyEnemyUnitSpawned += Unit_OnAnyEnemyUnitSpawned; // Подпишемся на событие (Любой Рожденный(созданный) Вражеский Юнит)
         Unit.OnAnyUnitDead += Unit_OnAnyUnitDead;  // Подпишемся на событие (Любой Мертвый Юнит)
+    }
+
+    public void InitUnits(bool firstStart)
+    {
+        if (firstStart)
+        {
+            UnitTypeBasicListSO unitTypeBasicListSO = Resources.Load<UnitTypeBasicListSO>(typeof(UnitTypeBasicListSO).Name);
+
+            foreach (UnitTypeSO unitFriendTypeSO in unitTypeBasicListSO.list)
+            {
+                Unit unit = new Unit(unitFriendTypeSO, _soundManager);
+                _unitFriendList.Add(unit);
+            }
+        }
+        else
+        {
+            // Реализовать загрузку
+        }
     }
 
 

@@ -21,7 +21,7 @@ public class PlacedObjectTypeButton : MonoBehaviour // Кнопка  Типа Размещаемого
 
     private Camera _cameraInventoryUI;
     private TooltipUI _tooltipUI;
-    private PickUpDrop _pickUpDrop;
+    private PickUpDropPlacedObject _pickUpDrop;
        
 
     private void Awake()
@@ -35,13 +35,15 @@ public class PlacedObjectTypeButton : MonoBehaviour // Кнопка  Типа Размещаемого
         _typeSelectContainerArray = new Transform[] { _weaponSelectContainer, _itemSelectContainer, _moduleSelectContainer };
     }
 
-    public void Init(TooltipUI tooltipUI, PickUpDrop pickUpDrop)
+    public void Init(TooltipUI tooltipUI, PickUpDropPlacedObject pickUpDrop)
     {
         _tooltipUI = tooltipUI;
         _pickUpDrop = pickUpDrop;
+
+        Setup();
     }
 
-    private void Start()
+    private void Setup()
     {
         CreateTypePlacedObjectButton(); // Создать Кнопки типов Размещаемых объектов
 
@@ -95,15 +97,15 @@ public class PlacedObjectTypeButton : MonoBehaviour // Кнопка  Типа Размещаемого
                         
             switch (placedObjectTypeSO) // В зависимости от типа поместим в нужный контейнер
             {
-                case WeaponTypeSO weaponTypeSO:
+                case ShootingWeaponTypeSO weaponTypeSO:
                     CreatePlacedObjectButton(weaponTypeSO, _weaponSelectContainer);// Создать Кнопки Размещаемых объектов и поместим в контейнер
                     break;
 
-                case ItemTypeSO itemTypeSO:
+                case GrappleTypeSO itemTypeSO:
                     CreatePlacedObjectButton(itemTypeSO, _itemSelectContainer);// Создать Кнопки Размещаемых объектов и поместим в контейнер
                     break;
 
-                case ModuleTypeSO moduleTypeSO:
+                case GrenadeTypeSO moduleTypeSO:
                     CreatePlacedObjectButton(moduleTypeSO, _moduleSelectContainer);// Создать Кнопки Размещаемых объектов и поместим в контейнер
                     break;
             }

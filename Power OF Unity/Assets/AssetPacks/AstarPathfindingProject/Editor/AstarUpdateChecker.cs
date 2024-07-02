@@ -299,7 +299,7 @@ namespace Pathfinding {
 				EditorPrefs.DeleteKey("AstarRemindUpdateDate");
 				EditorPrefs.DeleteKey("AstarRemindUpdateVersion");
 
-				AstarUpdateWindow.Init(latestVersion, latestVersionDescription);
+				//AstarUpdateWindow.Init(latestVersion, latestVersionDescription);
 			}
 #endif
 		}

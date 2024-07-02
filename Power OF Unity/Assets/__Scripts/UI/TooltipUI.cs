@@ -15,14 +15,14 @@ using UnityEngine.UI;
 public class TooltipUI : MonoBehaviour
 {   
 
+    [SerializeField] private TextMeshProUGUI _shortTooltipsText; // Текст подсказки (тип TextMeshProUGUI надо выбрать и буквами UI)
+    [SerializeField] private TextMeshProUGUI _nameText; // Текст подсказки (тип TextMeshProUGUI надо выбрать и буквами UI)
+    [SerializeField] private TextMeshProUGUI _descriptionText; // Текст подсказки (тип TextMeshProUGUI надо выбрать и буквами UI)
+    [SerializeField] private TextMeshProUGUI _detailsText; // Текст подсказки (тип TextMeshProUGUI надо выбрать и буквами UI)
+    [SerializeField] private TextMeshProUGUI _sideEffectsTooltipsText; // Текст подсказки (тип TextMeshProUGUI надо выбрать и буквами UI)
+    private ContentSizeFitter _contentSizeFitter; // Настройки размера контента
     private RectTransform _canvasTooltipRectTransform; // Трансформ холста 
     private RectTransform _tooltipRectTransform; // Трансформ всплывающей подсказки TooltipUI // В ИНСПЕКТОРЕ НАСТРОИТЬ ЯКОРЬ НА НИЖНИЙ ЛЕВЫЙ УГОЛ, это координаты (0, 0) что бы он правильно следовал за мышью 
-    private ContentSizeFitter _contentSizeFitter; // Настройки размера контента
-    private TextMeshProUGUI _shortTooltipsText; // Текст подсказки (тип TextMeshProUGUI надо выбрать и буквами UI)
-    private TextMeshProUGUI _nameText; // Текст подсказки (тип TextMeshProUGUI надо выбрать и буквами UI)
-    private TextMeshProUGUI _descriptionText; // Текст подсказки (тип TextMeshProUGUI надо выбрать и буквами UI)
-    private TextMeshProUGUI _detailsText; // Текст подсказки (тип TextMeshProUGUI надо выбрать и буквами UI)
-    private TextMeshProUGUI _sideEffectsTooltipsText; // Текст подсказки (тип TextMeshProUGUI надо выбрать и буквами UI)
     //private RectTransform _backgroundRectTransform; // Трансформ заднего фона
     private TooltipTimer _tooltipTimer; // Время отображения подсказки (расширяющий класс)
     private bool _followMouse; // Следовать за мышью   
@@ -36,9 +36,11 @@ public class TooltipUI : MonoBehaviour
     {
         _virtualMouseCustom = virtualMouseCustom;
         _gameInput = gameInput;
+
+        Setup();
     }
 
-    private void Start()
+    private void Setup()
     {
         Canvas canvas = GetComponentInParent<Canvas>();
         canvas.sortingOrder = 100; // Установим большой слой сортировки что бы подсказки отображались повер всех канвасов
@@ -46,11 +48,18 @@ public class TooltipUI : MonoBehaviour
         _canvasTooltipRectTransform = (RectTransform)canvas.transform;
         _tooltipRectTransform = GetComponent<RectTransform>();
         _contentSizeFitter = GetComponent<ContentSizeFitter>();
-        _shortTooltipsText = transform.Find("shortTooltipsText").GetComponent<TextMeshProUGUI>();
-        _nameText = transform.Find("nameText").GetComponent<TextMeshProUGUI>();
-        _descriptionText = transform.Find("descriptionText").GetComponent<TextMeshProUGUI>();
-        _detailsText = transform.Find("detailsText").GetComponent<TextMeshProUGUI>();
-        _sideEffectsTooltipsText = transform.Find("sideEffectsTooltipsText").GetComponent<TextMeshProUGUI>();
+
+        if (_shortTooltipsText == null)
+            _shortTooltipsText = transform.Find("shortTooltipsText").GetComponent<TextMeshProUGUI>();
+        if (_nameText == null)
+            _nameText = transform.Find("nameText").GetComponent<TextMeshProUGUI>();
+        if (_descriptionText == null)
+            _descriptionText = transform.Find("descriptionText").GetComponent<TextMeshProUGUI>();
+        if (_detailsText == null)
+            _detailsText = transform.Find("detailsText").GetComponent<TextMeshProUGUI>();
+        if (_sideEffectsTooltipsText == null)
+            _sideEffectsTooltipsText = transform.Find("sideEffectsTooltipsText").GetComponent<TextMeshProUGUI>();
+
         _widthTooltip = _tooltipRectTransform.sizeDelta.x; // сохраним оригинальную ширину
         //_backgroundRectTransform = transform.Find("background").GetComponent<RectTransform>();
 

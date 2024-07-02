@@ -6,15 +6,16 @@ using System;
 /// <remarks>
 /// может использоваться для повреждения предметов
 /// </remarks>
-public class Health 
+public class Health  
 {
-    private SoundManager _soundManager;
     public Health(int health, SoundManager soundManager)
     {
         _health = health;
         _healthMax = _health;
         _soundManager = soundManager;
     }
+    
+    private SoundManager _soundManager;
 
     public event EventHandler OnDead; // Умер (запустим событие когда юнит умер)
     public event EventHandler OnDamageAndHealing; // Получил повреждение или Вылечился (запуск события при получении Урона или Лечении )

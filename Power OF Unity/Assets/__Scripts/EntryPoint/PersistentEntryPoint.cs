@@ -13,16 +13,18 @@ public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
     private VirtualMouseCustom _virtualMouseCustom;
     private MusicManager _musicManager;
     private SoundManager _soundManager;
-    private OptionsMenuUI _optionsMenuUI;
+    private OptionsMenuUI _optionsMenuUI; // убрать отсюда и загружать из ресурсов
     private TooltipUI _tooltipUI;
     private GameInput _gameInput;
+    private JsonSaveableEntity _jsonSaveableEntity;
+    private UnitManager _unitManager;
 
     public void Process(DIContainer rootContainer)
     {
         GetComponent();
         Register(rootContainer);
         Init();
-    }    
+    }
 
     private void GetComponent()
     {
@@ -31,18 +33,21 @@ public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
         _soundManager = GetComponentInChildren<SoundManager>(true);
         _optionsMenuUI = GetComponentInChildren<OptionsMenuUI>(true);
         _tooltipUI = GetComponentInChildren<TooltipUI>(true);
+        _gameInput = new GameInput();
+        _jsonSaveableEntity = new JsonSaveableEntity();
+        _unitManager = new UnitManager(_tooltipUI, _soundManager); // ѕосле реализации сохранени€ можно будет его создавать в каждой сцене
     }
 
     private void Register(DIContainer rootContainer)
-    {      
-        _gameInput = rootContainer.RegisterSingleton(c => new GameInput()).CreateInstance();
-        _soundManager = rootContainer.RegisterSingleton(c => _soundManager).CreateInstance();
-        rootContainer.RegisterSingleton(c => new JsonSaveableEntity());
+    {
+        rootContainer.RegisterSingleton(c => _gameInput);
+        rootContainer.RegisterSingleton(c => _jsonSaveableEntity);
         rootContainer.RegisterSingleton(c => _virtualMouseCustom);
+        rootContainer.RegisterSingleton(c => _soundManager);
         rootContainer.RegisterSingleton(c => _musicManager);
         rootContainer.RegisterSingleton(c => _optionsMenuUI);
         rootContainer.RegisterSingleton(c => _tooltipUI);
-        rootContainer.RegisterSingleton(c => new UnitManager(_tooltipUI));
+        rootContainer.RegisterSingleton(c => _unitManager); 
     }
 
     private void Init()
@@ -51,7 +56,7 @@ public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
         _optionsMenuUI.Init(_gameInput, _soundManager, _musicManager);
         _tooltipUI.Init(_gameInput, _virtualMouseCustom);
     }
-  
-    
+
+
 }
 

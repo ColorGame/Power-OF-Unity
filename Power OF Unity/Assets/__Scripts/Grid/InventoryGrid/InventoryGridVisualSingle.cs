@@ -1,5 +1,7 @@
 using UnityEngine;
-
+/// <summary>
+/// Создается в каждой позиции сетки. И меняет цвет в зависимости от переданных параметров
+/// </summary>
 public class InventoryGridVisualSingle : MonoBehaviour
 {
     [SerializeField] private MeshRenderer _meshRendererQuad; // Будем менять материал для визуализиции сетки инвенторя

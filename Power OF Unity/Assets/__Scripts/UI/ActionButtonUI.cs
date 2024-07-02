@@ -8,80 +8,51 @@ using UnityEngine.UI;
 /// <remarks>
 /// Прикриплена к кнопке
 /// </remarks>
-public class ActionButtonUI : MonoBehaviour 
-{
-    [SerializeField] private TextMeshProUGUI _textMeshPro; // TextMeshProUGUI для пользовательского интерфейса
+public class ActionButtonUI : MonoBehaviour
+{   
     [SerializeField] private Button _button;
     [SerializeField] private GameObject _selectedButtonVisualUI; // Будем включать и выкл. GameObject что бы скрыть или показать рамку кнопки // В инспекторе надо закинуть рамку
-
-    [SerializeField] private Sprite _spriteShoot; // В префабе кнопки закинуть соответствующий спрайт кнопки
-    [SerializeField] private Sprite _spriteGrenade;
-    [SerializeField] private Sprite _spriteMove;
-    [SerializeField] private Sprite _spriteSpin;
-    [SerializeField] private Sprite _spriteSword;
-    [SerializeField] private Sprite _spriteInteract;
-    [SerializeField] private Sprite _spriteHeal;
-    [SerializeField] private Sprite _spriteBinoculars;
-    [SerializeField] private Sprite _spriteHook;
-
-
-    private BaseAction _baseAction;   
-    private Color _textColor;
-    private UnitActionSystem _unitActionSystem;
+    [SerializeField] private Image _placedObjectImage;         
    
-    public void SetBaseAction(BaseAction baseAction, UnitActionSystem unitActionSystem) // Присвоить базовое действие на кнопку (в аргумент передаем наше baseAction)
+    private UnitActionSystem _unitActionSystem;
+    private PlacedObjectTypeSO _placedObjectTypeSO;
+
+    public void SetMoveAction(MoveAction moveAction, UnitActionSystem unitActionSystem) 
+    {     
+        _unitActionSystem = unitActionSystem;        
+        _button.onClick.AddListener(() =>
+        {
+            _unitActionSystem.SetSelectedAction(moveAction); //Установить Выбранное Действие
+        });
+    }
+
+    public void SetBaseActionAndPlacedObjectTypeSO(BaseAction baseAction,PlacedObjectTypeSO placedObjectTypeSO, UnitActionSystem unitActionSystem)
     {
-        _baseAction = baseAction; // Сохраним переданное нам базовое действие
-        _textMeshPro.text = baseAction.GetActionName().ToUpper(); // В название кнопки запишем Полученное имя Активного Действия  //ToUpper()- В верхнем регистре               
-        _textColor = _textMeshPro.color; // Сохраним цвет текста
-
+        _placedObjectTypeSO = placedObjectTypeSO;
         _unitActionSystem = unitActionSystem;
-
+       
+        _placedObjectImage.sprite = placedObjectTypeSO.GetImageButton();
+        _placedObjectImage.rectTransform.localScale = Vector3.one * placedObjectTypeSO.GetScaleImageButton();
+        
         //Добавим событие при нажатии на нашу кнопку
         _button.onClick.AddListener(() =>
         {
+            baseAction.SetPlacedObjectTypeSO(placedObjectTypeSO);
             _unitActionSystem.SetSelectedAction(baseAction); //Установить Выбранное Действие
         });
 
-        switch (_baseAction) // В зависимости от выбранного базового действия присвоить спрайт кнопке
-        {
-            case ShootAction shootAction:
-                _button.image.sprite = _spriteShoot;
-                break;
-            case GrenadeAction grenadeAction:
-                _button.image.sprite = _spriteGrenade;
-                break;
-            case MoveAction moveAction:
-                _button.image.sprite = _spriteMove;
-                break;
-            case SpinAction spinAction:
-                _button.image.sprite = _spriteSpin;
-                break;
-            case HealAction healAction:
-                _button.image.sprite = _spriteHeal;
-                break;
-            case SwordAction swordAction:
-                _button.image.sprite = _spriteSword;
-                break;
-            case InteractAction interactAction:
-                _button.image.sprite = _spriteInteract;
-                break;
-            case SpotterFireAction spotterFireAction:
-                _button.image.sprite = _spriteBinoculars;
-                break;
-            case GrappleAction comboAction:
-                _button.image.sprite = _spriteHook;
-                break;
+        InteractableEnable();
+    }
 
-        }
-    }    
+
 
     public void UpdateSelectedVisual() // (Обновление визуала) Включение и выключение визуализации выбора.(вызывается событием при выборе кнопки базового действия)
     {
         BaseAction selectedBaseAction = _unitActionSystem.GetSelectedAction(); // Получим выбраное действие
-        _selectedButtonVisualUI.SetActive(selectedBaseAction == _baseAction);   // Включить рамку если выбранное действие совподает с действием которое мы назначили на нашу кнопку
-                                                                                // Если не совподает то получим false и рамка отключиться
+                                                                               //_selectedButtonVisualUI.SetActive(_placedObject == selectedBaseAction.GetPlacedObjectTypeSO());   // Включить рамку если выбранное действие совподает с действием которое мы назначили на нашу кнопку // Если не совподает то получим false и рамка отключиться
 
+        if (_placedObjectTypeSO == selectedBaseAction.GetPlacedObjectTypeSO())
+            _button.Select();
         // Можно поменять цвет кнопки при активации кнопки
         /*if (selectedBaseAction == _baseAction) // Если кнопка активна
         {
@@ -95,22 +66,22 @@ public class ActionButtonUI : MonoBehaviour
 
 
     //способ скрыть кнопки когда занят действием
-    private void InteractableEnable() // Включить взаимодействие
+    public void InteractableEnable() // Включить взаимодействие
     {
         _button.interactable = true;
-        _textMeshPro.color = _textColor;
+       
         UpdateSelectedVisual(); // Обновим отображение рамки кнопки в зависимости от активированного действия
     }
 
-    private void InteractableDesabled() // Отключить взаимодействие // Кнопка становиться не активная и меняет цвет(Настраивается в инспекторе color  Desabled)
+    public void InteractableDesabled() // Отключить взаимодействие // Кнопка становиться не активная и меняет цвет(Настраивается в инспекторе color  Desabled)
     {
         _button.interactable = false;
-
-        Color textColor = _textColor; // Сохраним в локальную переменную цвет текста
-        textColor.a = 0.1f; // Изменим значение альфа канала
-        _textMeshPro.color = textColor; // Изменим текущий цвет текса (сдел прозрачным)
-
         _selectedButtonVisualUI.SetActive(false); //Отключим рамку
+
+        /*Color textColor = _textColor; // Сохраним в локальную переменную цвет текста
+        textColor.a = 0.1f; // Изменим значение альфа канала
+        _textMeshPro.color = textColor; // Изменим текущий цвет текса (сдел прозрачным)*/
+
     }
 
     public void HandleStateButton(bool isBusy) // Обработать состояние кнопки

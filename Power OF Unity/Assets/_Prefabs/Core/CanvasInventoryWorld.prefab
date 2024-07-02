@@ -1314,7 +1314,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &184017063774223903
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3997,7 +3997,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -5111,7 +5111,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5626137873303912141}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6955bc4b3e0e9d24caf5528b3aa00d30, type: 3}
+  m_Script: {fileID: 11500000, guid: 1cd35d2310efab7429ab75273fa7844c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5687983636235380462
@@ -6225,7 +6225,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -6630,7 +6630,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -7209,7 +7209,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -7589,17 +7589,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gridParametersArray:
-  - gridName: 1
+  - slot: 1
     width: 5
     height: 5
     cellSize: 0.25
     anchorGridTransform: {fileID: 7539607776801565352}
-  - gridName: 2
+  - slot: 2
     width: 5
     height: 2
     cellSize: 0.25
     anchorGridTransform: {fileID: 5057143155182773666}
-  - gridName: 3
+  - slot: 3
     width: 3
     height: 2
     cellSize: 0.25

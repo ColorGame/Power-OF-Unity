@@ -4,14 +4,7 @@ using UnityEngine;
 
 
 public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут выполнить толька два соседних юнита одновременно
-{
-    // static - обозначает что event будет существовать для всего класса не зависимо от того скольго у нас созданно Юнитов.                                                                                
-    public static event EventHandler<OnComboEventArgs> OnAnyUnitComboStateChanged; // У любого юнита изменилось состояние Комбо         
-    public class OnComboEventArgs : EventArgs // Расширим класс событий, чтобы в аргументе события передать нужных юнитов
-    {
-        public Unit partnerUnit; // Юнит партнер на котором надо изменить состояние
-        public State state; // Состояние
-    }
+{  
 
     public static event EventHandler OnAnyUnitStunComboAction; // Любой Юнит Оглушен в Комбо Действии
 
@@ -34,7 +27,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
     private Unit _unitEnemy;  // Юнит ВРАГ    
     private GridPositionXZ _targetPointEnemyGridPosition; // Точка перемещения врага
     private Transform _instantiateFXPrefab; // Созданный префаб частичек
-    private Rope _unitRope;
+    
     private RopeRanderer _ropeRandererUnit;
     private RopeRanderer _ropeRandererPartner;
 
@@ -43,25 +36,17 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
     private int _maxComboEnemyDistance = 5; //Максимальная дистанция Комбо Для поиска Врага//НУЖНО НАСТРОИТЬ//
     private float zOffset = 0; // 
 
-    protected override void Awake()
-    {
-        base.Awake();
-        if (TryGetComponent<Rope>(out Rope unitRope))
-        {
-            _unitRope = unitRope;
-        }
-    }
+    
 
-    protected override void Start()
+    public override void SetupForSpawn(Unit unit)
     {
-        base.Start();
+       base.SetupForSpawn(unit);
 
         _state = State.ComboSearchPartner; // Установим состояние по умолчанию т.к. используем в методе GetValidActionGridPositionList
-        _ropeRandererUnit = _unitRope.GetRopeRanderer();
-
-        GrappleAction.OnAnyUnitComboStateChanged += ComboAction_OnAnyUnitComboStateChanged;
+        _ropeRandererUnit = _unit.GetUnitRope().GetRopeRanderer();
     }
 
+   
 
     private void Update()
     {
@@ -116,11 +101,8 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
                 _instantiateFXPrefab.LookAt(_unitPartner.GetTransformPosition() + Vector3.up * 1.7f); // И разверну в сторону партнера
 
                 _state = State.ComboSearchEnemy;
-                OnAnyUnitComboStateChanged?.Invoke(this, new OnComboEventArgs // У юнита партнера тоже изменим состоянеи, что бы он смог правильно потратить очки действия (они GetActionPointCost() зависят от состояния)
-                {
-                    partnerUnit = _unitPartner,
-                    state = _state
-                });
+                _unitPartner.GetAction<GrappleAction>().SetState(_state); // У юнита партнера тоже изменим состоянеи
+
                 ActionComplete(); // Завершим действие выбора ПАРТНЕРА и ВЫБЕРИМ ЦЕЛЬ  (выполним делегат ClearBusy переданный из класса UnitActionSystem, а в UnitActionSystem_OnBusyChanged из класса ActionButtonSystemUI сделаем доп проверку, что-бы кнопки оставались выключенными но юнитов можно выбирать)
                 break;
 
@@ -130,26 +112,19 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
                 break;
             case State.ComboStart:
                 _state = State.ComboAfter;
-                OnAnyUnitComboStateChanged?.Invoke(this, new OnComboEventArgs // У юнита партнера тоже изменим состоянеи, что бы он смог выйти из комбо цикла
-                {
-                    partnerUnit = _unitPartner,
-                    state = _state
-                });
+                _unitPartner.GetAction<GrappleAction>().SetState(_state);// У юнита партнера тоже изменим состоянеи, что бы он смог выйти из комбо цикла               
+                
                 float ComboAfterStateTime = 0.5f;
                 _stateTimer = ComboAfterStateTime;
                 break;
 
             case State.ComboAfter: // В этом состоянии кнопки UI появляются
                 Destroy(_instantiateFXPrefab.gameObject);
-                _unitPartner.GetAction<GrappleAction>().GetUnitRope().HideRope();
-                _unitRope.HideRope();
+                _unitPartner.GetUnitRope().HideRope();
+                _unit.GetUnitRope().HideRope();
 
                 _state = State.ComboSearchPartner;
-                OnAnyUnitComboStateChanged?.Invoke(this, new OnComboEventArgs // У юнита партнера тоже изменим состоянеи, что бы он смог выйти из комбо цикла
-                {
-                    partnerUnit = _unitPartner,
-                    state = _state
-                });
+                _unitPartner.GetAction<GrappleAction>().SetState(_state);// У юнита партнера тоже изменим состоянеи, что бы он смог выйти из комбо цикла
                 ActionComplete(); // Вызовим базовую функцию ДЕЙСТВИЕ ЗАВЕРШЕНО
                 break;
         }
@@ -169,7 +144,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
         if (Vector3.Dot(unitEnemyDirection, transform.forward) >= 0.95f) // Точка возвращает 1, если они указывают в одном и том же направлении, -1, если они указывают в совершенно противоположных направлениях, и ноль, если векторы перпендикулярны.
         {
             //Стреляем веревкой
-            Vector3 enemuAimPoint = _unitEnemy.GetAction<ShootAction>().GetAimPoinTransform().position; // Точка прицеливания уврага
+            Vector3 enemuAimPoint = _unitEnemy.GetHeadTransform().position; // Точка прицеливания уврага
             // Развернем веревку в сторону врага (будем работать с локальной Z)
             _ropeRandererPartner.transform.LookAt(enemuAimPoint);
             _ropeRandererUnit.transform.LookAt(enemuAimPoint);
@@ -189,7 +164,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
             if (zOffset >= Vector3.Distance(_unitPartner.GetTransformPosition(), _unitEnemy.GetTransformPosition()) &&
                 zOffset >= Vector3.Distance(_unit.GetTransformPosition(), _unitEnemy.GetTransformPosition())) // Веревка долетела до врага
             {
-                _soundManager.PlayOneShot(SoundName.HookShoot);
+                _unit.GetSoundManager().PlayOneShot(SoundName.HookShoot);
                 NextState(); //Следующие состояние
             }
         }
@@ -197,7 +172,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
 
     private void PullEnemy() // Тяним врага
     {
-        Vector3 targetPointEnemyWorldPosition = _levelGrid.GetWorldPosition(_targetPointEnemyGridPosition); // Получим позицию куда надо переместить врага                
+        Vector3 targetPointEnemyWorldPosition = _unit.GetLevelGrid().GetWorldPosition(_targetPointEnemyGridPosition); // Получим позицию куда надо переместить врага                
 
         Vector3 moveEnemyDirection = (targetPointEnemyWorldPosition - _unitEnemy.GetTransformPosition()).normalized; // Направление движения, еденичный вектор
 
@@ -219,19 +194,11 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
         {
             float stunPercent = 0.3f; // Процент ОГЛУШЕНИЯ
             _unitEnemy.GetActionPointsSystem().Stun(stunPercent); //НУЖНО НАСТРОИТЬ// Оглушим
-            _soundManager.PlayOneShot(SoundName.HookPull);
+            _unit.GetSoundManager().PlayOneShot(SoundName.HookPull);
             NextState(); //Следующие состояние
             _unitEnemy.UpdateGridPosition(); // Обновим сеточную позицию у врага которого перетащили
         }
-    }
-
-    private void ComboAction_OnAnyUnitComboStateChanged(object sender, OnComboEventArgs e)
-    {
-        if (e.partnerUnit == _unit) // Есля Партнер для комбо - Это Я то
-        {
-            SetState(e.state); // Изменить мое состояние
-        };
-    }
+    }    
 
     public override string GetActionName() // Присвоить базовое действие //целиком переопределим базовую функцию
     {
@@ -262,7 +229,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
                 GridPositionXZ testGridPosition = unitGridPosition + offsetGridPosition; // Тестируемая Сеточная позиция
                 Unit targetUnit = null;
 
-                if (!_levelGrid.IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
+                if (!_unit.GetLevelGrid().IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
                 {
                     continue; // continue заставляет программу переходить к следующей итерации цикла 'for' игнорируя код ниже
                 }
@@ -277,14 +244,14 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
                             return validGridPositionList; // Вернкм пустой список
                         }
 
-                        if (!_levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточное позицию где нет юнитов 
+                        if (!_unit.GetLevelGrid().HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточное позицию где нет юнитов 
                         {
                             // Позиция сетки пуста, нет Юнитов
                             continue;
                         }
 
                         // Если ищем Партнера то ИСКЛЮЧИМ ВРАГОВ
-                        targetUnit = _levelGrid.GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции  // GetUnitAtGridPosition может вернуть null но в коде выше мы исключаем нулевые позиции, так что проверка не нужна                        
+                        targetUnit = _unit.GetLevelGrid().GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции  // GetUnitAtGridPosition может вернуть null но в коде выше мы исключаем нулевые позиции, так что проверка не нужна                        
                         if (targetUnit.IsEnemy() != _unit.IsEnemy()) // Если тестируемый не в моей команде (игнорируем его)
                         {
                             continue;
@@ -314,21 +281,21 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
                             continue;
                         }
 
-                        if (!_levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточное позицию где нет юнитов 
+                        if (!_unit.GetLevelGrid().HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточное позицию где нет юнитов 
                         {
                             // Позиция сетки пуста, нет Юнитов
                             continue;
                         }
 
                         // Если ищем врага то ИСКЛЮЧИМ ДРУЖЕСТВЕННЫХ ЮНИТОВ
-                        targetUnit = _levelGrid.GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции // GetUnitAtGridPosition может вернуть null но в коде выше мы исключаем нулевые позиции, так что проверка не нужна
+                        targetUnit = _unit.GetLevelGrid().GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции // GetUnitAtGridPosition может вернуть null но в коде выше мы исключаем нулевые позиции, так что проверка не нужна
                         if (targetUnit.IsEnemy() == _unit.IsEnemy()) // Если тестируемый в одной команде (игнорируем его)
                         {
                             continue;
                         }
 
                         // ПРОВЕРИМ НА ПРОСТРЕЛИВАЕМОСТЬ КРЮКОМ до цели 
-                        Vector3 unitWorldPosition = _levelGrid.GetWorldPosition(unitGridPosition); // Переведем в мировые координаты переданную нам сеточную позицию Юнита  
+                        Vector3 unitWorldPosition = _unit.GetLevelGrid().GetWorldPosition(unitGridPosition); // Переведем в мировые координаты переданную нам сеточную позицию Юнита  
                         Vector3 TestPositionDirection = (targetUnit.GetWorldPosition() - unitWorldPosition).normalized; //Нормализованный Вектор Направления выстрека крюка
                         float heightRaycast = 1.7f; // Высота выстрела луча на уровне головы (есле не видим значит пропустим)
                         if (Physics.Raycast(
@@ -344,22 +311,22 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
 
                     case State.ComboStart:
 
-                        if (_levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточное позицию С ЮНИТАМИ. бедем перемещать захваченного юнита на пустую
+                        if (_unit.GetLevelGrid().HasAnyUnitOnGridPosition(testGridPosition)) // Исключим сеточное позицию С ЮНИТАМИ. бедем перемещать захваченного юнита на пустую
                         {
                             // Там Юнит - надо Пропустить
                             continue;
                         }
 
                         /*//если в этой позиции нет узла пути GraphNode  значит эта GridPositionXZ недоступна для хотьбы (стена, колона) или висит в воздухе)              
-                        if (!_levelGrid.WalkableNode(testGridPosition))
+                        if (!_unit.GetLevelGrid().WalkableNode(testGridPosition))
                         {
                             continue; // Пропустим эту позицию
                         }*/
 
 
                         // ПРОВЕРИМ НА ПРОСТРЕЛИВАЕМОСТЬ КРЮКОМ до цели
-                        unitWorldPosition = _levelGrid.GetWorldPosition(unitGridPosition); // Переведем в мировые координаты переданную нам сеточную позицию Юнита
-                        Vector3 testWorldPosition = _levelGrid.GetWorldPosition(testGridPosition);// 
+                        unitWorldPosition = _unit.GetLevelGrid().GetWorldPosition(unitGridPosition); // Переведем в мировые координаты переданную нам сеточную позицию Юнита
+                        Vector3 testWorldPosition = _unit.GetLevelGrid().GetWorldPosition(testGridPosition);// 
                         TestPositionDirection = (testWorldPosition - unitWorldPosition).normalized; //Нормализованный Вектор Направления выстрела крюка
                         heightRaycast = 0.2f; // Высота выстрела луча сделаем низко что бы попасть в низкие объекты. (не стал стрелять сверху т.к. объект может быть смещен относительно центра сеточной позийии)
                         if (Physics.Raycast(
@@ -372,7 +339,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
                             continue;
                         }
 
-                        //Исключим сеточные позиции где нельзя ходить (есть препятствия стены объекты) // Проверил в начале с помощъю  if (_levelGrid.GetGridNode(testGridPosition) == null) 
+                        //Исключим сеточные позиции где нельзя ходить (есть препятствия стены объекты) // Проверил в начале с помощъю  if (_unit.GetLevelGrid().GetGridNode(testGridPosition) == null) 
 
                         /*if (PathfindingMonkey.Instance.GetGridPositionInAirList().Contains(testGridPosition))
                         {
@@ -400,17 +367,17 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
         {
             default:
             case State.ComboSearchPartner: // поиска Партнера
-                _unitPartner = _levelGrid.GetUnitAtGridPosition(gridPosition); // Получим юнита для КОМБО  
-                _ropeRandererPartner = _unitPartner.GetAction<GrappleAction>().GetUnitRope().GetRopeRanderer(); // Получим у партнера Рендеринг Веревки
+                _unitPartner = _unit.GetLevelGrid().GetUnitAtGridPosition(gridPosition); // Получим юнита для КОМБО  
+                _ropeRandererPartner = _unitPartner.GetUnitRope().GetRopeRanderer(); // Получим у партнера Рендеринг Веревки
                 float ComboSearchPartnerStateTime = 0.5f; //Поиск ПАРТНЕРА.  Для избежания магических чисель введем переменную  Продолжительность Состояния Поиск ПАРТНЕРА ..//НУЖНО НАСТРОИТЬ//
                 _stateTimer = ComboSearchPartnerStateTime;
                 break;
 
             case State.ComboSearchEnemy:  // Если ищем врага то                 
                 _unitPartner.GetActionPointsSystem().SpendActionPoints(GetActionPointCost()); // СПИШЕМ У ПАРТНЕРА ОЧКИ ДЕЙСТВИЯ (у меня уже списали в HandleSelectedAction() в классе UnitActionSystem)
-                _unitEnemy = _levelGrid.GetUnitAtGridPosition(gridPosition); // Сохраняем врага                
-                _unitPartner.GetAction<GrappleAction>().GetUnitRope().ShowRope();
-                _unitRope.ShowRope();
+                _unitEnemy = _unit.GetLevelGrid().GetUnitAtGridPosition(gridPosition); // Сохраняем врага                
+                _unitPartner.GetUnitRope().ShowRope();
+                _unit.GetUnitRope().ShowRope();
                 // Время задам большим т.к. растояния разные, но когда достигнута целевая точка я запущу NextStste()
                 float ComboSearchEnemyStateTime = 5f;
                 _stateTimer = ComboSearchEnemyStateTime;
@@ -470,10 +437,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
         return _state = state;
     }
 
-    public Rope GetUnitRope()
-    {
-        return _unitRope;
-    }
+ 
 
 
 

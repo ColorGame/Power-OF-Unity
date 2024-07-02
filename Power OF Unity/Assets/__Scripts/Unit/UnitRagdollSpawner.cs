@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class UnitRagdollSpawner : MonoBehaviour // Юнит Тряпичная кукла Зарождение// Висит на юните
+public class UnitRagdollSpawner : MonoBehaviour, ISetupForSpawn // Юнит Тряпичная кукла Зарождение// Висит на юните
 {
     [SerializeField] private Transform _ragdollPrefab; // Префаб тряпичной куклы
     [SerializeField] private Transform _originalRootBone; // Оригинальная Корневая Кость(юнита) // В инспекторе закинуть кость юнита под названием Root 

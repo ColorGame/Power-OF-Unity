@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-
-public class Rope : MonoBehaviour // Веревка Юнита
+/// <summary>
+/// Веревка Юнита
+/// </summary>
+public class Rope : MonoBehaviour
 {
     private RopeRanderer _ropeRanderer;
 

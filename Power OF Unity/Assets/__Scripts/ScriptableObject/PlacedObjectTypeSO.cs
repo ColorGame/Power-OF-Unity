@@ -9,7 +9,7 @@ using UnityEngine;
 /// </summary>
 /// <remarks>
 /// abstract - НЕЛЬЗЯ создать экземпляр данного класса.
-/// На практике вы, скорее всего, будете использовать подкласс, такой как "WeaponPlacedObjectSO"  "ItemPlacedObjectSO" или "ModulePlacedObjectSO" "EquipmentPlacedObjectSO".
+/// На практике вы, скорее всего, будете использовать подкласс, такой как "SwordTypeSO"  "ShootingWeaponTypeSO" или "GrenadeTypeSO" "HealItemTypeSO".
 /// </remarks>
 public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallbackReceiver//ISerializationCallbackReceiver Интерфейс для получения обратных вызовов при сериализации и десериализации.Будем использовать для создания ID при сериализации
                                                                                            //Сериализацией называется процесс записи состояния объекта (с возможной последующей передачей) в поток. Десериализация это процесс обратный сериализации – из данных,
@@ -20,28 +20,38 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
     [Tooltip("Тип размещаемого объекта")]
     [SerializeField] private PlacedObjectType _placedObjectType;
     [Tooltip("Префаб размещаемого объекта")]
-    [SerializeField] private Transform _prefab;
+    [SerializeField] private Transform _prefab; 
     [Tooltip("Визуальная часть размещаемого объекта")]
     [SerializeField] private Transform _visual;
     [Tooltip("Сколько занимает клеток в ширину Х")]
-    [SerializeField] private int _widthX;
+    [Range(1, 5)][SerializeField] private int _widthX;
     [Tooltip("Сколько занимает клеток в высоту У")]
-    [SerializeField] private int _heightY;
+    [Range(1, 2)][SerializeField] private int _heightY;
+    [Tooltip("Изображение для кнопки")]
+    [SerializeField] private Sprite _imageButton;
+    /*[Tooltip("Масштаб изображение для кнопки")]
+    [SerializeField] private float _scaleImageButton;*/
     [Tooltip("Список слотов инвенторя на которые можно разместить наш объект")]
     [SerializeField] private List<InventorySlot> _canPlacedOnSlotList;
     [Tooltip("Вес размещаемого объекта в килограммах")]
     [Range(0, 50)][SerializeField] private int _weight;
 
-    private BaseAction[] _baseActionArray; // Список базовых действий прикрипленных к данному предмету их может быть несколько (например GrappleComboAction и GrappleAction)
 
     // КЭШИРОВАННОЕ СОСТАЯНИЕ
     static Dictionary<string, PlacedObjectTypeSO> placedObjectLookupCache; //кэшированный словарь поиска предмта типа PlacedObjectTypeSO// Статический словарь (Ключ-ID номер предмета, Значение)
 
 
-    public virtual PlacedObjectTooltip GetPlacedObjectTooltip() // Получить всплывающую подсказку длф данного размещенного объекта // virtual- переопределим в наследуемых классах
+    public virtual PlacedObjectTooltip GetPlacedObjectTooltip() // Получить всплывающую подсказку для данного размещенного объекта // virtual- переопределим в наследуемых классах
     {
         return PlacedObjectTypeBaseStatsSO.Instance.GetTooltipPlacedObject(_placedObjectType);
     }
+    /// <summary>
+    /// Получить базовое действие для данного PlacedObjectTypeSO
+    /// </summary>
+    /// <remarks>
+    /// В аргумент передаюм юнита у которого хотим получить BaseAction
+    /// </remarks>
+    public abstract BaseAction GetAction(Unit unit);
 
     /// <summary>
     /// Список сеточных позиций которые занимает объект относительно переданной сеточной позиции
@@ -89,14 +99,12 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
     /// </summary>
     public List<InventorySlot> GetCanPlacedOnSlotList() { return _canPlacedOnSlotList; }
 
-    public BaseAction[] GetBaseActionsArray()
-    {
-        if(_baseActionArray.Length == 0) // Если еще не заполнена то 
-        {
-          return  _baseActionArray = _prefab.GetComponents<BaseAction>();
-        }
-        return _baseActionArray;
-    }
+    public Sprite GetImageButton() { return _imageButton; }
+    /// <summary>
+    /// Масштаб изображения. Все спрайты имеют одинвковый размер 512х256, поэтому маленькие предметы в виде ножа гранаты ... надо отмаштабировать
+    /// </summary>
+    public float GetScaleImageButton() { return _widthX/5f; } // 5 - это максимальный размер ширины сетки инвенторя (если в ширину предмет занимает 5 клеток то Scale=1)
+
 
     void ISerializationCallbackReceiver.OnBeforeSerialize()
     {

@@ -24,9 +24,7 @@ public abstract class UnitTypeSO : ScriptableObject, ISerializationCallbackRecei
     [Header("Дистанция движения.\nИзмеряется в узлах сетки, включает узел с самими Юнитом")]
     [SerializeField] private int _basicMoveDistance = Constant.MOVE_DISTSNCE_MAX;
     [Header("Префаб ядра юнита со скриптами")]
-    [SerializeField] private Transform _unitCorePrefab;
-   
-    private List<BaseAction> _baseActionList; // Список базовых действий прикрипленные к предметам в списке _basicPlacedObjectTypeSOArray
+    [SerializeField] private Transform _unitCorePrefab;  
 
     public string GetName() { return _name; }
     public int GetBasicHealth() { return _basicHealth; }

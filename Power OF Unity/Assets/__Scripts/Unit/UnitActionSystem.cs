@@ -20,17 +20,17 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
     }
 
 
-    [SerializeField] private Unit _selectedUnit; // Выбранный юнит (ПО УМОЛЧАНИЮ).Ниже сделаем общедоступный метод который будет возвращать ВЫБРАННОГО ЮНИТА
-    [SerializeField] private LayerMask _unitLayerMask; // маска слоя юнитов (появится в ИНСПЕКТОРЕ) НАДО ВЫБРАТЬ Units
+    private LayerMask _unitLayerMask; // маска слоя юнитов (появится в ИНСПЕКТОРЕ) НАДО ВЫБРАТЬ Units
+    private Unit _selectedUnit; // Выбранный юнит (ПО УМОЛЧАНИЮ).Ниже сделаем общедоступный метод который будет возвращать ВЫБРАННОГО ЮНИТА
 
     private GameInput _gameInput;
-    private BaseAction _selectedAction; // Выбранное Действие// Будем передовать в Button
+    private BaseAction _selectedAction; // Выбранное Действие// Будем передовать в Button   
     private bool _isBusy; // Занят (булевая переменная для исключения одновременных действий)
     private UnitManager _unitManager;
     private TurnSystem _turnSystem;
     private LevelGrid _levelGrid;
     private MouseOnGameGrid _mouseOnGameGrid;
-      
+
     public void Init(GameInput gameInput, UnitManager unitManager, TurnSystem turnSystem, LevelGrid levelGrid, MouseOnGameGrid mouseOnGameGrid)
     {
         _gameInput = gameInput;
@@ -42,10 +42,12 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
 
     private void Start()
     {
+        _unitLayerMask = LayerMask.GetMask("Units");
+        _selectedUnit = _unitManager.GetUnitFriendList()[0];
         SetSelectedUnit(_selectedUnit, _selectedUnit.GetAction<MoveAction>()); // Присвоить(Установить) выбранного юнита, Установить Выбранное Действие,   // При старте в _targetUnit передается юнит по умолчанию 
 
 
-        // Пока сделала в старте так как возникает гонка
+        // Пока сделал в старте так как возникает гонка
         _gameInput.OnClickAction += GameInput_OnClickAction; // Подпишемся на событие клик по мыши или геймпаду
         _unitManager.OnAnyUnitDeadAndRemoveList += UnitManager_OnAnyUnitDeadAndRemoveList; //Подпишемся на событие Любой Юнит Умер И Удален из Списка
         _turnSystem.OnTurnChanged += TurnSystem_OnTurnChanged; // Подпишемся Ход Изменен
@@ -202,15 +204,8 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
 
         OnSelectedActionChanged?.Invoke(this, EventArgs.Empty); // "?"- проверяем что !=0. Invoke вызвать (this-ссылка на объект который запускает событие "отправитель" а класс ActionButtonSystemUI  LevelGridVisual будет его прослушивать "обрабатывать")
     }
-    public BaseAction GetSelectedAction() // Вернуть выбранное действие
-    {
-        return _selectedAction;
-    }
-
-    public Unit GetSelectedUnit() // Сделаем общедоступный метод который будет возвращать ВЫБРАННОГО ЮНИТА (что бы не делать переменную публичной _targetUnit)
-    {
-        return _selectedUnit;
-    }
+    public BaseAction GetSelectedAction() { return _selectedAction; }// Вернуть выбранное действие
+    public Unit GetSelectedUnit() { return _selectedUnit; }
 
 
 

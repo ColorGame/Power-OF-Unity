@@ -3,11 +3,11 @@ using UnityEngine;
 /// <summary>
 /// Ёкипирует юнита предметами из его инвентар€ (создает и удал€ет прикрипленные объекты). 
 /// </summary>
-/// <remarks>
-///  омпонент должен быть прикриплен к юниту
-/// </remarks>
 public class UnitEquipment 
 {
+    /// <summary>
+    /// Ёкипирует юнита предметами из его инвентар€ (создает и удал€ет прикрипленные объекты). 
+    /// </summary>
     public UnitEquipment(Unit unit)
     {
         _unit = unit;

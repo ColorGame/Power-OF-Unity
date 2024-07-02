@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -12,9 +11,11 @@ public class Unit
 {
     public Unit(UnitTypeSO unitTypeSO, SoundManager soundManager)
     {
-        _healthSystem = new Health(_unitTypeSO.GetBasicHealth(), soundManager);
+        _soundManager = soundManager;
+        _healthSystem = new Health(unitTypeSO.GetBasicHealth(), _soundManager);
         _actionPointsSystem = new ActionPoints(this);
-        _baseActionsList = new List<BaseAction>();
+        _unitInventory = new UnitInventory(this);
+        _unitEquipment = new UnitEquipment(this);
 
         switch (unitTypeSO)
         {
@@ -25,15 +26,9 @@ public class Unit
                 break;
             case UnitEnemySO unitEnemySO:
                 _unitTypeSO = unitEnemySO;
-                _baseActionsList = unitEnemySO.GetBaseActionsList();
                 _isEnemy = true;
                 break;
         }
-
-        _unitInventory = new UnitInventory(this);
-        _unitEquipment = new UnitEquipment(this);
-                
-        _soundManager = soundManager;
     }
 
 
@@ -44,48 +39,52 @@ public class Unit
     private bool _isEnemy;
     private GridPositionXZ _gridPosition;
 
-    private UnitTypeSO _unitTypeSO;
-    private Health _healthSystem;
-    private ActionPoints _actionPointsSystem;
-    private UnitInventory _unitInventory;
-    private UnitEquipment _unitEquipment;
-    private List<BaseAction> _baseActionsList; // Список базовых действий // Будем использовать при создании кнопок   
+    readonly UnitTypeSO _unitTypeSO;
+    readonly Health _healthSystem;
+    readonly ActionPoints _actionPointsSystem;
+    readonly UnitInventory _unitInventory;
+    readonly UnitEquipment _unitEquipment;
+    private BaseAction[] _baseActionsArray; // Массив базовых действий 
     private UnitArmorType _unitAmorType; //Тип брони юнита        
     private Transform _unitCoreTransform;
 
     private LevelGrid _levelGrid;
     private TurnSystem _turnSystem;
-    private SoundManager _soundManager;
+    readonly SoundManager _soundManager;
     private UnitActionSystem _unitActionSystem;
+    private HandleAnimationEvents _handleAnimationEvents;
+    private CameraFollow _cameraFollow;
+    private Rope _unitRope;
+    private Transform _headTransform;
 
     /// <summary>
     /// Настройка ЮНИТА при спанвне на Уровня. (Настроим transform и gridPosition ...)
     /// </summary>   
-    public void SetupForSpawn( LevelGrid levelGrid, TurnSystem turnSystem, Transform unitCoreTransform, CameraFollow cameraFollow, UnitActionSystem unitActionSystem)
+    public void SetupForSpawn(LevelGrid levelGrid, TurnSystem turnSystem, Transform unitCoreTransform, CameraFollow cameraFollow, UnitActionSystem unitActionSystem)
     {
         // Когда Unit спавниться, настроим его положение в сетке и добовим к GridObjectUnitXZ(объектам сетки) в данной ячейки         
-        
+
         _levelGrid = levelGrid;
         _turnSystem = turnSystem;
         _unitActionSystem = unitActionSystem;
+        _unitCoreTransform = unitCoreTransform;
+        _cameraFollow = cameraFollow;
+        _handleAnimationEvents = unitCoreTransform.GetComponentInChildren<HandleAnimationEvents>(true);
+        _baseActionsArray = unitCoreTransform.GetComponents<BaseAction>();
+        _unitRope = unitCoreTransform.GetComponent<Rope>();
+        _headTransform = unitCoreTransform.Find("Head");
+
         _gridPosition = _levelGrid.GetGridPosition(unitCoreTransform.position); //Получим сеточную позицию в месте спавна
         _levelGrid.AddUnitAtGridPosition(_gridPosition, this); //Добавим юнита в нашу сетку
-        _unitCoreTransform = unitCoreTransform;
 
-        MoveAction moveAction = unitCoreTransform.GetComponent<MoveAction>();
-        UnitWorldUI unitWorldUI = unitCoreTransform.GetComponentInChildren<UnitWorldUI>(true);
-        LookAtCamera lookAtCamera = unitCoreTransform.GetComponentInChildren<LookAtCamera>(true);
-        HandleAnimationEvents handleAnimationEvents = unitCoreTransform.GetComponentInChildren<HandleAnimationEvents>(true);
-        UnitRagdollSpawner unitRagdollSpawner = unitCoreTransform.GetComponentInChildren<UnitRagdollSpawner>(true);
+        ISetupForSpawn[] iSetupForSpawnArray = unitCoreTransform.GetComponentsInChildren<ISetupForSpawn>(true);   // Найдем прикрепленные к unitCoreTransform, или к его дочерним объектам, все классы, реализующие интерфейс ISetupForSpawn.             
+        foreach (var iSetupForSpawn in iSetupForSpawnArray)
+        {
+            iSetupForSpawn.SetupForSpawn(this);
+        }
 
-        _baseActionsList.Add(moveAction); // Добавим передвижение в базовые действия
-        moveAction.SetupForSpawn(this, unitActionSystem, _unitTypeSO.GetBasicMoveDistance());
-        unitWorldUI.SetupForSpawn(this, unitActionSystem, _turnSystem);
-        lookAtCamera.SetupForSpawn(cameraFollow);
-        handleAnimationEvents.SetupForSpawn(this);
-        unitRagdollSpawner.SetupForSpawn(this);
         _healthSystem.SetupForSpawn();
-        _actionPointsSystem.SetupForSpawn(_turnSystem);
+        _actionPointsSystem.SetupForSpawn();
 
         _healthSystem.OnDead += HealthSystem_OnDead; // подписываемся на Event. Будет выполняться при смерти юнита       
 
@@ -102,16 +101,7 @@ public class Unit
         _levelGrid.RemoveUnitAtGridPosition(_gridPosition, this);
         _actionPointsSystem.SetupOnDestroyAndQuit();
 
-        _healthSystem.OnDead -= HealthSystem_OnDead;        
-    }
-
-    public void AddBaseActionsList(BaseAction baseAction)
-    {
-        _baseActionsList.Add(baseAction);
-    }
-    public void RemoveBaseActionsList(BaseAction baseAction)
-    {
-        _baseActionsList.Remove(baseAction);
+        _healthSystem.OnDead -= HealthSystem_OnDead;
     }
 
     public void UpdateGridPosition()
@@ -129,7 +119,7 @@ public class Unit
 
     public T GetAction<T>() where T : BaseAction //Фунцкция для получения любого типа базового действия // Создадим метод с GENERICS и ограничим типами в  BaseAction
     {
-        foreach (BaseAction baseAction in _baseActionsList) // Переберем Массив базовых действий
+        foreach (BaseAction baseAction in _baseActionsArray) // Переберем Массив базовых действий
         {
             if (baseAction is T) // если T совподает с каким нибудь baseAction то ...
             {
@@ -149,9 +139,9 @@ public class Unit
         return GetTransformPosition();
     }
 
-    public List<BaseAction> GetBaseActionsList() // Получить Список базовых действий
+    public BaseAction[] GetBaseActionsArray() // Получить Список базовых действий
     {
-        return _baseActionsList;
+        return _baseActionsArray;
     }
 
     public bool IsEnemy() // Раскроем поле
@@ -169,17 +159,14 @@ public class Unit
         OnAnyUnitDead?.Invoke(this, EventArgs.Empty); // Запустим событие Любой Мертвый Юнит. Событие статичное поэтому будет выполняться для любого мертвого Юнита      
     }
 
-
-
-
     public Health GetHealthSystem() { return _healthSystem; }
     public ActionPoints GetActionPointsSystem() { return _actionPointsSystem; }
     public UnitInventory GetUnitInventory() { return _unitInventory; }
     public UnitEquipment GetUnitEquipment() { return _unitEquipment; }
     public Vector3 GetTransformPosition() { return _unitCoreTransform.position; }
-    public void SetTransformPosition(Vector3 position) {  _unitCoreTransform.position = position; }
+    public void SetTransformPosition(Vector3 position) { _unitCoreTransform.position = position; }
     public Transform GetTransform() { return _unitCoreTransform; }
-    public void SetTransformForward(Vector3 forward) {  _unitCoreTransform.forward = forward; }
+    public void SetTransformForward(Vector3 forward) { _unitCoreTransform.forward = forward; }
     public T GetUnitTypeSO<T>() where T : UnitTypeSO //Фунцкция для получения любого наследника от UnitTypeSO
     {
         if (_unitTypeSO is T unit_T_SO)
@@ -188,11 +175,15 @@ public class Unit
         }
         return null; // Если нет совпадений то вернем ноль
     }
+    public UnitTypeSO GetUnitTypeSO() { return _unitTypeSO; }
     public UnitArmorType GetUnitArmorType() { return _unitAmorType; }
     public TurnSystem GetTurnSystem() { return _turnSystem; }
     public SoundManager GetSoundManager() { return _soundManager; }
-    public UnitActionSystem GetUnitActionSystem() { return _unitActionSystem; } 
-    public LevelGrid GetLevelGrid() { return _levelGrid;}
-
+    public UnitActionSystem GetUnitActionSystem() { return _unitActionSystem; }
+    public LevelGrid GetLevelGrid() { return _levelGrid; }
+    public HandleAnimationEvents GetHandleAnimationEvents() { return _handleAnimationEvents; }
+    public CameraFollow GetCameraFollow() { return _cameraFollow; }
+    public Rope GetUnitRope() { return _unitRope; }
+    public Transform GetHeadTransform() { return _headTransform; }
 }
 

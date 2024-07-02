@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Размещенный объект. Создаем и размещаем объект на сетке
+/// Экземпляр размещенного объекта(создаем экземпляр на сетке, в миру, на канвасе).
 /// </summary>
 /// <remarks>
 /// Прикрипить к перетаскиваемому объекту 
 /// </remarks>
 public class PlacedObject : MonoBehaviour 
 {
-    public static PlacedObject CreateInGrid(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY, Vector2Int gridPosition, PlacedObjectTypeSO placedObjectTypeSO, Transform parent , InventoryGrid inventoryGrid) // (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру)
+    public static PlacedObject CreateInGrid(GridSystemXY<GridObjectInventoryXY> gridSystemXY, Vector2Int gridPosition, PlacedObjectTypeSO placedObjectTypeSO, Transform parent , InventoryGrid inventoryGrid) // (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру)
     {        
         Vector3 offset = placedObjectTypeSO.GetOffsetVisualFromParent(); // вычислим смещение чтобы создать объект в центре worldPosition
         Vector3 worldPosition = inventoryGrid.GetWorldPositionLowerLeftСornerCell(gridPosition, gridSystemXY);
@@ -53,7 +53,7 @@ public class PlacedObject : MonoBehaviour
     
 
     private PlacedObjectTypeSO _placedObjectTypeSO;
-    private GridSystemTiltedXY<GridObjectInventoryXY> _gridSystemXY; // Сетка в которой разместилься наш объект
+    private GridSystemXY<GridObjectInventoryXY> _gridSystemXY; // Сетка в которой разместилься наш объект
     private Vector2Int _gridPositioAnchor; // Сеточная позиция Якоря  
     private Vector3 _targetRotation;
     private Vector3 _targetPosition;
@@ -83,7 +83,7 @@ public class PlacedObject : MonoBehaviour
             float moveSpeed = 20f;
             transform.position = Vector3.Lerp(transform.position, _targetPosition, Time.deltaTime * moveSpeed);
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_targetRotation), Time.deltaTime * 15f);
-            //transform.rotation = Quaternion.Lerp(transform.rotation, PickUpDrop.Instance.GetPlacedObjectRotation(), Time.deltaTime * 15f);// Плавно повернем объект
+            //transform.rotation = Quaternion.Lerp(transform.rotation, PickUpDropPlacedObject.Instance.GetPlacedObjectRotation(), Time.deltaTime * 15f);// Плавно повернем объект
         }
 
         if (_moveStartPosition) // Если надо переместить в начальную позиции и в конце уничтожим объект
@@ -141,12 +141,12 @@ public class PlacedObject : MonoBehaviour
         _gridPositioAnchor = gridPosition;
     }
 
-    public GridSystemTiltedXY<GridObjectInventoryXY> GetGridSystemXY() //Получим сетку на которую добавили наш оббъект
+    public GridSystemXY<GridObjectInventoryXY> GetGridSystemXY() //Получим сетку на которую добавили наш оббъект
     {
         return _gridSystemXY;
     }
 
-    public void SetGridSystemXY(GridSystemTiltedXY<GridObjectInventoryXY> gridSystemXY) //Установим сетку на которую добавили наш оббъект
+    public void SetGridSystemXY(GridSystemXY<GridObjectInventoryXY> gridSystemXY) //Установим сетку на которую добавили наш оббъект
     {
         _gridSystemXY = gridSystemXY;
     }
@@ -165,7 +165,7 @@ public class PlacedObject : MonoBehaviour
 
     /*public override string ToString()
     {
-        return _placedObjectTypeSO.nameString;
+        return _placedObject.nameString;
     }*/
 
     public PlacedObjectTypeSO GetPlacedObjectTypeSO()
@@ -192,14 +192,16 @@ public class PlacedObject : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
-    public List<InventorySlot> GetCanPlacedOnGridList() //Получить Сетки где можно разместить наш объект
+    /// <summary>
+    /// Получить Слот где можно разместить наш объект
+    /// </summary>
+    public List<InventorySlot> GetCanPlacedOnGridList() 
     {
         return _canPlacedOnSlotList;
     }    
 
     public PlacedObjectParameters GetPlacedObjectParameters()
     {
-        return new PlacedObjectParameters(_gridSystemXY.GetGridSlot(), _placedObjectTypeSO, _gridPositioAnchor);
+        return new PlacedObjectParameters(_gridSystemXY.GetGridSlot(), _gridPositioAnchor, this);
     }
 }

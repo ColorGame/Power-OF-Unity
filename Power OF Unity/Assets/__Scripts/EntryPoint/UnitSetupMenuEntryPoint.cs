@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class UnitSetupMenuEntryPoint : MonoBehaviour, IEntryPoint
 {
-    private UnitSelectedForEquip _unitSelectedForEquip;
+    private UnitInventorySystem _unitInventorySystem;
     private PlacedObjectTypeButton _placedObjectTypeButton;
-    private PickUpDrop _pickUpDrop;
+    private PickUpDropPlacedObject _pickUpDropPlacedObject;
     private InventoryGrid _inventoryGrid;
     private InventoryGridVisual _inventoryGridVisual;
 
@@ -17,7 +17,7 @@ public class UnitSetupMenuEntryPoint : MonoBehaviour, IEntryPoint
 
     private void GetComponent()
     {
-        _pickUpDrop = GetComponentInChildren<PickUpDrop>(true);
+        _pickUpDropPlacedObject = GetComponentInChildren<PickUpDropPlacedObject>(true);
         _placedObjectTypeButton = GetComponentInChildren<PlacedObjectTypeButton>(true);
         _inventoryGrid = GetComponentInChildren<InventoryGrid>(true);
         _inventoryGridVisual = GetComponentInChildren<InventoryGridVisual>(true);
@@ -25,15 +25,15 @@ public class UnitSetupMenuEntryPoint : MonoBehaviour, IEntryPoint
 
     private void Register()
     {
-        _unitSelectedForEquip = new UnitSelectedForEquip();
+        _unitInventorySystem = new UnitInventorySystem();
     }
 
     private void Init(DIContainer container)
     {
-        _unitSelectedForEquip.Init(_pickUpDrop);
-        _pickUpDrop.Init(container.Resolve<GameInput>(), container.Resolve<TooltipUI>(), _inventoryGrid);
-        _placedObjectTypeButton.Init(container.Resolve<TooltipUI>(), _pickUpDrop);
-        _inventoryGrid.Init(_pickUpDrop, container.Resolve<TooltipUI>());
-        _inventoryGridVisual.Init(_pickUpDrop, _inventoryGrid);
+        _unitInventorySystem.Init(_pickUpDropPlacedObject, container.Resolve<UnitManager>(), _inventoryGrid);
+        _pickUpDropPlacedObject.Init(container.Resolve<GameInput>(), container.Resolve<TooltipUI>(), _inventoryGrid);
+        _placedObjectTypeButton.Init(container.Resolve<TooltipUI>(), _pickUpDropPlacedObject);
+        _inventoryGrid.Init(_pickUpDropPlacedObject, container.Resolve<TooltipUI>());
+        _inventoryGridVisual.Init(_pickUpDropPlacedObject, _inventoryGrid);
     }
 }

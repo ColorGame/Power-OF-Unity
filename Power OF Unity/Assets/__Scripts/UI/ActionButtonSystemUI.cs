@@ -2,20 +2,26 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 
 
 /// <summary>
 /// Система управления КНОПКАМИ ДЕЙСТВИЙ
 /// </summary>
 /// <remarks>
-/// Динамически создавать кнопки при выборе юнита. 
+/// Настраивать кнопки при выборе юнита. 
 /// </remarks>
-public class ActionButtonSystemUI : MonoBehaviour 
-{    
-    [SerializeField] private Transform _actionButtonContainerTransform; // В инспекторе назначить  Контейнер для кнопок( находиться в сцене в Canvas)   
+public class ActionButtonSystemUI : MonoBehaviour
+{
     [SerializeField] private TextMeshProUGUI _actionPointsText; // Ссылка на текст очков над кнопками
     [SerializeField] private Image _actionPointImage; // Картинка головы
+
+    [SerializeField] private ActionButtonUI _mainWeaponButton; // Кнопка основного оружия
+    [SerializeField] private ActionButtonUI _otherWeaponButton; // Кнопка дополнительного оружия
+    [SerializeField] private ActionButtonUI _moveActionButton; // Кнопка перемещения
+    [SerializeField] private Transform _grenadeButtonContainer; // Контейнер для кнопок гранат
+    [SerializeField] private Button _unitInventoryButton; // Кнопка инвентарь юнита
+
 
     private TooltipUI _tooltipUI;
     private UnitActionSystem _unitActionSystem;
@@ -46,7 +52,7 @@ public class ActionButtonSystemUI : MonoBehaviour
     private void TurnSystem_OnTurnChanged(object sender, EventArgs e)
     {
         UpdateButtonVisibility();
-    }   
+    }
 
     private void UpdateButtonVisibility() // Обновление визуализации кнопок в зависимости от того ЧЕЙ ХОД (прятать во время врага)
     {
@@ -56,7 +62,7 @@ public class ActionButtonSystemUI : MonoBehaviour
         {
             actionButtonUI.HandleStateButton(isBusy);
         }
-       
+
         _actionPointsText.gameObject.SetActive(_turnSystem.IsPlayerTurn()); // Показываем только во время МОЕГО ХОДА
         _actionPointImage.gameObject.SetActive(_turnSystem.IsPlayerTurn());
     }
@@ -77,21 +83,91 @@ public class ActionButtonSystemUI : MonoBehaviour
         foreach (ActionButtonUI actionButtonUI in _actionButtonUIList) // В цикле обработаем состояние кнопок
         {
             actionButtonUI.HandleStateButton(e.isBusy);
-        }       
-    } 
+        }
+    }
 
     private void CreateUnitActionButtons() // Создать Кнопки для Действий Юнита 
     {
-        foreach (Transform buttonTransform in _actionButtonContainerTransform) // Очистим контейнер с кнопками
+        _actionButtonUIList.Clear(); // Очистим сисок кнопок     
+
+        _moveActionButton.SetMoveAction(_selectedUnit.GetAction<MoveAction>(), _unitActionSystem);
+        _actionButtonUIList.Add(_moveActionButton);
+
+        PlacedObjectTypeSO mainWeaponPlacedObjectTypeSO = _selectedUnit.GetUnitInventory().GetPlacedObjectMainWeaponSlot(); // У выбранного юнита, в слоте ОСНОВНОГО ОРУЖИЯ, получим тип объекта
+        if (mainWeaponPlacedObjectTypeSO != null)
+        {
+            BaseAction baseAction = mainWeaponPlacedObjectTypeSO.GetAction(_selectedUnit); // Получим у выбранного юнита, Базовое Действие для данного типа PlacedObjectTypeSO
+            _mainWeaponButton.SetBaseActionAndPlacedObjectTypeSO(baseAction, mainWeaponPlacedObjectTypeSO, _unitActionSystem);
+            _actionButtonUIList.Add(_mainWeaponButton); // Добавим в список полученный компонент ActionButtonUI
+        }
+        else
+        {
+            _mainWeaponButton.InteractableDesabled();
+        }
+
+        PlacedObjectTypeSO otherWeaponPlacedObjectTypeSO = _selectedUnit.GetUnitInventory().GetPlacedObjectOtherWeaponSlot(); // У выбранного юнита, в слоте ОСНОВНОГО ОРУЖИЯ, получим тип объекта
+        if (otherWeaponPlacedObjectTypeSO != null)
+        {
+            BaseAction baseAction = otherWeaponPlacedObjectTypeSO.GetAction(_selectedUnit); // Получим Базовое Действие для данного типа PlacedObjectTypeSO
+            _otherWeaponButton.SetBaseActionAndPlacedObjectTypeSO(baseAction, otherWeaponPlacedObjectTypeSO, _unitActionSystem);
+            _actionButtonUIList.Add(_otherWeaponButton); // Добавим в список полученный компонент ActionButtonUI
+        }
+        else
+        {
+            _otherWeaponButton.InteractableDesabled();
+        }
+
+
+        foreach (Transform buttonTransform in _grenadeButtonContainer) // Очистим контейнер с кнопками
         {
             Destroy(buttonTransform.gameObject); // Удалим игровой объект прикрипленный к Transform
         }
 
-        _actionButtonUIList.Clear(); // Очистим сисок кнопок     
+        List<GrenadeTypeSO> GrenadeFragList = new List<GrenadeTypeSO>();
+        List<GrenadeTypeSO> GrenadeSmokeList = new List<GrenadeTypeSO>();
+        List<GrenadeTypeSO> GrenadeElectroshockList = new List<GrenadeTypeSO>();
+        List<GrenadeTypeSO> GrenadePlasmaList = new List<GrenadeTypeSO>();
 
-        foreach (BaseAction baseAction in _selectedUnit.GetBaseActionsList()) // В цикле переберем массив базовых действий у выбранного юнита
+        foreach (GrenadeTypeSO grenadeTypeSO in _selectedUnit.GetUnitInventory().GetGrenadeTypeSOList()) // Переберем гранаты в багаже и распределим по спискам
         {
-            Transform actionButtonTransform = Instantiate(GameAssets.Instance.actionButtonUIPrefab, _actionButtonContainerTransform); // Для каждого baseAction создадим префаб кнопки и назначим родителя - Контейнер для кнопок
+            PlacedObjectType placedObjectType = grenadeTypeSO.GetPlacedObjectType();
+            switch (placedObjectType)
+            {
+                case PlacedObjectType.GrenadeFrag:
+                    GrenadeFragList.Add(grenadeTypeSO);
+                    break;
+                case PlacedObjectType.GrenadeSmoke:
+                    GrenadeSmokeList.Add(grenadeTypeSO);
+                    break;
+                case PlacedObjectType.GrenadeElectroshock:
+                    GrenadeElectroshockList.Add(grenadeTypeSO);
+                    break;
+                case PlacedObjectType.GrenadePlasma:
+                    GrenadePlasmaList.Add(grenadeTypeSO);
+                    break;
+            }
+        }
+
+
+
+        if (GrenadeFragList.Count != 0)
+        {
+            // создадим кнопку для данного типа гранаты и передадим количество GrenadeFragList.Count данного типа
+          ///  ActionButtonUI grenadeFragButton = Instantiate<ActionButtonUI>(GameAssets.Instance.actionButtonUIPrefab, _grenadeButtonContainer);
+        }
+       
+
+
+
+
+
+
+
+
+
+       /* foreach (BaseAction baseAction in _selectedUnit.GetBaseActionsArray()) // В цикле переберем массив базовых действий у выбранного юнита
+        {
+            Transform actionButtonTransform = Instantiate(GameAssets.Instance.actionButtonUIPrefab, _grenadeButtonContainer); // Для каждого baseAction создадим префаб кнопки и назначим родителя - Контейнер для кнопок
             ActionButtonUI actionButtonUI = actionButtonTransform.GetComponent<ActionButtonUI>(); // У кнопки найдем компонент ActionButtonUI
             actionButtonUI.SetBaseAction(baseAction, _unitActionSystem); //Назвать и Присвоить базовое действие (нашей кнопке)
 
@@ -106,7 +182,7 @@ public class ActionButtonSystemUI : MonoBehaviour
             };
 
             _actionButtonUIList.Add(actionButtonUI); // Добавим в список полученный компонент ActionButtonUI
-        }
+        }*/
     }
 
     private void SelectedUnit_OnActionPointsChanged(object sender, EventArgs e)
@@ -114,7 +190,7 @@ public class ActionButtonSystemUI : MonoBehaviour
         UpdateActionPoints();
     }
 
-    private void UnitActionSystem_OnSelectedUnitChanged(object sender, EventArgs e) 
+    private void UnitActionSystem_OnSelectedUnitChanged(object sender, EventArgs e)
     {
         SetupEventSelectedUnit();   // Настройка Event у выбранного Юнита
         CreateUnitActionButtons();  // Создать Кнопки для Действий Юнита 
@@ -139,18 +215,18 @@ public class ActionButtonSystemUI : MonoBehaviour
         UpdateSelectedVisual();
     }
 
-   
+
     private void UpdateSelectedVisual() //Обнавление визуализации выбора( при выборе кнопки включим рамку)
     {
         foreach (ActionButtonUI actionButtonUI in _actionButtonUIList)
         {
             actionButtonUI.UpdateSelectedVisual();
-        }        
+        }
     }
 
     private void UpdateActionPoints() // Обнавление очков действий (над кнопками действий)
-    {       
+    {
         _actionPointsText.text = " " + _selectedUnit.GetActionPointsSystem().GetActionPointsCount(); //Изменим текст добавив в него количество очков
-    }       
-    
+    }
+
 }

@@ -5,6 +5,7 @@ public class UnitFriendSO : UnitTypeSO
 {
     [Header("Поля для префабов ЮНИТА")]
 
+    [SerializeField] private Transform _unitFacePortfolioVisualPrefab;
     [SerializeField] private Transform _unitPortfolioVisualPrefab;
     [SerializeField] private Transform _unitEasyVisualPrefab;
     [SerializeField] private Transform _unitMediumVisualPrefab;

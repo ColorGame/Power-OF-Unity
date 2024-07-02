@@ -2,21 +2,20 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseAction : MonoBehaviour    //Базовое Действие Этот клас будут наследовать другие классы 
-                                                    // Мы хотим создавать ЭЕКЗЕМПЛЯРЫ ДЕЙСТВИЕ которые расширяют этот класс. Что-бы случайно не создать экземпляр BaseAction сделаем его
-                                                    // abstract - НЕ позволяет создать Instance (экземпляр) этого класса.
+/// <summary>
+/// Базовое Действие. Абстрактный клас 
+/// </summary>
+/// <remarks>
+/// Все базовые дествия должны быть прикрепленны к Unit.
+/// </remarks>
+public abstract class BaseAction : MonoBehaviour, ISetupForSpawn
 {
-    public static event EventHandler OnAnyActionStart; // static - обозначает что event будет существовать для всего класса не зависимо от того скольго у нас созданно Юнитов. Поэтому для прослушивания этого события слушателю не нужна ссылка на какую-либо конкретную единицу, они могут получить доступ к событию через класс, который затем запускает одно и то же событие для каждой единицы. 
-                                                       // Мы запустим событие Event при  Запуске Любого Действия.
-    public static event EventHandler OnAnyActionCompleted; // Мы запустим событие Event при  Завершении Любого Действия.
+    public static event EventHandler OnAnyActionStart; //Запуск Любого Действия.
+    public static event EventHandler OnAnyActionCompleted; //Завершении Любого Действия.
 
-    protected Unit _unit; // Юнит на котором лежит Выбранное Действие
     protected bool _isActive; // Булевая переменная. Что бы исключить паралельное выполнение нескольких действий
-
-    protected SoundManager _soundManager;
-    protected UnitActionSystem _unitActionSystem;
-    protected LevelGrid _levelGrid;
-    protected TurnSystem _turnSystem;
+    protected Unit _unit;
+    protected PlacedObjectTypeSO _placedObjectTypeSO;
 
     //Буду использовать встроенный делегат Action вместо - //public delegate void ActionCompleteDelegate(); //завершение действия // Объявляем делегат который не принимает аргумент и возвращает пустоту
     protected Action _onActionComplete; //(по завершении действия)// Объявляю делегат в пространстве имен - using System;
@@ -25,27 +24,31 @@ public abstract class BaseAction : MonoBehaviour    //Базовое Действие Этот клас
                                         //СВОЙСТВО Делегата. После выполнения функции в которую мы передали делегата, можно ПОЗЖЕ, в определенном месте кода, выполниться сохраненный делегат.
                                         //СВОЙСТВО Делегата. Может вызывать закрытую функцию из другого класса
 
-    public void Init(Unit unit)
+    public virtual void SetupForSpawn(Unit unit)
     {
         _unit = unit;
-
-        _soundManager = _unit.GetSoundManager();
-        _unitActionSystem = _unit.GetUnitActionSystem();
-        _levelGrid = _unit.GetLevelGrid();
-        _turnSystem = _unit.GetTurnSystem();
     }
     protected virtual void Awake() // protected virtual- обозначает что можно переопределить в дочерних классах
-    {        
-        
+    {
+
     }
 
     protected virtual void Start()
     {
-        
-    }
 
+    }
+    /// <summary>
+    /// Установим PlacedObjectTypeSO для данного действия (нужен для настройки полей).
+    /// </summary>  
+    /// <remarks>
+    /// для MoveAction он будет null
+    /// </remarks>
+    public virtual void SetPlacedObjectTypeSO(PlacedObjectTypeSO placedObjectTypeSO)  
+    {
+        _placedObjectTypeSO = placedObjectTypeSO;
+    }
     public abstract string GetActionName(); // Вернуть имя действия // abstract - вынуждает реализовывать в каждом подклассе и в базовом должно иметь пустое тело.
-   
+
     public abstract string GetToolTip(); // Вернкть всплывающую подсказку
 
     public abstract int GetMaxActionDistance(); // Вернуть Дистанцию действия
@@ -80,10 +83,9 @@ public abstract class BaseAction : MonoBehaviour    //Базовое Действие Этот клас
         OnAnyActionCompleted?.Invoke(this, EventArgs.Empty); // Запустим событие
     }
 
-    public Unit GetUnit() // Получить компонет Unit 
-    {
-        return _unit;
-    }
+    public Unit GetUnit() { return _unit; }
+    public PlacedObjectTypeSO GetPlacedObjectTypeSO() { return _placedObjectTypeSO; }
+
 
     public EnemyAIAction GetBestEnemyAIAction() // Получим Лучшее действие Вражеского ИИ для выбранного действия
     {

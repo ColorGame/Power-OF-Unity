@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 ///Мироврй интерфейс юнита (шкала здоровья). Лежит в canvas на юните
 /// </summary>
-public class UnitWorldUI : MonoBehaviour 
+public class UnitWorldUI : MonoBehaviour, ISetupForSpawn
 {
     [SerializeField] private TextMeshProUGUI _actionPointsText; // Закинуть текс UI
     [SerializeField] private TextMeshProUGUI _hitPercentText; // Закинуть процент попадания
@@ -20,11 +20,11 @@ public class UnitWorldUI : MonoBehaviour
     private UnitActionSystem _unitActionSystem;
     private TurnSystem _turnSystem;
 
-    public void SetupForSpawn(Unit unit, UnitActionSystem unitActionSystem, TurnSystem turnSystem)
+    public void SetupForSpawn(Unit unit)
     {
         _unit = unit;
-        _unitActionSystem=unitActionSystem;
-        _turnSystem = turnSystem;
+        _unitActionSystem= _unit.GetUnitActionSystem();
+        _turnSystem = _unit.GetTurnSystem();
         _healthSystem = _unit.GetHealthSystem();
         _actionPointsSystem = _unit.GetActionPointsSystem();
 

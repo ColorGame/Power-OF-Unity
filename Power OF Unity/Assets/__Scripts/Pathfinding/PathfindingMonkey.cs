@@ -428,7 +428,7 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
 
          foreach (GridPositionXZ p in neigboursPositions) // В цикле проверим на допустипость этих сеточных позиций
          {
-             if (_gridSystemTiltedXYList.IsValidGridPosition(p))
+             if (_gridSystemXYList.IsValidGridPosition(p))
              {
                  neighbourList.Add(GetNode(p.x, p.y));
              }                

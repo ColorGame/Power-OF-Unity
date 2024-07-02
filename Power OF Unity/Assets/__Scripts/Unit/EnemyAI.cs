@@ -101,7 +101,7 @@ public class EnemyAI : MonoBehaviour // Искуственный интелект юнита
         EnemyAIAction bestEnemyAIAction = null; // Лучшего действия вражеского ИИ по умолчпнию = null 
         BaseAction bestBaseAction = null; // Лучшее базовое действие по умолчпнию = null 
 
-        foreach (BaseAction baseAction in enemyUnit.GetBaseActionsList()) // Переберем массив базовых действий и НАЙДЕМ ЛУЧШЕЕ
+        foreach (BaseAction baseAction in enemyUnit.GetBaseActionsArray()) // Переберем массив базовых действий и НАЙДЕМ ЛУЧШЕЕ
         {
             if (!enemyUnit.GetActionPointsSystem().CanSpendActionPointsToTakeAction(baseAction)) // Спросим у enemyUnit мы МОЖЕМ Потратить Очки Действия, Чтобы Выполнить Действие ? Если НЕ можем то...
             {

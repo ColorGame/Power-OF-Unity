@@ -1,12 +1,14 @@
 using System;
 using UnityEngine;
-using static UnityEngine.UI.CanvasScaler;
 
 /// <summary>
-///  ласс отвечающий за логику ќ„ ќ¬ ƒ≈…—“¬»я юнита
+/// ќ„ » ƒ≈…—“¬»я юнита
 /// </summary>
 public class ActionPoints
 {
+    /// <summary>
+    /// ќ„ » ƒ≈…—“¬»я юнита
+    /// </summary>
     public ActionPoints(Unit unit) 
     {
         _unit = unit;
@@ -25,9 +27,9 @@ public class ActionPoints
 
     private TurnSystem _turnSystem;
 
-    public void SetupForSpawn(TurnSystem turnSystem)
+    public void SetupForSpawn()
     {       
-        _turnSystem = turnSystem;
+        _turnSystem = _unit.GetTurnSystem();
         _turnSystem.OnTurnChanged += TurnSystem_OnTurnChanged; // ѕодпиш. на событие ’од »зменен    
     }
 

@@ -421,11 +421,12 @@ GameObject:
   m_Component:
   - component: {fileID: 3013477999232598443}
   - component: {fileID: 2144567748358240566}
-  - component: {fileID: -4672128768459207291}
   - component: {fileID: 9166489426704551316}
   - component: {fileID: 591424564500887994}
+  - component: {fileID: 1038163711715851208}
   - component: {fileID: 2245190387780501782}
   - component: {fileID: 4830986332008438710}
+  - component: {fileID: -4672128768459207291}
   - component: {fileID: 4233964869486218640}
   - component: {fileID: 1481299886574317604}
   - component: {fileID: -3717358109818683237}
@@ -476,21 +477,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.6, y: 1.9167328, z: 0.6}
   m_Center: {x: 0, y: 0.83073664, z: 0}
---- !u!114 &-4672128768459207291
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3013477999232598442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc490144b3259c74b8d02c0231d59862, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _ragdollPrefab: {fileID: 3013477999232598443, guid: 6a2a0287dcd8d6d47879a07c82fd7818,
-    type: 3}
-  _originalRootBone: {fileID: 0}
 --- !u!114 &9166489426704551316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -515,12 +501,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4181afa80d6fdb4cab8ce82b6220ff4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _numberShoot: 3
-  _delayShoot: 0.2
   _shootPointTransform: {fileID: 0}
-  _HeadTransform: {fileID: 0}
   _targetAnimationAim: {fileID: 0}
   _aimRig: {fileID: 0}
+--- !u!114 &1038163711715851208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3013477999232598442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b5698f5123dd04488f7ab491e33adc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _obstaclesDoorMousePlaneCoverLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &2245190387780501782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -550,6 +548,21 @@ MonoBehaviour:
   _rifleTransformHand_L: {fileID: 0}
   _swordTransform: {fileID: 0}
   _binocularsTransform: {fileID: 0}
+--- !u!114 &-4672128768459207291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3013477999232598442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc490144b3259c74b8d02c0231d59862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ragdollPrefab: {fileID: 3013477999232598443, guid: 6a2a0287dcd8d6d47879a07c82fd7818,
+    type: 3}
+  _originalRootBone: {fileID: 0}
 --- !u!114 &4233964869486218640
 MonoBehaviour:
   m_ObjectHideFlags: 0

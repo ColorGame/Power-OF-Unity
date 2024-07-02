@@ -63,10 +63,12 @@ public class OptionsMenuUI : MonoBehaviour // Меню настроик
     {
         _soundManager = soundManager;
         _musicManager = musicManager;
-        _gameInput = gameInput;       
-    }   
+        _gameInput = gameInput;
 
-    private void Start()
+        Setup();
+    }     
+
+    private void Setup()
     {
         _panelList = new List<GameObject>() { _videoPanel, _soundPanel, _controlPanel };
         _animator = GetComponent<Animator>();
@@ -76,7 +78,7 @@ public class OptionsMenuUI : MonoBehaviour // Меню настроик
         _gameInput.OnMenuAlternate += GameInput_OnMenuAlternate;
 
         HideOptionsMenu();
-        _toggleBool= false;
+        _toggleBool = false;
 
         _edgeScrolling = PlayerPrefs.GetInt("edgeScrolling", 1) == 1; // Загрузим сохраненый параметр _edgeScrolling и если это 1 то будет истина если не=1 то будет ложь (из PlayerPrefs.GetInt нельзя тегать булевые параметры поэтому используем строку)
         _edgeScrollingToggle.SetIsOnWithoutNotify(_edgeScrolling); // Установим актуальное значения Тумблера прокрутка по краям  
@@ -85,7 +87,7 @@ public class OptionsMenuUI : MonoBehaviour // Меню настроик
         _musicSlider.value = _musicManager.GetNormalizedVolume();
 
         UpdateText();
-    }       
+    }
 
     private void Update()
     {
