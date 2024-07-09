@@ -13,13 +13,16 @@ MonoBehaviour:
   m_Name: Pistol2Machine
   m_EditorClassIdentifier: 
   _itemID: fb659afb-a88d-40f7-8873-c09336456114
-  _placedObjectType: 3
-  _prefab: {fileID: 0}
-  _visual: {fileID: 0}
-  _widthX: 1
-  _heightY: 1
-  _imageButton: {fileID: 0}
-  _canPlacedOnSlotList: 
+  _placedObjectType: 8
+  _prefab3D: {fileID: 3656954414905745779, guid: b03cff5dd4a0e904ba34fe0b6c3881f7,
+    type: 3}
+  _prefab2D: {fileID: 3324843693884112870, guid: 7dce735a683ff9344b892d10fd2cf71d,
+    type: 3}
+  _visual2D: {fileID: 7404412928878719274, guid: c53cac259698efc4dae3706008e5f9b7,
+    type: 3}
+  _widthX: 3
+  _heightY: 2
+  _canPlacedOnSlotList: 010000000200000003000000
   _weight: 0
   numberShotInOneAction: 4
   delayShot: 0.2

@@ -245,7 +245,7 @@ public class ShootAction : BaseAction
             ignoreCoverSmokeCollider = hitCoverInfo.collider;
         }
         /*Debug.DrawRay(unitWorldPosition + Vector3.up * heightRaycast,
-                 shototDirection * (_cellSize *1.5f),
+                 shototDirection * (_cellSizeWithScaleFactor *1.5f),
                  Color.white,
                  100);*/
 

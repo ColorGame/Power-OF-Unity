@@ -13,20 +13,22 @@ public class GridSystemXY<TGridObject>
 
     protected int _width;     // Ширина
     protected int _height;    // Высота
-    protected float _cellSize;// Размер ячейки
+    protected float _canvasScaleFactor;// Масштаб канваса на котором строиться сетка (ВЛИЯЕТ НА РАЗМЕР ЯЧЕЙКИ)
+    protected float _cellSizeWithScaleFactor;// Размер ячейки с учетом масштаба канваса
     protected Transform _anchorGridTransform; // Якорь сетки
     protected TGridObject[,] _gridObjectArray; // Двумерный массив объектов сетки
     protected Vector3 _offsetСenterCell;// Сделаем смещение что бы центр ячейки не совподал  с (0.0) transform.position родителя 
     protected InventorySlot _slot;
 
-    public GridSystemXY(InventoryGridParameters gridParameters, Func<GridSystemXY<TGridObject>, Vector2Int, TGridObject> createGridObject)  // Конструктор // Func - это встроенный ДЕЛЕГАТ (третий параметр в аргументе это тип<TGridObject> который возвращает наш делегат и назавем его createGridObject)
+    public GridSystemXY(float canvasScaleFactor, InventoryGridParameters gridParameters, Func<GridSystemXY<TGridObject>, Vector2Int, TGridObject> createGridObject)  // Конструктор // Func - это встроенный ДЕЛЕГАТ (третий параметр в аргументе это тип<TGridObject> который возвращает наш делегат и назавем его createGridObject)
     {
         _width = gridParameters.width;
         _height = gridParameters.height;
-        _cellSize = gridParameters.cellSize;
+        _canvasScaleFactor= canvasScaleFactor;
+        _cellSizeWithScaleFactor = gridParameters.cellSize* canvasScaleFactor;
         _anchorGridTransform = gridParameters.anchorGridTransform;
         _slot = gridParameters.slot;
-        _offsetСenterCell = new Vector3(0.5f, 0.5f, 0) * _cellSize; // Расчитаем смещение для нашей сетки , чтобы начало сетки (0,0) было в центре нулевой ячейки
+        _offsetСenterCell = new Vector3(0.5f, 0.5f, 0) * _cellSizeWithScaleFactor; // Расчитаем смещение для нашей сетки , чтобы начало сетки (0,0) было в центре нулевой ячейки
 
         _gridObjectArray = new TGridObject[_width, _height]; // создаем массив сетки определенного размером width на height
         for (int x = 0; x < _width; x++)
@@ -48,27 +50,35 @@ public class GridSystemXY<TGridObject>
         Vector3 localPosition = worldPosition - _anchorGridTransform.position - _offsetСenterCell; // переведите обратно в 0 (удалим смещение якоря относительно начала координат и смещение центра нулевой ячекйки) 
         return new Vector2Int
             (
-            Mathf.RoundToInt(localPosition.x / _cellSize),  // Применяем Mathf.RoundToInt для преоброзования float в int
-            Mathf.RoundToInt(localPosition.y / _cellSize)
+            Mathf.RoundToInt(localPosition.x / _cellSizeWithScaleFactor),  // Применяем Mathf.RoundToInt для преоброзования float в int
+            Mathf.RoundToInt(localPosition.y / _cellSizeWithScaleFactor)
             );
     }
-
-    public virtual Vector3 GetWorldPositionGridCenter() //  Получим мировые координаты центра Сетки (относительно  _anchorGridTransform)
-    {
-        float x = _cellSize * _width / 2; // Размер ячейки умножим на количество ячеек, которое занимает наш объект по Х и делим пополам
-        float y = _cellSize * _height / 2;
+    /// <summary>
+    /// Получим мировые координаты центра Сетки
+    /// </summary>
+    public virtual Vector3 GetWorldPositionGridCenter() 
+    {        
+        // К мировым координатам якоря добавим добавим смещение к центру сеточной системы
+        float x = _anchorGridTransform.position.x+ _cellSizeWithScaleFactor * _width / 2; // Размер ячейки умножим на количество ячеек, которое занимает наш объект по Х и делим пополам
+        float y = _anchorGridTransform.position.y + _cellSizeWithScaleFactor * _height / 2;
 
         return new Vector3(x, y, 0);
     }
-
-    public virtual Vector3 GetWorldPositionCenterСornerCell(Vector2Int gridPosition) // Получим мировые координаты центра ячейки (относительно  _anchorGridTransform)
-    {
-        return new Vector3(gridPosition.x, gridPosition.y, 0) * _cellSize + _anchorGridTransform.position + _offsetСenterCell;   // Получим координаты нашей ячеки с учетом ее масштаба, добавим смещение самой сетки _anchorGridTransform и смещения нулевой ячейки
+    /// <summary>
+    /// Получим мировые координаты центра ячейки
+    /// </summary>
+    public virtual Vector3 GetWorldPositionCenterСornerCell(Vector2Int gridPosition) 
+    {              
+        return new Vector3(gridPosition.x, gridPosition.y, 0) * _cellSizeWithScaleFactor + _anchorGridTransform.position + _offsetСenterCell;   // Получим координаты нашей ячеки с учетом ее масштаба, добавим смещение самой сетки _anchorGridTransform и смещения нулевой ячейки
                                                                                                                     // мы хотим что бы центр ячейки был смещен относительного нашего _anchorGridTransform  и левый угол сетки совподал с ***Grid.transform.position                                                                                                              
     }
-    public virtual Vector3 GetWorldPositionLowerLeftСornerCell(Vector2Int gridPosition) // Получим мировые координаты нижнего левого угола ячейки (относительно  _anchorGridTransform)
+    /// <summary>
+    /// Получим мировые координаты нижнего левого угола ячейки
+    /// </summary>
+    public virtual Vector3 GetWorldPositionLowerLeftСornerCell(Vector2Int gridPosition) 
     {
-        return new Vector3(gridPosition.x, gridPosition.y, 0) * _cellSize + _anchorGridTransform.position;   // Получим координаты нашей ячеки с учетом ее масштаба, добавим смещение самой сетки _anchorGridTransform                                                                                        
+        return new Vector3(gridPosition.x, gridPosition.y, 0) * _cellSizeWithScaleFactor + _anchorGridTransform.position;   // Получим координаты нашей ячеки с учетом ее масштаба, добавим смещение самой сетки _anchorGridTransform                                                                                        
     }
 
 
@@ -121,10 +131,12 @@ public class GridSystemXY<TGridObject>
     {
         return _height;
     }
-
-    public float GetCellSize()
+    /// <summary>
+    /// Размер ячейки с учетом масштаба CANVAS
+    /// </summary>
+    public float GetCellSizeWithScaleFactor()
     {
-        return _cellSize;
+        return _cellSizeWithScaleFactor;
     }
 
 }

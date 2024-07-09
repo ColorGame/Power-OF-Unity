@@ -72,7 +72,7 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
                 {
                     GridPositionXZ gridPosition = new GridPositionXZ(x, z, floor);
 
-                    Transform gridSystemVisualSingleTransform = Instantiate(GameAssets.Instance.levelGridSystemVisualSinglePrefab, _levelGrid.GetWorldPosition(gridPosition), Quaternion.identity); // Создадим наш префаб в каждой позиции сетки
+                    Transform gridSystemVisualSingleTransform = Instantiate(GameAssets.Instance.LevelGridVisualSinglePrefab, _levelGrid.GetWorldPosition(gridPosition), Quaternion.identity); // Создадим наш префаб в каждой позиции сетки
 
                     _gridSystemVisualSingleArray[x, z, floor] = gridSystemVisualSingleTransform.GetComponent<LevelGridVisualSingle>(); // Сохраняем компонент LevelGridVisualSingle в трехмерный массив где x,y,_floor это будут индексы массива.
                 }
@@ -93,7 +93,7 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
              for (int y = 0; y < _levelGrid.GetHeight(); y++)
              {
                  _gridSystemVisualSingleArray[x, y].
-                     ShowTooltipsFollowMouse(GetGridVisualTypeMaterial(GridVisualType.White));
+                     ShowShortTooltipFollowMouse(GetGridVisualTypeMaterial(GridVisualType.White));
              }
          }*/
 
@@ -256,7 +256,7 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
         foreach (GridPositionXZ gridPosition in gridPositionlist) // в цикле перебереи список и Покажем(включим) только те позиции которые нам передали
         {
             _gridSystemVisualSingleArray[gridPosition.x, gridPosition.z, gridPosition.floor].
-                Show(GetGridVisualTypeMaterial(gridVisualType)); // В аргумент ShowTooltipsFollowMouse предадим материал в зависимости от переданного нам события
+                Show(GetGridVisualTypeMaterial(gridVisualType)); // В аргумент ShowShortTooltipFollowMouse предадим материал в зависимости от переданного нам события
         }
     }
 

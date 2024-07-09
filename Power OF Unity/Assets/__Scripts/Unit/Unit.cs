@@ -13,7 +13,7 @@ public class Unit
     {
         _soundManager = soundManager;
         _healthSystem = new Health(unitTypeSO.GetBasicHealth(), _soundManager);
-        _actionPointsSystem = new ActionPoints(this);
+        _actionPointsSystem = new UnitActionPoints(this);
         _unitInventory = new UnitInventory(this);
         _unitEquipment = new UnitEquipment(this);
 
@@ -41,7 +41,7 @@ public class Unit
 
     readonly UnitTypeSO _unitTypeSO;
     readonly Health _healthSystem;
-    readonly ActionPoints _actionPointsSystem;
+    readonly UnitActionPoints _actionPointsSystem;
     readonly UnitInventory _unitInventory;
     readonly UnitEquipment _unitEquipment;
     private BaseAction[] _baseActionsArray; // Массив базовых действий 
@@ -160,7 +160,7 @@ public class Unit
     }
 
     public Health GetHealthSystem() { return _healthSystem; }
-    public ActionPoints GetActionPointsSystem() { return _actionPointsSystem; }
+    public UnitActionPoints GetActionPointsSystem() { return _actionPointsSystem; }
     public UnitInventory GetUnitInventory() { return _unitInventory; }
     public UnitEquipment GetUnitEquipment() { return _unitEquipment; }
     public Vector3 GetTransformPosition() { return _unitCoreTransform.position; }

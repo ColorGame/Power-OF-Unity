@@ -118,8 +118,10 @@ public class GameInput
     {
         return _activeGameDevice;
     }
-
-    public Vector2 GetMouseScreenPosition() // ¬ернуть положение мыши на экране (вернет значение в количестве пикселей а не в метрах)
+    /// <summary>
+    ///  ¬ернуть точку мыши на экране (вернет значение в количестве пикселей а не в метрах)
+    /// </summary>
+    public Vector2 GetMouseScreenPoint()
     {
         return Mouse.current.position.ReadValue();
     }

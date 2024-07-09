@@ -13,7 +13,7 @@ using UnityEngine.UI;
 ///  У background и text подсказки надо убрать галочку Raycast target - что бы подсказка не мерцала
 /// </remarks>
 public class TooltipUI : MonoBehaviour
-{   
+{
 
     [SerializeField] private TextMeshProUGUI _shortTooltipsText; // Текст подсказки (тип TextMeshProUGUI надо выбрать и буквами UI)
     [SerializeField] private TextMeshProUGUI _nameText; // Текст подсказки (тип TextMeshProUGUI надо выбрать и буквами UI)
@@ -32,7 +32,7 @@ public class TooltipUI : MonoBehaviour
     private VirtualMouseCustom _virtualMouseCustom;
     private GameInput _gameInput;
 
-    public void Init( GameInput gameInput, VirtualMouseCustom virtualMouseCustom) 
+    public void Init(GameInput gameInput, VirtualMouseCustom virtualMouseCustom)
     {
         _virtualMouseCustom = virtualMouseCustom;
         _gameInput = gameInput;
@@ -74,7 +74,7 @@ public class TooltipUI : MonoBehaviour
     private void Update()
     {
         if (_followMouse)
-            HandleFollowMouse();       
+            HandleFollowMouse();
 
 
         if (_tooltipTimer != null) // Если задано время то - запустим таймер
@@ -108,7 +108,7 @@ public class TooltipUI : MonoBehaviour
             case GameInput.GameDevice.Gamepad:
                 anchoredPosition = _virtualMouseCustom.cursorTransform.anchoredPosition / _canvasTooltipRectTransform.localScale.x;
                 break;
-        }        
+        }
 
         // Позаботимся что бы подсказка всегда оставалась на экране
         if (anchoredPosition.x + _tooltipRectTransform.rect.width > _canvasTooltipRectTransform.rect.width) // Если размер подсказки выходит за правую сторону холста то ...
@@ -124,12 +124,12 @@ public class TooltipUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Показать всплывающую подсказку, которая следует за мышью.
+    /// Показать короткую всплывающую подсказку, которая следует за мышью.
     /// </summary>
     /// <remarks>
     /// TooltipTimer - Время отображения подсказки
     /// </remarks>
-    public void ShowTooltipsFollowMouse(string shortTooltipsText, TooltipTimer tooltipTimer = null)
+    public void ShowShortTooltipFollowMouse(string shortTooltipsText, TooltipTimer tooltipTimer = null)
     {
         gameObject.SetActive(true);
         _tooltipTimer = tooltipTimer;
@@ -145,12 +145,12 @@ public class TooltipUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Показать всплывающую подсказку о размещенном объекте.
+    /// Показать привязанную(заякаренную) всплывающую подсказку о размещенном объекте.
     /// </summary>
     /// <remarks>
-    /// В аргумент передать СЛОТ и КАМЕРУ которая рендерит этот слот
+    /// В аргумент передать СЛОТ ,Если слот рендерится СПЕЦИАЛЬНОЙ камерой то предадим и ее. 
     /// </remarks>
-    public void ShowPlacedObjectTooltip(PlacedObjectTooltip placedObjectTooltip, RectTransform slotRectTransform, Camera cameraSlotRender)
+    public void ShowAnchoredPlacedObjectTooltip(PlacedObjectTooltip placedObjectTooltip, RectTransform slotRectTransform, Camera cameraSlotRender = null)
     {
         gameObject.SetActive(true);
         _contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained; // Отключим автоматическое выставление ширины
@@ -159,7 +159,7 @@ public class TooltipUI : MonoBehaviour
         EnablePlacedObjectTooltip();
 
         _nameText.SetText(placedObjectTooltip.name);
-        _nameText.ForceMeshUpdate();
+        _nameText.ForceMeshUpdate();// Принудительное обновление текса в этом кадре
 
         _descriptionText.SetText(placedObjectTooltip.description);
         _descriptionText.ForceMeshUpdate();
@@ -176,12 +176,12 @@ public class TooltipUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Показать привязанную всплывающую подсказку
+    /// Показать привязанную(заякаренную) Короткую всплывающую подсказку
     /// </summary>
     /// <remarks>
-    /// В аргумент передать СЛОТ и КАМЕРУ которая рендерит этот слот, по умолчанию это 
+    /// В аргумент передать СЛОТ, Если слот рендерится СПЕЦИАЛЬНОЙ камерой то предадим и ее. 
     /// </remarks>
-    public void ShowAnchoredTooltip(string shortTooltipsText, RectTransform slotRectTransform)
+    public void ShowAnchoredShortTooltip(string shortTooltipsText, RectTransform slotRectTransform, Camera cameraSlotRender = null)
     {
         gameObject.SetActive(true);
         _contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained; // Отключим автоматическое выставление ширины
@@ -194,10 +194,12 @@ public class TooltipUI : MonoBehaviour
 
         _followMouse = false; // Отключим следованию за мыщью. Мы будем фиксировать на углах
         _tooltipTimer = null; // Обнулим таймер. До этого могла гореть подсказка с таймером и если не обнулить то в Update она скроет текущую подсказку
-               
-        PositionTooltip(slotRectTransform);        
-    }
 
+        PositionTooltip(slotRectTransform, cameraSlotRender);
+    }
+    /// <summary>
+    /// Включить текст короткой всплывающей подски
+    /// </summary>
     private void EnableShortTooltipsText()
     {
         _shortTooltipsText.gameObject.SetActive(true);
@@ -207,7 +209,9 @@ public class TooltipUI : MonoBehaviour
         _detailsText.gameObject.SetActive(false);
         _sideEffectsTooltipsText.gameObject.SetActive(false);
     }
-
+    /// <summary>
+    /// Включить подсказку о размещенном объекте
+    /// </summary>
     private void EnablePlacedObjectTooltip()
     {
         _shortTooltipsText.gameObject.SetActive(false);
@@ -224,14 +228,14 @@ public class TooltipUI : MonoBehaviour
     /// <remarks>
     /// Если слот рендерится СПЕЦИАЛЬНОЙ камерой то предадим ее в аргумент. 
     /// </remarks>
-    private void PositionTooltip(RectTransform slotTransform, Camera cameraSlotRender = null) 
+    private void PositionTooltip(RectTransform slotTransform, Camera cameraSlotRender = null)
     {
         // Требуется для обеспечения обновления углов с помощью позиционирующих элементов.
         Canvas.ForceUpdateCanvases(); // Принудительно обновите содержимое всех canvas.
 
         Vector3[] tooltipCornerArray = new Vector3[4]; //Массив - углы всплывающей подсказки
         _tooltipRectTransform.GetWorldCorners(tooltipCornerArray); // Заполним этот массив (углы созданной подсказки) Получите углы вычисленного прямоугольника в мировом пространстве.
-              
+
         Vector3[] slotCornerArray = new Vector3[4]; //Массив - углы слота на который наводим мыш
         slotTransform.GetWorldCorners(slotCornerArray);
 
@@ -244,7 +248,7 @@ public class TooltipUI : MonoBehaviour
             right = slotTransform.position.x < Screen.width / 2; // расположить ПРАВЕЕ -если центр слота левее середины экрана)
         }
         else
-        {     
+        {
             // Преобразуем координаты относительно камеры которая рендерит этот слот - slotTransform
             slotCornerArray = Array.ConvertAll(slotCornerArray, i => cameraSlotRender.WorldToScreenPoint(i));// Преобразуем и перезапишем массив координат
             Vector3 slotPositionFromCamera = cameraSlotRender.WorldToScreenPoint(slotTransform.position);
@@ -252,7 +256,7 @@ public class TooltipUI : MonoBehaviour
             // Где надо расположить подсказку относительно центра якоря слота
             below = slotPositionFromCamera.y > Screen.height / 2; // расположить НИЖЕ -если центр слота выше середины экрана
             right = slotPositionFromCamera.x < Screen.width / 2; // расположить ПРАВЕЕ -если центр слота левее середины экрана)
-        }        
+        }
 
         int slotCornerIndex = GetCornerIndex(below, right); //Получим угол слота к которому прицепим подсказку
         int tooltipCornerIndex = GetCornerIndex(!below, !right); // Получим у подсказки противоположный угол
@@ -266,7 +270,7 @@ public class TooltipUI : MonoBehaviour
         {
             anchoredPosition.y = _canvasTooltipRectTransform.rect.height - _tooltipRectTransform.rect.height;// Зафиксируем на верхней стороне 
         }
-        if (anchoredPosition.y  < 0) 
+        if (anchoredPosition.y < 0)
         {
             anchoredPosition.y = 0;
         }

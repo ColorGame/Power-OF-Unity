@@ -12,7 +12,7 @@ public class ActionButtonUI : MonoBehaviour
 {   
     [SerializeField] private Button _button;
     [SerializeField] private GameObject _selectedButtonVisualUI; // Будем включать и выкл. GameObject что бы скрыть или показать рамку кнопки // В инспекторе надо закинуть рамку
-    [SerializeField] private Image _placedObjectImage;         
+    [SerializeField] private Transform _placedObjectVisual;         
    
     private UnitActionSystem _unitActionSystem;
     private PlacedObjectTypeSO _placedObjectTypeSO;
@@ -31,8 +31,8 @@ public class ActionButtonUI : MonoBehaviour
         _placedObjectTypeSO = placedObjectTypeSO;
         _unitActionSystem = unitActionSystem;
        
-        _placedObjectImage.sprite = placedObjectTypeSO.GetImageButton();
-        _placedObjectImage.rectTransform.localScale = Vector3.one * placedObjectTypeSO.GetScaleImageButton();
+       /* _placedObjectImage.sprite = placedObjectTypeSO.GetVisual2D();
+        _placedObjectImage.rectTransform.localScale = Vector3.one * placedObjectTypeSO.GetScaleImageButton();*/
         
         //Добавим событие при нажатии на нашу кнопку
         _button.onClick.AddListener(() =>

@@ -1,42 +1,32 @@
-using UnityEngine;
+п»їusing UnityEngine;
 /// <summary>
-/// Создается в каждой позиции сетки. И меняет цвет в зависимости от переданных параметров
+/// РђР±СЃС‚СЂР°РєС‚РЅС‹Р№ РєР»Р°СЃСЃ. Р’РёР·СѓР°Р» СЃРµС‚РєРё РёРЅРІРµРЅС‚РѕСЂСЏ, СЃРѕР·РґР°РµС‚СЃСЏ РІ РєР°Р¶РґРѕР№ СЏС‡РµР№РєРё Рё РјРµРЅСЏРµС‚ С†РІРµС‚ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ РїРµСЂРµРґР°РЅРЅС‹С… РїР°СЂР°РјРµС‚СЂРѕРІ
 /// </summary>
-public class InventoryGridVisualSingle : MonoBehaviour
+public abstract class InventoryGridVisualSingle : MonoBehaviour
 {
-    [SerializeField] private MeshRenderer _meshRendererQuad; // Будем менять материал для визуализиции сетки инвенторя
+    private bool _isBusy; //Р—Р°РЅСЏС‚Рѕ  
 
-    private bool _isBusy; //Занято 
+    public abstract void Hide(); // РЎРєСЂС‹С‚СЊ
 
-    public void Hide() // Скрыть
-    {
-        _meshRendererQuad.enabled = false;
-    }
 
-    public void Show(Material material) //Показать и Установить переданный материал
-    {
-        _meshRendererQuad.enabled = true;
-        _meshRendererQuad.material = material;       
-    }
+    public abstract void Show(Material material); //РџРѕРєР°Р·Р°С‚СЊ Рё РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РїРµСЂРµРґР°РЅРЅС‹Р№ РјР°С‚РµСЂРёР°Р»
+   
 
-    public void SetIsBusyAndMaterial(bool isBusy, Material material)
+    public virtual void SetIsBusyAndMaterial(bool isBusy, Material material)
     {
         _isBusy = isBusy;
-        if (_isBusy) // Если ячейка занята то
+        if (_isBusy) // Р•СЃР»Рё СЏС‡РµР№РєР° Р·Р°РЅСЏС‚Р° С‚Рѕ
         {
-            Hide(); // Скроем сетку
+            Hide(); // РЎРєСЂРѕРµРј СЃРµС‚РєСѓ
         }
         else
         {
-            Show(material); // Показать
+            Show(material); // РџРѕРєР°Р·Р°С‚СЊ
         }
     }
 
-    public bool GetIsBusy()
+    public virtual bool GetIsBusy()
     {
         return _isBusy;
     }
-
-   
-   
 }

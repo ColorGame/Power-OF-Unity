@@ -7,7 +7,7 @@ public class GameplayEntryPoint : MonoBehaviour, IEntryPoint
     private MouseOnGameGrid _mouseOnGameGrid;
     private UnitActionSystem _unitActionSystem;
     private UnitSpawnerOnLevel _unitSpawnerOnLevel;
-    private SelectUnitButtonSystemUI _selectUnitButtonUI;
+    private SelectUnitButtonSystemInLevelUI _selectUnitButtonUI;
     private OptionsMenagerUI _optionsMenagerUI;
     private ActionButtonSystemUI _actionButtonSystemUI;
     private EnemyAI _enemyAI;
@@ -32,7 +32,7 @@ public class GameplayEntryPoint : MonoBehaviour, IEntryPoint
         _mouseOnGameGrid = GetComponentInChildren<MouseOnGameGrid>(true);
         _unitActionSystem = GetComponentInChildren<UnitActionSystem>(true);
         _unitSpawnerOnLevel = GetComponentInChildren<UnitSpawnerOnLevel>(true);
-        _selectUnitButtonUI = GetComponentInChildren<SelectUnitButtonSystemUI>(true);
+        _selectUnitButtonUI = GetComponentInChildren<SelectUnitButtonSystemInLevelUI>(true);
         _optionsMenagerUI = GetComponentInChildren<OptionsMenagerUI>(true);
         _actionButtonSystemUI = GetComponentInChildren<ActionButtonSystemUI>(true);
         _enemyAI = GetComponentInChildren<EnemyAI>(true);

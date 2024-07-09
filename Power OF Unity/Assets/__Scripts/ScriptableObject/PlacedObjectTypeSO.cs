@@ -19,18 +19,16 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
     [SerializeField] private string _itemID = null;
     [Tooltip("Тип размещаемого объекта")]
     [SerializeField] private PlacedObjectType _placedObjectType;
-    [Tooltip("Префаб размещаемого объекта")]
-    [SerializeField] private Transform _prefab; 
-    [Tooltip("Визуальная часть размещаемого объекта")]
-    [SerializeField] private Transform _visual;
+    [Tooltip("Префаб размещаемого объекта 3D/для создания и размещении на игроке")]
+    [SerializeField] private Transform _prefab3D;
+    [Tooltip("Префаб размещаемого объекта 2D(для Canvas)")]
+    [SerializeField] private Transform _prefab2D;
+    [Tooltip("Визуальная часть размещаемого объекта 2D(для кнопок Canvas)")]
+    [SerializeField] private Transform _visual2D;
     [Tooltip("Сколько занимает клеток в ширину Х")]
     [Range(1, 5)][SerializeField] private int _widthX;
     [Tooltip("Сколько занимает клеток в высоту У")]
-    [Range(1, 2)][SerializeField] private int _heightY;
-    [Tooltip("Изображение для кнопки")]
-    [SerializeField] private Sprite _imageButton;
-    /*[Tooltip("Масштаб изображение для кнопки")]
-    [SerializeField] private float _scaleImageButton;*/
+    [Range(1, 2)][SerializeField] private int _heightY;   
     [Tooltip("Список слотов инвенторя на которые можно разместить наш объект")]
     [SerializeField] private List<InventorySlot> _canPlacedOnSlotList;
     [Tooltip("Вес размещаемого объекта в килограммах")]
@@ -71,8 +69,9 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
     }
 
     public PlacedObjectType GetPlacedObjectType() { return _placedObjectType; }
-
-    public Transform GetPrefab() { return _prefab; }
+    public Transform GetPrefab3D() { return _prefab3D; }
+    public Transform GetPrefab2D() { return _prefab2D; }
+    public Transform GetVisual2D() { return _visual2D; }
 
     /// <summary>
     /// Вычислить смещение визуала относительно родителя
@@ -90,22 +89,13 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
     /// <summary>
     /// Получить количество ЯЧЕЕК которое занимает объект в ширину Х и высоту Ую
     /// /// </summary>    
-    public Vector2Int GetWidthXHeightYInCells() { return new Vector2Int(_widthX, _heightY); }
-
-    public Transform GetVisual() { return _visual; }
+    public Vector2Int GetWidthXHeightYInCells() { return new Vector2Int(_widthX, _heightY); }  
 
     /// <summary>
     /// Список слотов на которые можно разместить наш объект
     /// </summary>
     public List<InventorySlot> GetCanPlacedOnSlotList() { return _canPlacedOnSlotList; }
-
-    public Sprite GetImageButton() { return _imageButton; }
-    /// <summary>
-    /// Масштаб изображения. Все спрайты имеют одинвковый размер 512х256, поэтому маленькие предметы в виде ножа гранаты ... надо отмаштабировать
-    /// </summary>
-    public float GetScaleImageButton() { return _widthX/5f; } // 5 - это максимальный размер ширины сетки инвенторя (если в ширину предмет занимает 5 клеток то Scale=1)
-
-
+       
     void ISerializationCallbackReceiver.OnBeforeSerialize()
     {
         // Сгенерируйте и сохраните новый UUID, если он пуст или там просто пустые пробелы.
@@ -114,7 +104,6 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
             _itemID = Guid.NewGuid().ToString();
         }
     }
-
     void ISerializationCallbackReceiver.OnAfterDeserialize()
     {
         // Требуется ISerializationCallbackReceiver, но нам не нужно ничего с этим делать.

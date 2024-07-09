@@ -8,6 +8,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2795409752527690228, guid: bd764e50990acd841ae96b8de1d9c21b,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 810
+      objectReference: {fileID: 0}
+    - target: {fileID: 2795409752527690228, guid: bd764e50990acd841ae96b8de1d9c21b,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 405
+      objectReference: {fileID: 0}
     - target: {fileID: 4291044399722190882, guid: bd764e50990acd841ae96b8de1d9c21b,
         type: 3}
       propertyPath: m_Pivot.x
@@ -86,12 +96,12 @@ PrefabInstance:
     - target: {fileID: 4291044399722190882, guid: bd764e50990acd841ae96b8de1d9c21b,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 375
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4291044399722190882, guid: bd764e50990acd841ae96b8de1d9c21b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 150
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4291044399722190882, guid: bd764e50990acd841ae96b8de1d9c21b,
         type: 3}
@@ -111,7 +121,7 @@ PrefabInstance:
     - target: {fileID: 7867005394304499552, guid: bd764e50990acd841ae96b8de1d9c21b,
         type: 3}
       propertyPath: m_Name
-      value: ItemCoreVisual_5x2
+      value: Rifle2Base2DVisual_5x2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

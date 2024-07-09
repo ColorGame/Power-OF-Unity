@@ -120,7 +120,7 @@ public class CameraFollow: MonoBehaviour
     {
         if (!_edgeScrolling) return;// Если прокрутка по краям НЕ активированна то выходим
 
-        Vector2 mousePosition = _gameInput.GetMouseScreenPosition();
+        Vector2 mousePosition = _gameInput.GetMouseScreenPoint();
         Vector2 inputMoveDirection = Vector2.zero;
         float edgeScrollingSize = 5; // (количество пикселей) Отступ от края экрана где начинается движение камеры
         if (mousePosition.x > Screen.width - edgeScrollingSize) // если мыш больше высоты экран - отступ от края

@@ -24,8 +24,8 @@ public class UnitEquipment
         {
             PlacedObjectTypeSO mainPlacedObjectTypeSO =  _unit.GetUnitTypeSO<UnitEnemySO>().GetMainPlacedObjectTypeSO(); // Получим основное оружие для экиперовки врага
             // Сделать
-            PlacedObject placedObject = PlacedObject.CreateInWorld(_rightHandTransform.position, mainPlacedObjectTypeSO, _unit.GetTransform());
-            EquipWeapon(placedObject);
+          //  PlacedObject placedObject = PlacedObject.CreateInWorld(_rightHandTransform.position, mainPlacedObjectTypeSO, _unit.GetTransform(), _unit.Get);
+         //   EquipWeapon(placedObject);
         }
     }
 

@@ -18,9 +18,13 @@ MonoBehaviour:
     type: 3}
   placedObjectTypeButtonPrefab: {fileID: 580290972513468962, guid: 7c40f42c73910994e83e1125fb769b7d,
     type: 3}
-  levelGridSystemVisualSinglePrefab: {fileID: 8005569743934790880, guid: 1072dce5c5edd4f4ebc287c19b6a5c43,
+  LevelGridVisualSinglePrefab: {fileID: 8005569743934790880, guid: 1072dce5c5edd4f4ebc287c19b6a5c43,
     type: 3}
-  inventoryGridSystemVisualSinglePrefab: {fileID: 8005569743934790880, guid: 770019eb39762254fb001ae827020869,
+  InventoryGridInVisualSingleWorldSpacePrefab: {fileID: 2345425899709787899, guid: 770019eb39762254fb001ae827020869,
+    type: 3}
+  InventoryGridInVisualSingleScreenSpacePrefab: {fileID: 800289091492083290, guid: c97ebce0fcab5da4da1f49c3f5277599,
+    type: 3}
+  actionButtonUIPrefab: {fileID: 8201834220122701377, guid: d4bfeafd841c4544f92b1be743c3fdd2,
     type: 3}
   grenadeExplosionFXPrefab: {fileID: 6125734487752806136, guid: cd82db3c69485304186c77a2c1ed7066,
     type: 3}
@@ -36,34 +40,3 @@ MonoBehaviour:
     type: 3}
   spotterFireFXPrefab: {fileID: 4979191747963808, guid: b63e286960e48c343a03df8fbd5a8b0d,
     type: 3}
-  _enemyTypePrefabUnitList:
-  - enemyType: 0
-    transformPrefab: {fileID: 58416398212876061, guid: 7ce38a94eea45cf428d2040fd6e30662,
-      type: 3}
-  - enemyType: 1
-    transformPrefab: {fileID: 58416398212876061, guid: 08d4b3d35d7c3b441819e54d393d3fe1,
-      type: 3}
-  - enemyType: 2
-    transformPrefab: {fileID: 58416398212876061, guid: 89c824699e5068343a5b57cf6f536694,
-      type: 3}
-  - enemyType: 3
-    transformPrefab: {fileID: 58416398212876061, guid: 6cab5efa8a27c9248b53537f64869b12,
-      type: 3}
-  - enemyType: 4
-    transformPrefab: {fileID: 537996223107129077, guid: 25b24ead5fdf0a04abdb463c412762e1,
-      type: 3}
-  - enemyType: 5
-    transformPrefab: {fileID: 8624069984998383222, guid: b69254569871a0f4ea3ef0cda2dca5c1,
-      type: 3}
-  - enemyType: 6
-    transformPrefab: {fileID: 58416398212876061, guid: 42fd93ec5488df64ba595f3e439eb5f3,
-      type: 3}
-  - enemyType: 7
-    transformPrefab: {fileID: 58416398212876061, guid: cb6275f86cdc36940b28c3e74acc978f,
-      type: 3}
-  - enemyType: 8
-    transformPrefab: {fileID: 58416398212876061, guid: aaa0c732cfd84c6438182ba8189aa7d7,
-      type: 3}
-  - enemyType: 9
-    transformPrefab: {fileID: 58416398212876061, guid: b398cd39271f0a4448ddffe1ca171352,
-      type: 3}

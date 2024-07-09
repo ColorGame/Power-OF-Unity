@@ -21,7 +21,7 @@ public class ActionBusyUI : MonoBehaviour // Действие занят. (будет обрабатывать
     
     
     
-    /*private void ShowTooltipsFollowMouse() // Показать
+    /*private void ShowShortTooltipFollowMouse() // Показать
     {
         gameObject.SetActive(true);
     }
@@ -35,7 +35,7 @@ public class ActionBusyUI : MonoBehaviour // Действие занят. (будет обрабатывать
     {
         if (isBusy)
         {
-            ShowTooltipsFollowMouse();
+            ShowShortTooltipFollowMouse();
         }
         else
         {

@@ -1,44 +1,29 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Создает сетку инверторя. В каждой позиции создается GridObjectInventoryXY который хранит информ о размещенном на сетке объекте
+/// РЎРµС‚РєР° РёРЅРІРµСЂС‚РѕСЂСЏ. Р’ РєР°Р¶РґРѕР№ СЏС‡РµР№РєРё СЃРѕР·РґР°РµС‚СЃСЏ GridObjectInventoryXY РєРѕС‚РѕСЂС‹Р№ С…СЂР°РЅРёС‚ РёРЅС„РѕСЂРј Рѕ СЂР°Р·РјРµС‰РµРЅРЅРѕРј РЅР° СЃРµС‚РєРµ РѕР±СЉРµРєС‚Рµ
 /// </summary>
-/// <remarks>
-/// Взаимодействие сторонних систем с InventoryGrid, рекомендую через PickUpDropPlacedObject. 
-/// </remarks>
 public class InventoryGrid : MonoBehaviour
 {
 
-    private static float cellSize;  // Размер ячейки
+    private static float cellSize;  // Р Р°Р·РјРµСЂ СЏС‡РµР№РєРё
 
-    [SerializeField] private InventoryGridParameters[] _gridParametersArray; // Массив параметров сеток ЗАДАТЬ в ИНСПЕКТОРЕ
-    [SerializeField] private Transform _gridDebugObjectPrefab; // Префаб отладки сетки 
+    [SerializeField] private InventoryGridParameters[] _gridParametersArray; // РњР°СЃСЃРёРІ РїР°СЂР°РјРµС‚СЂРѕРІ СЃРµС‚РѕРє Р—РђР”РђРўР¬ РІ РРќРЎРџР•РљРўРћР Р•
+    [SerializeField] private Transform _gridDebugObjectPrefab; // РџСЂРµС„Р°Р± РѕС‚Р»Р°РґРєРё СЃРµС‚РєРё 
 
     private TooltipUI _tooltipUI;
     private PickUpDropPlacedObject _pickUpDrop;
-    private Transform _canvasInventoryWorld;
-    private List<PlacedObject> _placedObjectList = new List<PlacedObject>(); // Список размещенных объектов    
-    private List<GridSystemXY<GridObjectInventoryXY>> _gridSystemXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectInventoryXY    
+    private Canvas _canvas;
+    private List<PlacedObject> _placedObjectList = new List<PlacedObject>(); // РЎРїРёСЃРѕРє СЂР°Р·РјРµС‰РµРЅРЅС‹С… РѕР±СЉРµРєС‚РѕРІ    
+    private List<GridSystemXY<GridObjectInventoryXY>> _gridSystemXYList; //РЎРїРёСЃРѕРє СЃРµС‚РѕС‡РЅР°С… СЃРёСЃС‚РµРј .Р’ РґР¶РµРЅРµСЂРёРє РїСЂРµРґР°РµРј С‚РёРї GridObjectInventoryXY    
 
 
 
     private void Awake()
     {
-        _gridSystemXYList = new List<GridSystemXY<GridObjectInventoryXY>>(); // Инициализируем список              
-
-        foreach (InventoryGridParameters gridParameters in _gridParametersArray)
-        {
-            GridSystemXY<GridObjectInventoryXY> gridSystem = new GridSystemXY<GridObjectInventoryXY>(gridParameters,   // ПОСТРОИМ СЕТКУ  и в каждой ячейки создадим объект типа GridObjectInventoryXY
-                (GridSystemXY<GridObjectInventoryXY> g, Vector2Int gridPosition) => new GridObjectInventoryXY(g, gridPosition)); //в четвертом параметре аргумента зададим функцию ананимно через лямбду => new GridObjectUnitXZ(g, _gridPositioAnchor) И ПЕРЕДАДИМ ЕЕ ДЕЛЕГАТУ. (лямбда выражение можно вынести в отдельный метод)
-
-            //gridSystem.CreateDebugObject(_gridDebugObjectPrefab); // Создадим наш префаб в каждой ячейки
-            _gridSystemXYList.Add(gridSystem); // Добавим в список созданную сетку          
-        }
-
-        _canvasInventoryWorld = GetComponentInParent<Canvas>().transform;
-        cellSize = _gridSystemXYList[0].GetCellSize(); // Для всех сеток масштаб ячейки одинвковый  
+        _canvas = GetComponentInParent<Canvas>();          
     }
 
     public void Init(PickUpDropPlacedObject pickUpDrop, TooltipUI tooltipUI)
@@ -48,74 +33,69 @@ public class InventoryGrid : MonoBehaviour
 
         Setup();
     }
-
+   
     private void Setup()
-    {
-        // Задодим размер и тайлинг материала заднего фона
+    {       
+        cellSize = _gridParametersArray[0].cellSize;// Р”Р»СЏ РІСЃРµС… СЃРµС‚РѕРє РјР°СЃС€С‚Р°Р± СЏС‡РµР№РєРё РѕРґРёРЅРІРєРѕРІС‹Р№ 
 
-        //_background.localPosition = new Vector3(_widthBag / 2f, _heightBag / 2f, 0) * _cellSize; // разместим задний фон посередине
-        // _background.localScale = new Vector3(_widthBag, _heightBag, 0) * _cellSize;
-        //_background.GetComponent<Material>().mainTextureScale = new Vector2(_widthBag, _heightBag);// Сдеалем количество тайлов равным количеству ячеек по высоте и ширине   
+        _gridSystemXYList = new List<GridSystemXY<GridObjectInventoryXY>>(); // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј СЃРїРёСЃРѕРє              
+
+        foreach (InventoryGridParameters gridParameters in _gridParametersArray)
+        {
+            GridSystemXY<GridObjectInventoryXY> gridSystem = new GridSystemXY<GridObjectInventoryXY>(_canvas.scaleFactor, gridParameters,   // РџРћРЎРўР РћРРњ РЎР•РўРљРЈ  Рё РІ РєР°Р¶РґРѕР№ СЏС‡РµР№РєРё СЃРѕР·РґР°РґРёРј РѕР±СЉРµРєС‚ С‚РёРїР° GridObjectInventoryXY
+                (GridSystemXY<GridObjectInventoryXY> g, Vector2Int gridPosition) => new GridObjectInventoryXY(g, gridPosition)); //РІ С‡РµС‚РІРµСЂС‚РѕРј РїР°СЂР°РјРµС‚СЂРµ Р°СЂРіСѓРјРµРЅС‚Р° Р·Р°РґР°РґРёРј С„СѓРЅРєС†РёСЋ Р°РЅР°РЅРёРјРЅРѕ С‡РµСЂРµР· Р»СЏРјР±РґСѓ => new GridObjectUnitXZ(g, _gridPositioAnchor) Р РџР•Р Р•Р”РђР”РРњ Р•Р• Р”Р•Р›Р•Р“РђРўРЈ. (Р»СЏРјР±РґР° РІС‹СЂР°Р¶РµРЅРёРµ РјРѕР¶РЅРѕ РІС‹РЅРµСЃС‚Рё РІ РѕС‚РґРµР»СЊРЅС‹Р№ РјРµС‚РѕРґ)
+
+            //gridSystem.CreateDebugObject(_gridDebugObjectPrefab); // РЎРѕР·РґР°РґРёРј РЅР°С€ РїСЂРµС„Р°Р± РІ РєР°Р¶РґРѕР№ СЏС‡РµР№РєРё
+            _gridSystemXYList.Add(gridSystem); // Р”РѕР±Р°РІРёРј РІ СЃРїРёСЃРѕРє СЃРѕР·РґР°РЅРЅСѓСЋ СЃРµС‚РєСѓ          
+        }
+
+
+        // Р—Р°РґРѕРґРёРј СЂР°Р·РјРµСЂ Рё С‚Р°Р№Р»РёРЅРі РјР°С‚РµСЂРёР°Р»Р° Р·Р°РґРЅРµРіРѕ С„РѕРЅР°
+
+        //_background.localPosition = new Vector3(_widthBag / 2f, _heightBag / 2f, 0) * _cellSizeWithScaleFactor; // СЂР°Р·РјРµСЃС‚РёРј Р·Р°РґРЅРёР№ С„РѕРЅ РїРѕСЃРµСЂРµРґРёРЅРµ
+        // _background.localScale = new Vector3(_widthBag, _heightBag, 0) * _cellSizeWithScaleFactor;
+        //_background.GetComponent<Material>().mainTextureScale = new Vector2(_widthBag, _heightBag);// РЎРґРµР°Р»РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ С‚Р°Р№Р»РѕРІ СЂР°РІРЅС‹Рј РєРѕР»РёС‡РµСЃС‚РІСѓ СЏС‡РµРµРє РїРѕ РІС‹СЃРѕС‚Рµ Рё С€РёСЂРёРЅРµ   
 
         /* foreach (InventoryGridParameters gridParameters in _gridParametersArray)
          {
-             RectTransform bagBackground = (RectTransform)gridParameters.anchorGridTransform.GetChild(0); //Получим задний фон сетки
+             RectTransform bagBackground = (RectTransform)gridParameters.anchorGridTransform.GetChild(0); //РџРѕР»СѓС‡РёРј Р·Р°РґРЅРёР№ С„РѕРЅ СЃРµС‚РєРё
              bagBackground.sizeDelta = new Vector2(gridParameters.width, gridParameters.height);
              bagBackground.localScale = Vector3.one * gridParameters.cellSize;
-             bagBackground.GetComponent<RawImage>().uvRect = new Rect(0, 0, gridParameters.width, gridParameters.height);   // Сдеалем количество тайлов равным количеству ячеек по высоте и ширине   
+             bagBackground.GetComponent<RawImage>().uvRect = new Rect(0, 0, gridParameters.width, gridParameters.height);   // РЎРґРµР°Р»РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ С‚Р°Р№Р»РѕРІ СЂР°РІРЅС‹Рј РєРѕР»РёС‡РµСЃС‚РІСѓ СЏС‡РµРµРє РїРѕ РІС‹СЃРѕС‚Рµ Рё С€РёСЂРёРЅРµ   
          }*/
     }
 
     /// <summary>
-    /// Попробуем, для заданной позиции Мыши, получим сеточную систему на Кэнвасе и в случае удачи вернем ее и сеточную позицию
+    /// РџРѕРїСЂРѕР±СѓРµРј, РґР»СЏ Р·Р°РґР°РЅРЅРѕР№ РїРѕР·РёС†РёРё РњС‹С€Рё, РїРѕР»СѓС‡РёРј СЃРµС‚РѕС‡РЅСѓСЋ СЃРёСЃС‚РµРјСѓ РЅР° РљСЌРЅРІР°СЃРµ Рё РІ СЃР»СѓС‡Р°Рµ СѓРґР°С‡Рё РІРµСЂРЅРµРј РµРµ Рё СЃРµС‚РѕС‡РЅСѓСЋ РїРѕР·РёС†РёСЋ
     /// </summary>   
-    public bool TryGetGridSystemGridPosition(Vector3 mousePosition, RenderMode canvasRenderMode, Camera camera, out GridSystemXY<GridObjectInventoryXY> gridSystemXY, out Vector2Int mouseGridPosition)
+    public bool TryGetGridSystemGridPosition(Vector3 mousePosition, out GridSystemXY<GridObjectInventoryXY> gridSystemXY, out Vector2Int mouseGridPosition)
     {
         gridSystemXY = null;
-        mouseGridPosition = new Vector2Int(0, 0);
+        mouseGridPosition = new Vector2Int();
 
-        switch (canvasRenderMode)
+        foreach (GridSystemXY<GridObjectInventoryXY> localGridSystem in _gridSystemXYList) // РїРµСЂР±РµСЂРµРј СЃРїРёСЃРѕРє СЃРµС‚РѕРє
         {
-            case RenderMode.ScreenSpaceOverlay:
-                foreach (InventoryGridParameters inventoryGridParameter in _gridParametersArray)
-                {
-                    Vector2 mouseLocalPosition;
-                    RectTransform rectTransformGrid = (RectTransform)inventoryGridParameter.anchorGridTransform;
-                    if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransformGrid, mousePosition, null, out mouseLocalPosition)) // Если мы попали на трансформ сетки, то вернем локальную позицию мыши на этом трансформе
-                    {
-                        gridSystemXY = GetGridSystemXY(inventoryGridParameter.slot);
-                        mouseGridPosition = gridSystemXY.GetGridPosition(mouseLocalPosition);
-                    }
-                }
-                break;
+            Vector2Int testGridPositionMouse = localGridSystem.GetGridPosition(mousePosition); //РґР»СЏ РґР°РЅРЅРѕР№ localGridSystem РїРѕР»СѓС‡РёРј СЃРµС‚РѕС‡РЅСѓСЋ РїРѕР·РёС†РёСЋ РјС‹С€РєРё
 
-            case RenderMode.ScreenSpaceCamera:
-                foreach (InventoryGridParameters inventoryGridParameter in _gridParametersArray)
-                {
-                    Vector2 localPositionMouse;
-                    RectTransform rectTransformGrid = (RectTransform)inventoryGridParameter.anchorGridTransform;
-                    if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransformGrid, mousePosition, camera, out localPositionMouse)) // Если мы попали на трансформ сетки, то вернем локальную позицию мыши на этом трансформе
-                    {
-                        gridSystemXY = GetGridSystemXY(inventoryGridParameter.slot);
-                        mouseGridPosition = gridSystemXY.GetGridPosition(localPositionMouse);
-                    }
-                }
+            if (localGridSystem.IsValidGridPosition(testGridPositionMouse)) // Р•СЃР»Рё С‚РµСЃС‚РёСЂСѓРµРјР°СЏ СЃРµС‚РѕС‡РЅР°СЏ РїРѕР·РёС†РёСЏ РґРѕРїСѓСЃС‚РёРјР°, РІРµСЂРЅРµРј РµРµ Рё СЃР°РјСѓ СЃРµС‚РѕС‡РЅСѓСЋ СЃРёСЃС‚РµРјСѓ
+            {
+                gridSystemXY = localGridSystem;
+                mouseGridPosition = testGridPositionMouse;
                 break;
-
-            case RenderMode.WorldSpace:
-                foreach (GridSystemXY<GridObjectInventoryXY> localGridSystem in _gridSystemXYList) // перберем список сеток
-                {
-                    Vector2Int testGridPositionMouse = localGridSystem.GetGridPosition(mousePosition); //для данной localGridSystem получим сеточную позицию мышки
-
-                    if (localGridSystem.IsValidGridPosition(testGridPositionMouse)) // Если тестируемая сеточная позиция допустима, вернем ее и саму сеточную систему
-                    {
-                        gridSystemXY = localGridSystem;
-                        mouseGridPosition = testGridPositionMouse;
-                        break;
-                    }
-                }
-                break;
+            }
         }
+        //РЎРїРѕСЃРѕР± РґР»СЏ Canvas РєРѕС‚РѕСЂС‹Р№ РІ РїР»РѕСЃРєРѕСЃС‚Рё СЌРєСЂР°РЅР°, С‡РµСЂРµР· С„СѓРЅРє. RectTransformUtility.ScreenPointToLocalPointInRectangle
+        /*foreach (InventoryGridParameters inventoryGridParameter in _gridParametersArray)
+        {
+            Vector2 localPositionMouse;
+            RectTransform rectTransformGrid = (RectTransform)inventoryGridParameter.anchorGridTransform;
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransformGrid, mousePosition, camera, out localPositionMouse)) // Р•СЃР»Рё РјС‹ РїРѕРїР°Р»Рё РЅР° С‚СЂР°РЅСЃС„РѕСЂРј СЃРµС‚РєРё, С‚Рѕ РІРµСЂРЅРµРј Р»РѕРєР°Р»СЊРЅСѓСЋ РїРѕР·РёС†РёСЋ РјС‹С€Рё РЅР° СЌС‚РѕРј С‚СЂР°РЅСЃС„РѕСЂРјРµ
+            {
+                gridSystemXY = GetGridSystemXY(inventoryGridParameter.slot);
+                mouseGridPosition = gridSystemXY.GetGridPosition(localPositionMouse); // !!! РќР•Р›Р¬Р—РЇ РџР•Р Р•Р”РћР’РђРўР¬ Р›РћРљРђР›Р¬РќР«Р• РљРћРћР Р”РРќРђРўР«
+                break;
+            }
+        }*/
 
         if (gridSystemXY == null)
         {
@@ -125,58 +105,58 @@ public class InventoryGrid : MonoBehaviour
         {
             return true;
         }
-    }   
+    }
 
     /// <summary>
-    /// Попробую Добавить Размещаемый объект в Позицию Сетки
+    /// РџРѕРїСЂРѕР±СѓСЋ Р”РѕР±Р°РІРёС‚СЊ Р Р°Р·РјРµС‰Р°РµРјС‹Р№ РѕР±СЉРµРєС‚ РІ РџРѕР·РёС†РёСЋ РЎРµС‚РєРё
     /// </summary>   
-    /// <remarks>Верну false если - Разместить нельзя. Если могу то добавлю  Размещаемый объект в GridObjectInventoryXY</remarks>
+    /// <remarks>Р’РµСЂРЅСѓ false РµСЃР»Рё - Р Р°Р·РјРµСЃС‚РёС‚СЊ РЅРµР»СЊР·СЏ. Р•СЃР»Рё РјРѕРіСѓ С‚Рѕ РґРѕР±Р°РІР»СЋ  Р Р°Р·РјРµС‰Р°РµРјС‹Р№ РѕР±СЉРµРєС‚ РІ GridObjectInventoryXY</remarks>
     public bool TryAddPlacedObjectAtGridPosition(Vector2Int gridPositionPlace, PlacedObject placedObject, GridSystemXY<GridObjectInventoryXY> gridSystemXY)
     {
-        List<Vector2Int> gridPositionList = placedObject.GetTryOccupiesGridPositionList(gridPositionPlace); // Получим список сеточных позиций которые хочет занять объект
+        List<Vector2Int> gridPositionList = placedObject.GetTryOccupiesGridPositionList(gridPositionPlace); // РџРѕР»СѓС‡РёРј СЃРїРёСЃРѕРє СЃРµС‚РѕС‡РЅС‹С… РїРѕР·РёС†РёР№ РєРѕС‚РѕСЂС‹Рµ С…РѕС‡РµС‚ Р·Р°РЅСЏС‚СЊ РѕР±СЉРµРєС‚
         bool canPlace = true;
-        foreach (Vector2Int gridPosition in gridPositionList) // Сначало надо проверить каждую ячейку
+        foreach (Vector2Int gridPosition in gridPositionList) // РЎРЅР°С‡Р°Р»Рѕ РЅР°РґРѕ РїСЂРѕРІРµСЂРёС‚СЊ РєР°Р¶РґСѓСЋ СЏС‡РµР№РєСѓ
         {
-            if (!gridSystemXY.IsValidGridPosition(gridPosition)) // Если есть хоть одна НЕ допустимая позиция то 
+            if (!gridSystemXY.IsValidGridPosition(gridPosition)) // Р•СЃР»Рё РµСЃС‚СЊ С…РѕС‚СЊ РѕРґРЅР° РќР• РґРѕРїСѓСЃС‚РёРјР°СЏ РїРѕР·РёС†РёСЏ С‚Рѕ 
             {
-                canPlace = false; // Разместить нельзя
+                canPlace = false; // Р Р°Р·РјРµСЃС‚РёС‚СЊ РЅРµР»СЊР·СЏ
                 break;
             }
-            if (gridSystemXY.GetGridObject(gridPosition).HasPlacedObject()) // Если хоть на одной позиции уже есть размещенный объект то
+            if (gridSystemXY.GetGridObject(gridPosition).HasPlacedObject()) // Р•СЃР»Рё С…РѕС‚СЊ РЅР° РѕРґРЅРѕР№ РїРѕР·РёС†РёРё СѓР¶Рµ РµСЃС‚СЊ СЂР°Р·РјРµС‰РµРЅРЅС‹Р№ РѕР±СЉРµРєС‚ С‚Рѕ
             {
-                canPlace = false; // Разместить нельзя
-                break; //break завершит цикл полностью, continue просто пропустит текущую итерацию.
+                canPlace = false; // Р Р°Р·РјРµСЃС‚РёС‚СЊ РЅРµР»СЊР·СЏ
+                break; //break Р·Р°РІРµСЂС€РёС‚ С†РёРєР» РїРѕР»РЅРѕСЃС‚СЊСЋ, continue РїСЂРѕСЃС‚Рѕ РїСЂРѕРїСѓСЃС‚РёС‚ С‚РµРєСѓС‰СѓСЋ РёС‚РµСЂР°С†РёСЋ.
             }
         }
 
-        if (canPlace)//Если Можем разместить на сетке
+        if (canPlace)//Р•СЃР»Рё РњРѕР¶РµРј СЂР°Р·РјРµСЃС‚РёС‚СЊ РЅР° СЃРµС‚РєРµ
         {
             foreach (Vector2Int gridPosition in gridPositionList)
             {
-                GridObjectInventoryXY gridObject = gridSystemXY.GetGridObject(gridPosition); // Получим GridObjectInventoryXY который находится в gridPosition
-                gridObject.AddPlacedObject(placedObject); // Добавить Размещаемый объект 
+                GridObjectInventoryXY gridObject = gridSystemXY.GetGridObject(gridPosition); // РџРѕР»СѓС‡РёРј GridObjectInventoryXY РєРѕС‚РѕСЂС‹Р№ РЅР°С…РѕРґРёС‚СЃСЏ РІ gridPosition
+                gridObject.AddPlacedObject(placedObject); // Р”РѕР±Р°РІРёС‚СЊ Р Р°Р·РјРµС‰Р°РµРјС‹Р№ РѕР±СЉРµРєС‚ 
             }
             _placedObjectList.Add(placedObject);
         }
         return canPlace;
     }
     /// <summary>
-    /// Удаление Размещаемый объект из сетки (предпологается что он уже размещен в сетке)
+    /// РЈРґР°Р»РµРЅРёРµ Р Р°Р·РјРµС‰Р°РµРјС‹Р№ РѕР±СЉРµРєС‚ РёР· СЃРµС‚РєРё (РїСЂРµРґРїРѕР»РѕРіР°РµС‚СЃСЏ С‡С‚Рѕ РѕРЅ СѓР¶Рµ СЂР°Р·РјРµС‰РµРЅ РІ СЃРµС‚РєРµ)
     /// </summary>
     public void RemovePlacedObjectAtGrid(PlacedObject placedObject)
     {
-        List<Vector2Int> gridPositionList = placedObject.GetOccupiesGridPositionList(); // Получим список сеточных позиций которые занимает объект
-        GridSystemXY<GridObjectInventoryXY> gridSystemXY = placedObject.GetGridSystemXY(); // Получим сетку на которой он размещен 
+        List<Vector2Int> gridPositionList = placedObject.GetOccupiesGridPositionList(); // РџРѕР»СѓС‡РёРј СЃРїРёСЃРѕРє СЃРµС‚РѕС‡РЅС‹С… РїРѕР·РёС†РёР№ РєРѕС‚РѕСЂС‹Рµ Р·Р°РЅРёРјР°РµС‚ РѕР±СЉРµРєС‚
+        GridSystemXY<GridObjectInventoryXY> gridSystemXY = placedObject.GetGridSystemXY(); // РџРѕР»СѓС‡РёРј СЃРµС‚РєСѓ РЅР° РєРѕС‚РѕСЂРѕР№ РѕРЅ СЂР°Р·РјРµС‰РµРЅ 
         foreach (Vector2Int gridPosition in gridPositionList)
         {
-            GridObjectInventoryXY gridObject = gridSystemXY.GetGridObject(gridPosition); // Получим GridObjectInventoryXY для сетки в которой он находится
-            gridObject.RemovePlacedObject(placedObject); // удалим Размещаемый объект 
+            GridObjectInventoryXY gridObject = gridSystemXY.GetGridObject(gridPosition); // РџРѕР»СѓС‡РёРј GridObjectInventoryXY РґР»СЏ СЃРµС‚РєРё РІ РєРѕС‚РѕСЂРѕР№ РѕРЅ РЅР°С…РѕРґРёС‚СЃСЏ
+            gridObject.RemovePlacedObject(placedObject); // СѓРґР°Р»РёРј Р Р°Р·РјРµС‰Р°РµРјС‹Р№ РѕР±СЉРµРєС‚ 
         }
         _placedObjectList.Remove(placedObject);
     }
 
     /// <summary>
-    /// Очистить инвентарь и удалить размещенные предметы
+    /// РћС‡РёСЃС‚РёС‚СЊ РёРЅРІРµРЅС‚Р°СЂСЊ Рё СѓРґР°Р»РёС‚СЊ СЂР°Р·РјРµС‰РµРЅРЅС‹Рµ РїСЂРµРґРјРµС‚С‹
     /// </summary>
     public void ClearInventoryGridAndDestroyPlacedObjects()
     {
@@ -189,33 +169,34 @@ public class InventoryGrid : MonoBehaviour
 
     public List<GridSystemXY<GridObjectInventoryXY>> GetGridSystemXYList() { return _gridSystemXYList; }
 
-    // Получить сеточную позицию
+    // РџРѕР»СѓС‡РёС‚СЊ СЃРµС‚РѕС‡РЅСѓСЋ РїРѕР·РёС†РёСЋ
     public Vector2Int GetGridPosition(Vector3 worldPosition, GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetGridPosition(worldPosition);
 
-    // Получим мировые координаты центра ячейки (относительно  нашей ***GridTransform)
-    public Vector3 GetWorldPositionCenterСornerCell(Vector2Int gridPosition, GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWorldPositionCenterСornerCell(gridPosition);
+    /// <summary>
+    /// РџРѕР»СѓС‡РёРј РјРёСЂРѕРІС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ С†РµРЅС‚СЂР° СЏС‡РµР№РєРё 
+    /// </summary>    
+    public Vector3 GetWorldPositionCenterРЎornerCell(Vector2Int gridPosition, GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWorldPositionCenterРЎornerCell(gridPosition) ;
 
-    //  Получим мировые координаты центра Сетки (относительно  нашей ***GridTransform)
+    /// <summary>
+    /// РџРѕР»СѓС‡РёРј РјРёСЂРѕРІС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ С†РµРЅС‚СЂР° РЎРµС‚РєРё 
+    /// </summary>
     public Vector3 GetWorldPositionGridCenter(GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWorldPositionGridCenter();
 
     /// <summary>
-    /// Получим мировые координаты нижнего левого угола ячейки (относительно  нашей ***GridTransform)
-    /// </summary>   
-    /// <returns></returns>
-    public Vector3 GetWorldPositionLowerLeftСornerCell(Vector2Int gridPosition, GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWorldPositionLowerLeftСornerCell(gridPosition);
+    /// РџРѕР»СѓС‡РёРј РјРёСЂРѕРІС‹Рµ РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅРёР¶РЅРµРіРѕ Р»РµРІРѕРіРѕ СѓРіРѕР»Р° СЏС‡РµР№РєРё 
+    /// </summary>
+    public Vector3 GetWorldPositionLowerLeftРЎornerCell(Vector2Int gridPosition, GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWorldPositionLowerLeftРЎornerCell(gridPosition);
 
     public Vector3 GetRotationAnchorGrid(GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetRotationAnchorGrid();
     public Transform GetAnchorGrid(GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetAnchorGrid();
     public int GetWidth(GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWidth();
     public int GetHeight(GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetHeight();
-    public static float GetCellSize()// (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру)
-    {
-        return cellSize;
-    }
+    public Canvas GetCanvas() { return _canvas; }
+    public static float GetCellSize() { return cellSize ; }// (static РѕР±РѕР·РЅР°С‡Р°РµС‚ С‡С‚Рѕ РјРµС‚РѕРґ РїСЂРёРЅР°РґР»РµР¶РёС‚ РєР»Р°СЃСЃСѓ Р° РЅРµ РєРѕРєРѕРјСѓ РЅРёР±СѓРґСЊ СЌРєР·РµРјРїР»СЏСЂСѓ)
 
-    public GridSystemXY<GridObjectInventoryXY> GetGridSystemXY(InventorySlot inventorySlot) // Получить сетку для этого слота
+    public GridSystemXY<GridObjectInventoryXY> GetGridSystemXY(InventorySlot inventorySlot) // РџРѕР»СѓС‡РёС‚СЊ СЃРµС‚РєСѓ РґР»СЏ СЌС‚РѕРіРѕ СЃР»РѕС‚Р°
     {
-        foreach (GridSystemXY<GridObjectInventoryXY> localGridSystem in _gridSystemXYList) // перберем список сеток
+        foreach (GridSystemXY<GridObjectInventoryXY> localGridSystem in _gridSystemXYList) // РїРµСЂР±РµСЂРµРј СЃРїРёСЃРѕРє СЃРµС‚РѕРє
         {
             if (localGridSystem.GetGridSlot() == inventorySlot)
             {
@@ -230,21 +211,21 @@ public class InventoryGrid : MonoBehaviour
         public void Save()
         {
             _placedObjectList = new List<PlacedObjectParameters>();
-            for (int i = 0; i < _gridSystemXYList.Count; i++) // переберем все сетки
+            for (int i = 0; i < _gridSystemXYList.Count; i++) // РїРµСЂРµР±РµСЂРµРј РІСЃРµ СЃРµС‚РєРё
             {
-                for (int x = 0; x < _gridSystemXYList[i].GetWidth(); x++) // для каждой сетки переберем длину
+                for (int x = 0; x < _gridSystemXYList[i].GetWidth(); x++) // РґР»СЏ РєР°Р¶РґРѕР№ СЃРµС‚РєРё РїРµСЂРµР±РµСЂРµРј РґР»РёРЅСѓ
                 {
-                    for (int y = 0; y < _gridSystemXYList[i].GetHeight(); y++)  // и высоту
+                    for (int y = 0; y < _gridSystemXYList[i].GetHeight(); y++)  // Рё РІС‹СЃРѕС‚Сѓ
                     {
                         Vector2Int gridPosition = new Vector2Int(x, y);
-                        GridObjectInventoryXY gridObject = _gridSystemXYList[i].GetGridObject(gridPosition); // Получим сеточный объект для нашей позиции
+                        GridObjectInventoryXY gridObject = _gridSystemXYList[i].GetGridObject(gridPosition); // РџРѕР»СѓС‡РёРј СЃРµС‚РѕС‡РЅС‹Р№ РѕР±СЉРµРєС‚ РґР»СЏ РЅР°С€РµР№ РїРѕР·РёС†РёРё
 
-                        if (gridObject.HasPlacedObject()) // Если в этой позиции есть размещенный объект то 
+                        if (gridObject.HasPlacedObject()) // Р•СЃР»Рё РІ СЌС‚РѕР№ РїРѕР·РёС†РёРё РµСЃС‚СЊ СЂР°Р·РјРµС‰РµРЅРЅС‹Р№ РѕР±СЉРµРєС‚ С‚Рѕ 
                         {
                             PlacedObjectParameters placedObjectParameters = new PlacedObjectParameters(
                                 slot = _gridSystemXYList[i]
                                 );
-                            if (!_placedObjectList.Contains(gridObject.GetPlacedObject())) // Если этот объект еще не содержиться в списке то добавим его (PlacedObject может одновременно размещаться на нескольких GridObject, поэтому нужна проверка)
+                            if (!_placedObjectList.Contains(gridObject.GetPlacedObject())) // Р•СЃР»Рё СЌС‚РѕС‚ РѕР±СЉРµРєС‚ РµС‰Рµ РЅРµ СЃРѕРґРµСЂР¶РёС‚СЊСЃСЏ РІ СЃРїРёСЃРєРµ С‚Рѕ РґРѕР±Р°РІРёРј РµРіРѕ (PlacedObject РјРѕР¶РµС‚ РѕРґРЅРѕРІСЂРµРјРµРЅРЅРѕ СЂР°Р·РјРµС‰Р°С‚СЊСЃСЏ РЅР° РЅРµСЃРєРѕР»СЊРєРёС… GridObject, РїРѕСЌС‚РѕРјСѓ РЅСѓР¶РЅР° РїСЂРѕРІРµСЂРєР°)
                             {
                                 _placedObjectList.Add(gridObject.GetPlacedObject());
                             }
@@ -253,7 +234,7 @@ public class InventoryGrid : MonoBehaviour
                 }
             }
 
-            // Создадим Список Добавленных Размещенных объектов
+            // РЎРѕР·РґР°РґРёРј РЎРїРёСЃРѕРє Р”РѕР±Р°РІР»РµРЅРЅС‹С… Р Р°Р·РјРµС‰РµРЅРЅС‹С… РѕР±СЉРµРєС‚РѕРІ
             List<PlacedObjectParameters> addPlacedObjectList = new List<PlacedObjectParameters>();
             foreach (PlacedObjectParameters placedObject in placedObjectList)
             {
@@ -267,30 +248,30 @@ public class InventoryGrid : MonoBehaviour
 
             string json = JsonUtility.ToJson(new ListAddPlacedObject { addPlacedObjectList = addPlacedObjectList });
 
-            PlayerPrefs.SetString("InventoryGridSystemSave", json); // Устанавливает единственное строковое значение для предпочтения, определяемого данным ключом. Вы можете использовать PlayerPrefs.getString для получения этого значени
-            SaveSystem.Save("InventoryGridSystemSave", json, true); // Сохраним и перепишем последнее
+            PlayerPrefs.SetString("InventoryGridSystemSave", json); // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РµРґРёРЅСЃС‚РІРµРЅРЅРѕРµ СЃС‚СЂРѕРєРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ РґР»СЏ РїСЂРµРґРїРѕС‡С‚РµРЅРёСЏ, РѕРїСЂРµРґРµР»СЏРµРјРѕРіРѕ РґР°РЅРЅС‹Рј РєР»СЋС‡РѕРј. Р’С‹ РјРѕР¶РµС‚Рµ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ PlayerPrefs.getString РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ СЌС‚РѕРіРѕ Р·РЅР°С‡РµРЅРё
+            SaveSystem.Save("InventoryGridSystemSave", json, true); // РЎРѕС…СЂР°РЅРёРј Рё РїРµСЂРµРїРёС€РµРј РїРѕСЃР»РµРґРЅРµРµ
 
             Debug.Log("Save!");
         }
 
         public void Load()
         {
-            if (PlayerPrefs.HasKey("InventoryGridSystemSave")) // Возвращает true, если заданное значение key существует в PlayerPrefs, в противном случае возвращает false.
+            if (PlayerPrefs.HasKey("InventoryGridSystemSave")) // Р’РѕР·РІСЂР°С‰Р°РµС‚ true, РµСЃР»Рё Р·Р°РґР°РЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ key СЃСѓС‰РµСЃС‚РІСѓРµС‚ РІ PlayerPrefs, РІ РїСЂРѕС‚РёРІРЅРѕРј СЃР»СѓС‡Р°Рµ РІРѕР·РІСЂР°С‰Р°РµС‚ false.
             {
                 string json = PlayerPrefs.GetString("InventoryGridSystemSave");
                 json = SaveSystem.Load("InventoryGridSystemSave");
 
-                ListAddPlacedObject listAddPlacedObject = JsonUtility.FromJson<ListAddPlacedObject>(json); // Загрузим список Добавленных Размещенных объектов
+                ListAddPlacedObject listAddPlacedObject = JsonUtility.FromJson<ListAddPlacedObject>(json); // Р—Р°РіСЂСѓР·РёРј СЃРїРёСЃРѕРє Р”РѕР±Р°РІР»РµРЅРЅС‹С… Р Р°Р·РјРµС‰РµРЅРЅС‹С… РѕР±СЉРµРєС‚РѕРІ
 
-                foreach (AddPlacedObject addPlacedObject in listAddPlacedObject.addPlacedObjectList) // Переберем каждый Добавленный Размещенный объект в списке
+                foreach (AddPlacedObject addPlacedObject in listAddPlacedObject.addPlacedObjectList) // РџРµСЂРµР±РµСЂРµРј РєР°Р¶РґС‹Р№ Р”РѕР±Р°РІР»РµРЅРЅС‹Р№ Р Р°Р·РјРµС‰РµРЅРЅС‹Р№ РѕР±СЉРµРєС‚ РІ СЃРїРёСЃРєРµ
                 {
-                    // Создадим и разместим сохраненный объект               
-                    GridSystemXY<GridObjectInventoryXY> gridSystemXY = GetGridSystemXY(addPlacedObject.gridName); // Получим сетку для размещения
-                    PlacedObject placedObject = PlacedObject.CreateInGrid(gridSystemXY, addPlacedObject.gridPositioAnchor, addPlacedObject.placedObject, _canvasInventory, this);
-                    if (!_pickUpDropPlacedObject.TryDrop(gridSystemXY, addPlacedObject.gridPositioAnchor, placedObject)) // Если не удалось сбросить объект на сетку то
+                    // РЎРѕР·РґР°РґРёРј Рё СЂР°Р·РјРµСЃС‚РёРј СЃРѕС…СЂР°РЅРµРЅРЅС‹Р№ РѕР±СЉРµРєС‚               
+                    GridSystemXY<GridObjectInventoryXY> gridSystemXY = GetGridSystemXY(addPlacedObject.gridName); // РџРѕР»СѓС‡РёРј СЃРµС‚РєСѓ РґР»СЏ СЂР°Р·РјРµС‰РµРЅРёСЏ
+                    PlacedObject placedObject = PlacedObject.CreateAddTryPlacedInGrid(gridSystemXY, addPlacedObject.gridPositioAnchor, addPlacedObject.placedObject, _canvasInventory, this);
+                    if (!_pickUpDropPlacedObject.TryDrop(gridSystemXY, addPlacedObject.gridPositioAnchor, placedObject)) // Р•СЃР»Рё РЅРµ СѓРґР°Р»РѕСЃСЊ СЃР±СЂРѕСЃРёС‚СЊ РѕР±СЉРµРєС‚ РЅР° СЃРµС‚РєСѓ С‚Рѕ
                     {
-                        placedObject.DestroySelf(); // Уничтожим этот объект
-                        _tooltipUI.ShowTooltipsFollowMouse("не удалось загрузить сохранение", new TooltipUI.TooltipTimer { timer = 3f }); // Покажем подсказку и зададим новый таймер отображения подсказки                   
+                        placedObject.DestroySelf(); // РЈРЅРёС‡С‚РѕР¶РёРј СЌС‚РѕС‚ РѕР±СЉРµРєС‚
+                        _tooltipUI.ShowShortTooltipFollowMouse("РЅРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ СЃРѕС…СЂР°РЅРµРЅРёРµ", new TooltipUI.TooltipTimer { timer = 3f }); // РџРѕРєР°Р¶РµРј РїРѕРґСЃРєР°Р·РєСѓ Рё Р·Р°РґР°РґРёРј РЅРѕРІС‹Р№ С‚Р°Р№РјРµСЂ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РїРѕРґСЃРєР°Р·РєРё                   
                     }
                 }
             }
@@ -298,14 +279,14 @@ public class InventoryGrid : MonoBehaviour
         }*/
 
 
-    /*public InventoryGridParameters[] GetGridParametersArray() //Получить Массив параметров сеток
+    /*public InventoryGridParameters[] GetGridParametersArray() //РџРѕР»СѓС‡РёС‚СЊ РњР°СЃСЃРёРІ РїР°СЂР°РјРµС‚СЂРѕРІ СЃРµС‚РѕРє
     {
         return _gridParametersArray;
     }
 
-    public PlacedObject GetPlacedObjectAtGridPosition(Vector2Int gridPosition, GridSystemXY<GridObjectInventoryXY> gridSystemXY) // Получить Размещаемый объект в этой сеточной позиции
+    public PlacedObject GetPlacedObjectAtGridPosition(Vector2Int gridPosition, GridSystemXY<GridObjectInventoryXY> gridSystemXY) // РџРѕР»СѓС‡РёС‚СЊ Р Р°Р·РјРµС‰Р°РµРјС‹Р№ РѕР±СЉРµРєС‚ РІ СЌС‚РѕР№ СЃРµС‚РѕС‡РЅРѕР№ РїРѕР·РёС†РёРё
     {
-        GridObjectInventoryXY gridObject = gridSystemXY.GetGridObject(gridPosition); // Получим GridObjectInventoryXY который находится в gridPositionPlace
+        GridObjectInventoryXY gridObject = gridSystemXY.GetGridObject(gridPosition); // РџРѕР»СѓС‡РёРј GridObjectInventoryXY РєРѕС‚РѕСЂС‹Р№ РЅР°С…РѕРґРёС‚СЃСЏ РІ gridPositionPlace
         return gridObject.GetPlacedObject();
     }*/
 }

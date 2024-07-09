@@ -22,8 +22,9 @@ public class GameAssets : ScriptableObject //Игровые Активы
     public Transform grenadeProjectilePrefab; // Префаб граната
     public Transform bulletProjectilePrefab; // Префаб пули
     public Transform placedObjectTypeButtonPrefab; // Кнопка выбора оружия
-    public Transform levelGridSystemVisualSinglePrefab; // Префаб визуализации узла сетки
-    public Transform inventoryGridSystemVisualSinglePrefab; // Префаб визуализации узла сетки Инвенторя
+    public Transform LevelGridVisualSinglePrefab; // Префаб визуализации узла сетки
+    public InventoryGridVisualSingle InventoryGridInVisualSingleScreenSpacePrefab; // Префаб визуализации узла сетки Инвенторя
+    public InventoryGridVisualSingle InventoryGridInVisualSingleWorldSpacePrefab; // Префаб визуализации узла сетки Инвенторя
     public Transform actionButtonUIPrefab; // Префаб кнопки выбора действия
     [Header("ПРЕФАБЫ FX-система частиц")]
     public Transform grenadeExplosionFXPrefab; // Префаб частички взрыва гранаты //НЕЗАБУДЬ ПОСТАВИТЬ ГАЛОЧКУ У TRAIL самоуничтожение(Destroy) после проигрывания

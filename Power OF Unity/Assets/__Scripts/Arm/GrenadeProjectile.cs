@@ -283,7 +283,7 @@ public class GrenadeProjectile : MonoBehaviour // Гранатный снаряд
         private void OnDrawGizmos() // Для рисования вспогательных объектов в сцене, в нашем случае круг действия гранаты
         {
             Handles.color = Color.red;
-            Handles.DrawWireDisc(_targetRotation, Vector3.up , _damageRadiusInCells * _levelGrid.GetCellSize(), 4f);
+            Handles.DrawWireDisc(_targetRotation, Vector3.up , _damageRadiusInCells * _levelGrid.GetCellSizeWithScaleFactor(), 4f);
         }
     #endif // При создании билда этот кусок кода не будет в него включаться а будет работать только в EDITOR(редактор)*/
 

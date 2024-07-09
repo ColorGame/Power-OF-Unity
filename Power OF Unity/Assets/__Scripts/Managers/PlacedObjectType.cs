@@ -8,19 +8,27 @@ public enum PlacedObjectType
     GrapplingHookGun,       //пистолет с абордажным крюком
     SyringeGun,             //Шприц-пистолет
 
-    Pistol,                 //Пистолет
+    GrenadeFrag,
+    GrenadeSmoke,
+    GrenadeStun,
+    GrenadePlasma,
+
+    Pistol1Base,             //Пистолет
+    Pistol2Machine,          //Пистолет-пулемет
+    Pistol3MachineWithButt,  //Пистолет-пулемет с прикладом. Больше дальность и меньше тряски при ручном наведении
+    Pistol4Laser,            //Лазерный пистолет
+    RevolverLaser,           //Лазерный револьвер. Мощьный одиночный выстрел - замена лазерному пистолету. Болеше урон и дальность
+   
+    Rifle1Small,             //Винтовка Маленькая
+    Rifle2Base,              //Винтовка
+    Rifle3LaserSmall,        //Лазерная винтовка маленькая
+    Rifle4LaserBase,         //Лазерная винтовка
+    
+    
     Shotgun,                //Дробовик
-    MachinePistol,          //Пистолет-пулемет
-    MachinePistolWithButt,  //Пистолет-пулемет с прикладом. Больше дальность и меньше тряски при ручном наведении
-    RifleSmall,             //Винтовка Маленькая
-    Rifle,                  //Винтовка
     SniperRifle,            //Снайперская винтовка
 
-    LaserPistol,            //Лазерный пистолет
-    LaserRevolver,          //Лазерный револьвер. Мощьный одиночный выстрел - замена лазерному пистолету. Болеше урон и дальность
     LaserShotgun,           //Лазерный дробовик
-    LaserRifleSmall,        //Лазерная винтовка маленькая
-    LaserRifle,             //Лазерная винтовка
     LaserSniperRifle,       //Лазерная снайперская винтовка
 
     PlasmaRifleSmall,       //Маленькая плазменная винтовка
@@ -33,10 +41,7 @@ public enum PlacedObjectType
     SwordStun,
 
 
-    GrenadeFrag,
-    GrenadeSmoke,
-    GrenadeElectroshock,
-    GrenadePlasma,
+    
 
     Binoculars,             // Бинокль
     Medipack,               //Медицинский пакет

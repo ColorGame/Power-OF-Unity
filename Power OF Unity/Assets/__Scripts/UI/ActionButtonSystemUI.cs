@@ -139,7 +139,7 @@ public class ActionButtonSystemUI : MonoBehaviour
                 case PlacedObjectType.GrenadeSmoke:
                     GrenadeSmokeList.Add(grenadeTypeSO);
                     break;
-                case PlacedObjectType.GrenadeElectroshock:
+                case PlacedObjectType.GrenadeStun:
                     GrenadeElectroshockList.Add(grenadeTypeSO);
                     break;
                 case PlacedObjectType.GrenadePlasma:
@@ -174,7 +174,7 @@ public class ActionButtonSystemUI : MonoBehaviour
             MouseEnterExitEventsUI mouseEnterExitEvents = actionButtonTransform.GetComponent<MouseEnterExitEventsUI>(); // Найдем на кнопке компонент - События входа и выхода мышью 
             mouseEnterExitEvents.OnMouseEnter += (object sender, EventArgs e) => // Подпишемся на событие - ПРИ ВХОДЕ мыши на кнопку. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
             {
-                _tooltipUI.ShowAnchoredTooltip(baseAction.GetToolTip(), (RectTransform)actionButtonTransform); // При наведении на кнопку покажем подсказку и передадим текст
+                _tooltipUI.ShowAnchoredShortTooltip(baseAction.GetToolTip(), (RectTransform)actionButtonTransform); // При наведении на кнопку покажем подсказку и передадим текст
             };
             mouseEnterExitEvents.OnMouseExit += (object sender, EventArgs e) => // Подпишемся на событие - ПРИ ВЫХОДЕ мыши из кнопки.
             {

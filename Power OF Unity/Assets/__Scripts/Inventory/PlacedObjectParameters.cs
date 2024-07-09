@@ -8,12 +8,18 @@ using UnityEngine;
 public struct PlacedObjectParameters
 {
     public InventorySlot slot;
+    /// <summary>
+    /// Экземпляр размещенного объекта
+    /// </summary>
     public PlacedObject placedObject;
     public PlacedObjectTypeSO placedObjectTypeSO;
+    /// <summary>
+    /// Сеточная позиция Якоря(нижний левый угол объекта) 
+    /// </summary>
     public Vector2Int gridPositioAnchor; // Сеточная позиция Якоря  
 
     /// <summary>
-    /// Параметры размещаемого объекта. 
+    /// Параметры размещаемого объекта. Без экземпляра PlacedObject
     /// </summary>
     public PlacedObjectParameters(InventorySlot slot, Vector2Int gridPositioAnchor, PlacedObjectTypeSO placedObjectTypeSO)
     {
@@ -24,7 +30,7 @@ public struct PlacedObjectParameters
     }
 
     /// <summary>
-    /// Параметры размещаемого объекта. 
+    /// Параметры размещаемого объекта. С созданным экземпляром PlacedObject
     /// </summary>
     public PlacedObjectParameters(InventorySlot slot, Vector2Int gridPositioAnchor, PlacedObject placedObject)
     {

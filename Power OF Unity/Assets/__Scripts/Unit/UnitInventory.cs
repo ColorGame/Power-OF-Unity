@@ -12,6 +12,8 @@ public class UnitInventory
     public UnitInventory(Unit unit)
     {
         _unit = unit;
+
+        //Здесь можно загрузить стандартную загрузку инвенторя
         _placedObjectList = new List<PlacedObjectParameters>();
     }
 
@@ -19,11 +21,11 @@ public class UnitInventory
     public event EventHandler<PlacedObject> OnRemovePlacedObjectList; // Событие Удален предмет из инвенторя
 
     private Unit _unit;
-    private List<PlacedObjectParameters> _placedObjectList = new List<PlacedObjectParameters>(); // Список предметов инвентаря
+    private List<PlacedObjectParameters> _placedObjectList; // Список предметов инвентаря
 
     private PlacedObjectTypeSO _placedObjectMainWeaponSlot;
     private PlacedObjectTypeSO _placedObjectOtherWeaponSlot;
-    private List<PlacedObjectTypeSO> _placedObjecеBagSlotList;
+    private List<PlacedObjectTypeSO> _placedObjecеBagSlotList = new List<PlacedObjectTypeSO>();
     private List<GrenadeTypeSO> _grenadeInBagSOList = new List<GrenadeTypeSO>(); // Список гранат в багаже
 
     /// <summary>

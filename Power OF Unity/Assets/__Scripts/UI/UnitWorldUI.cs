@@ -16,7 +16,7 @@ public class UnitWorldUI : MonoBehaviour, ISetupForSpawn
     
     private Unit _unit;
     private Health _healthSystem;
-    private ActionPoints _actionPointsSystem;
+    private UnitActionPoints _actionPointsSystem;
     private UnitActionSystem _unitActionSystem;
     private TurnSystem _turnSystem;
 

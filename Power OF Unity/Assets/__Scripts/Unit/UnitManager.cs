@@ -96,7 +96,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
         }
         else
         {
-            _tooltipUI.ShowTooltipsFollowMouse("Все 12 мест заняты", new TooltipUI.TooltipTimer { timer = 2f }); // Покажем подсказку и зададим новый таймер отображения подсказки
+            _tooltipUI.ShowShortTooltipFollowMouse("Все 12 мест заняты", new TooltipUI.TooltipTimer { timer = 2f }); // Покажем подсказку и зададим новый таймер отображения подсказки
         }
     }
     public void RemoveUnitFriendOnMissionList(Unit unit)
