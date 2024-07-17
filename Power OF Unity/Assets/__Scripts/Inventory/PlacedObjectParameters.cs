@@ -19,24 +19,15 @@ public struct PlacedObjectParameters
     public Vector2Int gridPositioAnchor; // Сеточная позиция Якоря  
 
     /// <summary>
-    /// Параметры размещаемого объекта. Без экземпляра PlacedObject
+    /// Параметры размещаемого объекта
     /// </summary>
-    public PlacedObjectParameters(InventorySlot slot, Vector2Int gridPositioAnchor, PlacedObjectTypeSO placedObjectTypeSO)
+    public PlacedObjectParameters(InventorySlot slot, Vector2Int gridPositioAnchor, PlacedObjectTypeSO placedObjectTypeSO = null, PlacedObject placedObject = null)
     {
         this.slot = slot;
         this.gridPositioAnchor = gridPositioAnchor;
         this.placedObjectTypeSO = placedObjectTypeSO;
-        this.placedObject = default;
+        this.placedObject = placedObject;
     }
 
-    /// <summary>
-    /// Параметры размещаемого объекта. С созданным экземпляром PlacedObject
-    /// </summary>
-    public PlacedObjectParameters(InventorySlot slot, Vector2Int gridPositioAnchor, PlacedObject placedObject)
-    {
-        this.slot = slot;
-        this.gridPositioAnchor = gridPositioAnchor;
-        this.placedObject = placedObject;
-        this.placedObjectTypeSO = placedObject.GetPlacedObjectTypeSO();
-    }
+
 }

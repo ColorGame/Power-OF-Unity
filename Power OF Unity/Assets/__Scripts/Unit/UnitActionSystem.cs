@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 // Этот клас важен и он должен просыпаться самым первым. Настроим его, добавим в Project Settings/ Script Execution Order и поместим выше Deafault Time
 public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТКА ВЫБОРА ДЕЙСТВИЯ ЮНИТА)
 {
-    public event EventHandler OnSelectedUnitChanged; // Выбранный Юнит Изменен (когда поменяется выбранный юнит мы запустим событие Event) <Unit>-новый выбранный юнит
+    public event EventHandler<Unit> OnSelectedUnitChanged; // Выбранный Юнит Изменен (когда поменяется выбранный юнит мы запустим событие Event) <Unit>-новый выбранный юнит
     public event EventHandler OnSelectedActionChanged; // Выбранное Действие Изменено (когда меняется активное действие в блоке кнопок мы запустим событие Event)  
     public event EventHandler OnGameOver; // Конец игры
 
@@ -195,7 +195,7 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
 
         SetSelectedAction(baseAction); // Получим компонент "MoveAction"  нашего Выбранного юнита (по умолчанию при старте базовым действием бедет MoveAction). Сохраним в переменную _selectedAction через функцию SetSelectedAction()
 
-        OnSelectedUnitChanged?.Invoke(this, EventArgs.Empty); // "?"- проверяем что !=0. Invoke вызвать (this-ссылка на объект который запускает событие "отправитель" а класс UnitSelectedVisual и ActionButtonSystemUI будет его прослушивать "обрабатывать" для этого ему нужна ссылка на _targetUnit)
+        OnSelectedUnitChanged?.Invoke(this, _selectedUnit); // "?"- проверяем что !=0. Invoke вызвать (this-ссылка на объект который запускает событие "отправитель" а класс UnitSelectedVisual и ActionButtonSystemUI будет его прослушивать "обрабатывать" для этого ему нужна ссылка на _targetUnit)
     }
 
     public void SetSelectedAction(BaseAction baseAction) //Установить Выбранное Действие, И запускаем событие  

@@ -1,20 +1,25 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 
 /// <summary>
 /// Система инвенторя юнитов(звено между сеткой и инвентарем юнита). Отвечает за настройку и загрузку инвенторя ВЫБРАННОГО юнита
 /// </summary>
-public class UnitInventorySystem 
+public class UnitInventorySystem
 {
+    public event EventHandler<Unit> OnSelectedUnitChanged; // Изменен выбранный юнит
+    public event EventHandler OnInventoryGridsCleared; // Инвентарные сетки очищены
+    public event EventHandler<PlacedObject> OnAddPlacedObjectAtInventoryGrid; // Объект добавлен в сетку Интвенторя
 
     private Unit _selectedUnit;
     private PickUpDropPlacedObject _pickUpDropPlacedObject;
     private UnitManager _unitManager;
     private InventoryGrid _inventoryGrid;
 
+
     public void Init(PickUpDropPlacedObject pickUpDropPlacedObject, UnitManager unitManager, InventoryGrid inventoryGrid)
-    {       
+    {
         _pickUpDropPlacedObject = pickUpDropPlacedObject;
         _unitManager = unitManager;
         _inventoryGrid = inventoryGrid;
@@ -31,7 +36,7 @@ public class UnitInventorySystem
     private void SelectUnitAtStart()
     {
         List<Unit> UnitFriendList = _unitManager.GetUnitFriendList();
-        if (UnitFriendList.Count!=0)
+        if (UnitFriendList.Count != 0)
         {
             _selectedUnit = UnitFriendList[0];
         }
@@ -39,15 +44,26 @@ public class UnitInventorySystem
         UpdateInventoryGrid();
     }
 
-  
-    private void UpdateInventoryGrid ()
+
+    private void UpdateInventoryGrid()
     {
-        List<PlacedObjectParameters> placedObjectList = _selectedUnit.GetUnitInventory().GetPlacedObjectList();
         _inventoryGrid.ClearInventoryGridAndDestroyPlacedObjects();
+        OnInventoryGridsCleared?.Invoke(this, EventArgs.Empty);
+
+        List<PlacedObjectParameters> placedObjectList = _selectedUnit.GetUnitInventory().GetPlacedObjectList();
         foreach (PlacedObjectParameters placedObjectParameters in placedObjectList)
         {
-            // Создадим и попробуем разместить   
-            PlacedObject.CreateAddTryPlacedInGrid(placedObjectParameters, _inventoryGrid, _pickUpDropPlacedObject);
+            // Создадим   
+            PlacedObject placedObject = PlacedObject.CreateInGrid(placedObjectParameters, _pickUpDropPlacedObject, _inventoryGrid);
+            // Попробуем добавить в сетку
+            if (_inventoryGrid.TryAddPlacedObjectAtGridPosition(placedObject.GetGridPositionAnchor(), placedObject, placedObject.GetGridSystemXY()))
+            {
+                OnAddPlacedObjectAtInventoryGrid?.Invoke(this, placedObject); // Запустим событие
+            }
+            else
+            {
+                UnityEngine.Object.Destroy(placedObject.gameObject);
+            }
         }
     }
 
@@ -66,11 +82,12 @@ public class UnitInventorySystem
         _selectedUnit.GetUnitInventory().RemovePlacedObjectList(placedObject);
     }
 
-
     public void SetSelectedUnit(Unit selectedUnit)
     {
         _selectedUnit = selectedUnit;
         UpdateInventoryGrid();
-        Debug.Log($"Выбрал -{_selectedUnit.GetUnitTypeSO<UnitTypeSO>().GetName()} ");
+        OnSelectedUnitChanged?.Invoke(this, _selectedUnit); // Подписываятся кнопки выбора юнита для настройки инвенторя UnitSelectAtInventoryButton
     }
+
+    public Unit GetSelectedUnit() { return _selectedUnit; }
 }

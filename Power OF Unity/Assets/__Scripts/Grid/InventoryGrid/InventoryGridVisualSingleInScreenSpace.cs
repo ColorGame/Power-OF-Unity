@@ -13,7 +13,7 @@ public class InventoryGridVisualSingleInScreenSpace : InventoryGridVisualSingle
         rectTransform.sizeDelta = Vector2.one * InventoryGrid.GetCellSize();
     }   
 
-    public override  void Hide() // Скрыть
+    protected override  void Hide() // Скрыть
     {
         _image.enabled = false;
     }

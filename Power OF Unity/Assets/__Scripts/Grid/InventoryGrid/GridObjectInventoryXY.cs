@@ -38,7 +38,7 @@ public class GridObjectInventoryXY
         return _placedObject;
     }
 
-    public void RemovePlacedObject(PlacedObject placedObject) // удалим Размещаемый объект 
+    public void RemovePlacedObject() // удалим Размещаемый объект 
     {
         _placedObject = null;
     } 

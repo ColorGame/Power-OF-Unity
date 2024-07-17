@@ -10,48 +10,51 @@ using UnityEngine.EventSystems;
 public class PlacedObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     /// <summary>
-    /// Создадим экземпляр PlacedObject и попробую разместить в сетки инвенторя.
+    /// Создадим экземпляр PlacedObject в стеке.
     /// </summary>
-    /// <remarks>Удалю экземпляр PlacedObject, если не удасться разместить</remarks>
-    public static PlacedObject CreateAddTryPlacedInGrid(PlacedObjectParameters placedObjectParameters, InventoryGrid inventoryGrid, PickUpDropPlacedObject pickUpDropPlacedObject) // (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру)
+    public static PlacedObject CreateInGrid(PlacedObjectParameters placedObjectParameters, PickUpDropPlacedObject pickUpDropPlacedObject, InventoryGrid inventoryGrid) // (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру)
     {
         PlacedObjectTypeSO placedObjectTypeSO = placedObjectParameters.placedObjectTypeSO;
         Vector2Int gridPositionAnchor = placedObjectParameters.gridPositioAnchor;
         GridSystemXY<GridObjectInventoryXY> gridSystemXY = inventoryGrid.GetGridSystemXY(placedObjectParameters.slot);
-        Transform canvasContainer = inventoryGrid.GetCanvas().transform;
-        Vector3 worldPosition = gridSystemXY.GetWorldPositionLowerLeftСornerCell(gridPositionAnchor);
-        Transform placedObjectTransform = Instantiate(placedObjectTypeSO.GetPrefab2D(), worldPosition, Quaternion.Euler(canvasContainer.rotation.eulerAngles.x, 0, 0), canvasContainer); //canvasContainer.rotation.eulerAngles.x- что бы был повернут как родитель
-        PlacedObject placedObject = placedObjectTransform.GetComponent<PlacedObject>();
-        if (inventoryGrid.TryAddPlacedObjectAtGridPosition(gridPositionAnchor, placedObject, gridSystemXY))
-        {
-            Destroy(placedObject.gameObject);           
+        Canvas canvas = inventoryGrid.GetCanvas();
+
+        Vector3 worldPosition = new Vector3();
+        switch (placedObjectParameters.slot)
+        {          
+            case InventorySlot.BagSlot:
+                 worldPosition = gridSystemXY.GetWorldPositionLowerLeftСornerCell(gridPositionAnchor);
+                break;            
+            case InventorySlot.MainWeaponSlot:
+            case InventorySlot.OtherWeaponsSlot:
+                Vector3 offset = placedObjectTypeSO.GetOffsetVisualСenterFromAnchor()* canvas.scaleFactor;
+                worldPosition = gridSystemXY.GetWorldPositionGridCenter()- offset;
+                break;
         }
-        placedObject._placedObjectTypeSO = placedObjectTypeSO;
-        placedObject._offsetVisualFromParent = placedObjectTypeSO.GetOffsetVisualFromParent();
-        placedObject._pickUpDropPlacedObject = pickUpDropPlacedObject;
-        placedObject.Setup();
+
+        PlacedObject placedObject = CreateInWorld(worldPosition, placedObjectTypeSO, canvas.transform, pickUpDropPlacedObject);
+        placedObject._gridSystemXY = gridSystemXY;
+        placedObject._gridPositioAnchor = gridPositionAnchor;
 
         return placedObject;
     }
 
     /// <summary>
     /// Создадим экземпляр PlacedObject в мировом пространстве
-    /// </summary>   
-    /// <remarks>
-    /// Зкземпляр создасться в цетре переданных "worldPosition".
-    /// </remarks>
+    /// </summary>
+    /// <remarks> Якорь(нижний левый край) созданного объекта будет = worldPosition</remarks>
     public static PlacedObject CreateInWorld(Vector3 worldPosition, PlacedObjectTypeSO placedObjectTypeSO, Transform parent, PickUpDropPlacedObject pickUpDropPlacedObject)
-    {
-        Vector3 offset = placedObjectTypeSO.GetOffsetVisualFromParent(); // вычислим смещение чтобы создать объект в центре worldPosition
-        Transform placedObjectTransform = Instantiate(placedObjectTypeSO.GetPrefab2D(), worldPosition - offset, Quaternion.Euler(parent.rotation.eulerAngles.x, 0, 0), parent); //canvasContainer.rotation.eulerAngles.x- что бы был повернут как родитель
+    {       
+        Transform placedObjectTransform = Instantiate(placedObjectTypeSO.GetPrefab2D(), worldPosition , Quaternion.Euler(parent.rotation.eulerAngles.x, 0, 0), parent); //canvasContainer.rotation.eulerAngles.x- что бы был повернут как родитель
         PlacedObject placedObject = placedObjectTransform.GetComponent<PlacedObject>();
         placedObject._placedObjectTypeSO = placedObjectTypeSO;
-        placedObject._offsetVisualFromParent = offset;
+        placedObject._offsetVisualFromParent = placedObjectTypeSO.GetOffsetVisualСenterFromAnchor();
         placedObject._pickUpDropPlacedObject = pickUpDropPlacedObject;
         placedObject.Setup();
 
         return placedObject;
     }
+
 
     private PlacedObjectTypeSO _placedObjectTypeSO;
     private GridSystemXY<GridObjectInventoryXY> _gridSystemXY; // Сетка в которой разместилься наш объект
@@ -156,8 +159,11 @@ public class PlacedObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public PlacedObjectParameters GetPlacedObjectParameters()
     {
-        return new PlacedObjectParameters(_gridSystemXY.GetGridSlot(), _gridPositioAnchor, this);
+        return new PlacedObjectParameters(_gridSystemXY.GetGridSlot(), _gridPositioAnchor, _placedObjectTypeSO);
     }
+
+
+    // для канваса в режиме ScrenSpace
 
     public void OnPointerEnter(PointerEventData eventData) /// Если мыш над этим объектом то передадим этот объект в PickUpDropPlacedObject
     {

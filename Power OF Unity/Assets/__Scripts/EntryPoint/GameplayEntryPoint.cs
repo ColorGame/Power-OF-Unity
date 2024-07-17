@@ -7,7 +7,7 @@ public class GameplayEntryPoint : MonoBehaviour, IEntryPoint
     private MouseOnGameGrid _mouseOnGameGrid;
     private UnitActionSystem _unitActionSystem;
     private UnitSpawnerOnLevel _unitSpawnerOnLevel;
-    private SelectUnitButtonSystemInLevelUI _selectUnitButtonUI;
+    private UnitSelectAtLevelButtonsSystemUI _unitSelectAtLevelButtonsSystemUI;
     private OptionsMenagerUI _optionsMenagerUI;
     private ActionButtonSystemUI _actionButtonSystemUI;
     private EnemyAI _enemyAI;
@@ -32,7 +32,7 @@ public class GameplayEntryPoint : MonoBehaviour, IEntryPoint
         _mouseOnGameGrid = GetComponentInChildren<MouseOnGameGrid>(true);
         _unitActionSystem = GetComponentInChildren<UnitActionSystem>(true);
         _unitSpawnerOnLevel = GetComponentInChildren<UnitSpawnerOnLevel>(true);
-        _selectUnitButtonUI = GetComponentInChildren<SelectUnitButtonSystemInLevelUI>(true);
+        _unitSelectAtLevelButtonsSystemUI = GetComponentInChildren<UnitSelectAtLevelButtonsSystemUI>(true);
         _optionsMenagerUI = GetComponentInChildren<OptionsMenagerUI>(true);
         _actionButtonSystemUI = GetComponentInChildren<ActionButtonSystemUI>(true);
         _enemyAI = GetComponentInChildren<EnemyAI>(true);
@@ -54,7 +54,7 @@ public class GameplayEntryPoint : MonoBehaviour, IEntryPoint
         _mouseOnGameGrid.Init(container.Resolve<GameInput>(), _levelGrid);
         _unitActionSystem.Init(container.Resolve<GameInput>(), container.Resolve<UnitManager>(), _turnSystem, _levelGrid, _mouseOnGameGrid);
         _unitSpawnerOnLevel.Init(container.Resolve<UnitManager>(), _turnSystem, container.Resolve<SoundManager>(), _levelGrid, _unitActionSystem, _cameraFollow);
-        _selectUnitButtonUI.Init(container.Resolve<UnitManager>(), _turnSystem, _unitActionSystem);
+        _unitSelectAtLevelButtonsSystemUI.Init(container.Resolve<UnitManager>(), _turnSystem, _unitActionSystem, _cameraFollow);
         _optionsMenagerUI.Init(container.Resolve<UnitManager>(), _unitActionSystem);
         _actionButtonSystemUI.Init(_unitActionSystem, _turnSystem, container.Resolve<TooltipUI>());
         _enemyAI.Init(container.Resolve<UnitManager>(), _turnSystem, _unitActionSystem);

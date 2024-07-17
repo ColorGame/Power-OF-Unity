@@ -31,11 +31,10 @@ public class SpotterFireAction : BaseAction // Действие Корректировщик огня НАСЛ
         _unit.GetUnitActionSystem().OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged; // Выбранный юнит изменен
     }
 
-    private void UnitActionSystem_OnSelectedUnitChanged(object sender, EventArgs e)
+    private void UnitActionSystem_OnSelectedUnitChanged(object sender, Unit selectedUnit)
     {
         if (_partnerUnit != null) // Если есть партнер
-        {
-            Unit selectedUnit = _unit.GetUnitActionSystem().GetSelectedUnit();
+        {           
             if (selectedUnit != _partnerUnit) // Если выделенный юнит НЕ ПАРТНЕР то
             {
                 _partnerUnit.GetAction<ShootAction>().СlearSpotterFireUnit(); // Очистить у партнера поле корректировщика огня

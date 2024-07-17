@@ -215,9 +215,9 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
             
     }
 
-    private void UnitActionSystem_OnSelectedUnitChanged(object sender, EventArgs e)
+    private void UnitActionSystem_OnSelectedUnitChanged(object sender, Unit selectedUnit)
     {
-        if (_unit.GetUnitActionSystem().GetSelectedUnit() == _unit) // Если выбран этот юнит
+        if (selectedUnit == _unit) // Если выбран этот юнит
         {
           GeneratePossibleMoves(_unit); // Сгенерируем возможные ходы с помощью (A* Pathfinding Project4.2.18) для нашего юнита
         }

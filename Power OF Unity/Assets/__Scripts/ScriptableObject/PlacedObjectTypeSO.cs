@@ -74,9 +74,9 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
     public Transform GetVisual2D() { return _visual2D; }
 
     /// <summary>
-    /// Вычислить смещение визуала относительно родителя
+    /// Вычислить смещение центра визуала относительно якоря
     /// </summary>  
-    public Vector3 GetOffsetVisualFromParent()
+    public Vector3 GetOffsetVisualСenterFromAnchor()
     {
         float cellSize = InventoryGrid.GetCellSize();
 

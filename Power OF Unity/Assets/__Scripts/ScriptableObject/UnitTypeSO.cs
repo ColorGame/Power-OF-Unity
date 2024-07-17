@@ -32,14 +32,7 @@ public abstract class UnitTypeSO : ScriptableObject, ISerializationCallbackRecei
     public int GetBasicMoveDistance() { return _basicMoveDistance; }
     public Transform GetUnitCorePrefab() { return _unitCorePrefab; }
         
-    /// <summary>
-    /// Получить массив ДОПУСТИМЫХ базовых действий для этого юнита
-    /// </summary>
-    public BaseAction[] GetValidBaseActionArray()
-    {
-        return _unitCorePrefab.GetComponents<BaseAction>();
-    }
-
+    
 
     /* /// <summary>
      /// Получите экземпляр SO из его UUID.

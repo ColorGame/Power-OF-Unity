@@ -9,6 +9,15 @@ using UnityEngine;
 /// </remarks>
 public class Unit
 {
+    /// <summary>
+    /// Местоположение юнита
+    /// </summary>
+    public enum Location
+    {
+        Barrack,
+        Mission,
+    }
+
     public Unit(UnitTypeSO unitTypeSO, SoundManager soundManager)
     {
         _soundManager = soundManager;
@@ -16,6 +25,7 @@ public class Unit
         _actionPointsSystem = new UnitActionPoints(this);
         _unitInventory = new UnitInventory(this);
         _unitEquipment = new UnitEquipment(this);
+        _location = Location.Barrack; // по умолчанию все юниты появляются в КАЗАРМЕ
 
         switch (unitTypeSO)
         {
@@ -38,6 +48,7 @@ public class Unit
     // Частные случаи
     private bool _isEnemy;
     private GridPositionXZ _gridPosition;
+    private Location _location;
 
     readonly UnitTypeSO _unitTypeSO;
     readonly Health _healthSystem;
@@ -185,5 +196,7 @@ public class Unit
     public CameraFollow GetCameraFollow() { return _cameraFollow; }
     public Rope GetUnitRope() { return _unitRope; }
     public Transform GetHeadTransform() { return _headTransform; }
+    public void SetLocation(Location location) { _location = location; }
+    public Location GetLocation() { return _location; }
 }
 

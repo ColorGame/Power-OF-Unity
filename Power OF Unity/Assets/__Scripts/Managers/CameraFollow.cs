@@ -3,14 +3,14 @@ using Unity.Cinemachine;
 using UnityEngine;
 
 
-public class CameraFollow: MonoBehaviour
+public class CameraFollow : MonoBehaviour
 {
 
     private const float MIN_FOLLOW_Y_OFFSET = 2f;
     private const float MAX_FOLLOW_Y_OFFSET = 15f;
 
     public event EventHandler OnCameraRotateStarted; // События На камере Поворот начался или завершен. Будет подписываться LookAtCamera 
-    public event EventHandler OnCameraRotateCompleted; 
+    public event EventHandler OnCameraRotateCompleted;
     public event EventHandler<float> OnCameraZoomStarted; // События На камере Масштабирование началось или завершено. Будет подписываться LookAtCamera 
     public event EventHandler OnCameraZoomCompleted;
 
@@ -20,7 +20,7 @@ public class CameraFollow: MonoBehaviour
     private GameInput _gameInput;
     private OptionsMenuUI _optionsMenuUI;
 
-   // private CinemachineTransposer _cinemachineTransposer;
+    // private CinemachineTransposer _cinemachineTransposer;
     private CinemachineTransposer _cinemachineTransposer; // Компонент на виртуальной камере с помощью которого будем реализовывать ZOOM
     private bool _edgeScrolling; // прокрутка по краям
 
@@ -38,8 +38,8 @@ public class CameraFollow: MonoBehaviour
 
     private float _moveSpeed = 10f; // Скорость камеры
     private float _rotationSpeed = 5f;
-    private float _zoomSpeed = 5f;       
-       
+    private float _zoomSpeed = 5f;
+
     public void Init(GameInput gameInput, OptionsMenuUI optionsMenuUI)
     {
         _gameInput = gameInput;
@@ -47,9 +47,6 @@ public class CameraFollow: MonoBehaviour
 
         _cinemachineTransposer = _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>(); // Получим и сохраним компонент CinemachineTransposer из виртуальной камеры, чтобы в дальнейшем изменять ее параметры для ZOOM камеры
         _targetZoomFollowOffset = _cinemachineTransposer.m_FollowOffset; // Смещение следования
-
-        SelectUnitFriendlyButtonUI.OnAnyFriendlyUnitButtonPressed += UpdateSelectedUnit; //подпишемся Нажата любая кнопка дружественного юнита 
-        SelectUnitEnemyButtonUI.OnAnyEnemylyUnitButtonPressed += UpdateSelectedUnit; //подпишемся Нажата любая кнопка вражественного юнита
 
         _gameInput.OnCameraMovementStarted += GameInput_OnCameraMovementStarted;
         _gameInput.OnCameraMovementCanceled += GameInput_OnCameraMovementCanceled;
@@ -62,10 +59,7 @@ public class CameraFollow: MonoBehaviour
         _edgeScrolling = PlayerPrefs.GetInt("edgeScrolling", 1) == 1; // Загрузим сохраненый параметр _edgeScrolling и если это 1 то будет истина если не=1 то будет ложь (из PlayerPrefs.GetInt нельзя тегать булевые параметры поэтому используем строку)
     }
 
-    private void OptionsMenuUI_OnEdgeScrollingChange(object sender, bool e)
-    {
-        SetEdgeScrolling(e);
-    }
+    private void OptionsMenuUI_OnEdgeScrollingChange(object sender, bool e) { SetEdgeScrolling(e); }
 
     private void GameInput_OnCameraZoomAction(object sender, float e)
     {
@@ -95,12 +89,6 @@ public class CameraFollow: MonoBehaviour
     private void GameInput_OnCameraMovementStarted(object sender, System.EventArgs e) { _moveStarted = true; }
     private void GameInput_OnCameraMovementCanceled(object sender, System.EventArgs e) { _moveStarted = false; }
 
-
-    private void UpdateSelectedUnit(object sender, Unit targetUnit)
-    {
-        _targetUnit = targetUnit;
-        _targetMoveStarted = true;
-    }
 
     private void Update()
     {
@@ -222,11 +210,12 @@ public class CameraFollow: MonoBehaviour
     /// <summary>
     /// Установить булевое значение для - прокрутки по краям
     /// </summary>
-    public void SetEdgeScrolling(bool edgeScrolling)
-    {
-        _edgeScrolling = edgeScrolling;       
-    }
+    public void SetEdgeScrolling(bool edgeScrolling) { _edgeScrolling = edgeScrolling; }
 
-    
+    public void SetTargetUnit(Unit targetUnit)
+    {
+        _targetUnit = targetUnit;
+        _targetMoveStarted = true;
+    }
 
 }

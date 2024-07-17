@@ -38,12 +38,14 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
 
     private PickUpDropPlacedObject _pickUpDropPlacedObject;
     private InventoryGrid _inventoryGrid;
+    private UnitInventorySystem _unitInventorySystem;
 
 
-    public void Init(PickUpDropPlacedObject pickUpDrop, InventoryGrid inventoryGrid)
+    public void Init(PickUpDropPlacedObject pickUpDrop, InventoryGrid inventoryGrid,UnitInventorySystem unitInventorySystem)
     {
         _pickUpDropPlacedObject = pickUpDrop;
         _inventoryGrid = inventoryGrid;
+        _unitInventorySystem = unitInventorySystem;
 
         Setup();
     }
@@ -91,38 +93,47 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
             }
         }
 
-        _pickUpDropPlacedObject.OnAddPlacedObjectAtInventoryGrid += PickUpDropSystem_OnAddPlacedObjectAtGrid;
+        _pickUpDropPlacedObject.OnAddPlacedObjectAtInventoryGrid += OnAddPlacedObjectAtGrid;
         _pickUpDropPlacedObject.OnRemovePlacedObjectAtInventoryGrid += PickUpDropSystem_OnRemovePlacedObjectAtGrid;
         _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged += PickUpDropManager_OnGrabbedObjectGridPositionChanged;
         _pickUpDropPlacedObject.OnGrabbedObjectGridExits += PickUpDropManager_OnGrabbedObjectGridExits;
+
+        _unitInventorySystem.OnInventoryGridsCleared += UnitInventorySystem_OnInventoryGridsCleared;
+        _unitInventorySystem.OnAddPlacedObjectAtInventoryGrid += OnAddPlacedObjectAtGrid;
+    }
+
+    // Инвентарь очищен
+    private void UnitInventorySystem_OnInventoryGridsCleared(object sender, EventArgs e) 
+    {
+        SetDefoltStste(); // Установить дефолтное состояние        
     }
 
     // Захваченый объект покинул сетку
-    private void PickUpDropManager_OnGrabbedObjectGridExits(object sender, EventArgs e)  // Захваченый объект покинул сетку
+    private void PickUpDropManager_OnGrabbedObjectGridExits(object sender, EventArgs e)  
     {
-        SetDefaultState(); // Установим дефолтное состояние всех сеток
+        UpdateVisual(); 
     }
 
     // позиция захваченного объекта на сетке изменилась
     private void PickUpDropManager_OnGrabbedObjectGridPositionChanged(object sender, PlacedObjectParameters e)
     {
-        SetDefaultState(); // Установим дефолтное состояние всех сеток
+        UpdateVisual(); 
         ShowPossibleGridPositions(e.slot, e.placedObject, e.gridPositioAnchor, GridVisualType.Yellow); //показать возможные сеточные позиции
     }
 
-    // Объект удален из сетки
+    // Объект удален из сетки и повис над ней
     private void PickUpDropSystem_OnRemovePlacedObjectAtGrid(object sender, PlacedObject placedObject)
     {
         SetIsBusyAndMaterial(placedObject, false, GridVisualType.Yellow);
     }
 
     // Объект добавлен в сетку 
-    private void PickUpDropSystem_OnAddPlacedObjectAtGrid(object sender, PlacedObject placedObject)
+    private void OnAddPlacedObjectAtGrid(object sender, PlacedObject placedObject)
     {
         SetIsBusyAndMaterial(placedObject, true);
     }
 
-    private void SetDefaultState() // Установить дефолтное состояние сеток
+    private void UpdateVisual() // Обновить визуал
     {
         for (int i = 0; i < _gridSystemXYList.Count; i++) // переберем все сетки
         {
@@ -134,6 +145,20 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
                     {
                         _inventoryGridVisualSingleArray[i][x, y].Show(GetGridVisualTypeMaterial(GridVisualType.Grey));
                     }
+                }
+            }
+        }
+    }
+
+    private void SetDefoltStste() // Установить дефолтное состояние
+    {
+        for (int i = 0; i < _gridSystemXYList.Count; i++) // переберем все сетки
+        {
+            for (int x = 0; x < _gridSystemXYList[i].GetWidth(); x++) // для каждой сетки переберем длину
+            {
+                for (int y = 0; y < _gridSystemXYList[i].GetHeight(); y++)  // и высоту
+                {
+                   _inventoryGridVisualSingleArray[i][x, y].SetIsBusyAndMaterial(false,GetGridVisualTypeMaterial(GridVisualType.Grey));                   
                 }
             }
         }

@@ -6,8 +6,8 @@ public abstract class InventoryGridVisualSingle : MonoBehaviour
 {
     private bool _isBusy; //Занято  
 
-    public abstract void Hide(); // Скрыть
 
+    protected abstract void Hide(); // Скрыть
 
     public abstract void Show(Material material); //Показать и Установить переданный материал
    

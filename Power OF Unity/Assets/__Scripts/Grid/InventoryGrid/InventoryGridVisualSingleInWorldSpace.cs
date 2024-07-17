@@ -8,7 +8,7 @@ public class InventoryGridVisualSingleInWorldSpace : InventoryGridVisualSingle
 
    
 
-    public override void Hide() // Скрыть
+    protected override void Hide() // Скрыть
     {
         _meshRendererQuad.enabled = false;
     }

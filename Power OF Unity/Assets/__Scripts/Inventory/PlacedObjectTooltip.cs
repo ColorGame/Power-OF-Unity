@@ -14,6 +14,5 @@ public struct PlacedObjectTooltip
         this.description = description;
         this.details = details;
         this.sideEffects = sideEffects;
-
     }
 }

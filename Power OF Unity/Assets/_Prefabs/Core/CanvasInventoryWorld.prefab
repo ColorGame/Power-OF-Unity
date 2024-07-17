@@ -3320,7 +3320,7 @@ GameObject:
   - component: {fileID: 3636002810780896532}
   - component: {fileID: 6234796677737348823}
   - component: {fileID: 1788224316249727209}
-  - component: {fileID: 7724495113099535770}
+  - component: {fileID: 1843776596593340590}
   m_Layer: 5
   m_Name: ScrollPlacedObjectTypeButton
   m_TagString: Untagged
@@ -3389,7 +3389,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7724495113099535770
+--- !u!114 &1843776596593340590
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3398,15 +3398,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 3550164295071752204}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f4de708501721a4e915d9511aa05d3e, type: 3}
+  m_Script: {fileID: 11500000, guid: 7e98380369d73474aace7d919dcba31b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponSelectContainer: {fileID: 7725138826090953014}
   _itemSelectContainer: {fileID: 3144157187258069278}
   _moduleSelectContainer: {fileID: 4803815872962266077}
   _weaponButtonPanel: {fileID: 8610547684014364660}
+  _weaponButtonSelectedImage: {fileID: 0}
   _itemButtonPanel: {fileID: 8254902629325805776}
+  _itemButtonSelectedImage: {fileID: 0}
   _moduleButtonPanel: {fileID: 5706279707273905463}
+  _moduleButtonSelectedImage: {fileID: 0}
   _ignorePlacedObjectList: []
 --- !u!1 &3714222364121080036
 GameObject:

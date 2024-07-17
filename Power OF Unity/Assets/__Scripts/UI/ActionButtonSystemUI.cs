@@ -42,8 +42,8 @@ public class ActionButtonSystemUI : MonoBehaviour
         _unitActionSystem.OnSelectedActionChanged += UnitActionSystem_OnSelectedActionChanged; //Выбранное Действие Изменено  
         _unitActionSystem.OnBusyChanged += UnitActionSystem_OnBusyChanged; // Занятость Изменена        
         _turnSystem.OnTurnChanged += TurnSystem_OnTurnChanged; // Изменен номер хода подписываемся       
-
-        SetupEventSelectedUnit(); // Настройка Event у выбранного Юнита
+               
+        SetupEventSelectedUnit(_unitActionSystem.GetSelectedUnit()); // Настройка Event у выбранного Юнита
         CreateUnitActionButtons();// Создать Кнопки для Действий Юнита        
         UpdateSelectedVisual();
         UpdateActionPoints();
@@ -153,21 +153,12 @@ public class ActionButtonSystemUI : MonoBehaviour
         if (GrenadeFragList.Count != 0)
         {
             // создадим кнопку для данного типа гранаты и передадим количество GrenadeFragList.Count данного типа
-          ///  ActionButtonUI grenadeFragButton = Instantiate<ActionButtonUI>(GameAssets.Instance.actionButtonUIPrefab, _grenadeButtonContainer);
+          ///  ActionButtonUI grenadeFragButton = Instantiate<ActionButtonUI>(GameAssets.Instance.actionButtonUI, _grenadeButtonContainer);
         }
-       
-
-
-
-
-
-
-
-
 
        /* foreach (BaseAction baseAction in _selectedUnit.GetBaseActionsArray()) // В цикле переберем массив базовых действий у выбранного юнита
         {
-            Transform actionButtonTransform = Instantiate(GameAssets.Instance.actionButtonUIPrefab, _grenadeButtonContainer); // Для каждого baseAction создадим префаб кнопки и назначим родителя - Контейнер для кнопок
+            Transform actionButtonTransform = Instantiate(GameAssets.Instance.actionButtonUI, _grenadeButtonContainer); // Для каждого baseAction создадим префаб кнопки и назначим родителя - Контейнер для кнопок
             ActionButtonUI actionButtonUI = actionButtonTransform.GetComponent<ActionButtonUI>(); // У кнопки найдем компонент ActionButtonUI
             actionButtonUI.SetBaseAction(baseAction, _unitActionSystem); //Назвать и Присвоить базовое действие (нашей кнопке)
 
@@ -190,22 +181,21 @@ public class ActionButtonSystemUI : MonoBehaviour
         UpdateActionPoints();
     }
 
-    private void UnitActionSystem_OnSelectedUnitChanged(object sender, EventArgs e)
+    private void UnitActionSystem_OnSelectedUnitChanged(object sender, Unit selectedUnit)
     {
-        SetupEventSelectedUnit();   // Настройка Event у выбранного Юнита
+        SetupEventSelectedUnit(selectedUnit);   // Настройка Event у выбранного Юнита
         CreateUnitActionButtons();  // Создать Кнопки для Действий Юнита 
         UpdateSelectedVisual();
         UpdateActionPoints();
     }
 
-    private void SetupEventSelectedUnit() // Настройка Event у выбранного Юнита
+    private void SetupEventSelectedUnit(Unit newSelectedUnit) // Настройка Event у выбранного Юнита
     {
         if (_selectedUnit != null) //Если есть выбранный юнит то отпишемся от него.  (при первом запуске выбранный юнит не назначен и нет подписки)
         {
             _selectedUnit.GetActionPointsSystem().OnActionPointsChanged -= SelectedUnit_OnActionPointsChanged;
         }
-        //Получим нового выбранного юнита и подпишемся на него
-        Unit newSelectedUnit = _unitActionSystem.GetSelectedUnit();
+        //Получим нового выбранного юнита и подпишемся на него        
         _selectedUnit = newSelectedUnit;
         _selectedUnit.GetActionPointsSystem().OnActionPointsChanged += SelectedUnit_OnActionPointsChanged; // У выбранного юнита изменились очки действия
     }

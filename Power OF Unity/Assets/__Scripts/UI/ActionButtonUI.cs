@@ -10,12 +10,17 @@ using UnityEngine.UI;
 /// </remarks>
 public class ActionButtonUI : MonoBehaviour
 {   
-    [SerializeField] private Button _button;
     [SerializeField] private GameObject _selectedButtonVisualUI; // Будем включать и выкл. GameObject что бы скрыть или показать рамку кнопки // В инспекторе надо закинуть рамку
     [SerializeField] private Transform _placedObjectVisual;         
    
+    private Button _button;
     private UnitActionSystem _unitActionSystem;
     private PlacedObjectTypeSO _placedObjectTypeSO;
+
+    private void Awake()
+    {
+        _button = GetComponent<Button>();
+    }
 
     public void SetMoveAction(MoveAction moveAction, UnitActionSystem unitActionSystem) 
     {     

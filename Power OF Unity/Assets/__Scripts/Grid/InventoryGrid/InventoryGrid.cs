@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// Сетка инверторя. В каждой ячейки создается GridObjectInventoryXY который хранит информ о размещенном на сетке объекте
 /// </summary>
+/// <remarks>
+/// !!!Обращаться к InventoryGrid ЖЕЛАТЕЛЬНО через класс PickUpDropPlacedObject
+/// </remarks>
 public class InventoryGrid : MonoBehaviour
 {
 
@@ -13,8 +15,7 @@ public class InventoryGrid : MonoBehaviour
     [SerializeField] private InventoryGridParameters[] _gridParametersArray; // Массив параметров сеток ЗАДАТЬ в ИНСПЕКТОРЕ
     [SerializeField] private Transform _gridDebugObjectPrefab; // Префаб отладки сетки 
 
-    private TooltipUI _tooltipUI;
-    private PickUpDropPlacedObject _pickUpDrop;
+    private TooltipUI _tooltipUI;  
     private Canvas _canvas;
     private List<PlacedObject> _placedObjectList = new List<PlacedObject>(); // Список размещенных объектов    
     private List<GridSystemXY<GridObjectInventoryXY>> _gridSystemXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectInventoryXY    
@@ -26,9 +27,8 @@ public class InventoryGrid : MonoBehaviour
         _canvas = GetComponentInParent<Canvas>();          
     }
 
-    public void Init(PickUpDropPlacedObject pickUpDrop, TooltipUI tooltipUI)
-    {
-        _pickUpDrop = pickUpDrop;
+    public void Init(TooltipUI tooltipUI)
+    {       
         _tooltipUI = tooltipUI;
 
         Setup();
@@ -136,6 +136,11 @@ public class InventoryGrid : MonoBehaviour
                 GridObjectInventoryXY gridObject = gridSystemXY.GetGridObject(gridPosition); // Получим GridObjectInventoryXY который находится в gridPosition
                 gridObject.AddPlacedObject(placedObject); // Добавить Размещаемый объект 
             }
+
+            placedObject.Drop();  // Бросить
+            placedObject.SetGridPositionAnchor(gridPositionPlace); // Установим новую сеточную позицию якоря
+            placedObject.SetGridSystemXY(gridSystemXY); //Установим сетку на которую добавили наш оббъект
+
             _placedObjectList.Add(placedObject);
         }
         return canPlace;
@@ -150,7 +155,7 @@ public class InventoryGrid : MonoBehaviour
         foreach (Vector2Int gridPosition in gridPositionList)
         {
             GridObjectInventoryXY gridObject = gridSystemXY.GetGridObject(gridPosition); // Получим GridObjectInventoryXY для сетки в которой он находится
-            gridObject.RemovePlacedObject(placedObject); // удалим Размещаемый объект 
+            gridObject.RemovePlacedObject(); // удалим Размещаемый объект 
         }
         _placedObjectList.Remove(placedObject);
     }
@@ -160,11 +165,23 @@ public class InventoryGrid : MonoBehaviour
     /// </summary>
     public void ClearInventoryGridAndDestroyPlacedObjects()
     {
-        foreach (PlacedObject placedObject in _placedObjectList)
+        for (int i = 0; i < _gridSystemXYList.Count; i++) // переберем все сетки
         {
-            RemovePlacedObjectAtGrid(placedObject);
+            for (int x = 0; x < _gridSystemXYList[i].GetWidth(); x++) // для каждой сетки переберем длину
+            {
+                for (int y = 0; y < _gridSystemXYList[i].GetHeight(); y++)  // и высоту
+                {
+                    GridObjectInventoryXY gridObject = _gridSystemXYList[i].GetGridObject(new Vector2Int(x,y)); // Получим GridObjectInventoryXY для сетки в которой он находится
+                    gridObject.RemovePlacedObject(); // удалим Размещаемый объект 
+                }
+            }
+        }
+
+        foreach (PlacedObject placedObject in _placedObjectList) 
+        {           
             Destroy(placedObject.gameObject);
         }
+        _placedObjectList.Clear();
     }
 
     public List<GridSystemXY<GridObjectInventoryXY>> GetGridSystemXYList() { return _gridSystemXYList; }
@@ -267,7 +284,7 @@ public class InventoryGrid : MonoBehaviour
                 {
                     // Создадим и разместим сохраненный объект               
                     GridSystemXY<GridObjectInventoryXY> gridSystemXY = GetGridSystemXY(addPlacedObject.gridName); // Получим сетку для размещения
-                    PlacedObject placedObject = PlacedObject.CreateAddTryPlacedInGrid(gridSystemXY, addPlacedObject.gridPositioAnchor, addPlacedObject.placedObject, _canvasInventory, this);
+                    PlacedObject placedObject = PlacedObject.CreateInGrid(gridSystemXY, addPlacedObject.gridPositioAnchor, addPlacedObject.placedObject, _canvasInventory, this);
                     if (!_pickUpDropPlacedObject.TryDrop(gridSystemXY, addPlacedObject.gridPositioAnchor, placedObject)) // Если не удалось сбросить объект на сетку то
                     {
                         placedObject.DestroySelf(); // Уничтожим этот объект

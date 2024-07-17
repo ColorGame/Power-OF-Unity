@@ -18,26 +18,20 @@ public class UnitSelectedVisual : MonoBehaviour // Визуализация выбора юнита
     private void Start() // А в методе StartScene() использовать для взаимодествия и получения внешних ссылок
     {
         _unitActionSystem.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged; // подписываемся на Event из UnitActionSystem (становимся слушателями). Обозначает что мы выполняем функцию UnitActionSystem_OnSelectedUnitChanged()
-                                                                                                   // Будет выполняться каждый раз когда мы меняем выбранного юнита.
-        UpdateVisual(); // Что бы при старте визуал был включен только у выбранного игрока
+                                                                                           // Будет выполняться каждый раз когда мы меняем выбранного юнита.
+        Unit selectedUnit = _unitActionSystem.GetSelectedUnit();
+        UpdateVisual(selectedUnit); // Что бы при старте визуал был включен только у выбранного игрока
     }
 
     // метод лучше назвать также как и Event
-    private void UnitActionSystem_OnSelectedUnitChanged(object sender, EventArgs e) //sender - отправитель // Подписка должна иметь туже сигнатуру что и функция отправителя OnSelectedUnitChanged
+    private void UnitActionSystem_OnSelectedUnitChanged(object sender, Unit selectedUnit) //sender - отправитель // Подписка должна иметь туже сигнатуру что и функция отправителя OnSelectedUnitChanged
     {
-        UpdateVisual();
+        UpdateVisual(selectedUnit);
     }
 
-    private void UpdateVisual() // (Обновление визуала) Включение и выключение визуализации выбора.
+    private void UpdateVisual(Unit selectedUnit) // (Обновление визуала) Включение и выключение визуализации выбора.
     {
-        if (_unitActionSystem.GetSelectedUnit() == _unit) // Если выбранный юнит равен юниту на котором лежит этот скрипт то
-        {
-            _meshRenderer.enabled = true; // включим круг
-        }
-        else
-        {
-            _meshRenderer.enabled = false; // выключим круг
-        }
+        _meshRenderer.enabled = (selectedUnit == _unit);// Если выбранный юнит равен юниту на котором лежит этот скрипт то включим круг       
     }
 
     private void OnDestroy() // Встроенная функция в MonoBehaviour и вызывается при уничтожении игрового объекта
