@@ -21,11 +21,15 @@ public class Unit
     public Unit(UnitTypeSO unitTypeSO, SoundManager soundManager)
     {
         _soundManager = soundManager;
-        _healthSystem = new Health(unitTypeSO.GetBasicHealth(), _soundManager);
-        _actionPointsSystem = new UnitActionPoints(this);
-        _unitInventory = new UnitInventory(this);
+        _healthSystem = new HealthSystem(unitTypeSO.GetBasicHealth(), _soundManager);
+        _actionPointsSystem = new UnitActionPoints(this, unitTypeSO.GetBasicActionPoints());
+        _unitInventory = new UnitInventory();
         _unitEquipment = new UnitEquipment(this);
+        _unitPower = new UnitPower(unitTypeSO.GetBasicPower());
+        _unitAccuracy = new UnitAccuracy(unitTypeSO.GetBasicAccuracy());
         _location = Location.Barrack; // по умолчанию все юниты появляются в КАЗАРМЕ
+        _completedMissionsCount = 0;
+        _killedEnemiesCount = 0;
 
         switch (unitTypeSO)
         {
@@ -51,10 +55,14 @@ public class Unit
     private Location _location;
 
     readonly UnitTypeSO _unitTypeSO;
-    readonly Health _healthSystem;
+    readonly HealthSystem _healthSystem;
     readonly UnitActionPoints _actionPointsSystem;
     readonly UnitInventory _unitInventory;
     readonly UnitEquipment _unitEquipment;
+    readonly UnitPower _unitPower;
+    readonly UnitAccuracy _unitAccuracy;
+    private int _completedMissionsCount;
+    private int _killedEnemiesCount;
     private BaseAction[] _baseActionsArray; // Массив базовых действий 
     private UnitArmorType _unitAmorType; //Тип брони юнита        
     private Transform _unitCoreTransform;
@@ -170,10 +178,14 @@ public class Unit
         OnAnyUnitDead?.Invoke(this, EventArgs.Empty); // Запустим событие Любой Мертвый Юнит. Событие статичное поэтому будет выполняться для любого мертвого Юнита      
     }
 
-    public Health GetHealthSystem() { return _healthSystem; }
+    public HealthSystem GetHealthSystem() { return _healthSystem; }
     public UnitActionPoints GetActionPointsSystem() { return _actionPointsSystem; }
     public UnitInventory GetUnitInventory() { return _unitInventory; }
     public UnitEquipment GetUnitEquipment() { return _unitEquipment; }
+    public UnitPower GetUnitPower() { return _unitPower; }
+    public UnitAccuracy GetUnitAccuracy() { return _unitAccuracy; }
+    public int GetCompletedMissionsCount() {  return _completedMissionsCount; }
+    public int GetKilledEnemiesCount() {  return _killedEnemiesCount; }
     public Vector3 GetTransformPosition() { return _unitCoreTransform.position; }
     public void SetTransformPosition(Vector3 position) { _unitCoreTransform.position = position; }
     public Transform GetTransform() { return _unitCoreTransform; }
@@ -188,6 +200,7 @@ public class Unit
     }
     public UnitTypeSO GetUnitTypeSO() { return _unitTypeSO; }
     public UnitArmorType GetUnitArmorType() { return _unitAmorType; }
+    public void SetUnitArmorType(UnitArmorType unitArmorType) { _unitAmorType = unitArmorType; }
     public TurnSystem GetTurnSystem() { return _turnSystem; }
     public SoundManager GetSoundManager() { return _soundManager; }
     public UnitActionSystem GetUnitActionSystem() { return _unitActionSystem; }

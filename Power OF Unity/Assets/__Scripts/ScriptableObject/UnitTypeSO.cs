@@ -19,8 +19,14 @@ public abstract class UnitTypeSO : ScriptableObject, ISerializationCallbackRecei
     [Header("Авт.сген. UUID для сохр/загр.\nОчистите это поле, если вы хотите сген-ть новое.")]
     [SerializeField] private string _unitID = null;
     [SerializeField] private string _name;   // Имя Юнита
+    [Range(0,100)]
     [SerializeField] private int _basicHealth; // Здоровье
-    [SerializeField] private int _basicActionPoints = Constant.ACTION_POINTS_MAX; // Очки действия
+    [Range(0, 100)]
+    [SerializeField] private int _basicActionPoints; // Очки действия
+    [Range(0, 100)]
+    [SerializeField] private int _basicPower; // Сила поднятия
+    [Range(0, 100)]
+    [SerializeField] private int _basicAccuracy; // Точность
     [Header("Дистанция движения.\nИзмеряется в узлах сетки, включает узел с самими Юнитом")]
     [SerializeField] private int _basicMoveDistance = Constant.MOVE_DISTSNCE_MAX;
     [Header("Префаб ядра юнита со скриптами")]
@@ -29,6 +35,8 @@ public abstract class UnitTypeSO : ScriptableObject, ISerializationCallbackRecei
     public string GetName() { return _name; }
     public int GetBasicHealth() { return _basicHealth; }
     public int GetBasicActionPoints() { return _basicActionPoints; }
+    public int GetBasicPower() {  return _basicPower; }
+    public int GetBasicAccuracy() {  return _basicAccuracy; }
     public int GetBasicMoveDistance() { return _basicMoveDistance; }
     public Transform GetUnitCorePrefab() { return _unitCorePrefab; }
         

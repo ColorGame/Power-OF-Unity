@@ -15,7 +15,7 @@ public class UnitWorldUI : MonoBehaviour, ISetupForSpawn
     [SerializeField] private Image _healthBarImage; // в инспекторе закинуть шкалу здоровья "Bar"
     
     private Unit _unit;
-    private Health _healthSystem;
+    private HealthSystem _healthSystem;
     private UnitActionPoints _actionPointsSystem;
     private UnitActionSystem _unitActionSystem;
     private TurnSystem _turnSystem;

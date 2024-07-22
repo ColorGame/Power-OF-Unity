@@ -69,7 +69,7 @@ public class GridSystemXY<TGridObject>
     /// Получим мировые координаты центра ячейки
     /// </summary>
     public virtual Vector3 GetWorldPositionCenterСornerCell(Vector2Int gridPosition) 
-    {              
+    {
         return new Vector3(gridPosition.x, gridPosition.y, 0) * _cellSizeWithScaleFactor + _anchorGridTransform.position + _offsetСenterCell;   // Получим координаты нашей ячеки с учетом ее масштаба, добавим смещение самой сетки _anchorGridTransform и смещения нулевой ячейки
                                                                                                                     // мы хотим что бы центр ячейки был смещен относительного нашего _anchorGridTransform  и левый угол сетки совподал с ***Grid.transform.position                                                                                                              
     }

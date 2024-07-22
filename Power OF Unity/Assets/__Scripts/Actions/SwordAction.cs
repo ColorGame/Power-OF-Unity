@@ -97,7 +97,7 @@ public class SwordAction : BaseAction // Базовое действие Меч
 
         if (_targetUnit.GetActionPointsSystem().GetStunned() && !_unit.GetActionPointsSystem().GetStunned()) // Если враг оглушенный а я нет
         {
-            int maxDamage = Mathf.RoundToInt(_targetUnit.GetHealthSystem().GetHealthMax() * 0.8f); // Отнимим 90% его макс здоровья
+            int maxDamage = Mathf.RoundToInt(_targetUnit.GetHealthSystem().GetHealthFull() * 0.8f); // Отнимим 90% его макс здоровья
             _targetUnit.GetHealthSystem().Damage(maxDamage);
         }
         else

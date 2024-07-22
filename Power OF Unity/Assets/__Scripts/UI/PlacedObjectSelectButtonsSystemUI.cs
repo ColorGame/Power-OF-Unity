@@ -34,14 +34,19 @@ public class PlacedObjectSelectButtonsSystemUI : MonoBehaviour
     {
         _scrollRect = GetComponent<ScrollRect>();
         _canvasRenderMode = GetComponentInParent<Canvas>().renderMode;
-        if (_canvasRenderMode == RenderMode.WorldSpace)// Если канвас в мировом пространстве то
+
+        switch (_canvasRenderMode)
         {
-            _cameraInventoryUI = GetComponentInParent<Camera>(); // Для канваса в мировом пространстве будем использовать отдельную дополнительную камеру
+            case RenderMode.ScreenSpaceOverlay:
+                _cameraInventoryUI = null;
+                break;
+            case RenderMode.ScreenSpaceCamera:
+                break;
+            case RenderMode.WorldSpace:
+                _cameraInventoryUI = GetComponentInParent<Camera>(); // Для канваса в мировом пространстве будем использовать отдельную дополнительную камеру
+                break;
         }
-        else
-        {
-            _cameraInventoryUI = null;
-        }
+       
 
 
         _placedObjectTypeListSO = Resources.Load<PlacedObjectTypeListSO>(typeof(PlacedObjectTypeListSO).Name);    // Загружает ресурс запрошенного типа, хранящийся по адресу path(путь) в папке Resources(эту папку я создал в папке ScriptableObjects).

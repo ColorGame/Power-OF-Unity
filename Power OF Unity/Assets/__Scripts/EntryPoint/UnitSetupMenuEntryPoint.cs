@@ -8,6 +8,8 @@ public class UnitSetupMenuEntryPoint : MonoBehaviour, IEntryPoint
     private InventoryGrid _inventoryGrid;
     private InventoryGridVisual _inventoryGridVisual;
     private UnitSelectAtInventoryButtonsSystemUI _unitSelectAtInventoryButtonsSystemUI;
+    private UnitPortfolioUI _unitPortfolioUI;
+    private UnitSpawnerOnInventoryMenu _unitSpawnerOnInventoryMenu;
 
     public void Process(DIContainer container)
     {
@@ -23,6 +25,8 @@ public class UnitSetupMenuEntryPoint : MonoBehaviour, IEntryPoint
         _unitSelectAtInventoryButtonsSystemUI = GetComponentInChildren<UnitSelectAtInventoryButtonsSystemUI>(true);
         _inventoryGrid = GetComponentInChildren<InventoryGrid>(true);
         _inventoryGridVisual = GetComponentInChildren<InventoryGridVisual>(true);
+        _unitPortfolioUI = GetComponentInChildren<UnitPortfolioUI>(true);
+        _unitSpawnerOnInventoryMenu = GetComponentInChildren<UnitSpawnerOnInventoryMenu>(true);
     }
 
     private void Register()
@@ -34,6 +38,8 @@ public class UnitSetupMenuEntryPoint : MonoBehaviour, IEntryPoint
     {
         _inventoryGrid.Init(container.Resolve<TooltipUI>());
         _pickUpDropPlacedObject.Init(container.Resolve<GameInput>(), container.Resolve<TooltipUI>(), _inventoryGrid);
+        _unitPortfolioUI.Init(_unitInventorySystem); // должна иниц. перед _unitInventorySystem 
+        _unitSpawnerOnInventoryMenu.Init(_unitInventorySystem);// должна иниц. перед _unitInventorySystem 
         _unitInventorySystem.Init(_pickUpDropPlacedObject, container.Resolve<UnitManager>(), _inventoryGrid);
         _placedObjectSelectButtonsSystemUI.Init(container.Resolve<TooltipUI>(), _pickUpDropPlacedObject);
         _unitSelectAtInventoryButtonsSystemUI.Init(container.Resolve<UnitManager>(), _unitInventorySystem);

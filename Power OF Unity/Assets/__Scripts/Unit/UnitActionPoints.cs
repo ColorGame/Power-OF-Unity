@@ -9,15 +9,18 @@ public class UnitActionPoints
     /// <summary>
     /// ОЧКИ ДЕЙСТВИЯ юнита
     /// </summary>
-    public UnitActionPoints(Unit unit)
+    public UnitActionPoints(Unit unit, int actionPoints)
     {
         _unit = unit;
+        _actionPoints = actionPoints;
+        _actionPointsFull = _actionPoints;
     }
 
     public event EventHandler OnActionPointsChanged;  // изменении очков действий.         
 
 
-    private int _actionPointsCount = Constant.ACTION_POINTS_MAX; // Очки действия
+    private int _actionPoints; // Очки действия
+    private int _actionPointsFull; //Полное количество очков действия
     private float _penaltyStunPercent;  // Штрафной процент оглушения (будем применять в след ход)
     private bool _stunned = false; // Оглушенный(по умолчанию ложь)
     private Unit _unit;
@@ -61,7 +64,7 @@ public class UnitActionPoints
     /// </summary>
     public bool CanSpendActionPointsToTakeAction(BaseAction baseAction)
     {
-        if (_actionPointsCount >= baseAction.GetActionPointCost()) // Если очков действия хватает то...
+        if (_actionPoints >= baseAction.GetActionPointCost()) // Если очков действия хватает то...
         {
             return true; // Можем выполнить действие
         }
@@ -71,35 +74,36 @@ public class UnitActionPoints
         }
 
         /*// Альтернативная запись кода выше
-        return _actionPointsCount >= baseAction.GetActionPointCost();*/
+        return _actionPoints >= baseAction.GetActionPointCost();*/
     }
     /// <summary>
     /// Потратить очки действий (amount- количество которое надо потратить)
     /// </summary>
     public void SpendActionPoints(int amount)
     {
-        _actionPointsCount -= amount;
+        _actionPoints -= amount;
 
         OnActionPointsChanged?.Invoke(this, EventArgs.Empty); // запускаем событие ПОСЛЕ обнавления очков действий.(для // РЕШЕНИЕ // 2 //в ActionButtonSystemUI)
     }
     /// <summary>
     /// Получить количество очков действия
     /// </summary>
-    public int GetActionPointsCount() { return _actionPointsCount; }
+    public int GetActionPointsCount() { return _actionPoints; }
+    public int GetActionPointsCountFull() { return _actionPointsFull; }
 
     /// <summary>
-    /// Ход изменен Сбросим очки действий до максимальных
+    /// Ход изменен Сбросим очки действий до полного
     /// </summary>
     public void TurnSystem_OnTurnChanged(object sender, EventArgs empty) 
     {
         if ((_unit.IsEnemy() && !_turnSystem.IsPlayerTurn()) || // Если это враг И его очередь (НЕ очередь игрока) ИЛИ это НЕ враг(игрок) и очередь игрока то...
             (!_unit.IsEnemy() && _turnSystem.IsPlayerTurn()))
         {
-            _actionPointsCount = Constant.ACTION_POINTS_MAX;
+            _actionPoints = _actionPointsFull;
 
             if (_penaltyStunPercent != 0)
             {
-                _actionPointsCount -= Mathf.RoundToInt(_actionPointsCount * _penaltyStunPercent); // Применим штраф
+                _actionPoints -= Mathf.RoundToInt(_actionPoints * _penaltyStunPercent); // Применим штраф
                 _penaltyStunPercent = 0;
                 SetStunned(false); // Отключим оглушение
             }
@@ -108,7 +112,7 @@ public class UnitActionPoints
             /*int passedTurnNumber = _turnSystem.GetTurnNumber() - _startStunTurnNumber;// прошло ходов от начала Оглушения
             if (passedTurnNumber <= _durationStunEffectTurnNumber) // Если ходов прошло меньше или равно длительности ОГЛУШЕНИЯ (Значит оглушение еще действует)
             {
-                _actionPointsCount -= Mathf.RoundToInt(_actionPointsCount * _penaltyStunPercent); // Применим штраф
+                _actionPoints -= Mathf.RoundToInt(_actionPoints * _penaltyStunPercent); // Применим штраф
                 _penaltyStunPercent = _penaltyStunPercent *0.3f; // Уменьшим штраф оставим 30% от изначального (это надо Если оглушение длиться несколько ходов)
             }
             if (passedTurnNumber > _durationStunEffectTurnNumber) //Если ходов прошло больше продолжительности ОГЛУШЕНИЯ
@@ -130,11 +134,11 @@ public class UnitActionPoints
 
         /*// БОлее сложная распространяется на след ход
         _startStunTurnNumber = _turnSystem.GetTurnNumber(); // Получим стартовый номер хода              
-        if (_actionPointsCount > 0) // Если очков хода больше нуля
+        if (_actionPoints > 0) // Если очков хода больше нуля
         {
             _durationStunEffectTurnNumber = 1; //Нужно НАСТРОИТЬ// Оглушение будет длиться весь следующий ход
         }
-        if(_actionPointsCount<=0) // Если очков хода нету
+        if(_actionPoints<=0) // Если очков хода нету
         {
             _durationStunEffectTurnNumber = 3; //Нужно НАСТРОИТЬ// Оглушение будет длиться следующие 3 хода (через ход врага)
         }*/

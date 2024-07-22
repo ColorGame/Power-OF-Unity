@@ -24,7 +24,7 @@ public class InventoryGrid : MonoBehaviour
 
     private void Awake()
     {
-        _canvas = GetComponentInParent<Canvas>();          
+        _canvas = GetComponentInParent<Canvas>();
     }
 
     public void Init(TooltipUI tooltipUI)

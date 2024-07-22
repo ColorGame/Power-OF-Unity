@@ -78,14 +78,18 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
                     Transform AnchorGridTransform = _inventoryGrid.GetAnchorGrid(_gridSystemXYList[i]);
 
                     InventoryGridVisualSingle inventoryGridVisualSingle;
-                    if (canvasRenderMode == RenderMode.WorldSpace) // Если канвас в мировом пространстве то
+
+                    switch (canvasRenderMode)
                     {
-                        inventoryGridVisualSingle = Instantiate(GameAssets.Instance.InventoryGridInVisualSingleWorldSpacePrefab, _inventoryGrid.GetWorldPositionCenterСornerCell(gridPosition, _gridSystemXYList[i]), Quaternion.Euler(rotation), AnchorGridTransform); // Создадим наш префаб в каждой позиции сетки
-                    }
-                    else
-                    {
+                        default:
+                        case RenderMode.ScreenSpaceOverlay:
+                        case RenderMode.ScreenSpaceCamera:
                         inventoryGridVisualSingle = Instantiate(GameAssets.Instance.InventoryGridInVisualSingleScreenSpacePrefab, _inventoryGrid.GetWorldPositionCenterСornerCell(gridPosition, _gridSystemXYList[i]), Quaternion.Euler(rotation), AnchorGridTransform); // Создадим наш префаб в каждой позиции сетки
-                    }
+                            break;                            
+                        case RenderMode.WorldSpace:
+                        inventoryGridVisualSingle = Instantiate(GameAssets.Instance.InventoryGridInVisualSingleWorldSpacePrefab, _inventoryGrid.GetWorldPositionCenterСornerCell(gridPosition, _gridSystemXYList[i]), Quaternion.Euler(rotation), AnchorGridTransform); // Создадим наш префаб в каждой позиции сетки
+                            break;
+                    }                    
 
                     _gridNameIndexDictionary[_gridSystemXYList[i].GetGridSlot()] = i; // Присвоим ключу(имя Сетки под этим индексом) значение (индекс массива)
                     _inventoryGridVisualSingleArray[i][x, y] = inventoryGridVisualSingle; // Сохраняем компонент LevelGridVisualSingle в трехмерный массив где x,y,y это будут индексы массива.

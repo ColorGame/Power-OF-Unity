@@ -14,19 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitID: 44eea0d1-dde2-42ae-81f6-eb1e432babc5
   _name: "\u042E\u043D\u0438\u04422"
-  _basicHealth: 100
-  _basicActionPoints: 5
+  _basicHealth: 26
+  _basicActionPoints: 67
+  _basicPower: 27
+  _basicAccuracy: 68
   _basicMoveDistance: 5
   _unitCorePrefab: {fileID: 7190681445944954987, guid: 773c0e24e4f8c55459490dc095013475,
     type: 3}
-  _unitFacePortfolioVisualPrefab: {fileID: 6286862877503542559, guid: 3578c060882338849ab53556eaf82578,
+  _unitAvatarPortfolioVisualPrefab: {fileID: 6286862877503542559, guid: 3578c060882338849ab53556eaf82578,
     type: 3}
-  _unitPortfolioVisualPrefab: {fileID: 8139890902060512657, guid: 9dda396d700ad134c833ced371fad6c6,
+  _unitBaseVisualPrefab: {fileID: 8842619547430605232, guid: ecaf8966a4f42d84bb0ddb788a94221d,
     type: 3}
-  _unitEasyVisualPrefab: {fileID: 8985483217945399179, guid: 4a0acf9f11e2bca4998f44a7efdba2a1,
+  _unitEasyVisualPrefab: {fileID: 8842619547430605232, guid: c245e5f88460e6844a648e5db979f0dd,
     type: 3}
-  _unitMediumVisualPrefab: {fileID: 8985483217945399179, guid: e77d737f0acad734584271e43ae11ed2,
+  _unitMediumVisualPrefab: {fileID: 8842619547430605232, guid: c82e4b3e86f617843a9e2810ea4616b2,
     type: 3}
-  _unitHardVisualPrefab: {fileID: 8985483217945399179, guid: dd808ae4b35cdf44eabb3b54ff4f6ba7,
+  _unitHardVisualPrefab: {fileID: 8842619547430605232, guid: f1fe10aab51943f4abe8b87817f8a8eb,
     type: 3}
-  _basicAmorType: 0
+  _basicAmorType: 2

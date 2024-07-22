@@ -19,7 +19,7 @@ namespace Synty.Interface.SciFiSoldierHUD.Samples
         public Animator animator;
 
         [Header("Parameters")]
-        public string parameterName = "Health";
+        public string parameterName = "HealthSystem";
         public float inSpeed = 5f;
         public float outSpeed = 5f;
         public float startDelay;

@@ -13,15 +13,22 @@ MonoBehaviour:
   m_Name: UnitFriend 3
   m_EditorClassIdentifier: 
   _unitID: 2dfda4ff-bdb3-4d49-b332-24651899374b
-  _name: 
+  _name: "\u0418\u043B\u044C\u044F \u041C\u0443\u0440\u043E\u043C\u0435\u0446"
   _basicHealth: 100
-  _basicActionPoints: 5
+  _basicActionPoints: 100
+  _basicPower: 100
+  _basicAccuracy: 100
   _basicMoveDistance: 5
-  _unitCorePrefab: {fileID: 7190681445944954987, guid: 773c0e24e4f8c55459490dc095013475,
+  _unitCorePrefab: {fileID: 2627047634066788303, guid: 602eca0fe7b206a45828fc1718ba728a,
     type: 3}
-  _unitStartVisualPrefab: {fileID: 0}
-  _unitEasyVisualPrefab: {fileID: 0}
-  _unitMediumVisualPrefab: {fileID: 0}
-  _unitHardVisualPrefab: {fileID: 0}
-  _unitPortfolioHeadVisualPrefab: {fileID: 0}
-  _basicAmorType: 0
+  _unitAvatarPortfolioVisualPrefab: {fileID: 6286862877503542559, guid: 737a8cd69bc2c0c48ae90d2d91501f24,
+    type: 3}
+  _unitBaseVisualPrefab: {fileID: 8842619547430605232, guid: e6828862c28c1c9448f3bc2ea7154390,
+    type: 3}
+  _unitEasyVisualPrefab: {fileID: 8842619547430605232, guid: e9b2a0ef1eecf4042943150a30f874ef,
+    type: 3}
+  _unitMediumVisualPrefab: {fileID: 8842619547430605232, guid: e6cdd9fa0059bee46885c87b6aef7895,
+    type: 3}
+  _unitHardVisualPrefab: {fileID: 8842619547430605232, guid: 324c2d62d57326648a70cfb88559054f,
+    type: 3}
+  _basicAmorType: 3

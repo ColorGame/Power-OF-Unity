@@ -400,11 +400,11 @@ public class ShootAction : BaseAction
     public float AttackScore(Unit unit) // ќценка атаки // ¬ первую очередь Ѕьем слабых, но потом при равных значени€х здоровь€, добиваем тех кто был самым сильным
     {
         int health = unit.GetHealthSystem().GetHealth();
-        int healthMax = unit.GetHealthSystem().GetHealthMax();
+        int healthFull = unit.GetHealthSystem().GetHealthFull();
 
-        float unitPerHealthPoint = 100 / healthMax;  //чем выше здоровье, тем ниже будет этот балл
-        return (healthMax - health) * unitPerHealthPoint + unitPerHealthPoint; // »такЕ если у всех целей максимальное здоровье (health=healthMax), то ЅќЋ№Ў≈ очков получит юнит с меньшим максимальным здоровьем (самому хилому навал€ют в первую очередь).
-                                                                               // ≈сли после повреждений у двух юнитов одинаковое здоровье например 20 но у первого healthMax=100 а у второго 120 то навал€ют второму т.к. у него больше максимальное здоровье и он получит больше очков значени€
+        float unitPerHealthPoint = 100 / healthFull;  //чем выше здоровье, тем ниже будет этот балл
+        return (healthFull - health) * unitPerHealthPoint + unitPerHealthPoint; // »такЕ если у всех целей максимальное здоровье (health=healthFull), то ЅќЋ№Ў≈ очков получит юнит с меньшим максимальным здоровьем (самому хилому навал€ют в первую очередь).
+                                                                               // ≈сли после повреждений у двух юнитов одинаковое здоровье например 20 но у первого healthFull=100 а у второго 120 то навал€ют второму т.к. у него больше максимальное здоровье и он получит больше очков значени€
     }
 
     public void SetSpotterFireUnit(Unit spotterFireUnit) // ”становить корректировщика огн€

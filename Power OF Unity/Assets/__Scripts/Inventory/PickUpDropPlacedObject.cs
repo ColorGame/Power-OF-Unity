@@ -46,15 +46,21 @@ public class PickUpDropPlacedObject : MonoBehaviour //
     {
         _canvasInventory = GetComponentInParent<Canvas>();
         _canvasRenderMode = _canvasInventory.renderMode;
-        if (_canvasRenderMode == RenderMode.WorldSpace)// Если канвас в мировом пространстве то
+
+        switch (_canvasRenderMode)
         {
-            _planeForCanvasInWorldSpace = new Plane(_canvasInventory.transform.forward, _canvasInventory.transform.position); // Создадим плоскость в позиции canvasInventory
-            _camera = GetComponentInParent<Camera>(); // Для канваса в мировом пространстве будем использовать дополнительную камеру
+            case RenderMode.ScreenSpaceOverlay:
+                _camera = Camera.main;
+                break;
+            case RenderMode.ScreenSpaceCamera:
+                _camera = GetComponentInParent<Camera>(); // Для канваса будем использовать дополнительную камеру
+                break;
+            case RenderMode.WorldSpace:
+                _planeForCanvasInWorldSpace = new Plane(_canvasInventory.transform.forward, _canvasInventory.transform.position); // Создадим плоскость в позиции canvasInventory
+                _camera = GetComponentInParent<Camera>(); // Для канваса в мировом пространстве будем использовать дополнительную камеру
+                break;
         }
-        else
-        {
-            _camera = Camera.main;
-        }
+       
         _inventoryLayerMask = LayerMask.GetMask("Inventory");
 
         _gameInput.OnClickAction += GameInput_OnClickAction;

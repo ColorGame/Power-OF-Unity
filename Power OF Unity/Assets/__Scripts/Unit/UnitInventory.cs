@@ -9,18 +9,15 @@ public class UnitInventory
     /// <summary>
     /// Инвентарь юнита (Хранилище для предметов, которыми оснащен игрок). 
     /// </summary>
-    public UnitInventory(Unit unit)
-    {
-        _unit = unit;
-
+    public UnitInventory()
+    {       
         //Здесь можно загрузить стандартную загрузку инвенторя
         _placedObjectList = new List<PlacedObjectParameters>();
     }
 
     public event EventHandler<PlacedObject> OnAddPlacedObjectList; // Событие Добавлен предмет в инвентарь
     public event EventHandler<PlacedObject> OnRemovePlacedObjectList; // Событие Удален предмет из инвенторя
-
-    private Unit _unit;
+       
     private List<PlacedObjectParameters> _placedObjectList; // Список предметов инвентаря
 
     private PlacedObjectTypeSO _placedObjectMainWeaponSlot;

@@ -5,7 +5,7 @@ public class UnitRagdollSpawner : MonoBehaviour, ISetupForSpawn // Юнит Тряпична
     [SerializeField] private Transform _ragdollPrefab; // Префаб тряпичной куклы
     [SerializeField] private Transform _originalRootBone; // Оригинальная Корневая Кость(юнита) // В инспекторе закинуть кость юнита под названием Root 
 
-    private Health _healthSystem;
+    private HealthSystem _healthSystem;
     private UnitActionSystem _unitActionSystem;
 
     private Unit _keelerUnit; //Сохраним юнита который хочет нас убить Киллер.

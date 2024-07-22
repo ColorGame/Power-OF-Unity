@@ -1,6 +1,5 @@
-using System.Collections.Generic;
-using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 
 /// <summary>
@@ -37,11 +36,9 @@ public class UnitInventorySystem
     {
         List<Unit> UnitFriendList = _unitManager.GetUnitFriendList();
         if (UnitFriendList.Count != 0)
-        {
-            _selectedUnit = UnitFriendList[0];
-        }
-
-        UpdateInventoryGrid();
+        {           
+            SetSelectedUnit(UnitFriendList[0]);
+        }        
     }
 
 

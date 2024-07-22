@@ -21,16 +21,16 @@ public class UnitSelectAtInventoryButtonsSystemUI : MonoBehaviour
     private TextMeshProUGUI[] _headerContainerTextArray; // Массив текеста заголовка контейнера
     private UnitManager _unitManager;
     private UnitInventorySystem _unitInventorySystem;
-    private ScrollRect _scrollRect; //Компонент прокрутки кнопок
-    private RenderMode _canvasRenderMode;
+    private ScrollRect _scrollRect; //Компонент прокрутки кнопок    
     private Camera _cameraInventoryUI;
     private TooltipUI _tooltipUI;
 
     private void Awake()
     {
         _scrollRect = GetComponent<ScrollRect>();
-        _canvasRenderMode = GetComponentInParent<Canvas>().renderMode;
-        if (_canvasRenderMode == RenderMode.WorldSpace)// Если канвас в мировом пространстве то
+
+        RenderMode canvasRenderMode = GetComponentInParent<Canvas>().renderMode;
+        if (canvasRenderMode == RenderMode.WorldSpace)// Если канвас в мировом пространстве то
         {
             _cameraInventoryUI = GetComponentInParent<Camera>(); // Для канваса в мировом пространстве будем использовать отдельную дополнительную камеру
         }

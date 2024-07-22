@@ -5,8 +5,8 @@ public class UnitFriendSO : UnitTypeSO
 {
     [Header("Поля для префабов ЮНИТА")]
 
-    [SerializeField] private Transform _unitFacePortfolioVisualPrefab;
-    [SerializeField] private Transform _unitPortfolioVisualPrefab;
+    [SerializeField] private Transform _unitAvatarPortfolioVisualPrefab;
+    [SerializeField] private Transform _unitBaseVisualPrefab;
     [SerializeField] private Transform _unitEasyVisualPrefab;
     [SerializeField] private Transform _unitMediumVisualPrefab;
     [SerializeField] private Transform _unitHardVisualPrefab;
@@ -14,12 +14,15 @@ public class UnitFriendSO : UnitTypeSO
     [SerializeField] private UnitArmorType _basicAmorType; // Базовый тип брони юнита
 
 
-    public Transform GetUnitPortfolioVisualPrefab() { return _unitPortfolioVisualPrefab; }
+    public Transform GetUnitAvatarPortfolioVisualPrefab() { return _unitAvatarPortfolioVisualPrefab; }
     public Transform GetUnitVisualPrefab(UnitArmorType unitArmorType)
     {
         switch (unitArmorType)
         {
             default:
+            case UnitArmorType.Base:
+                return _unitBaseVisualPrefab;
+
             case UnitArmorType.Easy:
                 return _unitEasyVisualPrefab;
 
