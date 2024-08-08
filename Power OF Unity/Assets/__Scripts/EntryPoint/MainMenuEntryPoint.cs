@@ -20,7 +20,7 @@ public class MainMenuEntryPoint : MonoBehaviour, IEntryPoint
 
     private void Init(DIContainer container)
     {
-        _mainMenuUI.Init(container.Resolve<OptionsMenuUI>(), container.Resolve<ScenesService>());
+        _mainMenuUI.Init(container.Resolve<OptionsSubMenuUI>(), container.Resolve<ScenesService>());
     }
     
 

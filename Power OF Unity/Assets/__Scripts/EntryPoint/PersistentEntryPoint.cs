@@ -13,7 +13,7 @@ public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
     private VirtualMouseCustom _virtualMouseCustom;
     private MusicManager _musicManager;
     private SoundManager _soundManager;
-    private OptionsMenuUI _optionsMenuUI; // убрать отсюда и загружать из ресурсов
+    private OptionsSubMenuUI _optionsMenuUI; // убрать отсюда и загружать из ресурсов
     private TooltipUI _tooltipUI;
     private GameInput _gameInput;
     private JsonSaveableEntity _jsonSaveableEntity;
@@ -31,7 +31,7 @@ public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
         _virtualMouseCustom = GetComponentInChildren<VirtualMouseCustom>(true);
         _musicManager = GetComponentInChildren<MusicManager>(true);
         _soundManager = GetComponentInChildren<SoundManager>(true);
-        _optionsMenuUI = GetComponentInChildren<OptionsMenuUI>(true);
+        _optionsMenuUI = GetComponentInChildren<OptionsSubMenuUI>(true);
         _tooltipUI = GetComponentInChildren<TooltipUI>(true);
         _gameInput = new GameInput();
         _jsonSaveableEntity = new JsonSaveableEntity();

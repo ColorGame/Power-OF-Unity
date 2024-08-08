@@ -18,7 +18,7 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private Collider cameraBoundsCollider; //Ссылка на коллайдер который ограничивает виртуальную камеру
 
     private GameInput _gameInput;
-    private OptionsMenuUI _optionsMenuUI;
+    private OptionsSubMenuUI _optionsMenuUI;
 
     // private CinemachineTransposer _cinemachineTransposer;
     private CinemachineTransposer _cinemachineTransposer; // Компонент на виртуальной камере с помощью которого будем реализовывать ZOOM
@@ -40,7 +40,7 @@ public class CameraFollow : MonoBehaviour
     private float _rotationSpeed = 5f;
     private float _zoomSpeed = 5f;
 
-    public void Init(GameInput gameInput, OptionsMenuUI optionsMenuUI)
+    public void Init(GameInput gameInput, OptionsSubMenuUI optionsMenuUI)
     {
         _gameInput = gameInput;
         _optionsMenuUI = optionsMenuUI;

@@ -49,7 +49,7 @@ public class GameplayEntryPoint : MonoBehaviour, IEntryPoint
 
     private void Init(DIContainer container)
     {
-        _cameraFollow.Init(container.Resolve<GameInput>(), container.Resolve<OptionsMenuUI>());
+        _cameraFollow.Init(container.Resolve<GameInput>(), container.Resolve<OptionsSubMenuUI>());
         FloorVisibility.Init(_levelGrid, _cameraFollow); // инициализировать до спавна юнитов
         _mouseOnGameGrid.Init(container.Resolve<GameInput>(), _levelGrid);
         _unitActionSystem.Init(container.Resolve<GameInput>(), container.Resolve<UnitManager>(), _turnSystem, _levelGrid, _mouseOnGameGrid);
