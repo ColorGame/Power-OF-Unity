@@ -1,22 +1,18 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 /// <summary>
-/// Меню настроек звука видео... 
+/// Пол меню настроек звука видео... 
 /// </summary>
 /// <remarks>
-/// Должен быть прикриплен к PersistentEntryPoint
+/// Создается и инициализируется в PersistentEntryPoint
 /// </remarks>
 public class OptionsSubMenuUI : ToggleVisibleAnimatioSubscribeMenuUI 
 {
     public event EventHandler<bool> OnEdgeScrollingChange;
-
-
 
     [Header("Текст который будем менять")]
     [SerializeField] private TextMeshProUGUI _soundVolumeText; // Текст громкости звука

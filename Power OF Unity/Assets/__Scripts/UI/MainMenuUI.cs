@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuUI : MonoBehaviour // Главное меню
+/// <summary>
+/// Главное меню
+/// </summary>
+public class MainMenuUI : MonoBehaviour 
 {
     [SerializeField] private Button _resumeGameButton; // продолжить
     [SerializeField] private Button _startGameButton; // старт новой

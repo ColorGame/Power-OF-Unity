@@ -3,12 +3,18 @@ using UnityEngine;
 public class UnitSetupMenuEntryPoint : MonoBehaviour, IEntryPoint
 {
     private UnitInventorySystem _unitInventorySystem;
-    private PlacedObjectSelectButtonsSystemUI _placedObjectSelectButtonsSystemUI;
     private PickUpDropPlacedObject _pickUpDropPlacedObject;
     private InventoryGrid _inventoryGrid;
     private InventoryGridVisual _inventoryGridVisual;
-    private UnitSelectAtInventoryButtonsSystemUI _unitSelectAtInventoryButtonsSystemUI;
+
     private UnitPortfolioUI _unitPortfolioUI;
+    private UnitSelectAtInventoryButtonsSystemUI _unitSelectAtInventoryButtonsSystemUI;
+    private PlacedObjectSelectButtonsSystemUI _placedObjectSelectButtonsSystemUI;
+    private UpperMenuBarOnUnitSetupUI _upperMenuBarOnUnitSetupUI;
+    private GameMenuUI _gameMenuUI;
+    private QuitGameSubMenuUI _quitGameSubMenuUI;
+    private SaveGameSubMenuUI _saveGameSubMenuUI;
+
     private UnitSpawnerOnInventoryMenu _unitSpawnerOnInventoryMenu;
 
     public void Process(DIContainer container)
@@ -21,11 +27,17 @@ public class UnitSetupMenuEntryPoint : MonoBehaviour, IEntryPoint
     private void GetComponent()
     {
         _pickUpDropPlacedObject = GetComponentInChildren<PickUpDropPlacedObject>(true);
-        _placedObjectSelectButtonsSystemUI = GetComponentInChildren<PlacedObjectSelectButtonsSystemUI>(true);
-        _unitSelectAtInventoryButtonsSystemUI = GetComponentInChildren<UnitSelectAtInventoryButtonsSystemUI>(true);
         _inventoryGrid = GetComponentInChildren<InventoryGrid>(true);
         _inventoryGridVisual = GetComponentInChildren<InventoryGridVisual>(true);
+
         _unitPortfolioUI = GetComponentInChildren<UnitPortfolioUI>(true);
+        _unitSelectAtInventoryButtonsSystemUI = GetComponentInChildren<UnitSelectAtInventoryButtonsSystemUI>(true);
+        _placedObjectSelectButtonsSystemUI = GetComponentInChildren<PlacedObjectSelectButtonsSystemUI>(true);
+        _upperMenuBarOnUnitSetupUI = GetComponentInChildren<UpperMenuBarOnUnitSetupUI>(true);
+        _gameMenuUI = GetComponentInChildren<GameMenuUI>(true);
+        _quitGameSubMenuUI = GetComponentInChildren<QuitGameSubMenuUI>(true);
+        _saveGameSubMenuUI = GetComponentInChildren<SaveGameSubMenuUI>(true);
+
         _unitSpawnerOnInventoryMenu = GetComponentInChildren<UnitSpawnerOnInventoryMenu>(true);
     }
 
@@ -43,6 +55,10 @@ public class UnitSetupMenuEntryPoint : MonoBehaviour, IEntryPoint
         _unitInventorySystem.Init(_pickUpDropPlacedObject, container.Resolve<UnitManager>(), _inventoryGrid);
         _placedObjectSelectButtonsSystemUI.Init(container.Resolve<TooltipUI>(), _pickUpDropPlacedObject);
         _unitSelectAtInventoryButtonsSystemUI.Init(container.Resolve<UnitManager>(), _unitInventorySystem);
+        _upperMenuBarOnUnitSetupUI.Init(container.Resolve<GameInput>(), _gameMenuUI);
+        _gameMenuUI.Init(container.Resolve<GameInput>(), container.Resolve<OptionsSubMenuUI>(), _quitGameSubMenuUI,_saveGameSubMenuUI, container.Resolve<LoadGameSubMenuUI>());
+        _quitGameSubMenuUI.Init(container.Resolve<GameInput>(), container.Resolve<ScenesService>());
+        _saveGameSubMenuUI.Init(container.Resolve<GameInput>());
         _inventoryGridVisual.Init(_pickUpDropPlacedObject, _inventoryGrid, _unitInventorySystem);
     }
 }

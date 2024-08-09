@@ -2,6 +2,12 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Переключение ВИДИМОСТИ, АНИМАЦИИ, ПОДПИСКИ меню
+/// </summary>
+/// <remarks>
+/// Абстрактный класс.
+/// </remarks>
 public abstract class ToggleVisibleAnimatioSubscribeMenuUI : MonoBehaviour
 {
     [Header("Фон который блокирует\nвзаимодействие с задним фоном")]
@@ -136,7 +142,7 @@ public abstract class ToggleVisibleAnimatioSubscribeMenuUI : MonoBehaviour
     private void StartAnimation()
     {
         _animator.enabled = true;
-        _animator.CrossFade(_stateHashNameAnimation, 0.5f);
+        _animator.CrossFade(_stateHashNameAnimation, 0);
         _animationTimer = _animator.GetCurrentAnimatorStateInfo(0).length;
         _animationStart = true;
     }
