@@ -48,7 +48,6 @@ public class OptionsSubMenuUI : ToggleVisibleAnimatioSubscribeMenuUI
         _gameInput = gameInput;
 
         Setup();
-        SetAnimationOpenClose();
     }     
 
     private void Setup()

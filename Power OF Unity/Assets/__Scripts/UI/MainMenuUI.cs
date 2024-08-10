@@ -14,19 +14,21 @@ public class MainMenuUI : MonoBehaviour
 
     private OptionsSubMenuUI _optionsMenuUI;
     private ScenesService _scenesService;
+    private LoadGameSubMenuUI _loadGameSubMenuUI;
 
-    public void Init(OptionsSubMenuUI optionsMenuUI, ScenesService scenesService)
+    public void Init(OptionsSubMenuUI optionsMenuUI, ScenesService scenesService, LoadGameSubMenuUI loadGameSubMenuUI)
     {
         _optionsMenuUI = optionsMenuUI;
         _scenesService = scenesService;
+        _loadGameSubMenuUI = loadGameSubMenuUI;
 
         Setup();
     }
 
     private void Setup()
     {
-        _resumeGameButton.onClick.AddListener(() => { Debug.Log("ЗАГЛУШКА"); });
-        _loadGameButton.onClick.AddListener(() => { Debug.Log("ЗАГЛУШКА"); });
+        _resumeGameButton.onClick.AddListener(() => { Debug.Log("ЗАГЛУШКА_ПРОДОЛЖИТЬ"); });
+        _loadGameButton.onClick.AddListener(() => { _loadGameSubMenuUI.ToggleVisible();  });
         _optionGameButton.onClick.AddListener(() => { _optionsMenuUI.ToggleVisible(); });
         _startGameButton.onClick.AddListener(() => { _scenesService.Load(SceneName.UnitSetupMenu); });
         _quitGameButton.onClick.AddListener(() => { Application.Quit(); });// Кнопка будет работать тоько после сборки  kd

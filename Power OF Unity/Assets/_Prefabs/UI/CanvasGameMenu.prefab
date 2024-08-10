@@ -2278,6 +2278,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _backgroundBlockRaycast: {fileID: 3336530222003430152}
+  _resumeGameButton: {fileID: 4656670078122703704}
+  _saveGameButton: {fileID: 6015512561097507892}
+  _loadGameButton: {fileID: 4519477419603614133}
+  _optionGameButton: {fileID: 8320850478543408708}
+  _quitGameButton: {fileID: 1451600520356579170}
 --- !u!95 &6754294959041192413
 Animator:
   serializedVersion: 7
@@ -2358,7 +2363,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.78431374}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2765,7 +2770,7 @@ GameObject:
   - component: {fileID: 3072293320548923884}
   - component: {fileID: 1274210168585301342}
   m_Layer: 5
-  m_Name: CanvasGameMenuUI
+  m_Name: CanvasGameMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2813,7 +2818,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &3072293320548923884
 MonoBehaviour:

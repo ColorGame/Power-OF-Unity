@@ -34,6 +34,7 @@ public abstract class ToggleVisibleAnimatioSubscribeMenuUI : MonoBehaviour
             _animator = animator;
         }
 
+        SetAnimationOpenClose();
         HideMenuCallDelegate();
     }
 
@@ -59,7 +60,7 @@ public abstract class ToggleVisibleAnimatioSubscribeMenuUI : MonoBehaviour
         {
             _animator.enabled = false; // Отключим анимацию что бы вернуть управление в КОД
             _animationStart = false;
-            if (_stateHashNameAnimation == _animBase.OptionsSubMenuClose) // Если сейчас анимация закрывания то
+            if (_stateHashNameAnimation == _animationClose) // Если сейчас анимация закрывания то
                 HideMenuCallDelegate();
         }
     }
@@ -70,7 +71,7 @@ public abstract class ToggleVisibleAnimatioSubscribeMenuUI : MonoBehaviour
     protected void SubscribeAlternativeToggleVisible()
     {
         if (_gameInput != null) // При загрузки _gameInput еще не иницилизирован 
-            _gameInput.OnMenuAlternate += GameInput_OnMenuAlternate;
+            _gameInput.OnMenuAlternate += GameInput_OnMenuAlternateToggleVisible;
     }
     /// <summary>
     /// Отписаться от альтернативного переключение видимости меню
@@ -78,9 +79,9 @@ public abstract class ToggleVisibleAnimatioSubscribeMenuUI : MonoBehaviour
     protected void UnsubscribeAlternativeToggleVisible()
     {
         if (_gameInput != null) // При загрузки _gameInput еще не иницилизирован 
-            _gameInput.OnMenuAlternate -= GameInput_OnMenuAlternate;
+            _gameInput.OnMenuAlternate -= GameInput_OnMenuAlternateToggleVisible;
     }
-    private void GameInput_OnMenuAlternate(object sender, System.EventArgs e)
+    private void GameInput_OnMenuAlternateToggleVisible(object sender, System.EventArgs e)
     {
         ToggleVisible();
     }

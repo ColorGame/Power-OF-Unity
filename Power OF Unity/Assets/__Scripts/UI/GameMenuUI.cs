@@ -1,4 +1,6 @@
 using System;
+using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Игровое меню
@@ -8,6 +10,12 @@ using System;
 /// </remarks>
 public class GameMenuUI : ToggleVisibleAnimatioSubscribeMenuUI
 {
+    [SerializeField] private Button _resumeGameButton; // продолжить
+    [SerializeField] private Button _saveGameButton; // сохранить
+    [SerializeField] private Button _loadGameButton; // загрузить
+    [SerializeField] private Button _optionGameButton; // настройки
+    [SerializeField] private Button _quitGameButton; // выйти
+
 
     private OptionsSubMenuUI _optionsSubMenuUI;
     private QuitGameSubMenuUI _quitGameSubMenuUI;
@@ -26,12 +34,34 @@ public class GameMenuUI : ToggleVisibleAnimatioSubscribeMenuUI
     }
 
     private void Setup()
-    {
-        throw new NotImplementedException();
+    {             
+        _resumeGameButton.onClick.AddListener(() => {ToggleVisible(); }); 
+
+        _saveGameButton.onClick.AddListener(() => 
+        {
+            UnsubscribeAlternativeToggleVisible();
+            _saveGameSubMenuUI.ToggleVisible(SubscribeAlternativeToggleVisible); 
+        }); 
+        _loadGameButton.onClick.AddListener(() => 
+        {
+            UnsubscribeAlternativeToggleVisible();
+            _loadGameSubMenuUI.ToggleVisible(SubscribeAlternativeToggleVisible); 
+        });
+        _optionGameButton.onClick.AddListener(() => 
+        {
+            UnsubscribeAlternativeToggleVisible();
+            _optionsSubMenuUI.ToggleVisible(SubscribeAlternativeToggleVisible);
+        }); 
+        _quitGameButton.onClick.AddListener(() => 
+        {
+            UnsubscribeAlternativeToggleVisible();
+            _quitGameSubMenuUI.ToggleVisible(SubscribeAlternativeToggleVisible);
+        }); 
     }
 
     protected override void SetAnimationOpenClose()
     {
-        throw new System.NotImplementedException();
+        _animationOpen = _animBase.GameMenuOpen;
+        _animationClose = _animBase.GameMenuClose;
     }
 }
