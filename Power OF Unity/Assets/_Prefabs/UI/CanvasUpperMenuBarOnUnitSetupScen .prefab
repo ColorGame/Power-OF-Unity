@@ -1005,7 +1005,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &8958084655303477337
 MonoBehaviour:
@@ -2248,6 +2248,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameMenuButton: {fileID: 463431138985290651}
   _coinCountText: {fileID: 2458628436245005072}
+  _unitManagerButtonButton: {fileID: 7637111656708636164}
+  _weaponButton: {fileID: 3512901573741160843}
+  _armorButton: {fileID: 6223573778644036506}
+  _shopButton: {fileID: 2534554866151050705}
+  _missionButton: {fileID: 2395610269004892552}
+  _canvasSelectUnitAndPortfolioScreenSpace: {fileID: 0}
+  _canvasInventoryScreenSpace: {fileID: 0}
+  _unitSpawnerOnInventoryMenu: {fileID: 0}
 --- !u!1 &7057424348659268335
 GameObject:
   m_ObjectHideFlags: 0
@@ -2760,7 +2768,7 @@ GameObject:
   - component: {fileID: 952490229762171001}
   - component: {fileID: 5707143227552359355}
   m_Layer: 5
-  m_Name: BarrackButton
+  m_Name: UnitManagerButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

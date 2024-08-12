@@ -132,14 +132,14 @@ public class PlacedObjectSelectButtonsSystemUI : MonoBehaviour
 
             switch (placedObjectTypeSO) // В зависимости от типа поместим в нужный контейнер
             {
-                case GrappleTypeSO itemTypeSO:
-                    CreatePlacedObjectButton(itemTypeSO, _weaponSelectContainer);// Создать Кнопки Размещаемых объектов и поместим в контейнер
+                case GrappleTypeSO grappleTypeSO:
+                    CreatePlacedObjectButton(grappleTypeSO, _weaponSelectContainer);// Создать Кнопки Размещаемых объектов и поместим в контейнер
                     break;
-                case ShootingWeaponTypeSO weaponTypeSO:
-                    CreatePlacedObjectButton(weaponTypeSO, _weaponSelectContainer);// Создать Кнопки Размещаемых объектов и поместим в контейнер
+                case ShootingWeaponTypeSO shootingWeaponTypeSO:
+                    CreatePlacedObjectButton(shootingWeaponTypeSO, _weaponSelectContainer);// Создать Кнопки Размещаемых объектов и поместим в контейнер
                     break;
-                case GrenadeTypeSO moduleTypeSO:
-                    CreatePlacedObjectButton(moduleTypeSO, _itemSelectContainer);// Создать Кнопки Размещаемых объектов и поместим в контейнер
+                case GrenadeTypeSO grenadeTypeSO:
+                    CreatePlacedObjectButton(grenadeTypeSO, _itemSelectContainer);// Создать Кнопки Размещаемых объектов и поместим в контейнер
                     break;
             }
         }

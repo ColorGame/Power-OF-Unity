@@ -1,11 +1,11 @@
 //#define HEX_GRID_SYSTEM //ШЕСТИГРАННАЯ СЕТОЧНАЯ СИСТЕМА //  В C# определен ряд директив препроцессора, оказывающих влияние на интерпретацию исходного кода программы компилятором. 
 //Эти директивы определяют порядок интерпретации текста программы перед ее трансляцией в объектный код в том исходном файле, где они появляются. 
-
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelGridVisualSingle : MonoBehaviour //Сеточная система визуализации еденицы сетки (ячейки) // Лежит на самом префабе (белая рамка)
+/// <summary>
+/// Сеточная система визуализации еденицы сетки (ячейки) // Лежит на самом префабе (белая рамка)
+/// </summary>
+public class LevelGridVisualSingle : MonoBehaviour 
 {
     [SerializeField] private MeshRenderer _meshRendererQuad; // Будем включать и выкл. MeshRenderer что бы скрыть или показать наш визуальный объект
     [SerializeField] private MeshRenderer _meshRendererСircleGrenade; // Будем включать и выкл. MeshRenderer что бы скрыть или показать наш визуальный объект    

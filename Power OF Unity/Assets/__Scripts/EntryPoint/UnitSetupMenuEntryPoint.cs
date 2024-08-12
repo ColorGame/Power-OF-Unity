@@ -15,7 +15,7 @@ public class UnitSetupMenuEntryPoint : MonoBehaviour, IEntryPoint
     private QuitGameSubMenuUI _quitGameSubMenuUI;
     private SaveGameSubMenuUI _saveGameSubMenuUI;
 
-    private UnitSpawnerOnInventoryMenu _unitSpawnerOnInventoryMenu;
+    private SpawnerOnUnitSetupScen _unitSpawnerOnInventoryMenu;
 
     public void Process(DIContainer container)
     {
@@ -38,7 +38,7 @@ public class UnitSetupMenuEntryPoint : MonoBehaviour, IEntryPoint
         _quitGameSubMenuUI = GetComponentInChildren<QuitGameSubMenuUI>(true);
         _saveGameSubMenuUI = GetComponentInChildren<SaveGameSubMenuUI>(true);
 
-        _unitSpawnerOnInventoryMenu = GetComponentInChildren<UnitSpawnerOnInventoryMenu>(true);
+        _unitSpawnerOnInventoryMenu = GetComponentInChildren<SpawnerOnUnitSetupScen>(true);
     }
 
     private void Register()

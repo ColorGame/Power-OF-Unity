@@ -75,7 +75,15 @@ public class UnitSelectAtInventoryButtonsSystemUI : MonoBehaviour
             ShowHeaderContainerText(_onBarrackHeaderText);
         });
 
-     
+
+    }
+
+    private void OnEnable()
+    {
+        if (_unitManager != null) // При повторном включении обновим кнопки выбора юнита (первый раз она не запуститься т.к. _unitManager= null)
+        {
+            CreateUnitSelectButtonsSystem(); // Создать Кнопки типов Размещаемых объектов
+        }
     }
 
     private void ShowContainer(Transform typeSelectContainer) // Показать контейнер (в аргумент передаем нужный контейнер кнопок)
@@ -91,7 +99,7 @@ public class UnitSelectAtInventoryButtonsSystemUI : MonoBehaviour
             {
                 buttonContainer.gameObject.SetActive(false); // Выключим
             }
-        }      
+        }
     }
 
     private void ShowSelectedButton(Image typeButtonSelectedImage) // Показать визуализацию выбора кнопки
@@ -125,12 +133,12 @@ public class UnitSelectAtInventoryButtonsSystemUI : MonoBehaviour
 
         for (int index = 0; index < unitFriendOnBarrackList.Count; index++)
         {
-            CreateUnitSelectButton(unitFriendOnBarrackList[index], _unitsOnBarrackContainer, index+1);
+            CreateUnitSelectButton(unitFriendOnBarrackList[index], _unitsOnBarrackContainer, index + 1);
         }
 
         for (int index = 0; index < unitFriendOnMissionList.Count; index++)
         {
-            CreateUnitSelectButton(unitFriendOnMissionList[index], _unitsOnMissionContainer, index+1);
+            CreateUnitSelectButton(unitFriendOnMissionList[index], _unitsOnMissionContainer, index + 1);
         }
 
         _scrollRect.verticalScrollbar.value = 1f; // переместим прокрутку панели в верх.
@@ -140,6 +148,6 @@ public class UnitSelectAtInventoryButtonsSystemUI : MonoBehaviour
     private void CreateUnitSelectButton(Unit unit, Transform containerTransform, int index) // Создать Кнопку Размещаемых объектов и поместим в контейнер
     {
         UnitSelectAtInventoryButton unitSelectAtInventoryButton = Instantiate(GameAssets.Instance.unitSelectAtInventoryButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
-        unitSelectAtInventoryButton.Init(unit,_unitInventorySystem, index);       
-    }     
+        unitSelectAtInventoryButton.Init(unit, _unitInventorySystem, index);
+    }
 }

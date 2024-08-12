@@ -66,6 +66,16 @@ public class PickUpDropPlacedObject : MonoBehaviour //
         _gameInput.OnClickAction += GameInput_OnClickAction;
     }
 
+    private void OnEnable()
+    {
+        if(_gameInput!=null) // При повторном включении вновь активируем подписку
+            _gameInput.OnClickAction += GameInput_OnClickAction;
+    }
+    private void OnDisable()
+    {
+        _gameInput.OnClickAction -= GameInput_OnClickAction;
+    }
+
     private void GameInput_OnClickAction(object sender, EventArgs e) // Если мыш нажата 
     {
         // Установим дефолтное состояние полей
@@ -112,6 +122,91 @@ public class PickUpDropPlacedObject : MonoBehaviour //
             SetTargetPosition();
         }
     }
+
+    private void SetTargetPosition()
+    {
+        Vector2Int zeroGridPosition = Vector2Int.zero; // Нулевая позиция сетки                
+        GridSystemXY<GridObjectInventoryXY> gridSystemXY;
+        Vector2Int newMouseGridPosition;
+        Vector3 mousePosition;
+
+        if (_canvasRenderMode == RenderMode.WorldSpace)// Если канвас в мировом пространстве то
+        {
+            mousePosition = GetMousePositionOnPlane();
+        }
+        else
+        {
+            mousePosition = _gameInput.GetMouseScreenPoint();
+        }
+
+        if (_inventoryGrid.TryGetGridSystemGridPosition(mousePosition, out gridSystemXY, out newMouseGridPosition)) // Если над сеткой то попробуем получить ее
+        {
+            InventorySlot inventorySlot = gridSystemXY.GetGridSlot(); // Получим слот размещения в инвентаре
+            switch (inventorySlot)
+            {
+                case InventorySlot.BagSlot:
+
+                    _placedObject.SetTargetPosition(_inventoryGrid.GetWorldPositionLowerLeftСornerCell(newMouseGridPosition, gridSystemXY));
+                    if (_canvasRenderMode == RenderMode.WorldSpace)// Если канвас в мировом пространстве то учтем и его поворот
+                    {
+                        _placedObject.SetTargetRotation(_inventoryGrid.GetRotationAnchorGrid(gridSystemXY));
+                    }
+
+                    if (_mouseGridPosition != newMouseGridPosition || _mouseGridPosition == zeroGridPosition) // Если сеточная позиция не равна предыдущей или равна нулевой позиции то ...
+                    {
+                        //запустим - Событие позиция мыши на сетке изменилось и передадим новою параметры размещаемого объекта                     
+                        OnGrabbedObjectGridPositionChanged?.Invoke(this, new PlacedObjectParameters
+                        {
+                            slot = inventorySlot,
+                            gridPositioAnchor = newMouseGridPosition,
+                            placedObject = _placedObject,
+                        });
+
+                        _mouseGridPosition = newMouseGridPosition; // Перепишем предыдущую позицию на новую
+                    }
+                    break;
+
+                // для сетки Основного и Доп. оружия установим TargetPosition в центре сетки
+                case InventorySlot.MainWeaponSlot:
+                case InventorySlot.OtherWeaponsSlot:
+
+                    _placedObject.SetTargetPosition(_inventoryGrid.GetWorldPositionGridCenter(gridSystemXY) - _offset); //Чтобы объект был по середине сетки надо вычесть смещение центра визуала относительно якоря
+                    if (_canvasRenderMode == RenderMode.WorldSpace)// Если канвас в мировом пространстве то учтем и его поворот
+                    {
+                        _placedObject.SetTargetRotation(_inventoryGrid.GetRotationAnchorGrid(gridSystemXY));
+                    }
+                    else
+                    {
+                        _placedObject.SetTargetRotation(Vector3.zero);
+                    }
+
+                    //запустим - Событие позиция мыши на сетке изменилось и передадим новою параметры размещаемого объекта
+                    OnGrabbedObjectGridPositionChanged?.Invoke(this, new PlacedObjectParameters
+                    {
+                        slot = inventorySlot,
+                        gridPositioAnchor = zeroGridPosition,
+                        placedObject = _placedObject,
+                    });
+                    break;
+            }
+            _startEventOnGrabbedObjectGridExits = false; // Сбросим параметр
+        }
+        else // Если не над сеткой то просто следуем за мышью
+        {
+            _placedObject.SetTargetPosition(mousePosition - _offset);//Чтобы объект был по середине мышки надо вычесть смещение центра визуала относительно якоря
+            _placedObject.SetTargetRotation(Vector3.zero);
+
+
+            _mouseGridPosition = zeroGridPosition; //Сбросим сеточную позицию - Когда объект покидает сетку (чтобы визуал отображался корректно, при вводе мыши ,в ту же область сетки с который вышла))
+
+            if (!_startEventOnGrabbedObjectGridExits) // Если не запущено событие то запустим его
+            {
+                OnGrabbedObjectGridExits?.Invoke(this, EventArgs.Empty);
+                _startEventOnGrabbedObjectGridExits = true;
+            }
+        }
+    }
+
     /// <summary>
     /// Попробуем СХВАТИТЬ предмет
     /// </summary>
@@ -205,89 +300,6 @@ public class PickUpDropPlacedObject : MonoBehaviour //
         return drop;
     }
 
-    private void SetTargetPosition()
-    {
-        Vector2Int zeroGridPosition = Vector2Int.zero; // Нулевая позиция сетки                
-        GridSystemXY<GridObjectInventoryXY> gridSystemXY;
-        Vector2Int newMouseGridPosition;
-        Vector3 mousePosition;
-
-        if (_canvasRenderMode == RenderMode.WorldSpace)// Если канвас в мировом пространстве то
-        {
-            mousePosition = GetMousePositionOnPlane();
-        }
-        else
-        {
-            mousePosition = _gameInput.GetMouseScreenPoint();
-        }
-
-        if (_inventoryGrid.TryGetGridSystemGridPosition(mousePosition, out gridSystemXY, out newMouseGridPosition)) // Если над сеткой то попробуем получить ее
-        {
-            InventorySlot inventorySlot = gridSystemXY.GetGridSlot(); // Получим слот размещения в инвентаре
-            switch (inventorySlot)
-            {
-                case InventorySlot.BagSlot:
-
-                    _placedObject.SetTargetPosition(_inventoryGrid.GetWorldPositionLowerLeftСornerCell(newMouseGridPosition, gridSystemXY));
-                    if (_canvasRenderMode == RenderMode.WorldSpace)// Если канвас в мировом пространстве то учтем и его поворот
-                    {
-                        _placedObject.SetTargetRotation(_inventoryGrid.GetRotationAnchorGrid(gridSystemXY));
-                    }
-
-                    if (_mouseGridPosition != newMouseGridPosition || _mouseGridPosition == zeroGridPosition) // Если сеточная позиция не равна предыдущей или равна нулевой позиции то ...
-                    {
-                        //запустим - Событие позиция мыши на сетке изменилось и передадим новою параметры размещаемого объекта                     
-                        OnGrabbedObjectGridPositionChanged?.Invoke(this, new PlacedObjectParameters
-                        {
-                            slot = inventorySlot,
-                            gridPositioAnchor = newMouseGridPosition,
-                            placedObject = _placedObject,
-                        });
-
-                        _mouseGridPosition = newMouseGridPosition; // Перепишем предыдущую позицию на новую
-                    }
-                    break;
-
-                // для сетки Основного и Доп. оружия установим TargetPosition в центре сетки
-                case InventorySlot.MainWeaponSlot:
-                case InventorySlot.OtherWeaponsSlot:
-
-                    _placedObject.SetTargetPosition(_inventoryGrid.GetWorldPositionGridCenter(gridSystemXY) - _offset); //Чтобы объект был по середине сетки надо вычесть смещение центра визуала относительно якоря
-                    if (_canvasRenderMode == RenderMode.WorldSpace)// Если канвас в мировом пространстве то учтем и его поворот
-                    {
-                        _placedObject.SetTargetRotation(_inventoryGrid.GetRotationAnchorGrid(gridSystemXY));
-                    }
-                    else
-                    {
-                        _placedObject.SetTargetRotation(Vector3.zero);
-                    }
-
-                    //запустим - Событие позиция мыши на сетке изменилось и передадим новою параметры размещаемого объекта
-                    OnGrabbedObjectGridPositionChanged?.Invoke(this, new PlacedObjectParameters
-                    {
-                        slot = inventorySlot,
-                        gridPositioAnchor = zeroGridPosition,
-                        placedObject = _placedObject,
-                    });
-                    break;
-            }
-            _startEventOnGrabbedObjectGridExits = false; // Сбросим параметр
-        }
-        else // Если не над сеткой то просто следуем за мышью
-        {
-            _placedObject.SetTargetPosition(mousePosition - _offset);//Чтобы объект был по середине мышки надо вычесть смещение центра визуала относительно якоря
-            _placedObject.SetTargetRotation(Vector3.zero);
-
-
-            _mouseGridPosition = zeroGridPosition; //Сбросим сеточную позицию - Когда объект покидает сетку (чтобы визуал отображался корректно, при вводе мыши ,в ту же область сетки с который вышла))
-
-            if (!_startEventOnGrabbedObjectGridExits) // Если не запущено событие то запустим его
-            {
-                OnGrabbedObjectGridExits?.Invoke(this, EventArgs.Empty);
-                _startEventOnGrabbedObjectGridExits = true;
-            }
-        }
-    }
 
     public void CreatePlacedObject(Vector3 worldPosition, PlacedObjectTypeSO placedObjectTypeSO) //Создадим размещаемый объект при нажатии на кнопку(в аргументе получаем позицию и тип объекта) 
     {

@@ -30,7 +30,7 @@ public class MainMenuUI : MonoBehaviour
         _resumeGameButton.onClick.AddListener(() => { Debug.Log("ЗАГЛУШКА_ПРОДОЛЖИТЬ"); });
         _loadGameButton.onClick.AddListener(() => { _loadGameSubMenuUI.ToggleVisible();  });
         _optionGameButton.onClick.AddListener(() => { _optionsMenuUI.ToggleVisible(); });
-        _startGameButton.onClick.AddListener(() => { _scenesService.Load(SceneName.UnitSetupMenu); });
+        _startGameButton.onClick.AddListener(() => { _scenesService.Load(SceneName.UnitSetup); });
         _quitGameButton.onClick.AddListener(() => { Application.Quit(); });// Кнопка будет работать тоько после сборки  kd
     }
 }

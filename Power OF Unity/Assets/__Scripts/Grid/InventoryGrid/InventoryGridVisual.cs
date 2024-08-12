@@ -105,39 +105,46 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
         _unitInventorySystem.OnInventoryGridsCleared += UnitInventorySystem_OnInventoryGridsCleared;
         _unitInventorySystem.OnAddPlacedObjectAtInventoryGrid += OnAddPlacedObjectAtGrid;
     }
-
-    // Инвентарь очищен
+    /// <summary>
+    /// Инвентарь очищен
+    /// </summary>    
     private void UnitInventorySystem_OnInventoryGridsCleared(object sender, EventArgs e) 
     {
         SetDefoltStste(); // Установить дефолтное состояние        
     }
-
-    // Захваченый объект покинул сетку
+    /// <summary>
+    /// Захваченый объект покинул сетку
+    /// </summary>
     private void PickUpDropManager_OnGrabbedObjectGridExits(object sender, EventArgs e)  
     {
         UpdateVisual(); 
     }
-
-    // позиция захваченного объекта на сетке изменилась
+    /// <summary>
+    /// позиция захваченного объекта на сетке изменилась
+    /// </summary>
     private void PickUpDropManager_OnGrabbedObjectGridPositionChanged(object sender, PlacedObjectParameters e)
     {
         UpdateVisual(); 
         ShowPossibleGridPositions(e.slot, e.placedObject, e.gridPositioAnchor, GridVisualType.Yellow); //показать возможные сеточные позиции
     }
-
-    // Объект удален из сетки и повис над ней
+    /// <summary>
+    /// Объект удален из сетки и повис над ней
+    /// </summary>
     private void PickUpDropSystem_OnRemovePlacedObjectAtGrid(object sender, PlacedObject placedObject)
     {
         SetIsBusyAndMaterial(placedObject, false, GridVisualType.Yellow);
     }
-
-    // Объект добавлен в сетку 
+    /// <summary>
+    /// Объект добавлен в сетку 
+    /// </summary>
     private void OnAddPlacedObjectAtGrid(object sender, PlacedObject placedObject)
     {
         SetIsBusyAndMaterial(placedObject, true);
     }
-
-    private void UpdateVisual() // Обновить визуал
+    /// <summary>
+    /// Обновить визуал
+    /// </summary>
+    private void UpdateVisual()
     {
         for (int i = 0; i < _gridSystemXYList.Count; i++) // переберем все сетки
         {
@@ -153,8 +160,10 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
             }
         }
     }
-
-    private void SetDefoltStste() // Установить дефолтное состояние
+    /// <summary>
+    /// Установить дефолтное состояние
+    /// </summary>
+    private void SetDefoltStste() 
     {
         for (int i = 0; i < _gridSystemXYList.Count; i++) // переберем все сетки
         {
@@ -167,7 +176,9 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
             }
         }
     }
-
+    /// <summary>
+    /// Установить занятость и материал
+    /// </summary>
     private void SetIsBusyAndMaterial(PlacedObject placedObject, bool isBusy, GridVisualType gridVisualType = 0)
     {
         GridSystemXY<GridObjectInventoryXY> gridSystemXY = placedObject.GetGridSystemXY(); // Сеточная система которую занимает объект
@@ -250,8 +261,10 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
                 break;
         }
     }
-
-    private Material GetGridVisualTypeMaterial(GridVisualType gridVisualType) //(Вернуть Материал в зависимости от Состояния) Получить Тип Материала для Сеточной Визуализации в зависимости от переданного в аргумент Состояния Сеточной Визуализации
+    /// <summary>
+    /// (Вернуть Материал в зависимости от Состояния) Получить Тип Материала для Сеточной Визуализации в зависимости от переданного в аргумент Состояния Сеточной Визуализации
+    /// </summary>
+    private Material GetGridVisualTypeMaterial(GridVisualType gridVisualType)
     {
         foreach (GridVisualTypeMaterial gridVisualTypeMaterial in _gridVisualTypeMaterialList) // в цикле переберем Список тип материала визуального состояния сетки 
         {

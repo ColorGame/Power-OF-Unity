@@ -7,10 +7,21 @@ using UnityEngine.UI;
 /// </summary>
 public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
 {
-    [Header("Кнопки включения игрового меню")]
+    [Header("Кнопка включения игрового меню")]
     [SerializeField] private Button _gameMenuButton;
     [Header("Текст количества монет")]
     [SerializeField] private TextMeshProUGUI _coinCountText;
+    [Header("Кнопки верхней центральной панели")]
+    [SerializeField] private Button _unitManagerButtonButton;
+    [SerializeField] private Button _weaponButton;
+    [SerializeField] private Button _armorButton;
+    [SerializeField] private Button _shopButton;
+    [SerializeField] private Button _missionButton;
+    [Header("Объекты которые будем вкл/выкл.\nпри переключении вкладок")]
+    [SerializeField] private Canvas _canvasSelectUnitAndPortfolioScreenSpace;
+    [SerializeField] private Canvas _canvasInventoryScreenSpace;
+    [SerializeField] private Transform _unitSpawnerOnInventoryMenu;
+
 
     private GameInput _gameInput;
     private GameMenuUI _gameMenuUI;
@@ -30,6 +41,13 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
             UnsubscribeAlternativeToggleVisible();
             _gameMenuUI.ToggleVisible(SubscribeAlternativeToggleVisible);
         });
+
+        _unitManagerButtonButton.onClick.AddListener(() =>
+        {
+            UnsubscribeAlternativeToggleVisible();
+            _gameMenuUI.ToggleVisible(SubscribeAlternativeToggleVisible);
+        });
+
 
         SubscribeAlternativeToggleVisible();
     }

@@ -82,7 +82,7 @@ public class UnitPortfolioUI : MonoBehaviour
 
         UpdateName();
         UpdateAvatar();
-        UpdateNubberAndTargetScaleBar();
+        UpdateNubberSetTargetScaleBar();
         _updateTimer = _updateTimerMax;
     }
 
@@ -99,7 +99,10 @@ public class UnitPortfolioUI : MonoBehaviour
         Transform avatarTransform = Instantiate(_selectedUnit.GetUnitTypeSO<UnitFriendSO>().GetUnitAvatarPortfolioVisualPrefab(), _avatarContainer);
         avatarTransform.localScale /= _canvas.scaleFactor; //Установим масштаб аватара - Разделим текущий масштаб на масштаб родительского канваса
     }
-    private void UpdateNubberAndTargetScaleBar()
+    /// <summary>
+    /// Обновим цифры и установим целевой масштаб панели
+    /// </summary>
+    private void UpdateNubberSetTargetScaleBar()
     {
         int healthFull = _selectedUnit.GetHealthSystem().GetHealthFull();
         _healthNumberText.text = healthFull.ToString();

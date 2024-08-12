@@ -93,7 +93,7 @@ public abstract class ToggleVisibleAnimatioSubscribeMenuUI : MonoBehaviour
     /// </remarks>
     public void ToggleVisible(Action menuClosed = null, bool withAnimation = true) // Переключатель видимости меню НАСТРОЙКИ (будем вызывать через инспектор кнопкой OptionsButton)
     {
-        if (_menuClosed != null)
+        if (menuClosed != null)
             _menuClosed = menuClosed;
 
         if (!_toggleBool) // Если не активны(выключена) то активируем 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class UnitSpawnerOnInventoryMenu : MonoBehaviour
+public class SpawnerOnUnitSetupScen : MonoBehaviour
 {
     private UnitInventorySystem _unitInventorySystem;
 
