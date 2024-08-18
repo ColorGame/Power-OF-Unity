@@ -12,37 +12,43 @@ public class UnitSelectAtInventoryButton : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _numberUnitText; // Номер в списке
     [SerializeField] private TextMeshProUGUI _nameUnitText; // Имя юнита
 
-    private Button _unitSelectAtInventoryButton;  // Кнопка для включения панели Юнитов на МИССИИ
-    private UnitInventorySystem _unitInventorySystem;
+    private Button _unitSelectAtInventoryButton;  // Кнопка выбора  Юнита
+    private UnitManager _unitManager;
     private Unit _unit;
 
-    public void Init(Unit unit, UnitInventorySystem unitInventorySystem  , int index)
+    public void Init(Unit unit, UnitManager unitManager, int index)
     {
-        _unitInventorySystem = unitInventorySystem;
+        _unitManager = unitManager;
         _unit = unit;
 
         _nameUnitText.text = unit.GetUnitTypeSO<UnitTypeSO>().GetName(); // Зададим имя с ЗАГЛАВНОЙ БУКВЫ
         _numberUnitText.text = index.ToString();
 
         _unitSelectAtInventoryButton = GetComponent<Button>();
-        _unitSelectAtInventoryButton.onClick.AddListener(() => 
+        _unitSelectAtInventoryButton.onClick.AddListener(() =>
         {
-            _unitInventorySystem.SetSelectedUnit(unit);
+            _unitManager.SetSelectedUnit(unit);
         });
 
-        _unitInventorySystem.OnSelectedUnitChanged += UnitInventorySystem_OnSelectedUnitChanged;
+        _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
 
-        Unit selectedUnit = _unitInventorySystem.GetSelectedUnit(); // Выделенный Югит
+        Unit selectedUnit = _unitManager.GetSelectedUnit(); // Выделенный Югит
         UpdateSelectedVisual(selectedUnit);
     }
 
-    private void UnitInventorySystem_OnSelectedUnitChanged(object sender, Unit selectedUnit)
+    private void UnitManager_OnSelectedUnitChanged(object sender, Unit selectedUnit)
     {
         UpdateSelectedVisual(selectedUnit);
     }
 
     public void UpdateSelectedVisual(Unit selectedUnit) // (Обновление визуала) Включение и выключение визуализации выбора.
-    {       
-        _selectedImage.enabled = (selectedUnit == _unit);   // Включить выделение кнопки если это наш юнит        
+    {
+        _selectedImage.enabled = (selectedUnit != null && selectedUnit == _unit);   // Включить выделение кнопки если выбранный юнит != null и это наш юнит      
+    }
+
+    private void OnDestroy()
+    {
+        if (_unitManager != null)
+            _unitManager.OnSelectedUnitChanged -= UnitManager_OnSelectedUnitChanged;
     }
 }

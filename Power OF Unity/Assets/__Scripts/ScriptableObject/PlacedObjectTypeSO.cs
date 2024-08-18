@@ -19,8 +19,6 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
     [SerializeField] private string _itemID = null;
     [Tooltip("Тип размещаемого объекта")]
     [SerializeField] private PlacedObjectType _placedObjectType;
-    [Tooltip("Префаб размещаемого объекта 3D/для создания и размещении на игроке")]
-    [SerializeField] private Transform _prefab3D;
     [Tooltip("Префаб размещаемого объекта 2D(для Canvas)")]
     [SerializeField] private Transform _prefab2D;
     [Tooltip("Визуальная часть размещаемого объекта 2D(для кнопок Canvas)")]
@@ -34,22 +32,17 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
     [Tooltip("Вес размещаемого объекта в килограммах")]
     [Range(0, 50)][SerializeField] private int _weight;
 
+   /* [Tooltip("Префаб размещаемого объекта 3D/для создания и размещении на игроке")]
+    [SerializeField] private Transform _prefab3D;*/
 
     // КЭШИРОВАННОЕ СОСТАЯНИЕ
-    static Dictionary<string, PlacedObjectTypeSO> placedObjectLookupCache; //кэшированный словарь поиска предмта типа PlacedObjectTypeSO// Статический словарь (Ключ-ID номер предмета, Значение)
+    static Dictionary<string, PlacedObjectTypeWithActionSO> placedObjectLookupCache; //кэшированный словарь поиска предмта типа PlacedObjectTypeWithActionSO// Статический словарь (Ключ-ID номер предмета, Значение)
 
 
     public virtual PlacedObjectTooltip GetPlacedObjectTooltip() // Получить всплывающую подсказку для данного размещенного объекта // virtual- переопределим в наследуемых классах
     {
         return PlacedObjectTypeBaseStatsSO.Instance.GetTooltipPlacedObject(_placedObjectType);
     }
-    /// <summary>
-    /// Получить базовое действие для данного PlacedObjectTypeSO
-    /// </summary>
-    /// <remarks>
-    /// В аргумент передаюм юнита у которого хотим получить BaseAction
-    /// </remarks>
-    public abstract BaseAction GetAction(Unit unit);
 
     /// <summary>
     /// Список сеточных позиций которые занимает объект относительно переданной сеточной позиции
@@ -69,7 +62,7 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
     }
 
     public PlacedObjectType GetPlacedObjectType() { return _placedObjectType; }
-    public Transform GetPrefab3D() { return _prefab3D; }
+  //  public Transform GetPrefab3D() { return _prefab3D; }
     public Transform GetPrefab2D() { return _prefab2D; }
     public Transform GetVisual2D() { return _visual2D; }
 
@@ -78,12 +71,10 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
     /// </summary>  
     public Vector3 GetOffsetVisualСenterFromAnchor()
     {
-        float cellSize = InventoryGrid.GetCellSize();
-
-        float x = cellSize * _widthX / 2; // Размер ячейки умножим на количество ячеек, которое занимает наш объект по Х и делим пополам
-        float y = cellSize * _heightY / 2;
-
-        return new Vector3(x, y, 0);
+        RectTransform rectTransformPrefab2D = (RectTransform)_prefab2D.transform;  
+        Vector2 center = rectTransformPrefab2D.sizeDelta / 2;
+               
+        return center;
     }
 
     /// <summary>
@@ -103,6 +94,10 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
         {
             _itemID = Guid.NewGuid().ToString();
         }
+
+        // Получим тип размещаемого объекта в этой строке
+        if(name!=null)
+        _placedObjectType = SheetProcessor.ParseEnum<PlacedObjectType>(name);// Преобразуем данные из ячейки в Enum типа<PlacedObjectType>        
     }
     void ISerializationCallbackReceiver.OnAfterDeserialize()
     {

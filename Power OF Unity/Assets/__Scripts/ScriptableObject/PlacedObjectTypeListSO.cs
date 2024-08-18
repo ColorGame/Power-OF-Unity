@@ -6,9 +6,9 @@ using UnityEngine;
 public class PlacedObjectTypeListSO : ScriptableObject
 { // БУДЕТ ВСЕГО ОДИН ЭКЗЕМПЛЯР (один список)
 
-    public List<PlacedObjectTypeSO> list; // Список Типов Размещяемых объектов
-
-
+    [SerializeField]private List<PlacedObjectTypeWithActionSO> _placedObjectWithActionList; // Список Типов Размещяемых объектов
     
+
+    public List<PlacedObjectTypeWithActionSO> GetPlacedObjectWithActionList() { return _placedObjectWithActionList; }
 }
 

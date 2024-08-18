@@ -73,10 +73,10 @@ public class ShootAction : BaseAction
         _targetAnimationAim.position = _shootPointTransform.position; // при старте Цель для анимации прицеливания  будет точка прицеливания на самом юните, что бы не было лишних поворотов направлений
     }
 
-    public override void SetPlacedObjectTypeSO(PlacedObjectTypeSO placedObjectTypeSO)
+    public override void SetPlacedObjectTypeWithActionSO(PlacedObjectTypeWithActionSO placedObjectTypeWithActionSO)
     {
-        base.SetPlacedObjectTypeSO (placedObjectTypeSO);
-        _numberShotInOneAction = ((ShootingWeaponTypeSO)placedObjectTypeSO).GetNumberShotInOneAction();
+        base.SetPlacedObjectTypeWithActionSO (placedObjectTypeWithActionSO);
+        _numberShotInOneAction = ((ShootingWeaponTypeSO)placedObjectTypeWithActionSO).GetNumberShotInOneAction();
     }
 
     private void Update()

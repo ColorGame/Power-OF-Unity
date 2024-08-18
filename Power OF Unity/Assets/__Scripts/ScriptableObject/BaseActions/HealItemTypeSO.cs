@@ -2,7 +2,7 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "ScriptableObjects/HealItemType")]
 
-public class HealItemTypeSO : PlacedObjectTypeSO
+public class HealItemTypeSO : PlacedObjectTypeWithActionSO
 {
     public override BaseAction GetAction(Unit unit)
     {

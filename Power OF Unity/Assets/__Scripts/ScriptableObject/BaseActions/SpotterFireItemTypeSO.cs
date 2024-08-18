@@ -2,7 +2,7 @@
 
 [CreateAssetMenu(menuName = "ScriptableObjects/SpotterFireItemType")]
 
-public class SpotterFireItemTypeSO : PlacedObjectTypeSO
+public class SpotterFireItemTypeSO : PlacedObjectTypeWithActionSO
 {
     public override BaseAction GetAction(Unit unit)
     {

@@ -15,7 +15,7 @@ public class ActionButtonUI : MonoBehaviour
    
     private Button _button;
     private UnitActionSystem _unitActionSystem;
-    private PlacedObjectTypeSO _placedObjectTypeSO;
+    private PlacedObjectTypeWithActionSO _placedObjectTypeWithActionSO;
 
     private void Awake()
     {
@@ -31,18 +31,18 @@ public class ActionButtonUI : MonoBehaviour
         });
     }
 
-    public void SetBaseActionAndPlacedObjectTypeSO(BaseAction baseAction,PlacedObjectTypeSO placedObjectTypeSO, UnitActionSystem unitActionSystem)
+    public void SetBaseActionAndplacedObjectTypeWithActionSO(BaseAction baseAction,PlacedObjectTypeWithActionSO placedObjectTypeWithActionSO, UnitActionSystem unitActionSystem)
     {
-        _placedObjectTypeSO = placedObjectTypeSO;
+        _placedObjectTypeWithActionSO = placedObjectTypeWithActionSO;
         _unitActionSystem = unitActionSystem;
        
-       /* _placedObjectImage.sprite = placedObjectTypeSO.GetVisual2D();
-        _placedObjectImage.rectTransform.localScale = Vector3.one * placedObjectTypeSO.GetScaleImageButton();*/
+       /* _placedObjectImage.sprite = PlacedObjectTypeWithActionSO.GetVisual2D();
+        _placedObjectImage.rectTransform.localScale = Vector3.one * PlacedObjectTypeWithActionSO.GetScaleImageButton();*/
         
         //Добавим событие при нажатии на нашу кнопку
         _button.onClick.AddListener(() =>
         {
-            baseAction.SetPlacedObjectTypeSO(placedObjectTypeSO);
+            baseAction.SetPlacedObjectTypeWithActionSO(placedObjectTypeWithActionSO);
             _unitActionSystem.SetSelectedAction(baseAction); //Установить Выбранное Действие
         });
 
@@ -56,7 +56,7 @@ public class ActionButtonUI : MonoBehaviour
         BaseAction selectedBaseAction = _unitActionSystem.GetSelectedAction(); // Получим выбраное действие
                                                                                //_selectedButtonVisualUI.SetActive(_placedObject == selectedBaseAction.GetPlacedObjectTypeSO());   // Включить рамку если выбранное действие совподает с действием которое мы назначили на нашу кнопку // Если не совподает то получим false и рамка отключиться
 
-        if (_placedObjectTypeSO == selectedBaseAction.GetPlacedObjectTypeSO())
+        if (_placedObjectTypeWithActionSO == selectedBaseAction.GetPlacedObjectTypeWithActionSO())
             _button.Select();
         // Можно поменять цвет кнопки при активации кнопки
         /*if (selectedBaseAction == _baseAction) // Если кнопка активна

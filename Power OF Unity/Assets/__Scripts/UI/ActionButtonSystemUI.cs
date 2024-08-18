@@ -42,7 +42,7 @@ public class ActionButtonSystemUI : MonoBehaviour
         _unitActionSystem.OnSelectedActionChanged += UnitActionSystem_OnSelectedActionChanged; //Выбранное Действие Изменено  
         _unitActionSystem.OnBusyChanged += UnitActionSystem_OnBusyChanged; // Занятость Изменена        
         _turnSystem.OnTurnChanged += TurnSystem_OnTurnChanged; // Изменен номер хода подписываемся       
-               
+
         SetupEventSelectedUnit(_unitActionSystem.GetSelectedUnit()); // Настройка Event у выбранного Юнита
         CreateUnitActionButtons();// Создать Кнопки для Действий Юнита        
         UpdateSelectedVisual();
@@ -63,8 +63,8 @@ public class ActionButtonSystemUI : MonoBehaviour
             actionButtonUI.HandleStateButton(isBusy);
         }
 
-        _actionPointsText.gameObject.SetActive(_turnSystem.IsPlayerTurn()); // Показываем только во время МОЕГО ХОДА
-        _actionPointImage.gameObject.SetActive(_turnSystem.IsPlayerTurn());
+        _actionPointsText.enabled = _turnSystem.IsPlayerTurn(); // Показываем только во время МОЕГО ХОДА
+        _actionPointImage.enabled = _turnSystem.IsPlayerTurn();
     }
 
     // скрыть кнопки когда занят действием
@@ -93,11 +93,11 @@ public class ActionButtonSystemUI : MonoBehaviour
         _moveActionButton.SetMoveAction(_selectedUnit.GetAction<MoveAction>(), _unitActionSystem);
         _actionButtonUIList.Add(_moveActionButton);
 
-        PlacedObjectTypeSO mainWeaponPlacedObjectTypeSO = _selectedUnit.GetUnitInventory().GetPlacedObjectMainWeaponSlot(); // У выбранного юнита, в слоте ОСНОВНОГО ОРУЖИЯ, получим тип объекта
-        if (mainWeaponPlacedObjectTypeSO != null)
+        PlacedObjectTypeWithActionSO mainWeaponplacedObjectTypeWithActionSO = _selectedUnit.GetUnitInventory().GetPlacedObjectMainWeaponSlot(); // У выбранного юнита, в слоте ОСНОВНОГО ОРУЖИЯ, получим тип объекта
+        if (mainWeaponplacedObjectTypeWithActionSO != null)
         {
-            BaseAction baseAction = mainWeaponPlacedObjectTypeSO.GetAction(_selectedUnit); // Получим у выбранного юнита, Базовое Действие для данного типа PlacedObjectTypeSO
-            _mainWeaponButton.SetBaseActionAndPlacedObjectTypeSO(baseAction, mainWeaponPlacedObjectTypeSO, _unitActionSystem);
+            BaseAction baseAction = mainWeaponplacedObjectTypeWithActionSO.GetAction(_selectedUnit); // Получим у выбранного юнита, Базовое Действие для данного типа PlacedObjectTypeWithActionSO
+            _mainWeaponButton.SetBaseActionAndplacedObjectTypeWithActionSO(baseAction, mainWeaponplacedObjectTypeWithActionSO, _unitActionSystem);
             _actionButtonUIList.Add(_mainWeaponButton); // Добавим в список полученный компонент ActionButtonUI
         }
         else
@@ -105,11 +105,11 @@ public class ActionButtonSystemUI : MonoBehaviour
             _mainWeaponButton.InteractableDesabled();
         }
 
-        PlacedObjectTypeSO otherWeaponPlacedObjectTypeSO = _selectedUnit.GetUnitInventory().GetPlacedObjectOtherWeaponSlot(); // У выбранного юнита, в слоте ОСНОВНОГО ОРУЖИЯ, получим тип объекта
-        if (otherWeaponPlacedObjectTypeSO != null)
+        PlacedObjectTypeWithActionSO otherWeaponplacedObjectTypeWithActionSO = _selectedUnit.GetUnitInventory().GetPlacedObjectOtherWeaponSlot(); // У выбранного юнита, в слоте ОСНОВНОГО ОРУЖИЯ, получим тип объекта
+        if (otherWeaponplacedObjectTypeWithActionSO != null)
         {
-            BaseAction baseAction = otherWeaponPlacedObjectTypeSO.GetAction(_selectedUnit); // Получим Базовое Действие для данного типа PlacedObjectTypeSO
-            _otherWeaponButton.SetBaseActionAndPlacedObjectTypeSO(baseAction, otherWeaponPlacedObjectTypeSO, _unitActionSystem);
+            BaseAction baseAction = otherWeaponplacedObjectTypeWithActionSO.GetAction(_selectedUnit); // Получим Базовое Действие для данного типа PlacedObjectTypeWithActionSO
+            _otherWeaponButton.SetBaseActionAndplacedObjectTypeWithActionSO(baseAction, otherWeaponplacedObjectTypeWithActionSO, _unitActionSystem);
             _actionButtonUIList.Add(_otherWeaponButton); // Добавим в список полученный компонент ActionButtonUI
         }
         else
@@ -153,27 +153,27 @@ public class ActionButtonSystemUI : MonoBehaviour
         if (GrenadeFragList.Count != 0)
         {
             // создадим кнопку для данного типа гранаты и передадим количество GrenadeFragList.Count данного типа
-          ///  ActionButtonUI grenadeFragButton = Instantiate<ActionButtonUI>(GameAssets.Instance.actionButtonUI, _grenadeButtonContainer);
+            ///  ActionButtonUI grenadeFragButton = Instantiate<ActionButtonUI>(GameAssets.Instance.actionButtonUI, _grenadeButtonContainer);
         }
 
-       /* foreach (BaseAction baseAction in _selectedUnit.GetBaseActionsArray()) // В цикле переберем массив базовых действий у выбранного юнита
-        {
-            Transform actionButtonTransform = Instantiate(GameAssets.Instance.actionButtonUI, _grenadeButtonContainer); // Для каждого baseAction создадим префаб кнопки и назначим родителя - Контейнер для кнопок
-            ActionButtonUI actionButtonUI = actionButtonTransform.GetComponent<ActionButtonUI>(); // У кнопки найдем компонент ActionButtonUI
-            actionButtonUI.SetBaseAction(baseAction, _unitActionSystem); //Назвать и Присвоить базовое действие (нашей кнопке)
+        /* foreach (BaseAction baseAction in _selectedUnit.GetBaseActionsArray()) // В цикле переберем массив базовых действий у выбранного юнита
+         {
+             Transform actionButtonTransform = Instantiate(GameAssets.Instance.actionButtonUI, _grenadeButtonContainer); // Для каждого baseAction создадим префаб кнопки и назначим родителя - Контейнер для кнопок
+             ActionButtonUI actionButtonUI = actionButtonTransform.GetComponent<ActionButtonUI>(); // У кнопки найдем компонент ActionButtonUI
+             actionButtonUI.SetBaseAction(baseAction, _unitActionSystem); //Назвать и Присвоить базовое действие (нашей кнопке)
 
-            MouseEnterExitEventsUI mouseEnterExitEvents = actionButtonTransform.GetComponent<MouseEnterExitEventsUI>(); // Найдем на кнопке компонент - События входа и выхода мышью 
-            mouseEnterExitEvents.OnMouseEnter += (object sender, EventArgs e) => // Подпишемся на событие - ПРИ ВХОДЕ мыши на кнопку. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
-            {
-                _tooltipUI.ShowAnchoredShortTooltip(baseAction.GetToolTip(), (RectTransform)actionButtonTransform); // При наведении на кнопку покажем подсказку и передадим текст
-            };
-            mouseEnterExitEvents.OnMouseExit += (object sender, EventArgs e) => // Подпишемся на событие - ПРИ ВЫХОДЕ мыши из кнопки.
-            {
-                _tooltipUI.Hide(); // При отведении мыши скроем подсказку
-            };
+             MouseEnterExitEventsUI mouseEnterExitEvents = actionButtonTransform.GetComponent<MouseEnterExitEventsUI>(); // Найдем на кнопке компонент - События входа и выхода мышью 
+             mouseEnterExitEvents.OnMouseEnter += (object sender, EventArgs e) => // Подпишемся на событие - ПРИ ВХОДЕ мыши на кнопку. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
+             {
+                 _tooltipUI.ShowAnchoredShortTooltip(baseAction.GetToolTip(), (RectTransform)actionButtonTransform); // При наведении на кнопку покажем подсказку и передадим текст
+             };
+             mouseEnterExitEvents.OnMouseExit += (object sender, EventArgs e) => // Подпишемся на событие - ПРИ ВЫХОДЕ мыши из кнопки.
+             {
+                 _tooltipUI.Hide(); // При отведении мыши скроем подсказку
+             };
 
-            _actionButtonUIList.Add(actionButtonUI); // Добавим в список полученный компонент ActionButtonUI
-        }*/
+             _actionButtonUIList.Add(actionButtonUI); // Добавим в список полученный компонент ActionButtonUI
+         }*/
     }
 
     private void SelectedUnit_OnActionPointsChanged(object sender, EventArgs e)

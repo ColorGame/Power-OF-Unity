@@ -10,9 +10,6 @@ using UnityEngine.UI;
 /// </remarks>
 public abstract class ToggleVisibleAnimatioSubscribeMenuUI : MonoBehaviour
 {
-    [Header("Фон который блокирует\nвзаимодействие с задним фоном")]
-    [SerializeField] private Image _backgroundBlockRaycast;
-
     protected GameInput _gameInput;
     protected HashAnimationName _animBase = new HashAnimationName();
     protected int _animationOpen;
@@ -26,6 +23,7 @@ public abstract class ToggleVisibleAnimatioSubscribeMenuUI : MonoBehaviour
 
     private Action _menuClosed; // Делегат будем вызывать при закрытии меню
 
+    private Canvas _canvas;
 
     private void Awake()
     {
@@ -33,21 +31,13 @@ public abstract class ToggleVisibleAnimatioSubscribeMenuUI : MonoBehaviour
         {
             _animator = animator;
         }
-
+        _canvas = GetComponentInParent<Canvas>(true);
         SetAnimationOpenClose();
         HideMenuCallDelegate();
     }
 
     protected abstract void SetAnimationOpenClose();
 
-    private void OnEnable()
-    {
-        SubscribeAlternativeToggleVisible();
-    }
-    private void OnDisable()
-    {
-        UnsubscribeAlternativeToggleVisible();
-    }
 
     private void Update()
     {
@@ -118,21 +108,23 @@ public abstract class ToggleVisibleAnimatioSubscribeMenuUI : MonoBehaviour
                 HideMenuCallDelegate();
             }                
         }
-        _toggleBool = !_toggleBool;
     }
 
     private void ShowMenu()
-    {
-        gameObject.SetActive(true);
-        _backgroundBlockRaycast.enabled = true;
+    {      
+        _canvas.enabled = true;
+        SubscribeAlternativeToggleVisible();
+        _toggleBool=true;       
     }
     /// <summary>
     /// Скроем меню. Если есть не нулевой делегат вызовим его и обнулим.
     /// </summary>
     private void HideMenuCallDelegate()
-    {
-        gameObject.SetActive(false);
-        _backgroundBlockRaycast.enabled = false;
+    {        
+        _canvas.enabled = false;
+        UnsubscribeAlternativeToggleVisible();
+        _toggleBool = false;
+      
         if (_menuClosed != null)
         {
             _menuClosed();
@@ -146,6 +138,11 @@ public abstract class ToggleVisibleAnimatioSubscribeMenuUI : MonoBehaviour
         _animator.CrossFade(_stateHashNameAnimation, 0);
         _animationTimer = _animator.GetCurrentAnimatorStateInfo(0).length;
         _animationStart = true;
+    }
+
+    private void OnDestroy()
+    {
+        UnsubscribeAlternativeToggleVisible();
     }
 
 }

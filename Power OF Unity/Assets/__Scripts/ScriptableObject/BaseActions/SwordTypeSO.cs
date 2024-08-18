@@ -2,7 +2,7 @@
 
 [CreateAssetMenu(menuName = "ScriptableObjects/SwordType")]
 
-public class SwordTypeSO : PlacedObjectTypeSO
+public class SwordTypeSO : PlacedObjectTypeWithActionSO
 {
     public override BaseAction GetAction(Unit unit)
     {

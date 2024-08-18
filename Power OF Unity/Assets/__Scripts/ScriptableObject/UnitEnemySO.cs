@@ -8,12 +8,12 @@ public class UnitEnemySO : UnitTypeSO
 {
     [SerializeField] private Transform _unitEnemyVisualPrefab;
     [Header("SO основного предмета(оружи€) которым владеет враг\n(дл€ экипировки при спавне)")]
-    [SerializeField] private PlacedObjectTypeSO _mainPlacedObjectTypeSO;
+    [SerializeField] private PlacedObjectTypeWithActionSO _mainplacedObjectTypeWithActionSO;
     [Header("ћассив SO дополнительных предметов(оружи€) которым владеет враг")]
-    [SerializeField] private PlacedObjectTypeSO[] _otherPlacedObjectTypeSOArray;
+    [SerializeField] private PlacedObjectTypeWithActionSO[] _otherplacedObjectTypeWithActionSOArray;
 
-    public PlacedObjectTypeSO GetMainPlacedObjectTypeSO() { return _mainPlacedObjectTypeSO; }
-    public PlacedObjectTypeSO[] GetOtherPlacedObjectTypeSOArray() {  return _otherPlacedObjectTypeSOArray; }
+    public PlacedObjectTypeWithActionSO GetMainplacedObjectTypeWithActionSO() { return _mainplacedObjectTypeWithActionSO; }
+    public PlacedObjectTypeWithActionSO[] GetOtherplacedObjectTypeWithActionSOArray() {  return _otherplacedObjectTypeWithActionSOArray; }
     public Transform GetUnitEnemyVisualPrefab() { return _unitEnemyVisualPrefab; }
 
 }

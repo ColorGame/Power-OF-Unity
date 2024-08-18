@@ -13,7 +13,7 @@ using UnityEngine.UI;
 namespace Synty.Interface.SciFiSoldierHUD.Samples
 {
     /// <summary>
-    ///     Executes a list of animator actions and toggles a list of game objects on click.
+    ///     Executes a myUnitsBasiclist of animator actions and toggles a myUnitsBasiclist of game objects on click.
     /// </summary>
     public class SampleButtonAction : MonoBehaviour
     {

@@ -81,7 +81,7 @@ public class FloorVisibility : MonoBehaviour
         }
         if (_canvas != null)
         {
-            _canvas.gameObject.SetActive(true);
+            _canvas.enabled = true;
         }
     }
 
@@ -94,7 +94,7 @@ public class FloorVisibility : MonoBehaviour
         }
         if (_canvas != null)
         {
-            _canvas.gameObject.SetActive(false);
+            _canvas.enabled = false;
         }
     }
 

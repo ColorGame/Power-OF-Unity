@@ -1,7 +1,8 @@
+using System;
 using TMPro;
 using UnityEngine;
 
-public class UnitPortfolioUI : MonoBehaviour
+public class UnitPortfolioUI : MonoBehaviour, IToggleActivity
 {
     [Header("Здоровье")]
     [SerializeField] private Transform _healthBar;
@@ -23,7 +24,7 @@ public class UnitPortfolioUI : MonoBehaviour
     [Header("Имя юнита")]
     [SerializeField] private TextMeshProUGUI _unitNameText;
 
-    private UnitInventorySystem _unitInventorySystem;
+    private UnitManager _unitManager;
     private Canvas _canvas;
     private float _maxValue = 100f;
     private int _speed = 10;
@@ -37,37 +38,66 @@ public class UnitPortfolioUI : MonoBehaviour
     private float _updateTimer;
     private float _updateTimerMax = 3f;
 
-    private void Awake()
+    public void Init(UnitManager unitManager)
     {
-        _canvas = GetComponentInParent<Canvas>();
-    }
-
-    public void Init(UnitInventorySystem unitInventorySystem)
-    {
-        _unitInventorySystem = unitInventorySystem;
+        _unitManager = unitManager;
 
         Setup();
     }
 
     private void Setup()
-    {      
-       // UpdateSelectedUnit(_unitInventorySystem.GetSelectedUnit());
+    {
+        _canvas = GetComponentInParent<Canvas>(true);
+        _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
 
-        _unitInventorySystem.OnSelectedUnitChanged += UnitInventorySystem_OnSelectedUnitChanged;
+        _selectedUnit = _unitManager.GetSelectedUnit();
+        UpdatePortfolio();
     }
 
-    private void UnitInventorySystem_OnSelectedUnitChanged(object sender, Unit selectedUnit)
+    private void UnitManager_OnSelectedUnitChanged(object sender, Unit newSelectedUnit)
     {
-        UpdateSelectedUnit(selectedUnit);
+        _selectedUnit = newSelectedUnit;
+        UpdatePortfolio();
+    }
+
+    public void SetActive(bool active)
+    {
+        _canvas.enabled = active;
+    }
+   
+    private void ClearPortfolio()
+    {
+        _unitNameText.text = "";
+
+        foreach (Transform attachTransform in _avatarContainer) // Очистим контейнер
+        {
+            Destroy(attachTransform.gameObject);
+        }
+
+        _healthNumberText.text = "0";
+        _targetHealthBarScale = new Vector3(0, 1f, 1f);
+
+        _actionPointsNumberText.text = "0";
+        _targetActionPointsBarScale = new Vector3(0, 1f, 1f);
+
+        _powerNumberText.text = "0";
+        _targetPowerBarScale = new Vector3(0, 1f, 1f);
+
+        _accuracyNumberText.text = "0";
+        _targetAccuracyBarScale = new Vector3(0, 1f, 1f);
+
+        _completedMissionsCountText.text = "0";
+        _killedEnemiesCountText.text = "0";
+        _updateTimer = _updateTimerMax;
     }
 
     private void Update()
     {
         _updateTimer -= Time.deltaTime; // Запустим таймер для обновления
 
-        if (_updateTimer <= 0) 
-        { 
-            return; 
+        if (_updateTimer <= 0)
+        {
+            return;
         }
 
         UpdateScaleBar(_healthBar, _targetHealthBarScale);
@@ -76,14 +106,19 @@ public class UnitPortfolioUI : MonoBehaviour
         UpdateScaleBar(_accuracyBar, _targetAccuracyBarScale);
     }
 
-    private void UpdateSelectedUnit(Unit selectedUnit)
+    private void UpdatePortfolio()
     {
-        _selectedUnit = selectedUnit;
-
-        UpdateName();
-        UpdateAvatar();
-        UpdateNubberSetTargetScaleBar();
-        _updateTimer = _updateTimerMax;
+        if (_selectedUnit != null)
+        {
+            UpdateName();
+            UpdateAvatar();
+            UpdateNubberSetTargetScaleBar();
+            _updateTimer = _updateTimerMax;
+        }
+        else
+        {
+            ClearPortfolio();
+        }
     }
 
     private void UpdateName()
@@ -112,11 +147,11 @@ public class UnitPortfolioUI : MonoBehaviour
         _actionPointsNumberText.text = actionPointsFul.ToString();
         _targetActionPointsBarScale = new Vector3(actionPointsFul / _maxValue, 1f, 1f);
 
-        int powerFull = _selectedUnit.GetUnitPower().GetPower();
+        int powerFull = _selectedUnit.GetUnitPowerSystem().GetPower();
         _powerNumberText.text = powerFull.ToString();
         _targetPowerBarScale = new Vector3(powerFull / _maxValue, 1f, 1f);
 
-        int accuracyFull = _selectedUnit.GetUnitAccuracy().GetAccuracy();
+        int accuracyFull = _selectedUnit.GetUnitAccuracySystem().GetAccuracy();
         _accuracyNumberText.text = accuracyFull.ToString();
         _targetAccuracyBarScale = new Vector3(accuracyFull / _maxValue, 1f, 1f);
 
@@ -128,4 +163,11 @@ public class UnitPortfolioUI : MonoBehaviour
     {
         barTransform.localScale = Vector3.Lerp(barTransform.localScale, targetScale, Time.deltaTime * _speed);
     }
+
+    private void OnDestroy()
+    {
+        _unitManager.OnSelectedUnitChanged -= UnitManager_OnSelectedUnitChanged;
+    }
+
+   
 }

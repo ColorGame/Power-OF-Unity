@@ -22,9 +22,9 @@ public class UnitEquipment
         // подписаться на событие смена визуала юнита для получения АКТУАЛЬНЫХ rightHandTransform и leftHandTransform т.к. для разной брони разные скелеты
         if (_unit.IsEnemy())
         {
-            PlacedObjectTypeSO mainPlacedObjectTypeSO =  _unit.GetUnitTypeSO<UnitEnemySO>().GetMainPlacedObjectTypeSO(); // Получим основное оружие для экиперовки врага
+            PlacedObjectTypeWithActionSO mainplacedObjectTypeWithActionSO =  _unit.GetUnitTypeSO<UnitEnemySO>().GetMainplacedObjectTypeWithActionSO(); // Получим основное оружие для экиперовки врага
             // Сделать
-          //  PlacedObject placedObject = PlacedObject.CreateInWorld(_rightHandTransform.position, mainPlacedObjectTypeSO, _unit.GetTransform(), _unit.Get);
+          //  PlacedObject placedObject = PlacedObject.CreateInWorld(_rightHandTransform.position, mainplacedObjectTypeWithActionSO, _unit.GetTransform(), _unit.Get);
          //   EquipWeapon(placedObject);
         }
     }

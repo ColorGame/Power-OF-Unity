@@ -18,12 +18,12 @@ public class Rope : MonoBehaviour
 
     public void ShowRope()
     {
-        _ropeRanderer.gameObject.SetActive(true);
+        _ropeRanderer.enabled = true;
     }
 
     public void HideRope()
     {
-        _ropeRanderer.gameObject.SetActive(false);
+        _ropeRanderer.enabled = false;
     }
 
     public RopeRanderer GetRopeRanderer()

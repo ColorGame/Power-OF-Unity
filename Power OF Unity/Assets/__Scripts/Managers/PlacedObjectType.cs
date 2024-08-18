@@ -4,6 +4,8 @@
 /// </summary>
 public enum PlacedObjectType
 {
+    // ОРУЖИЕ
+    _______WEAPON_______,
     None,                   //Нет предмета
     GrapplingHookGun,       //пистолет с абордажным крюком
     SyringeGun,             //Шприц-пистолет
@@ -40,14 +42,24 @@ public enum PlacedObjectType
     SwordDouble,
     SwordStun,
 
-
-    
+    _______ITEM_______,
 
     Binoculars,             // Бинокль
     Medipack,               //Медицинский пакет
     CombatShield,           //Боевой Штурмовой щит Combat Assault Shield
 
-    NightVisionCamera,      //Камера ночного видения
+    NightVisionCamera,      //Камера ночного видения    
+
+    _______ARMOR_______,
+
+    ArmorHeadEasy,          //
+    ArmorHeadMedium,        //    
+
+    ArmorBodyEasy,          //
+    ArmorBodyMedium,        //
+    ArmorBodyMediumMod,     //
+    ArmorBodyHard,          //
+
 }
 
 

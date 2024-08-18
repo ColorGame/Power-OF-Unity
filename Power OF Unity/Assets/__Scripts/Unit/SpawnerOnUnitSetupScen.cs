@@ -2,35 +2,57 @@ using UnityEngine;
 
 public class SpawnerOnUnitSetupScen : MonoBehaviour
 {
-    private UnitInventorySystem _unitInventorySystem;
+    private UnitManager _unitManager;
+    private Unit _selectedUnit;
 
-    public void Init(UnitInventorySystem unitInventorySystem)
+    private void Awake()
     {
-        _unitInventorySystem = unitInventorySystem;
+        ClearSpawner();
+    }
+
+    public void Init(UnitManager unitManager)
+    {
+        _unitManager = unitManager;
 
         Setup();
     }
 
     private void Setup()
     {
-        //CreateSelectUnit(_unitInventorySystem.GetSelectedUnit());
+        //UpdateSpawn(_unitManager.GetSelectedUnit());
 
-        _unitInventorySystem.OnSelectedUnitChanged += UnitInventorySystem_OnSelectedUnitChanged;
+        _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
+
+        _selectedUnit = _unitManager.GetSelectedUnit();
+        UpdateSpawn();
     }
 
-    private void UnitInventorySystem_OnSelectedUnitChanged(object sender, Unit selectedUnit)
+    private void UnitManager_OnSelectedUnitChanged(object sender, Unit newSelectedUnit)
     {
-        CreateSelectUnit(selectedUnit);
+        _selectedUnit = newSelectedUnit;
+        UpdateSpawn();
     }
 
-    private void CreateSelectUnit(Unit selectedUnit)
+    private void UpdateSpawn()
+    {
+        ClearSpawner();
+
+        if (_selectedUnit != null)
+        {
+            Transform unitVisualPrefab = _selectedUnit.GetUnitTypeSO<UnitFriendSO>().GetUnitVisualPrefab(_selectedUnit.GetUnitArmorType());
+            Instantiate(unitVisualPrefab, transform);
+        }
+    }
+
+    private void ClearSpawner()
     {
         foreach (Transform attachTransform in transform) // Очистим точку спавна
         {
             Destroy(attachTransform.gameObject);
         }
-
-        Transform unitVisualPrefab = selectedUnit.GetUnitTypeSO<UnitFriendSO>().GetUnitVisualPrefab(selectedUnit.GetUnitArmorType());
-        Instantiate(unitVisualPrefab, transform);
+    }
+    private void OnDestroy()
+    {
+        _unitManager.OnSelectedUnitChanged -= UnitManager_OnSelectedUnitChanged;
     }
 }

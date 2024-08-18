@@ -6,7 +6,10 @@ public class InventoryGridVisualSingleInWorldSpace : InventoryGridVisualSingle
 {
     [SerializeField] private MeshRenderer _meshRendererQuad; // Будем менять материал для визуализиции сетки инвенторя
 
-   
+    public override void Init(float cellSize)
+    {      
+        transform.localScale = Vector2.one * cellSize;
+    }
 
     protected override void Hide() // Скрыть
     {
@@ -17,5 +20,7 @@ public class InventoryGridVisualSingleInWorldSpace : InventoryGridVisualSingle
     {
         _meshRendererQuad.enabled = true;
         _meshRendererQuad.material = material;       
-    }  
+    }
+
+    
 }

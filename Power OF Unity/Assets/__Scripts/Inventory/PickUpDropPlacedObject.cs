@@ -6,8 +6,9 @@ using UnityEngine;
 /// </summary>
 /// <remarks>
 /// Во время размещения, в PlacedObject передается сетка размещения и позиция якоря предмета на сетки.
+/// Работает в паре с классом PlacedObjectWithActionSelectButtonsSystemUI
 /// </remarks>
-public class PickUpDropPlacedObject : MonoBehaviour // 
+public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
 {
     public event EventHandler OnGrabbedObjectGridExits; // Захваченый объект покинул сетку
     public event EventHandler<PlacedObject> OnAddPlacedObjectAtInventoryGrid; // Объект добавлен в сетку Интвенторя
@@ -15,7 +16,7 @@ public class PickUpDropPlacedObject : MonoBehaviour //
     public event EventHandler<PlacedObjectParameters> OnGrabbedObjectGridPositionChanged; // позиция захваченного объекта на сетке изменилась 
 
     private LayerMask _inventoryLayerMask; // Для инвенторя настроить слой как Inventory // Настроим на объекте где есть коллайдер 
-    private Canvas _canvasInventory;
+    private Canvas _canvasPickUpDrop;
     private Camera _camera;
     private RenderMode _canvasRenderMode;
     private PlacedObject _placedObject; // Размещенный объект    
@@ -32,20 +33,24 @@ public class PickUpDropPlacedObject : MonoBehaviour //
     private GameInput _gameInput;
     private TooltipUI _tooltipUI;
     private InventoryGrid _inventoryGrid;
+    private UnitManager _unitManager;
+    private Unit _selectedUnit;
 
-    public void Init(GameInput gameInput, TooltipUI tooltipUI, InventoryGrid inventoryGrid)
+    public void Init(GameInput gameInput, TooltipUI tooltipUI, InventoryGrid inventoryGrid, UnitManager unitManager)
     {
         _gameInput = gameInput;
         _tooltipUI = tooltipUI;
         _inventoryGrid = inventoryGrid;
+        _unitManager = unitManager;
+
 
         Setup();
     }
 
     private void Setup()
     {
-        _canvasInventory = GetComponentInParent<Canvas>();
-        _canvasRenderMode = _canvasInventory.renderMode;
+        _canvasPickUpDrop = GetComponent<Canvas>();
+        _canvasRenderMode = _canvasPickUpDrop.renderMode;
 
         switch (_canvasRenderMode)
         {
@@ -56,28 +61,47 @@ public class PickUpDropPlacedObject : MonoBehaviour //
                 _camera = GetComponentInParent<Camera>(); // Для канваса будем использовать дополнительную камеру
                 break;
             case RenderMode.WorldSpace:
-                _planeForCanvasInWorldSpace = new Plane(_canvasInventory.transform.forward, _canvasInventory.transform.position); // Создадим плоскость в позиции canvasInventory
+                _planeForCanvasInWorldSpace = new Plane(_canvasPickUpDrop.transform.forward, _canvasPickUpDrop.transform.position); // Создадим плоскость в позиции canvasInventory
                 _camera = GetComponentInParent<Camera>(); // Для канваса в мировом пространстве будем использовать дополнительную камеру
                 break;
         }
-       
+
         _inventoryLayerMask = LayerMask.GetMask("Inventory");
 
-        _gameInput.OnClickAction += GameInput_OnClickAction;
+        _selectedUnit = _unitManager.GetSelectedUnit();
+       
+        _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
+       
     }
 
-    private void OnEnable()
+    private void UnitManager_OnSelectedUnitChanged(object sender, Unit newSelectedUnit)
     {
-        if(_gameInput!=null) // При повторном включении вновь активируем подписку
-            _gameInput.OnClickAction += GameInput_OnClickAction;
+        _selectedUnit = newSelectedUnit;
     }
-    private void OnDisable()
+
+    public void SetActive(bool active)
     {
-        _gameInput.OnClickAction -= GameInput_OnClickAction;
+        _canvasPickUpDrop.enabled = active;
+        if (active)
+        {
+            _gameInput.OnClickAction += GameInput_OnClickAction;           
+        }
+        else
+        {
+            _gameInput.OnClickAction -= GameInput_OnClickAction;          
+        }
     }
+   
 
     private void GameInput_OnClickAction(object sender, EventArgs e) // Если мыш нажата 
     {
+
+        if (_selectedUnit == null) // Если нет выбранного юнита то и некому настраивать инвентарь
+        {
+            _tooltipUI.ShowShortTooltipFollowMouse("ВЫБЕРИ ЮНИТА", new TooltipUI.TooltipTimer { timer = 0.5f }); // Покажем подсказку и зададим новый таймер отображения подсказки
+            return; // Выходим игнор. код ниже
+        }
+
         // Установим дефолтное состояние полей
         GridSystemXY<GridObjectInventoryXY> gridSystemXY;
         Vector2Int mouseGridPosition;
@@ -235,7 +259,7 @@ public class PickUpDropPlacedObject : MonoBehaviour //
                 _placedObject = _placedObjectMouseEnter;
                 _placedObject.Grab(); // Схватим его
                 _inventoryGrid.RemovePlacedObjectAtGrid(_placedObject);// Удалим из текущей сеточной позиции               
-                _offset = _placedObject.GetOffsetVisualFromParent() * _canvasInventory.scaleFactor;
+                _offset = _placedObject.GetOffsetCenterFromAnchor() * _canvasPickUpDrop.scaleFactor;
                 // Звук поднятия
                 OnRemovePlacedObjectAtInventoryGrid?.Invoke(this, _placedObject); // Запустим событие
             }
@@ -301,9 +325,16 @@ public class PickUpDropPlacedObject : MonoBehaviour //
     }
 
 
-    public void CreatePlacedObject(Vector3 worldPosition, PlacedObjectTypeSO placedObjectTypeSO) //Создадим размещаемый объект при нажатии на кнопку(в аргументе получаем позицию и тип объекта) 
+    public void CreatePlacedObject(Vector3 worldPosition, PlacedObjectTypeWithActionSO placedObjectTypeWithActionSO) //Создадим размещаемый объект при нажатии на кнопку(в аргументе получаем позицию и тип объекта) 
     {
-        // Перед создание сделаем проверку       
+        // Перед создание сделаем проверку    
+        if (_selectedUnit == null) // Если нет выбранного юнита то и неукого настраивать инвентарь
+        {
+            _tooltipUI.ShowShortTooltipFollowMouse("ВЫБЕРИ ЮНИТА", new TooltipUI.TooltipTimer { timer = 0.5f }); // Покажем подсказку и зададим новый таймер отображения подсказки
+            return; // Выходим игнор. код ниже
+        }
+
+          
         if (_placedObject != null) // Если Есть захваченый объект 
         {
             //Сбросим захваченный объект
@@ -313,8 +344,8 @@ public class PickUpDropPlacedObject : MonoBehaviour //
         }
         else
         {
-            _offset = placedObjectTypeSO.GetOffsetVisualСenterFromAnchor() * _canvasInventory.scaleFactor; // Чтобы объект был по середине мышки надо вычесть смещение центра визуала относительно якоря и учесть масштаб канваса         
-            _placedObject = PlacedObject.CreateInWorld(worldPosition - _offset, placedObjectTypeSO, _canvasInventory.transform, this); // Создадим объект
+            _offset = placedObjectTypeWithActionSO.GetOffsetVisualСenterFromAnchor() * _canvasPickUpDrop.scaleFactor; // Чтобы объект был по середине мышки надо вычесть смещение центра визуала относительно якоря и учесть масштаб канваса         
+            _placedObject = PlacedObject.CreateInWorld(worldPosition - _offset, placedObjectTypeWithActionSO, _canvasPickUpDrop.transform, this); // Создадим объект
             _placedObject.Grab(); // Схватим его
         }
     }
@@ -336,9 +367,7 @@ public class PickUpDropPlacedObject : MonoBehaviour //
         _placedObjectMouseEnter = placedObject;
     }
 
-    public Canvas GetCanvasInventory() { return _canvasInventory; }
-
-    public GridSystemXY<GridObjectInventoryXY> GetGridSystemXY(InventorySlot inventorySlot) => _inventoryGrid.GetGridSystemXY(inventorySlot);
+    public Canvas GetCanvas() { return _canvasPickUpDrop; }
 
 
     /*  public Vector3 CalculateOffsetGrab() // вычислим смещение захвата
@@ -374,4 +403,9 @@ public class PickUpDropPlacedObject : MonoBehaviour //
           }
       }*/
 
+    private void OnDestroy()
+    {
+        _unitManager.OnSelectedUnitChanged -= UnitManager_OnSelectedUnitChanged;
+        _gameInput.OnClickAction -= GameInput_OnClickAction;
+    }
 }

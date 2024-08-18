@@ -2,7 +2,7 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "ScriptableObjects/GrappleType")]
 
-public class GrappleTypeSO : PlacedObjectTypeSO
+public class GrappleTypeSO : PlacedObjectTypeWithActionSO
 {
     public override BaseAction GetAction(Unit unit)
     {

@@ -2,7 +2,7 @@
 
 [CreateAssetMenu(menuName = "ScriptableObjects/ShieldItemType")]
 
-public class ShieldItemTypeSO : PlacedObjectTypeSO
+public class ShieldItemTypeSO : PlacedObjectTypeWithActionSO
 {
     public override BaseAction GetAction(Unit unit)
     {

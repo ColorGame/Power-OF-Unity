@@ -15,7 +15,7 @@ public abstract class BaseAction : MonoBehaviour, ISetupForSpawn
 
     protected bool _isActive; // Булевая переменная. Что бы исключить паралельное выполнение нескольких действий
     protected Unit _unit;
-    protected PlacedObjectTypeSO _placedObjectTypeSO;
+    protected PlacedObjectTypeWithActionSO _placedObjectTypeWithActionSO;
 
     //Буду использовать встроенный делегат Action вместо - //public delegate void ActionCompleteDelegate(); //завершение действия // Объявляем делегат который не принимает аргумент и возвращает пустоту
     protected Action _onActionComplete; //(по завершении действия)// Объявляю делегат в пространстве имен - using System;
@@ -38,14 +38,14 @@ public abstract class BaseAction : MonoBehaviour, ISetupForSpawn
 
     }
     /// <summary>
-    /// Установим PlacedObjectTypeSO для данного действия (нужен для настройки полей).
+    /// Установим PlacedObjectTypeWithActionSO для данного действия (нужен для настройки полей).
     /// </summary>  
     /// <remarks>
     /// для MoveAction он будет null
     /// </remarks>
-    public virtual void SetPlacedObjectTypeSO(PlacedObjectTypeSO placedObjectTypeSO)  
+    public virtual void SetPlacedObjectTypeWithActionSO(PlacedObjectTypeWithActionSO placedObjectTypeWithActionSO)  
     {
-        _placedObjectTypeSO = placedObjectTypeSO;
+        _placedObjectTypeWithActionSO = placedObjectTypeWithActionSO;
     }
     public abstract string GetActionName(); // Вернуть имя действия // abstract - вынуждает реализовывать в каждом подклассе и в базовом должно иметь пустое тело.
 
@@ -84,7 +84,7 @@ public abstract class BaseAction : MonoBehaviour, ISetupForSpawn
     }
 
     public Unit GetUnit() { return _unit; }
-    public PlacedObjectTypeSO GetPlacedObjectTypeSO() { return _placedObjectTypeSO; }
+    public PlacedObjectTypeWithActionSO GetPlacedObjectTypeWithActionSO() { return _placedObjectTypeWithActionSO; }
 
 
     public EnemyAIAction GetBestEnemyAIAction() // Получим Лучшее действие Вражеского ИИ для выбранного действия

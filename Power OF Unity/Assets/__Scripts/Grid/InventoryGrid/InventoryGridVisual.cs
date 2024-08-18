@@ -6,7 +6,7 @@ using UnityEngine;
 /// Визуализация размещения в сетке инвенторя
 /// </summary>
 /// <remarks>Работает с типом PlacedObject</remarks>
-public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализации инвенторя
+public class InventoryGridVisual : MonoBehaviour ,IToggleActivity
 {
 
     [Serializable] // Чтобы созданная структура могла отображаться в инспекторе
@@ -36,6 +36,8 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
     private Dictionary<InventorySlot, int> _gridNameIndexDictionary; // Словарь (InventorySlot - ключ, int(индекс) -значение)
     private List<GridSystemXY<GridObjectInventoryXY>> _gridSystemXYList; // список сеток
 
+    private Canvas _canvas;
+
     private PickUpDropPlacedObject _pickUpDropPlacedObject;
     private InventoryGrid _inventoryGrid;
     private UnitInventorySystem _unitInventorySystem;
@@ -53,7 +55,7 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
 
     private void Setup()
     {
-        RenderMode canvasRenderMode = GetComponentInParent<Canvas>().renderMode;
+        _canvas = GetComponentInParent<Canvas>(true);       
         _gridNameIndexDictionary = new Dictionary<InventorySlot, int>();
 
         // Инициализируем сначала первую часть массива - Количество сеток
@@ -79,7 +81,7 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
 
                     InventoryGridVisualSingle inventoryGridVisualSingle;
 
-                    switch (canvasRenderMode)
+                    switch (_canvas.renderMode)
                     {
                         default:
                         case RenderMode.ScreenSpaceOverlay:
@@ -89,22 +91,42 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
                         case RenderMode.WorldSpace:
                         inventoryGridVisualSingle = Instantiate(GameAssets.Instance.InventoryGridInVisualSingleWorldSpacePrefab, _inventoryGrid.GetWorldPositionCenterСornerCell(gridPosition, _gridSystemXYList[i]), Quaternion.Euler(rotation), AnchorGridTransform); // Создадим наш префаб в каждой позиции сетки
                             break;
-                    }                    
+                    }
+
+                    inventoryGridVisualSingle.Init(_gridSystemXYList[i].GetCellSizeWithScaleFactor());
 
                     _gridNameIndexDictionary[_gridSystemXYList[i].GetGridSlot()] = i; // Присвоим ключу(имя Сетки под этим индексом) значение (индекс массива)
                     _inventoryGridVisualSingleArray[i][x, y] = inventoryGridVisualSingle; // Сохраняем компонент LevelGridVisualSingle в трехмерный массив где x,y,y это будут индексы массива.
                 }
             }
-        }
-
-        _pickUpDropPlacedObject.OnAddPlacedObjectAtInventoryGrid += OnAddPlacedObjectAtGrid;
-        _pickUpDropPlacedObject.OnRemovePlacedObjectAtInventoryGrid += PickUpDropSystem_OnRemovePlacedObjectAtGrid;
-        _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged += PickUpDropManager_OnGrabbedObjectGridPositionChanged;
-        _pickUpDropPlacedObject.OnGrabbedObjectGridExits += PickUpDropManager_OnGrabbedObjectGridExits;
-
-        _unitInventorySystem.OnInventoryGridsCleared += UnitInventorySystem_OnInventoryGridsCleared;
-        _unitInventorySystem.OnAddPlacedObjectAtInventoryGrid += OnAddPlacedObjectAtGrid;
+        }        
     }
+
+    public void SetActive(bool active)
+    {
+       _canvas.enabled = active;
+        if (active)
+        {
+            _pickUpDropPlacedObject.OnAddPlacedObjectAtInventoryGrid += OnAddPlacedObjectAtGrid;
+            _pickUpDropPlacedObject.OnRemovePlacedObjectAtInventoryGrid += PickUpDropSystem_OnRemovePlacedObjectAtGrid;
+            _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged += PickUpDropManager_OnGrabbedObjectGridPositionChanged;
+            _pickUpDropPlacedObject.OnGrabbedObjectGridExits += PickUpDropManager_OnGrabbedObjectGridExits;
+
+            _unitInventorySystem.OnInventoryGridsCleared += UnitInventorySystem_OnInventoryGridsCleared;
+            _unitInventorySystem.OnAddPlacedObjectAtInventoryGrid += OnAddPlacedObjectAtGrid;
+        }
+        else
+        {
+            _pickUpDropPlacedObject.OnAddPlacedObjectAtInventoryGrid -= OnAddPlacedObjectAtGrid;
+            _pickUpDropPlacedObject.OnRemovePlacedObjectAtInventoryGrid -= PickUpDropSystem_OnRemovePlacedObjectAtGrid;
+            _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged -= PickUpDropManager_OnGrabbedObjectGridPositionChanged;
+            _pickUpDropPlacedObject.OnGrabbedObjectGridExits -= PickUpDropManager_OnGrabbedObjectGridExits;
+
+            _unitInventorySystem.OnInventoryGridsCleared -= UnitInventorySystem_OnInventoryGridsCleared;
+            _unitInventorySystem.OnAddPlacedObjectAtInventoryGrid -= OnAddPlacedObjectAtGrid;
+        }
+    }
+
     /// <summary>
     /// Инвентарь очищен
     /// </summary>    
@@ -274,7 +296,12 @@ public class InventoryGridVisual : MonoBehaviour // Сеточная система визуализаци
             }
         }
 
-        Debug.LogError("Не смог найти GridVisualTypeMaterial для GridVisualType " + gridVisualType); // Если не найдет соответсвий выдаст ошибку
+        Debug.LogError("Не смог найти GridVisualTypeColor для GridVisualType " + gridVisualType); // Если не найдет соответсвий выдаст ошибку
         return null;
+    }
+
+    private void OnDestroy() 
+    {
+        _unitInventorySystem=null; // Очистим ссылки чтобы класс обнулился
     }
 }

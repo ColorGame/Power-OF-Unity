@@ -202,24 +202,24 @@ public class TooltipUI : MonoBehaviour
     /// </summary>
     private void EnableShortTooltipsText()
     {
-        _shortTooltipsText.gameObject.SetActive(true);
+        _shortTooltipsText.enabled = true;
 
-        _nameText.gameObject.SetActive(false);
-        _descriptionText.gameObject.SetActive(false);
-        _detailsText.gameObject.SetActive(false);
-        _sideEffectsTooltipsText.gameObject.SetActive(false);
+        _nameText.enabled = false;
+        _descriptionText.enabled = false;
+        _detailsText.enabled = false;
+        _sideEffectsTooltipsText.enabled = false;
     }
     /// <summary>
     /// Включить подсказку о размещенном объекте
     /// </summary>
     private void EnablePlacedObjectTooltip()
     {
-        _shortTooltipsText.gameObject.SetActive(false);
+        _shortTooltipsText.enabled = false;
 
-        _nameText.gameObject.SetActive(true);
-        _descriptionText.gameObject.SetActive(true);
-        _detailsText.gameObject.SetActive(true);
-        _sideEffectsTooltipsText.gameObject.SetActive(true);
+        _nameText.enabled = true;
+        _descriptionText.enabled = true;
+        _detailsText.enabled = true;
+        _sideEffectsTooltipsText.enabled = true;
     }
 
     /// <summary>

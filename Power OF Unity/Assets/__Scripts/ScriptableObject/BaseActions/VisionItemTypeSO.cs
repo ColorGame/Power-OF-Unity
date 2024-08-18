@@ -2,7 +2,7 @@
 
 [CreateAssetMenu(menuName = "ScriptableObjects/VisionItemType")]
 
-public class VisionItemTypeSO : PlacedObjectTypeSO
+public class VisionItemTypeSO : PlacedObjectTypeWithActionSO
 {
     public override BaseAction GetAction(Unit unit)
     {

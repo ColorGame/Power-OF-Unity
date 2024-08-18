@@ -6,6 +6,7 @@ public abstract class InventoryGridVisualSingle : MonoBehaviour
 {
     private bool _isBusy; //Занято  
 
+    public abstract void Init(float cellSize);
 
     protected abstract void Hide(); // Скрыть
 

@@ -25,8 +25,8 @@ public class Unit
         _actionPointsSystem = new UnitActionPoints(this, unitTypeSO.GetBasicActionPoints());
         _unitInventory = new UnitInventory();
         _unitEquipment = new UnitEquipment(this);
-        _unitPower = new UnitPower(unitTypeSO.GetBasicPower());
-        _unitAccuracy = new UnitAccuracy(unitTypeSO.GetBasicAccuracy());
+        _unitPowerSystem = new UnitPowerSystem(unitTypeSO.GetBasicPower());
+        _unitAccuracySystem = new UnitAccuracySystem(unitTypeSO.GetBasicAccuracy());
         _location = Location.Barrack; // по умолчанию все юниты появляются в КАЗАРМЕ
         _completedMissionsCount = 0;
         _killedEnemiesCount = 0;
@@ -59,8 +59,8 @@ public class Unit
     readonly UnitActionPoints _actionPointsSystem;
     readonly UnitInventory _unitInventory;
     readonly UnitEquipment _unitEquipment;
-    readonly UnitPower _unitPower;
-    readonly UnitAccuracy _unitAccuracy;
+    readonly UnitPowerSystem _unitPowerSystem;
+    readonly UnitAccuracySystem _unitAccuracySystem;
     private int _completedMissionsCount;
     private int _killedEnemiesCount;
     private BaseAction[] _baseActionsArray; // Массив базовых действий 
@@ -182,8 +182,8 @@ public class Unit
     public UnitActionPoints GetActionPointsSystem() { return _actionPointsSystem; }
     public UnitInventory GetUnitInventory() { return _unitInventory; }
     public UnitEquipment GetUnitEquipment() { return _unitEquipment; }
-    public UnitPower GetUnitPower() { return _unitPower; }
-    public UnitAccuracy GetUnitAccuracy() { return _unitAccuracy; }
+    public UnitPowerSystem GetUnitPowerSystem() { return _unitPowerSystem; }
+    public UnitAccuracySystem GetUnitAccuracySystem() { return _unitAccuracySystem; }
     public int GetCompletedMissionsCount() {  return _completedMissionsCount; }
     public int GetKilledEnemiesCount() {  return _killedEnemiesCount; }
     public Vector3 GetTransformPosition() { return _unitCoreTransform.position; }

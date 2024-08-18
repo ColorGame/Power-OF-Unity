@@ -93,7 +93,7 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
              for (int y = 0; y < _levelGrid.GetHeight(); y++)
              {
                  _gridSystemVisualSingleArray[x, y].
-                     ShowShortTooltipFollowMouse(GetGridVisualTypeMaterial(GridVisualType.White));
+                     ShowShortTooltipFollowMouse(GetGridVisualTypeColor(GridVisualType.White));
              }
          }*/
 
@@ -370,7 +370,7 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
             }
         }
 
-        Debug.LogError("Не смог найти GridVisualTypeMaterial для GridVisualType " + gridVisualType); // Если не найдет соответсвий выдаст ошибку
+        Debug.LogError("Не смог найти GridVisualTypeColor для GridVisualType " + gridVisualType); // Если не найдет соответсвий выдаст ошибку
         return null;
     }
 #endif

@@ -2,7 +2,7 @@ using UnityEngine;
 
 
 [CreateAssetMenu(menuName = "ScriptableObjects/ShootingWeaponType")]
-public class ShootingWeaponTypeSO : PlacedObjectTypeSO //Стреляющее оружие Оружие - объект типа SO (наследует класс Размещенного объекта)
+public class ShootingWeaponTypeSO : PlacedObjectTypeWithActionSO //Стреляющее оружие Оружие - объект типа SO (наследует класс Размещенного объекта)
 {   
    
     [SerializeField] private int numberShotInOneAction = 3; // Количество выстрелов за одно действие

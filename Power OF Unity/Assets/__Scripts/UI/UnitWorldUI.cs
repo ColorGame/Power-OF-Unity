@@ -101,20 +101,20 @@ public class UnitWorldUI : MonoBehaviour, ISetupForSpawn
 
     private void ShowHitPercent(float hitChance)
     {
-        _hitPercentText.gameObject.SetActive(true);
+        _hitPercentText.enabled =true;
         _hitPercentText.text = Mathf.Round(hitChance * 100f) + "%";
-        _aimImage.gameObject.SetActive(true);
+        _aimImage.enabled = true;
     }
 
     private void HideHitPercent()
     {
-        _hitPercentText.gameObject.SetActive(false);
-        _aimImage.gameObject.SetActive(false);
+        _hitPercentText.enabled = false;
+        _aimImage.enabled = false;
     }
 
     private void UpdateStunnedState()
     {
-        _stunnedImage.gameObject.SetActive(_unit.GetActionPointsSystem().GetStunned());
+        _stunnedImage.enabled = _unit.GetActionPointsSystem().GetStunned();
     }
         
 

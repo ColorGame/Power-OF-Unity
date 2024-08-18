@@ -31,6 +31,7 @@ public class GameAssets : ScriptableObject //Игровые Активы
     public UnitEnemySelectAtLevelButtonUI unitEnemySelectAtLevelButton; // Кнопка - выбора вражеского юнита на игровом уровне.
     public UnitFriendSelectAtLevelButtonUI unitFriendSelectAtLevelButton; // Кнопка - выбора дружественного юнита на игровом уровне.
     public UnitSelectAtInventoryButton unitSelectAtInventoryButton; // Кнопка - выбора  Юнита, для настройки инвентаря
+    public UnitSelectAtManagementButtonUI unitSelectAtManagementButton; // Кнопка - выбора  Юнита, в окне менеджмента юнитов
 
     [Header("ПРЕФАБЫ FX-система частиц")]
     public Transform grenadeExplosionFXPrefab; // Префаб частички взрыва гранаты //НЕЗАБУДЬ ПОСТАВИТЬ ГАЛОЧКУ У TRAIL самоуничтожение(Destroy) после проигрывания

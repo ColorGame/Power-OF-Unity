@@ -85,12 +85,7 @@ public class UnitActionPoints
 
         OnActionPointsChanged?.Invoke(this, EventArgs.Empty); // запускаем событие ПОСЛЕ обнавления очков действий.(для // РЕШЕНИЕ // 2 //в ActionButtonSystemUI)
     }
-    /// <summary>
-    /// Получить количество очков действия
-    /// </summary>
-    public int GetActionPointsCount() { return _actionPoints; }
-    public int GetActionPointsCountFull() { return _actionPointsFull; }
-
+    
     /// <summary>
     /// Ход изменен Сбросим очки действий до полного
     /// </summary>
@@ -144,6 +139,11 @@ public class UnitActionPoints
         }*/
         OnActionPointsChanged?.Invoke(this, EventArgs.Empty); // запускаем событие ПОСЛЕ обнавления очков действий.
     }
+    /// <summary>
+    /// Получить количество очков действия
+    /// </summary>
+    public int GetActionPointsCount() { return _actionPoints; }
+    public int GetActionPointsCountFull() { return _actionPointsFull; }
 
     public bool GetStunned() { return _stunned; }
     private void SetStunned(bool stunned) { _stunned = stunned; }

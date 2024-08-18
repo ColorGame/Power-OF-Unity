@@ -13,7 +13,7 @@ using UnityEngine.UI;
 namespace Synty.Interface.SciFiSoldierHUD.Samples
 {
     /// <summary>
-    ///     Oscillates the value of a list of sliders.
+    ///     Oscillates the value of a myUnitsBasiclist of sliders.
     /// </summary>
     public class SampleOscillateSliders : MonoBehaviour
     {

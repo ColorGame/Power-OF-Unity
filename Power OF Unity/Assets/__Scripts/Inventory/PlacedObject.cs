@@ -17,7 +17,7 @@ public class PlacedObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         PlacedObjectTypeSO placedObjectTypeSO = placedObjectParameters.placedObjectTypeSO;
         Vector2Int gridPositionAnchor = placedObjectParameters.gridPositioAnchor;
         GridSystemXY<GridObjectInventoryXY> gridSystemXY = inventoryGrid.GetGridSystemXY(placedObjectParameters.slot);
-        Canvas canvas = inventoryGrid.GetCanvas();
+        Canvas canvas = pickUpDropPlacedObject.GetCanvas();
 
         Vector3 worldPosition = new Vector3();
         switch (placedObjectParameters.slot)
@@ -48,7 +48,7 @@ public class PlacedObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         Transform placedObjectTransform = Instantiate(placedObjectTypeSO.GetPrefab2D(), worldPosition , Quaternion.Euler(parent.rotation.eulerAngles.x, 0, 0), parent); //canvasContainer.rotation.eulerAngles.x- что бы был повернут как родитель
         PlacedObject placedObject = placedObjectTransform.GetComponent<PlacedObject>();
         placedObject._placedObjectTypeSO = placedObjectTypeSO;
-        placedObject._offsetVisualFromParent = placedObjectTypeSO.GetOffsetVisualСenterFromAnchor();
+        placedObject._offsetOffsetCenterFromAnchor = placedObjectTypeSO.GetOffsetVisualСenterFromAnchor();
         placedObject._pickUpDropPlacedObject = pickUpDropPlacedObject;
         placedObject.Setup();
 
@@ -66,7 +66,7 @@ public class PlacedObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private Vector3 _scaleOriginal;
     private bool _grabbed; // Схвачен   
     private bool _moveStartPosition = false; // Переместить в начальную позицию        
-    private Vector3 _offsetVisualFromParent;
+    private Vector3 _offsetOffsetCenterFromAnchor;
     private List<InventorySlot> _canPlacedOnSlotList;// Слоты инвенторя где можно разместить наш объект   
 
     protected virtual void Setup()
@@ -120,7 +120,10 @@ public class PlacedObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void SetTargetPosition(Vector3 targetPosition) { _targetPosition = targetPosition; }
     public void SetTargetRotation(Vector3 targetRotation) { _targetRotation = targetRotation; }
-    public Vector3 GetOffsetVisualFromParent() { return _offsetVisualFromParent; }
+    /// <summary>
+    /// Смкщкние центра относительно якоря
+    /// </summary>
+    public Vector3 GetOffsetCenterFromAnchor() { return _offsetOffsetCenterFromAnchor; }
     public Vector2Int GetGridPositionAnchor() { return _gridPositioAnchor; }
     public void SetGridPositionAnchor(Vector2Int gridPosition) { _gridPositioAnchor = gridPosition; }
 

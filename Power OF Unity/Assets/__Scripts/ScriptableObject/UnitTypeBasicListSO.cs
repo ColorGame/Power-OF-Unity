@@ -6,5 +6,6 @@ using UnityEngine;
 
 public class UnitTypeBasicListSO : ScriptableObject// БУДЕТ ВСЕГО ОДИН ЭКЗЕМПЛЯР (один список)
 {
-    public List<UnitTypeSO> list; // Базовый список типов Юнитов
+    public List<UnitTypeSO> myUnitsBasiclist; // Базовый список моих Юнитов
+    public List<UnitTypeSO> hireUnitslist; // Cписок Юнитов для найма
 }

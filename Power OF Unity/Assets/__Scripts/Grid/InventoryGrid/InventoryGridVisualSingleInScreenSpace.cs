@@ -7,10 +7,10 @@ public class InventoryGridVisualSingleInScreenSpace : InventoryGridVisualSingle
 {
     [SerializeField] private Image _image; // Будем менять материал для визуализиции сетки инвенторя
 
-    private void Start()
+    public override void Init(float cellSize)
     {
         RectTransform rectTransform = (RectTransform)transform;
-        rectTransform.sizeDelta = Vector2.one * InventoryGrid.GetCellSize();
+        rectTransform.sizeDelta = Vector2.one * cellSize;
     }   
 
     protected override  void Hide() // Скрыть

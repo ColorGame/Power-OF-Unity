@@ -8,24 +8,21 @@ using UnityEngine;
 /// !!!Обращаться к InventoryGrid ЖЕЛАТЕЛЬНО через класс PickUpDropPlacedObject
 /// </remarks>
 public class InventoryGrid : MonoBehaviour
-{
-
-    private static float cellSize;  // Размер ячейки
+{  
+    public enum ActiveGrid
+    {
+        WeaponGrid,
+        ArmorGrid
+    }
 
     [SerializeField] private InventoryGridParameters[] _gridParametersArray; // Массив параметров сеток ЗАДАТЬ в ИНСПЕКТОРЕ
-    [SerializeField] private Transform _gridDebugObjectPrefab; // Префаб отладки сетки 
+  //  [SerializeField] private InventoryGridParameters[] _gridParametersArray; // Массив параметров сеток ЗАДАТЬ в ИНСПЕКТОРЕ
+    
 
     private TooltipUI _tooltipUI;  
-    private Canvas _canvas;
-    private List<PlacedObject> _placedObjectList = new List<PlacedObject>(); // Список размещенных объектов    
+    private List<PlacedObject> _placedObjectList = new List<PlacedObject>(); // Список размещенных объектов (для удаления placedObject.gameObject при чистки инвенторя) 
     private List<GridSystemXY<GridObjectInventoryXY>> _gridSystemXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectInventoryXY    
 
-
-
-    private void Awake()
-    {
-        _canvas = GetComponentInParent<Canvas>();
-    }
 
     public void Init(TooltipUI tooltipUI)
     {       
@@ -35,34 +32,17 @@ public class InventoryGrid : MonoBehaviour
     }
    
     private void Setup()
-    {       
-        cellSize = _gridParametersArray[0].cellSize;// Для всех сеток масштаб ячейки одинвковый 
-
+    {     
         _gridSystemXYList = new List<GridSystemXY<GridObjectInventoryXY>>(); // Инициализируем список              
 
+        Canvas canvas = GetComponentInParent<Canvas>();
         foreach (InventoryGridParameters gridParameters in _gridParametersArray)
         {
-            GridSystemXY<GridObjectInventoryXY> gridSystem = new GridSystemXY<GridObjectInventoryXY>(_canvas.scaleFactor, gridParameters,   // ПОСТРОИМ СЕТКУ  и в каждой ячейки создадим объект типа GridObjectInventoryXY
+            GridSystemXY<GridObjectInventoryXY> gridSystem = new GridSystemXY<GridObjectInventoryXY>(canvas.scaleFactor, gridParameters,   // ПОСТРОИМ СЕТКУ  и в каждой ячейки создадим объект типа GridObjectInventoryXY
                 (GridSystemXY<GridObjectInventoryXY> g, Vector2Int gridPosition) => new GridObjectInventoryXY(g, gridPosition)); //в четвертом параметре аргумента зададим функцию ананимно через лямбду => new GridObjectUnitXZ(g, _gridPositioAnchor) И ПЕРЕДАДИМ ЕЕ ДЕЛЕГАТУ. (лямбда выражение можно вынести в отдельный метод)
 
-            //gridSystem.CreateDebugObject(_gridDebugObjectPrefab); // Создадим наш префаб в каждой ячейки
             _gridSystemXYList.Add(gridSystem); // Добавим в список созданную сетку          
         }
-
-
-        // Задодим размер и тайлинг материала заднего фона
-
-        //_background.localPosition = new Vector3(_widthBag / 2f, _heightBag / 2f, 0) * _cellSizeWithScaleFactor; // разместим задний фон посередине
-        // _background.localScale = new Vector3(_widthBag, _heightBag, 0) * _cellSizeWithScaleFactor;
-        //_background.GetComponent<Material>().mainTextureScale = new Vector2(_widthBag, _heightBag);// Сдеалем количество тайлов равным количеству ячеек по высоте и ширине   
-
-        /* foreach (InventoryGridParameters gridParameters in _gridParametersArray)
-         {
-             RectTransform bagBackground = (RectTransform)gridParameters.anchorGridTransform.GetChild(0); //Получим задний фон сетки
-             bagBackground.sizeDelta = new Vector2(gridParameters.width, gridParameters.height);
-             bagBackground.localScale = Vector3.one * gridParameters.cellSize;
-             bagBackground.GetComponent<RawImage>().uvRect = new Rect(0, 0, gridParameters.width, gridParameters.height);   // Сдеалем количество тайлов равным количеству ячеек по высоте и ширине   
-         }*/
     }
 
     /// <summary>
@@ -207,9 +187,7 @@ public class InventoryGrid : MonoBehaviour
     public Vector3 GetRotationAnchorGrid(GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetRotationAnchorGrid();
     public Transform GetAnchorGrid(GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetAnchorGrid();
     public int GetWidth(GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetWidth();
-    public int GetHeight(GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetHeight();
-    public Canvas GetCanvas() { return _canvas; }
-    public static float GetCellSize() { return cellSize ; }// (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру)
+    public int GetHeight(GridSystemXY<GridObjectInventoryXY> gridSystemXY) => gridSystemXY.GetHeight();      
 
     public GridSystemXY<GridObjectInventoryXY> GetGridSystemXY(InventorySlot inventorySlot) // Получить сетку для этого слота
     {
@@ -284,7 +262,7 @@ public class InventoryGrid : MonoBehaviour
                 {
                     // Создадим и разместим сохраненный объект               
                     GridSystemXY<GridObjectInventoryXY> gridSystemXY = GetGridSystemXY(addPlacedObject.gridName); // Получим сетку для размещения
-                    PlacedObject placedObject = PlacedObject.CreateInGrid(gridSystemXY, addPlacedObject.gridPositioAnchor, addPlacedObject.placedObject, _canvasInventory, this);
+                    PlacedObject placedObject = PlacedObject.CreateInGrid(gridSystemXY, addPlacedObject.gridPositioAnchor, addPlacedObject.placedObject, _canvasPickUpDrop, this);
                     if (!_pickUpDropPlacedObject.TryDrop(gridSystemXY, addPlacedObject.gridPositioAnchor, placedObject)) // Если не удалось сбросить объект на сетку то
                     {
                         placedObject.DestroySelf(); // Уничтожим этот объект
