@@ -13,8 +13,8 @@ public class Testing : MonoBehaviour
 
 
         //ТЕСТ CreateDebugObject визуализация координат сетки в каждой ячейки
-        /*_gridSystemXYList = new GridSystemXZ(10, 10, 2f); // построим сетку 10 на 10 и размером 2 еденицы
-        _gridSystemXYList.CreateDebugObject(_gridDebugObjectPrefab); // Создадим наш префаб в каждой ячейки
+        /*_itemGridSystemXYList = new GridSystemXZ(10, 10, 2f); // построим сетку 10 на 10 и размером 2 еденицы
+        _itemGridSystemXYList.CreateDebugObject(_gridDebugObjectPrefab); // Создадим наш префаб в каждой ячейки
 
         Debug.Log(new GridPositionXZ(5, 7)); // тестируем что возвращает GridPositionXZ*/
     }
@@ -22,7 +22,7 @@ public class Testing : MonoBehaviour
     private void Update()
     {
         //ТЕСТ 
-        //Debug.Log(_gridSystemXYList.GetGridPosition(MouseOnGameGrid.GetTransformPosition())); // Получим положение сетки прямо под мышкой
+        //Debug.Log(_itemGridSystemXYList.GetGridPosition(MouseOnGameGrid.GetTransformPosition())); // Получим положение сетки прямо под мышкой
 
         //ТЕСТ Допустимых Сеточных Позиция для Действий
 

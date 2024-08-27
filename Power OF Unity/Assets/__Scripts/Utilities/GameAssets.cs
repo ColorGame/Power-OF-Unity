@@ -22,15 +22,15 @@ public class GameAssets : ScriptableObject //Игровые Активы
     public Transform grenadeProjectilePrefab; // Префаб граната
     public Transform bulletProjectilePrefab; // Префаб пули
     public Transform LevelGridVisualSinglePrefab; // Префаб визуализации узла сетки
-    public InventoryGridVisualSingle InventoryGridInVisualSingleScreenSpacePrefab; // Префаб визуализации узла сетки Инвенторя
-    public InventoryGridVisualSingle InventoryGridInVisualSingleWorldSpacePrefab; // Префаб визуализации узла сетки Инвенторя
+    public EquipmentGridVisualSingle EquipmentGridInVisualSingleScreenSpacePrefab; // Префаб визуализации узла сетки Инвенторя
+    public EquipmentGridVisualSingle EquipmentGridInVisualSingleWorldSpacePrefab; // Префаб визуализации узла сетки Инвенторя
 
     [Header("Кнопки - для динамического создания в UI")]
     public ActionButtonUI actionButtonUI; // Префаб кнопки выбора действия
-    public Transform placedObjectTypeButton; // Кнопка выбора оружия
+    public PlacedObjectSelectButtonUI placedObjectSelectButton; // Кнопка выбора оружия
     public UnitEnemySelectAtLevelButtonUI unitEnemySelectAtLevelButton; // Кнопка - выбора вражеского юнита на игровом уровне.
     public UnitFriendSelectAtLevelButtonUI unitFriendSelectAtLevelButton; // Кнопка - выбора дружественного юнита на игровом уровне.
-    public UnitSelectAtInventoryButton unitSelectAtInventoryButton; // Кнопка - выбора  Юнита, для настройки инвентаря
+    public UnitSelectAtEquipmentButtonUI unitSelectAtEquipmentButton; // Кнопка - выбора  Юнита, для настройки экипировки
     public UnitSelectAtManagementButtonUI unitSelectAtManagementButton; // Кнопка - выбора  Юнита, в окне менеджмента юнитов
 
     [Header("ПРЕФАБЫ FX-система частиц")]

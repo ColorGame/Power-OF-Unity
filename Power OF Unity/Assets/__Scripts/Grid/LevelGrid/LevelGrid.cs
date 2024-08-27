@@ -117,7 +117,7 @@ public class LevelGrid : MonoBehaviour // Основной скрипт который управляет СЕТК
         }
         else
         {
-            return GetGridSystem(gridPosition.floor).IsValidGridPosition(gridPosition); // Сквозная функция для получения доступа к IsValidGridPosition из _gridSystemXYList
+            return GetGridSystem(gridPosition.floor).IsValidGridPosition(gridPosition); // Сквозная функция для получения доступа к IsValidGridPosition из _itemGridSystemXYList
         }
 
     }

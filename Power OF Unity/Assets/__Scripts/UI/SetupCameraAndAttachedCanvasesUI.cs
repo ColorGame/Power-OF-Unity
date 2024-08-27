@@ -11,24 +11,24 @@ using UnityEngine.Rendering.Universal;
 public class SetupCameraAndAttachedCanvasesUI : MonoBehaviour
 {
     private Canvas[] _canvasAttachedArray;
-    private Camera _cameraInventoryUI;
+    private Camera _cameraEquipmentUI;
     private void Awake()
     {
         _canvasAttachedArray = GetComponentsInChildren<Canvas>();
-        _cameraInventoryUI = GetComponent<Camera>();
+        _cameraEquipmentUI = GetComponent<Camera>();
     }
 
     private void Start()
     {
         // При смене сцены надо вновь добавлять в стек текущей камеры
-        Camera.main.GetUniversalAdditionalCameraData().cameraStack.Add(_cameraInventoryUI); //Добавим в стек основной камеры нашу камеру инвенторя
+        Camera.main.GetUniversalAdditionalCameraData().cameraStack.Add(_cameraEquipmentUI); //Добавим в стек основной камеры нашу камеру экипировки
 
 
-        _cameraInventoryUI.cullingMask = LayerMask.GetMask("UI","Inventory","InventoryHidden"); // Настроим слои маски для отображения
+        _cameraEquipmentUI.cullingMask = LayerMask.GetMask("UI","Equipment","EquipmentHidden"); // Настроим слои маски для отображения
 
         foreach (Canvas canvas in _canvasAttachedArray)
         {
-            canvas.worldCamera = _cameraInventoryUI; // Установим для холста камеру которая будет его рендерить
+            canvas.worldCamera = _cameraEquipmentUI; // Установим для холста камеру которая будет его рендерить
         }      
     }
 }

@@ -14,172 +14,171 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _languageIndex: 0
   _namesPlacedObjectList:
-  - placedObjectType: 1
+  - placedObjectType: 0
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
     stringList:
     - "\u041F\u0438\u0441\u0442\u043E\u043B\u0435\u0442 \u043A\u0440\u044E\u043A"
     - Grapple Gun
     - "\u6293\u6597\u67AA"
     - "Greiferpistole\r"
-  - placedObjectType: 2
+  - placedObjectType: 3
     stringList:
     - "\u041F\u0438\u0441\u0442\u043E\u043B\u0435\u0442"
     - Pistol
     - "\u624B\u67AA"
     - "Pistole\r"
-  - placedObjectType: 3
-    stringList:
-    - "\u041F\u0438\u0441\u0442\u043E\u043B\u0435\u0442 \u043C\u0430\u0448\u0438\u043D\u0430"
-    - Pistol Machine
-    - "\u624B\u67AA\u673A"
-    - "Pistolenmaschine\r"
   - placedObjectType: 4
     stringList:
+    - "\u0413\u0440\u0430\u043D\u0430\u0442\u0430 \u043E\u0441\u043A\u043E\u043B\u043E\u0447\u043D\u0430\u044F"
+    - Grenade Frag
+    - "\u624B\u69B4\u5F39\u788E\u7247"
+    - "Granatsplitter\r"
+  - placedObjectType: 5
+    stringList:
+    - "\u0413\u0440\u0430\u043D\u0430\u0442\u0430 \u0434\u044B\u043C\u043E\u0432\u0430\u044F"
+    - Grenade Smoke
+    - "\u624B\u69B4\u5F39\u70DF\u96FE"
+    - "Granatrauch\r"
+  - placedObjectType: 6
+    stringList:
+    - "\u0413\u0440\u0430\u043D\u0430\u0442\u0430 \u043E\u0433\u043B\u0443\u0448\u0430\u044E\u0449\u0430\u044F"
+    - Grenade Stun
+    - "\u624B\u69B4\u5F39\u7729\u6655"
+    - "Granaten-Bet\xE4ubung\r"
+  - placedObjectType: 7
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    stringList:
     - "\u041F\u0438\u0441\u0442\u043E\u043B\u0435\u0442 \u043C\u0430\u0448\u0438\u043D\u0430"
     - Pistol Machine
     - "\u624B\u67AA\u673A"
     - "Pistolenmaschine\r"
-  - placedObjectType: 5
+  - placedObjectType: 9
+    stringList:
+    - "\u041F\u0438\u0441\u0442\u043E\u043B\u0435\u0442 \u043C\u0430\u0448\u0438\u043D\u0430"
+    - Pistol Machine
+    - "\u624B\u67AA\u673A"
+    - "Pistolenmaschine\r"
+  - placedObjectType: 10
     stringList:
     - "\u041F\u0438\u0441\u0442\u043E\u043B\u0435\u0442 \u043B\u0430\u0437\u0435\u0440"
     - Pistol Laser
     - "\u624B\u67AA\u6FC0\u5149"
     - "Pistolenlaser\r"
-  - placedObjectType: 6
+  - placedObjectType: 11
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 12
     stringList:
     - "\u0420\u0435\u0432\u043E\u043B\u044C\u0432\u0435\u0440"
     - Revolver
     - "\u5DE6\u8F6E\u624B\u67AA"
     - "Revolver\r"
-  - placedObjectType: 7
+  - placedObjectType: 13
     stringList:
     - "\u0412\u0438\u043D\u0442\u043E\u0432\u043A\u0430 \u043C\u0430\u043B\u0435\u043D\u044C\u043A\u0430\u044F"
     - Rifle Small
     - "\u6B65\u67AA\u5C0F"
     - "Gewehr Klein\r"
-  - placedObjectType: 8
+  - placedObjectType: 14
     stringList:
     - "\u0412\u0438\u043D\u0442\u043E\u0432\u043A\u0430 \u043C\u0430\u043B\u0435\u043D\u044C\u043A\u0430\u044F"
     - Rifle Small
     - "\u6B65\u67AA\u5C0F"
     - "Gewehr Klein\r"
-  - placedObjectType: 9
+  - placedObjectType: 15
     stringList:
     - "\u0412\u0438\u043D\u0442\u043E\u0432\u043A\u0430 \u0431\u0430\u0437\u0430"
     - Rifle Base
     - "\u6B65\u67AA\u5E95\u5EA7"
     - "Rifar Basis\r"
-  - placedObjectType: 10
+  - placedObjectType: 16
     stringList:
     - "\u0412\u0438\u043D\u0442\u043E\u0432\u043A\u0430 \u043B\u0430\u0437\u0435\u0440\u043D\u0430\u044F"
     - Rifle Laser
     - "\u6B65\u67AA\u6FC0\u5149"
     - "Gewehrlaser\r"
-  - placedObjectType: 11
+  - placedObjectType: 17
     stringList:
     - "\u0412\u0438\u043D\u0442\u043E\u0432\u043A\u0430 \u043F\u043B\u0430\u0437\u043C\u0435\u043D\u043D\u0430\u044F
       \u043C\u0430\u043B\u0430\u044F"
     - Rifle Plasma Small
     - "\u5C0F\u578B\u7B49\u79BB\u5B50\u6B65\u67AA"
     - "Gewehr Plasma Klein\r"
-  - placedObjectType: 12
+  - placedObjectType: 18
     stringList:
     - "\u0412\u0438\u043D\u0442\u043E\u0432\u043A\u0430 \u043F\u043B\u0430\u0437\u043C\u0435\u043D\u043D\u0430\u044F
       \u043C\u0430\u043B\u0430\u044F"
     - Rifle Plasma Small
     - "\u5C0F\u578B\u7B49\u79BB\u5B50\u6B65\u67AA"
     - "Gewehr Plasma Klein\r"
-  - placedObjectType: 13
+  - placedObjectType: 19
     stringList:
     - "\u0412\u0438\u043D\u0442\u043E\u0432\u043A\u0430 \u043F\u043B\u0430\u0437\u043C\u0435\u043D\u043D\u0430\u044F
       \u0431\u0430\u0437\u0430"
     - Rifle Plasma Base
     - "\u6B65\u67AA\u7B49\u79BB\u5B50\u57FA\u5730"
     - "Gewehr-Plasma-Basis\r"
-  - placedObjectType: 14
+  - placedObjectType: 20
     stringList:
     - "\u0414\u0440\u043E\u0431\u043E\u0432\u0438\u043A"
     - Shotgun
     - "\u9730\u5F39\u67AA"
     - "Schrotflinte\r"
-  - placedObjectType: 15
+  - placedObjectType: 21
     stringList:
     - "\u041F\u043B\u0430\u0437\u043C\u0435\u043D\u043D\u044B\u0439 \u0434\u0440\u043E\u0431\u043E\u0432\u0438\u043A"
     - Shotgun Plasma
     - "\u9730\u5F39\u67AA\u7B49\u79BB\u5B50"
     - "Schrotflintenplasma\r"
-  - placedObjectType: 16
+  - placedObjectType: 22
     stringList:
     - "\u0421\u043D\u0430\u0439\u043F\u0435\u0440"
     - Sniper
     - "\u72D9\u51FB\u624B"
     - "Scharfsch\xFCtze\r"
-  - placedObjectType: 17
+  - placedObjectType: 23
     stringList:
     - "\u0421\u043D\u0430\u0439\u043F\u0435\u0440\u0441\u043A\u0430\u044F \u043F\u043B\u0430\u0437\u043C\u0430"
     - Sniper Plasma
     - "\u7B49\u79BB\u5B50\u72D9\u51FB\u624B"
     - "Scharfsch\xFCtzenplasma\r"
-  - placedObjectType: 18
+  - placedObjectType: 24
     stringList:
     - "\u041C\u0435\u0447"
     - Sword
     - "\u5251"
     - "Schwert\r"
-  - placedObjectType: 19
+  - placedObjectType: 25
     stringList:
     - "\u041C\u0435\u0447 \u0434\u0432\u043E\u0439\u043D\u043E\u0439"
     - Sword Double
     - "\u53CC\u5251"
     - "Schwert Doppelt\r"
-  - placedObjectType: 20
+  - placedObjectType: 26
     stringList:
     - "\u041C\u0435\u0447 \u043E\u0433\u043B\u0443\u0448\u0430\u044E\u0449\u0438\u0439"
     - Sword Stun
     - "\u5251\u51FB\u6655"
     - "Schwert Bet\xE4uben\r"
-  - placedObjectType: 21
+  - placedObjectType: 27
     stringList:
     - "\u0411\u0438\u043D\u043E\u043A\u043B\u044C"
     - Binoculars
     - "\u671B\u8FDC\u955C"
     - "Ferngl\xE4sern\r"
-  - placedObjectType: 22
-    stringList:
-    - "\u0413\u0440\u0430\u043D\u0430\u0442\u0430 \u043E\u0441\u043A\u043E\u043B\u043E\u0447\u043D\u0430\u044F"
-    - Grenade Frag
-    - "\u624B\u69B4\u5F39\u788E\u7247"
-    - "Granatsplitter\r"
-  - placedObjectType: 23
-    stringList:
-    - "\u0413\u0440\u0430\u043D\u0430\u0442\u0430 \u0434\u044B\u043C\u043E\u0432\u0430\u044F"
-    - Grenade Smoke
-    - "\u624B\u69B4\u5F39\u70DF\u96FE"
-    - "Granatrauch\r"
-  - placedObjectType: 24
-    stringList:
-    - "\u0413\u0440\u0430\u043D\u0430\u0442\u0430 \u043E\u0433\u043B\u0443\u0448\u0430\u044E\u0449\u0430\u044F"
-    - Grenade Stun
-    - "\u624B\u69B4\u5F39\u7729\u6655"
-    - "Granaten-Bet\xE4ubung\r"
-  - placedObjectType: 25
-    stringList:
-    - "\u0410\u043F\u0442\u0435\u0447\u043A\u0430"
-    - Medkit
-    - "\u533B\u7597\u5305"
-    - "Medkit\r"
-  - placedObjectType: 26
-    stringList:
-    - "\u0429\u0438\u0442"
-    - Riot Shield
-    - "\u9632\u66B4\u76FE\u724C"
-    - "Schutzschild\r"
-  - placedObjectType: 27
-    stringList:
-    - "\u041A\u0430\u043C\u0435\u0440\u0430 \u043D\u043E\u0447\u043D\u043E\u0433\u043E
-      \u0432\u0438\u0434\u0435\u043D\u0438\u044F"
-    - Night Vision Camera
-    - "\u591C\u89C6\u6444\u50CF\u673A"
-    - "Nachtsichtkamera\r"
   - placedObjectType: 28
     stringList:
     - 
@@ -197,9 +196,70 @@ MonoBehaviour:
     - 
     - 
     - 
+    - "\r"
+  - placedObjectType: 31
+    stringList:
+    - "\u0410\u043F\u0442\u0435\u0447\u043A\u0430"
+    - Medkit
+    - "\u533B\u7597\u5305"
+    - "Medkit\r"
+  - placedObjectType: 32
+    stringList:
+    - "\u0429\u0438\u0442"
+    - Riot Shield
+    - "\u9632\u66B4\u76FE\u724C"
+    - "Schutzschild\r"
+  - placedObjectType: 33
+    stringList:
+    - "\u041A\u0430\u043C\u0435\u0440\u0430 \u043D\u043E\u0447\u043D\u043E\u0433\u043E
+      \u0432\u0438\u0434\u0435\u043D\u0438\u044F"
+    - Night Vision Camera
+    - "\u591C\u89C6\u6444\u50CF\u673A"
+    - "Nachtsichtkamera\r"
+  - placedObjectType: 34
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 35
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 36
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 37
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 38
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 39
+    stringList:
+    - 
+    - 
+    - 
     - 
   _descriptionsPlacedObjectList:
-  - placedObjectType: 1
+  - placedObjectType: 0
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
     stringList:
     - "\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0435\u0442\u0441\u044F \u0434\u043B\u044F
       \u043F\u043E\u0434\u0442\u0430\u0441\u043A\u0438\u0432\u0430\u043D\u0438\u044F
@@ -229,12 +289,6 @@ MonoBehaviour:
       \u62C9\u8D77\u4E00\u4E2A\u654C\u4EBA\u9700\u89812\u4E2A\u7528\u6237\u3002"
     - "\"Es wird verwendet, um Feinde oder Gegenst\xE4nde in Richtung des Benutzers
       zu ziehen. Es braucht 2 Benutzer, um einen Feind hochzuziehen.\"\r"
-  - placedObjectType: 2
-    stringList:
-    - 
-    - 
-    - 
-    - "\r"
   - placedObjectType: 3
     stringList:
     - 
@@ -402,9 +456,69 @@ MonoBehaviour:
     - 
     - 
     - 
+    - "\r"
+  - placedObjectType: 31
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 32
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 33
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 34
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 35
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 36
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 37
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 38
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 39
+    stringList:
+    - 
+    - 
+    - 
     - 
   _detailsPlacedObjectList:
-  - placedObjectType: 1
+  - placedObjectType: 0
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
     stringList:
     - "\u0423\u0440\u043E\u043D - 100<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 50<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -413,7 +527,7 @@ MonoBehaviour:
     - "\u635F\u574F - 100<br>\u8DDD\u79BB - 50<br>\u884C\u52A8\u6210\u672C - 20<br>\u91CD\u91CF
       - 30"
     - "Schaden - 100<br>Distanz - 50<br>Kosten der Aktion - 20<br>Gewicht - 30\r"
-  - placedObjectType: 2
+  - placedObjectType: 3
     stringList:
     - "\u0423\u0440\u043E\u043D - 10<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -422,7 +536,7 @@ MonoBehaviour:
     - "\u635F\u574F - 10<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 10<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 3
+  - placedObjectType: 4
     stringList:
     - "\u0423\u0440\u043E\u043D - 5<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -431,7 +545,7 @@ MonoBehaviour:
     - "\u635F\u574F - 5<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 5<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 4
+  - placedObjectType: 5
     stringList:
     - "\u0423\u0440\u043E\u043D - 2<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -440,7 +554,7 @@ MonoBehaviour:
     - "\u635F\u574F - 2<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 2<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 5
+  - placedObjectType: 6
     stringList:
     - "\u0423\u0440\u043E\u043D - 5<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -449,7 +563,7 @@ MonoBehaviour:
     - "\u635F\u574F - 5<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 5<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 6
+  - placedObjectType: 7
     stringList:
     - "\u0423\u0440\u043E\u043D - 1<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -458,7 +572,7 @@ MonoBehaviour:
     - "\u635F\u574F - 1<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 1<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 7
+  - placedObjectType: 8
     stringList:
     - "\u0423\u0440\u043E\u043D - 6<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -467,7 +581,7 @@ MonoBehaviour:
     - "\u635F\u574F - 6<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 6<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 8
+  - placedObjectType: 9
     stringList:
     - "\u0423\u0440\u043E\u043D - 8<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -476,7 +590,7 @@ MonoBehaviour:
     - "\u635F\u574F - 8<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 8<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 9
+  - placedObjectType: 10
     stringList:
     - "\u0423\u0440\u043E\u043D - 1<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -485,7 +599,7 @@ MonoBehaviour:
     - "\u635F\u574F - 1<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 1<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 10
+  - placedObjectType: 11
     stringList:
     - "\u0423\u0440\u043E\u043D - 3<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -494,15 +608,6 @@ MonoBehaviour:
     - "\u635F\u574F - 3<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 3<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 11
-    stringList:
-    - "\u0423\u0440\u043E\u043D - 8<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
-      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
-      - 2<br>\u0412\u0435\u0441 - 3"
-    - Damage - 8<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
-    - "\u635F\u574F - 8<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
-      - 3"
-    - "Schaden - 8<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
   - placedObjectType: 12
     stringList:
     - "\u0423\u0440\u043E\u043D - 8<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
@@ -514,6 +619,15 @@ MonoBehaviour:
     - "Schaden - 8<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
   - placedObjectType: 13
     stringList:
+    - "\u0423\u0440\u043E\u043D - 8<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 8<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 8<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 8<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 14
+    stringList:
     - "\u0423\u0440\u043E\u043D - 5<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
       - 2<br>\u0412\u0435\u0441 - 3"
@@ -521,7 +635,7 @@ MonoBehaviour:
     - "\u635F\u574F - 5<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 5<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 14
+  - placedObjectType: 15
     stringList:
     - "\u0423\u0440\u043E\u043D - 7<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -530,17 +644,17 @@ MonoBehaviour:
     - "\u635F\u574F - 7<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 7<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 15
-    stringList:
-    - "\u0423\u0440\u043E\u043D - 2<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
-      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
-      - 2<br>\u0412\u0435\u0441 - 3"
-    - Damage - 2<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
-    - "\u635F\u574F - 2<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
-      - 3"
-    - "Schaden - 2<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
   - placedObjectType: 16
     stringList:
+    - "\u0423\u0440\u043E\u043D - 2<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 2<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 2<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 2<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 17
+    stringList:
     - "\u0423\u0440\u043E\u043D - 1<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
       - 2<br>\u0412\u0435\u0441 - 3"
@@ -548,7 +662,7 @@ MonoBehaviour:
     - "\u635F\u574F - 1<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 1<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 17
+  - placedObjectType: 18
     stringList:
     - "\u0423\u0440\u043E\u043D - 2<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -557,7 +671,7 @@ MonoBehaviour:
     - "\u635F\u574F - 2<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 2<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 18
+  - placedObjectType: 19
     stringList:
     - "\u0423\u0440\u043E\u043D - 1<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -566,7 +680,7 @@ MonoBehaviour:
     - "\u635F\u574F - 1<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 1<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 19
+  - placedObjectType: 20
     stringList:
     - "\u0423\u0440\u043E\u043D - 6<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -575,7 +689,7 @@ MonoBehaviour:
     - "\u635F\u574F - 6<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 6<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 20
+  - placedObjectType: 21
     stringList:
     - "\u0423\u0440\u043E\u043D - 61<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -584,7 +698,7 @@ MonoBehaviour:
     - "\u635F\u574F - 61<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 61<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 21
+  - placedObjectType: 22
     stringList:
     - "\u0423\u0440\u043E\u043D - 0<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 0<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -593,7 +707,7 @@ MonoBehaviour:
     - "\u635F\u574F - 0<br>\u8DDD\u79BB - 0<br>\u884C\u52A8\u6210\u672C - 0<br>\u91CD\u91CF
       - 0"
     - "Schaden - 0<br>Distanz - 0<br>Kosten der Aktion - 0<br>Gewicht - 0\r"
-  - placedObjectType: 22
+  - placedObjectType: 23
     stringList:
     - "\u0423\u0440\u043E\u043D - 10<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -602,7 +716,7 @@ MonoBehaviour:
     - "\u635F\u574F - 10<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 10<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 23
+  - placedObjectType: 24
     stringList:
     - "\u0423\u0440\u043E\u043D - 6<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -611,7 +725,7 @@ MonoBehaviour:
     - "\u635F\u574F - 6<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 6<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 24
+  - placedObjectType: 25
     stringList:
     - "\u0423\u0440\u043E\u043D - 8<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -620,7 +734,7 @@ MonoBehaviour:
     - "\u635F\u574F - 8<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 8<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 25
+  - placedObjectType: 26
     stringList:
     - "\u0423\u0440\u043E\u043D - 1<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -629,7 +743,7 @@ MonoBehaviour:
     - "\u635F\u574F - 1<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 1<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 26
+  - placedObjectType: 27
     stringList:
     - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
       - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
@@ -638,56 +752,122 @@ MonoBehaviour:
     - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
       - 3"
     - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
-  - placedObjectType: 27
-    stringList:
-    - "\u0423\u0440\u043E\u043D - 100<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
-      - 50<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
-      - 20<br>\u0412\u0435\u0441 - 30"
-    - Damage - 100<br>Distance - 50<br>Cost of action - 20<br>Weight - 30
-    - "\u635F\u574F - 100<br>\u8DDD\u79BB - 50<br>\u884C\u52A8\u6210\u672C - 20<br>\u91CD\u91CF
-      - 30"
-    - "Schaden - 100<br>Distanz - 50<br>Kosten der Aktion - 20<br>Gewicht - 30\r"
   - placedObjectType: 28
     stringList:
-    - "\u0423\u0440\u043E\u043D - <br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
-      - <br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
-      - <br>\u0412\u0435\u0441 - "
-    - 'Damage - <br>Distance - <br>Cost of action - <br>Weight - '
-    - "\u635F\u574F - <br>\u8DDD\u79BB - <br>\u884C\u52A8\u6210\u672C - <br>\u91CD\u91CF
-      - "
-    - "Schaden - <br>Distanz - <br>Kosten der Aktion - <br>Gewicht - \r"
+    - 
+    - 
+    - 
+    - "\r"
   - placedObjectType: 29
     stringList:
-    - "\u0423\u0440\u043E\u043D - <br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
-      - <br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
-      - <br>\u0412\u0435\u0441 - "
-    - 'Damage - <br>Distance - <br>Cost of action - <br>Weight - '
-    - "\u635F\u574F - <br>\u8DDD\u79BB - <br>\u884C\u52A8\u6210\u672C - <br>\u91CD\u91CF
-      - "
-    - "Schaden - <br>Distanz - <br>Kosten der Aktion - <br>Gewicht - \r"
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
   - placedObjectType: 30
     stringList:
-    - "\u0423\u0440\u043E\u043D - <br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
-      - <br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
-      - <br>\u0412\u0435\u0441 - "
-    - 'Damage - <br>Distance - <br>Cost of action - <br>Weight - '
-    - "\u635F\u574F - <br>\u8DDD\u79BB - <br>\u884C\u52A8\u6210\u672C - <br>\u91CD\u91CF
-      - "
-    - 'Schaden - <br>Distanz - <br>Kosten der Aktion - <br>Gewicht - '
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 31
+    stringList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 32
+    stringList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 33
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 34
+    stringList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 35
+    stringList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 36
+    stringList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 37
+    stringList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 38
+    stringList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 39
+    stringList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3
   _sideEffectsPlacedObjectList:
-  - placedObjectType: 1
+  - placedObjectType: 0
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
     stringList:
     - "\u041F\u043E\u0431\u043E\u0447\u043D\u044B\u0439 \u044D\u0444\u0444\u0435\u043A\u0442
       - \u0428\u041E\u041A \u0443 \u0432\u0440\u0430\u0433\u0430."
     - The side effect is the SHOCK of the enemy.
     - "\u526F\u4F5C\u7528\u662F\u654C\u4EBA\u7684\u9707\u60CA\u3002"
     - "Der Nebeneffekt ist der SCHOCK des Feindes.\r"
-  - placedObjectType: 2
-    stringList:
-    - 
-    - 
-    - 
-    - "\r"
   - placedObjectType: 3
     stringList:
     - 
@@ -851,6 +1031,60 @@ MonoBehaviour:
     - 
     - "\r"
   - placedObjectType: 30
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 31
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 32
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 33
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 34
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 35
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 36
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 37
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 38
+    stringList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 39
     stringList:
     - 
     - 

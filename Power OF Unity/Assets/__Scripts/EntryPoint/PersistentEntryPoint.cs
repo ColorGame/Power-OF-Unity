@@ -18,6 +18,7 @@ public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
     private TooltipUI _tooltipUI;
     private GameInput _gameInput;
     private JsonSaveableEntity _jsonSaveableEntity;
+    private WarehouseManager _warehouseManager;
     private UnitManager _unitManager;
 
     public void Process(DIContainer rootContainer)
@@ -37,7 +38,8 @@ public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
         _tooltipUI = GetComponentInChildren<TooltipUI>(true);
         _gameInput = new GameInput();
         _jsonSaveableEntity = new JsonSaveableEntity();
-        _unitManager = new UnitManager(_tooltipUI, _soundManager); // После реализации сохранения можно будет его создавать в каждой сцене
+        _warehouseManager = new WarehouseManager(_tooltipUI);
+        _unitManager = new UnitManager(_tooltipUI, _soundManager, _warehouseManager); // После реализации сохранения можно будет его создавать в каждой сцене
     }
 
     private void Register(DIContainer rootContainer)
@@ -50,7 +52,8 @@ public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
         rootContainer.RegisterSingleton(c => _optionsMenuUI);
         rootContainer.RegisterSingleton(c => _loadGameSubMenuUI);
         rootContainer.RegisterSingleton(c => _tooltipUI);
-        rootContainer.RegisterSingleton(c => _unitManager); 
+        rootContainer.RegisterSingleton(c => _warehouseManager);
+        rootContainer.RegisterSingleton(c => _unitManager);
     }
 
     private void Init()
@@ -58,7 +61,7 @@ public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
         _virtualMouseCustom.Init(_gameInput);
         _optionsMenuUI.Init(_gameInput, _soundManager, _musicManager);
         _loadGameSubMenuUI.Init(_gameInput);
-        _tooltipUI.Init(_gameInput, _virtualMouseCustom);
+        _tooltipUI.Init(_gameInput, _virtualMouseCustom);        
     }
 
 

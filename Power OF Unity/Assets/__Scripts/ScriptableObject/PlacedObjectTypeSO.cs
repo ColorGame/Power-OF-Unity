@@ -5,7 +5,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// ScriptableObject, хранит всю информацию о предмете, который можно создать и поместить в инвентарь. 
+/// ScriptableObject, хранит всю информацию о предмете, который можно создать и поместить в экипировка. 
 /// </summary>
 /// <remarks>
 /// abstract - Ќ≈Ћ№«я создать экземпл€р данного класса.
@@ -27,8 +27,8 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
     [Range(1, 5)][SerializeField] private int _widthX;
     [Tooltip("—колько занимает клеток в высоту ”")]
     [Range(1, 2)][SerializeField] private int _heightY;   
-    [Tooltip("—писок слотов инвентор€ на которые можно разместить наш объект")]
-    [SerializeField] private List<InventorySlot> _canPlacedOnSlotList;
+    [Tooltip("—писок слотов экипировки на которые можно разместить наш объект")]
+    [SerializeField] private List<EquipmentSlot> _canPlacedOnSlotList;
     [Tooltip("¬ес размещаемого объекта в килограммах")]
     [Range(0, 50)][SerializeField] private int _weight;
 
@@ -85,7 +85,7 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
     /// <summary>
     /// —писок слотов на которые можно разместить наш объект
     /// </summary>
-    public List<InventorySlot> GetCanPlacedOnSlotList() { return _canPlacedOnSlotList; }
+    public List<EquipmentSlot> GetCanPlacedOnSlotList() { return _canPlacedOnSlotList; }
        
     void ISerializationCallbackReceiver.OnBeforeSerialize()
     {

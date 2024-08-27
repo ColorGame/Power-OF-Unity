@@ -23,8 +23,8 @@ public class Unit
         _soundManager = soundManager;
         _healthSystem = new HealthSystem(unitTypeSO.GetBasicHealth(), _soundManager);
         _actionPointsSystem = new UnitActionPoints(this, unitTypeSO.GetBasicActionPoints());
-        _unitInventory = new UnitInventory();
-        _unitEquipment = new UnitEquipment(this);
+        _unitEquipment = new UnitEquipment();
+        _unitEquips = new UnitEquips(this);
         _unitPowerSystem = new UnitPowerSystem(unitTypeSO.GetBasicPower());
         _unitAccuracySystem = new UnitAccuracySystem(unitTypeSO.GetBasicAccuracy());
         _location = Location.Barrack; // по умолчанию все юниты по€вл€ютс€ в  ј«ј–ћ≈
@@ -57,8 +57,8 @@ public class Unit
     readonly UnitTypeSO _unitTypeSO;
     readonly HealthSystem _healthSystem;
     readonly UnitActionPoints _actionPointsSystem;
-    readonly UnitInventory _unitInventory;
     readonly UnitEquipment _unitEquipment;
+    readonly UnitEquips _unitEquips;
     readonly UnitPowerSystem _unitPowerSystem;
     readonly UnitAccuracySystem _unitAccuracySystem;
     private int _completedMissionsCount;
@@ -180,8 +180,8 @@ public class Unit
 
     public HealthSystem GetHealthSystem() { return _healthSystem; }
     public UnitActionPoints GetActionPointsSystem() { return _actionPointsSystem; }
-    public UnitInventory GetUnitInventory() { return _unitInventory; }
     public UnitEquipment GetUnitEquipment() { return _unitEquipment; }
+    public UnitEquips GetUnitEquips() { return _unitEquips; }
     public UnitPowerSystem GetUnitPowerSystem() { return _unitPowerSystem; }
     public UnitAccuracySystem GetUnitAccuracySystem() { return _unitAccuracySystem; }
     public int GetCompletedMissionsCount() {  return _completedMissionsCount; }

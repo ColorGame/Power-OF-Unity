@@ -1,57 +1,113 @@
-using UnityEngine;
+using System;
+using System.Collections.Generic;
 
 /// <summary>
-/// Экипирует юнита предметами из его инвентаря (создает и удаляет прикрипленные объекты). 
+/// Экипировка юнита (Хранилище для предметов, которыми оснащен игрок). 
 /// </summary>
-public class UnitEquipment 
+public class UnitEquipment
 {
     /// <summary>
-    /// Экипирует юнита предметами из его инвентаря (создает и удаляет прикрипленные объекты). 
+    /// Экипировка юнита (Хранилище для предметов, которыми оснащен игрок). 
     /// </summary>
-    public UnitEquipment(Unit unit)
+    public UnitEquipment()
     {
-        _unit = unit;
+        //Здесь можно загрузить стандартную загрузку экипировки
+        _placedObjectList = new List<PlacedObjectGridParameters>();
     }
 
-    private Unit _unit;
-    private Transform _rightHandTransform = null;
-    private Transform _leftHandTransform = null;
+    private List<PlacedObjectGridParameters> _placedObjectList; // Список предметов экипировки
 
-    public void SetupForSpawn()
+    private PlacedObjectTypeWithActionSO _placedObjectMainWeaponSlot;
+    private PlacedObjectTypeWithActionSO _placedObjectOtherWeaponSlot;
+    private List<PlacedObjectTypeWithActionSO> _placedObjecеBagSlotList = new List<PlacedObjectTypeWithActionSO>();
+    private List<GrenadeTypeSO> _grenadeInBagSOList = new List<GrenadeTypeSO>(); // Список гранат в багаже
+
+    private PlacedObjectTypeArmorSO _placedObjectArmorHeadSlot;
+    private PlacedObjectTypeArmorSO _placedObjectArmorBodySlot;
+
+    /// <summary>
+    /// Добавить полученный объект в Список "Размещенных Объектов в Сетке Инвенторя".
+    /// </summary>  
+    public void AddPlacedObjectList(PlacedObject placedObject)
     {
-        // подписаться на событие смена визуала юнита для получения АКТУАЛЬНЫХ rightHandTransform и leftHandTransform т.к. для разной брони разные скелеты
-        if (_unit.IsEnemy())
+        PlacedObjectGridParameters placedObjectGridParameters = placedObject.GetPlacedObjectGridParameters();
+        _placedObjectList.Add(placedObjectGridParameters);
+
+        PlacedObjectTypeSO placedObjectTypeSO = placedObject.GetPlacedObjectTypeSO();
+
+        switch (placedObjectGridParameters.slot)
         {
-            PlacedObjectTypeWithActionSO mainplacedObjectTypeWithActionSO =  _unit.GetUnitTypeSO<UnitEnemySO>().GetMainplacedObjectTypeWithActionSO(); // Получим основное оружие для экиперовки врага
-            // Сделать
-          //  PlacedObject placedObject = PlacedObject.CreateInWorld(_rightHandTransform.position, mainplacedObjectTypeWithActionSO, _unit.GetTransform(), _unit.Get);
-         //   EquipWeapon(placedObject);
+            case EquipmentSlot.MainWeaponSlot:
+                _placedObjectMainWeaponSlot = (PlacedObjectTypeWithActionSO)placedObjectTypeSO;
+                break;
+            case EquipmentSlot.OtherWeaponsSlot:
+                _placedObjectOtherWeaponSlot = (PlacedObjectTypeWithActionSO)placedObjectTypeSO;
+                break;
+            case EquipmentSlot.BagSlot:
+                _placedObjecеBagSlotList.Add((PlacedObjectTypeWithActionSO)placedObjectTypeSO);
+                if (placedObjectTypeSO is GrenadeTypeSO grenadeTypeSO)
+                {
+                    _grenadeInBagSOList.Add(grenadeTypeSO);
+                }
+                break;
+            case EquipmentSlot.ArmorHeadSlot:
+                _placedObjectArmorHeadSlot = (PlacedObjectTypeArmorSO)placedObjectTypeSO;
+                break;
+            case EquipmentSlot.ArmorBodySlot:
+                _placedObjectArmorBodySlot = (PlacedObjectTypeArmorSO)placedObjectTypeSO;
+                break;
+        }
+
+    }
+    /// <summary>
+    /// Удалить полученный объект из Списока "Размещенных Объектов в Сетке Инвенторя".
+    /// </summary>  
+    public void RemovePlacedObjectList(PlacedObject placedObject)
+    {
+        PlacedObjectGridParameters placedObjectGridParameters = placedObject.GetPlacedObjectGridParameters();
+        _placedObjectList.Remove(placedObjectGridParameters);
+
+        PlacedObjectTypeSO placedObjectTypeSO = placedObject.GetPlacedObjectTypeSO();
+
+        switch (placedObjectGridParameters.slot)
+        {
+            case EquipmentSlot.MainWeaponSlot:
+                _placedObjectMainWeaponSlot = null;
+                break;
+            case EquipmentSlot.OtherWeaponsSlot:
+                _placedObjectOtherWeaponSlot = null;
+                break;
+            case EquipmentSlot.BagSlot:
+                _placedObjecеBagSlotList.Remove((PlacedObjectTypeWithActionSO)placedObjectTypeSO);
+                if (placedObjectTypeSO is GrenadeTypeSO grenadeTypeSO)
+                {
+                    _grenadeInBagSOList.Remove(grenadeTypeSO);
+                }
+                break;
+            case EquipmentSlot.ArmorHeadSlot:
+                _placedObjectArmorHeadSlot = null;
+                break;
+            case EquipmentSlot.ArmorBodySlot:
+                _placedObjectArmorBodySlot = null;
+                break;
         }
     }
-
-
     /// <summary>
-    ///  Экиперовать ОРУЖИЕМ, юнита к которому прикриплен этот скрипт
+    /// Очистить список размещенных объектов
     /// </summary>
-    public void EquipWeapon(PlacedObject placedObject)
+    public void ClearPlacedObjectList()
     {
-        //Получить из PlacedObject  SO а из него на какую руку и префаб
-
+        _placedObjectList.Clear();       
     }
 
-    /// <summary>
-    ///  Экиперовать БРОНЕЙ, юнита к которому прикриплен этот скрипт
-    /// </summary>
-    public void EquipArmor()
-    {
 
-    }
+    public PlacedObjectTypeWithActionSO GetPlacedObjectOtherWeaponSlot() { return _placedObjectOtherWeaponSlot; }
+    public PlacedObjectTypeWithActionSO GetPlacedObjectMainWeaponSlot() { return _placedObjectMainWeaponSlot; }
+    public List<PlacedObjectTypeWithActionSO> GetPlacedObjectBagSlotList() { return _placedObjecеBagSlotList; }
+    public List<GrenadeTypeSO> GetGrenadeTypeSOList() { return _grenadeInBagSOList; }
+    public PlacedObjectTypeArmorSO GetPlacedObjectArmorHeadSlot() { return _placedObjectArmorHeadSlot; }
+    public PlacedObjectTypeArmorSO GetPlacedObjectArmorBodySlot() {  return _placedObjectArmorBodySlot; }
+    public List<PlacedObjectGridParameters> GetPlacedObjectList() { return _placedObjectList; }
 
-    public void FreeHands() // Освободить руки
-    {
-       /* if (InventorySlot.MainWeaponSlot == placedObject.GetGridSystemXY().GetGridSlot())//Если удален из Сетки Основного Оружия
-        {
-           // Убрать экипировку
-        }*/
-    }
+
 }

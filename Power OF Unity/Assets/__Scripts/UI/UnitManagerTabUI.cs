@@ -101,7 +101,7 @@ public class UnitManagerTabUI : MonoBehaviour, IToggleActivity
             return; // Выходим игнор. код ниже
         }
         _unitManager.HireSelectedUnit();
-        CreateHireUnitSelectButtonsSystem();
+        UpdateHireUnitSelectButtonsSystem();
         _unitManager.ClearSelectedUnit(); // Очистим выделенного юнита чтобы сбросить 3D модель и ПОРТФОЛИО
     }
     /// <summary>
@@ -115,7 +115,7 @@ public class UnitManagerTabUI : MonoBehaviour, IToggleActivity
             return; // Выходим игнор. код ниже
         }
         _unitManager.DismissSelectedUnit();
-        CreateMuUnitSelectButtonsSystem();
+        UpdateMuUnitSelectButtonsSystem();
         _unitManager.ClearSelectedUnit(); // Очистим выделенного юнита чтобы сбросить 3D модель и ПОРТФОЛИО
     }
 
@@ -144,7 +144,7 @@ public class UnitManagerTabUI : MonoBehaviour, IToggleActivity
         _myUnitsContainer.gameObject.SetActive(active);
         if (active)
         {
-            CreateMuUnitSelectButtonsSystem();
+            UpdateMuUnitSelectButtonsSystem();
             _scrollRect.content = (RectTransform)_myUnitsContainer; // Установим этот контейнер как контент для прокрутки
         }
     }
@@ -159,7 +159,7 @@ public class UnitManagerTabUI : MonoBehaviour, IToggleActivity
         _hireUnitsContainer.gameObject.SetActive(active);
         if (active)
         {
-            CreateHireUnitSelectButtonsSystem();
+            UpdateHireUnitSelectButtonsSystem();
             _scrollRect.content = (RectTransform)_hireUnitsContainer; // Установим этот контейнер как контент для прокрутки
             _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
         }
@@ -188,9 +188,9 @@ public class UnitManagerTabUI : MonoBehaviour, IToggleActivity
 
    
     /// <summary>
-    /// Создать кнопки выбора юнитов для НАЙМА
+    /// Обновить кнопки выбора юнитов для НАЙМА
     /// </summary>
-    private void CreateHireUnitSelectButtonsSystem()
+    private void UpdateHireUnitSelectButtonsSystem()
     {
         foreach (Transform unitSelectButton in _hireUnitsContainer)
         {
@@ -205,9 +205,9 @@ public class UnitManagerTabUI : MonoBehaviour, IToggleActivity
         _scrollRect.verticalScrollbar.value = 1f; // переместим прокрутку панели в верх.
     }
     /// <summary>
-    /// Создать кнопки выбора моих юнитов
+    /// Обновить кнопки выбора моих юнитов
     /// </summary>
-    private void CreateMuUnitSelectButtonsSystem()
+    private void UpdateMuUnitSelectButtonsSystem()
     {
         foreach (Transform unitSelectButton in _myUnitsContainer) // Переберем все трансформы в нашем контейнере
         {

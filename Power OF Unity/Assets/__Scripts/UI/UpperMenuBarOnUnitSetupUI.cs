@@ -16,7 +16,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     [SerializeField] private Button _unitManagerButtonButton;
     [SerializeField] private Image _selectedUnitManagerButtonImage; // Изображение выделенной кнопки 
     [SerializeField] private Button _weaponButton;
-    [SerializeField] private Image _selectedWeaponButtonImage;
+    [SerializeField] private Image _selectedItemButtonImage;
     [SerializeField] private Button _armorButton;
     [SerializeField] private Image _selectedArmorButtonImage;
     [SerializeField] private Button _shopButton;
@@ -25,10 +25,11 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     [SerializeField] private Image _selectedMissionButtonImage;
 
     private UnitPortfolioUI _unitPortfolioUI;
-    private UnitSelectAtInventoryButtonsSystemUI _unitSelectAtInventoryButtonsSystemUI;
+    private UnitSelectAtEquipmentButtonsSystemUI _unitSelectAtEquipmentButtonsSystemUI;
     private PickUpDropPlacedObject _pickUpDropPlacedObject;
-    private UnitInventorySystem _unitInventorySystem;
-    private PlacedObjectWithActionSelectButtonsSystemUI _placedObjectSelectButtonsSystemUI;
+    private UnitEquipmentSystem _unitEquipmentSystem;
+    private ItemSelectButtonsSystemUI _itemSelectButtonsSystemUI;
+    private ArmorSelectButtonsSystemUI _armorSelectButtonsSystemUI;
     private UnitManagerTabUI _unitManagerTabUI;
 
 
@@ -43,33 +44,35 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
         _buttonSelectedImageArray = new Image[]
         {
             _selectedUnitManagerButtonImage,
-            _selectedWeaponButtonImage,
+            _selectedItemButtonImage,
             _selectedArmorButtonImage,
             _selectedShopButtonImage,
             _selectedMissionButtonImage
         };
 
-       
+
     }
 
     public void Init(
         GameInput gameInput,
         GameMenuUI gameMenuUI,
         UnitPortfolioUI unitPortfolioUI,
-        UnitSelectAtInventoryButtonsSystemUI unitSelectAtInventoryButtonsSystemUI,
+        UnitSelectAtEquipmentButtonsSystemUI unitSelectAtEquipmentButtonsSystemUI,
         PickUpDropPlacedObject pickUpDropPlacedObject,
-        UnitInventorySystem unitInventorySystem,
-        PlacedObjectWithActionSelectButtonsSystemUI placedObjectSelectButtonsSystemUI,
+        UnitEquipmentSystem unitEquipmentSystem,
+        ItemSelectButtonsSystemUI itemSelectButtonsSystemUI,
+        ArmorSelectButtonsSystemUI armorSelectButtonsSystemUI,
         UnitManagerTabUI unitManagerTabUI)
     {
         _gameInput = gameInput;
         _gameMenuUI = gameMenuUI;
 
         _unitPortfolioUI = unitPortfolioUI;
-        _unitSelectAtInventoryButtonsSystemUI = unitSelectAtInventoryButtonsSystemUI;
+        _unitSelectAtEquipmentButtonsSystemUI = unitSelectAtEquipmentButtonsSystemUI;
         _pickUpDropPlacedObject = pickUpDropPlacedObject;
-        _unitInventorySystem = unitInventorySystem;
-        _placedObjectSelectButtonsSystemUI = placedObjectSelectButtonsSystemUI;
+        _unitEquipmentSystem = unitEquipmentSystem;
+        _itemSelectButtonsSystemUI = itemSelectButtonsSystemUI;
+        _armorSelectButtonsSystemUI = armorSelectButtonsSystemUI;
         _unitManagerTabUI = unitManagerTabUI;
 
 
@@ -86,7 +89,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
         });
 
         _unitManagerButtonButton.onClick.AddListener(() => { ShowManagerTab(); });
-        _weaponButton.onClick.AddListener(() => { ShowWeaponTab(); });
+        _weaponButton.onClick.AddListener(() => { ShowItemTab(); });
         _armorButton.onClick.AddListener(() => { ShowArmorTab(); });
         _shopButton.onClick.AddListener(() => { ShowShopTab(); });
         _missionButton.onClick.AddListener(() => { ShowMissionTab(); });
@@ -95,14 +98,15 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
        {
             _pickUpDropPlacedObject,
             _unitPortfolioUI,
-            _unitInventorySystem,
-            _placedObjectSelectButtonsSystemUI,
-            _unitSelectAtInventoryButtonsSystemUI,
+            _unitEquipmentSystem,
+            _itemSelectButtonsSystemUI,
+            _armorSelectButtonsSystemUI,
+            _unitSelectAtEquipmentButtonsSystemUI,
             _unitManagerTabUI
        };
 
         SubscribeAlternativeToggleVisible();
-        ShowWeaponTab();
+        ShowItemTab();
     }
 
     /// <summary>
@@ -135,27 +139,31 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
         });
     }
 
-    private void ShowWeaponTab()
+    private void ShowItemTab()
     {
-        ShowSelectedButton(_selectedWeaponButtonImage);
+        ShowSelectedButton(_selectedItemButtonImage);
+        _unitEquipmentSystem.SetActiveEquipmentGrid(EquipmentGrid.ActiveGridList.ItemGridList);
         ShowTabs(new IToggleActivity[]
         {
             _pickUpDropPlacedObject,
             _unitPortfolioUI,
-            _unitSelectAtInventoryButtonsSystemUI,
-            _unitInventorySystem,
-            _placedObjectSelectButtonsSystemUI,
+            _unitSelectAtEquipmentButtonsSystemUI,
+            _unitEquipmentSystem,
+            _itemSelectButtonsSystemUI,
         });
 
     }
     private void ShowArmorTab()
     {
         ShowSelectedButton(_selectedArmorButtonImage);
+        _unitEquipmentSystem.SetActiveEquipmentGrid(EquipmentGrid.ActiveGridList.ArmorGridList);
         ShowTabs(new IToggleActivity[]
         {
-            _unitPortfolioUI,
-            _unitSelectAtInventoryButtonsSystemUI,
             _pickUpDropPlacedObject,
+            _unitPortfolioUI,
+            _unitSelectAtEquipmentButtonsSystemUI,
+            _unitEquipmentSystem,
+            _armorSelectButtonsSystemUI,
         });
 
     }
@@ -169,7 +177,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     {
         ShowSelectedButton(_selectedMissionButtonImage);
 
-        ShowTabs(new IToggleActivity[] {  } );
+        ShowTabs(new IToggleActivity[] { });
     }
 
     /// <summary>
@@ -180,9 +188,9 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     /// </remarks>
     private void ShowTabs(IToggleActivity[] showArray)
     {
-        foreach (IToggleActivity tab in _toggleTabArray) 
+        foreach (IToggleActivity tab in _toggleTabArray)
         {
-            tab.SetActive(false);            
+            tab.SetActive(false);
         }
         foreach (IToggleActivity tab in showArray)
         {

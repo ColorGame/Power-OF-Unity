@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class UnitManager // Менеджер (администратор) Юнитов
 {
-    public UnitManager(TooltipUI tooltipUI, SoundManager soundManager)
+    public UnitManager(TooltipUI tooltipUI, SoundManager soundManager, WarehouseManager warehouseManager)
     {
-        Init(tooltipUI, soundManager);
+        Init(tooltipUI, soundManager, warehouseManager);
     }
 
     public event EventHandler<Unit> OnSelectedUnitChanged; // Изменен выбранный юнит
     public event EventHandler OnAnyUnitDeadAndRemoveList; // Событие Любой Юнит Умер И Удален из Списка
     public event EventHandler OnAnyEnemyUnitSpawnedAndAddList; // Событие Любой вражеский юнит ражден и добавлен в Списка      
-  //  public event EventHandler OnUnitChangedLocation; // Событие Юнит Изменил Локацию   
+                                                               //  public event EventHandler OnUnitChangedLocation; // Событие Юнит Изменил Локацию   
 
     private List<Unit> _unitFriendList = new List<Unit>();// ОБЩИЙ список  моих юнитов
     private List<Unit> _unitFriendOnMissionList = new List<Unit>();// список моих юнитов на МИССИИ
@@ -23,39 +23,41 @@ public class UnitManager // Менеджер (администратор) Юнитов
 
     private TooltipUI _tooltipUI;
     private SoundManager _soundManager;
+    private WarehouseManager _warehouseManager;
 
     private Unit _selectedUnit;
 
 
-    private void Init(TooltipUI tooltipUI, SoundManager soundManager)
+    private void Init(TooltipUI tooltipUI, SoundManager soundManager, WarehouseManager warehouseManager)
     {
         _tooltipUI = tooltipUI;
         _soundManager = soundManager;
+        _warehouseManager = warehouseManager;
 
         InitUnits(firstStart: true);
 
         Unit.OnAnyEnemyUnitSpawned += Unit_OnAnyEnemyUnitSpawned; // Подпишемся на событие (Любой Рожденный(созданный) Вражеский Юнит)
         Unit.OnAnyUnitDead += Unit_OnAnyUnitDead;  // Подпишемся на событие (Любой Мертвый Юнит)
-               
+
     }
 
-    public void InitUnits(bool firstStart)
+    private void InitUnits(bool firstStart)
     {
         if (firstStart)
         {
             UnitTypeBasicListSO unitTypeBasicListSO = Resources.Load<UnitTypeBasicListSO>(typeof(UnitTypeBasicListSO).Name);
 
-            foreach (UnitTypeSO unitFriendTypeSO in unitTypeBasicListSO.myUnitsBasiclist)
+            foreach (UnitTypeSO unitFriendTypeSO in unitTypeBasicListSO.GetMyUnitsBasicList())
             {
                 Unit unit = new Unit(unitFriendTypeSO, _soundManager);
                 AddUnitFriendList(unit);
             }
 
-            foreach (UnitTypeSO unitFriendTypeSO in unitTypeBasicListSO.hireUnitslist)
+            foreach (UnitTypeSO unitFriendTypeSO in unitTypeBasicListSO.GetHireUnitsBasiclist())
             {
                 Unit hireUnit = new Unit(unitFriendTypeSO, _soundManager);
                 AddHireUnitList(hireUnit);
-            }            
+            }
         }
         else
         {
@@ -63,7 +65,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
         }
     }
 
-    
+
 
     private void Unit_OnAnyEnemyUnitSpawned(object sender, EventArgs e)
     {
@@ -101,15 +103,16 @@ public class UnitManager // Менеджер (администратор) Юнитов
         {
             SetSelectedUnit(_unitFriendList[0]);
             return _unitFriendList[0];
-        }else 
+        }
+        else
         {
-            return null; 
+            return null;
         }
     }
     public void SetSelectedUnit(Unit selectedUnit)
     {
-        _selectedUnit = selectedUnit;      
-        OnSelectedUnitChanged?.Invoke(this, _selectedUnit); // Подписываятся кнопки выбора юнита для настройки инвенторя UnitSelectAtInventoryButton
+        _selectedUnit = selectedUnit;
+        OnSelectedUnitChanged?.Invoke(this, _selectedUnit); // Подписываятся кнопки выбора юнита для настройки экипировки UnitSelectAtEquipmentButtonUI
     }
     /// <summary>
     /// Нанять выбранного юнита
@@ -122,9 +125,14 @@ public class UnitManager // Менеджер (администратор) Юнитов
     /// <summary>
     /// Уволить выбранного юнита
     /// </summary>
-    public void DismissSelectedUnit() 
+    public void DismissSelectedUnit()
     {
-        _selectedUnit.GetUnitInventory().RemoveAllInventory();
+        // Переберем экипировку юнита
+        foreach (PlacedObjectGridParameters placedObjectGridParameters in _selectedUnit.GetUnitEquipment().GetPlacedObjectList())
+        {
+            _warehouseManager.AddPlacedObjectTypeList(placedObjectGridParameters.placedObjectTypeSO);
+        }
+        _selectedUnit.GetUnitEquipment().ClearPlacedObjectList();
         RemoveUnitFriendList(_selectedUnit);
         AddHireUnitList(_selectedUnit);
     }
@@ -138,7 +146,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
     /// <summary>
     /// Удалить из списока для найма
     /// </summary>
-    private void RemoveHireUnitList(Unit unit) 
+    private void RemoveHireUnitList(Unit unit)
     {
         _hireUnitList.Remove(unit);
     }
@@ -176,14 +184,14 @@ public class UnitManager // Менеджер (администратор) Юнитов
     {
         RemoveUnitFromCurrentLocation(unit);
         unit.SetLocation(newLocation);
-        AddUnitToLocation(unit, newLocation);       
+        AddUnitToLocation(unit, newLocation);
     }
 
     /// <summary>
     /// Удалить юнита из текущей локации
     /// </summary>
     private void RemoveUnitFromCurrentLocation(Unit unit)
-    {       
+    {
         switch (unit.GetLocation()) // В зависимости от локации удалим из нужного списка
         {
             case Unit.Location.Barrack:
@@ -231,7 +239,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
     public List<Unit> GetUnitFriendOnBarrackList() { return _unitFriendOnBarrackList; }
     public List<Unit> GetUnitEnemyList() { return _unitEnemyList; }
     public List<Unit> GetUnitFriendDeadList() { return _unitFriendDeadList; }
-    public List <Unit> GetHireUnitTypeSOList() {return _hireUnitList; }
+    public List<Unit> GetHireUnitTypeSOList() { return _hireUnitList; }
     public Unit GetSelectedUnit() { return _selectedUnit; }
 
 }
