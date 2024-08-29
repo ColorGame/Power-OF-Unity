@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 /// <summary>
-/// Абстрактный класс. Визуал сетки экипировки, создается в каждой ячейки и меняет цвет в зависимости от переданных параметров
+/// Абстрактный класс. Визуал сетки экипировки, создается в каждой ячейки и меняет материал в зависимости от переданных параметров
 /// </summary>
 public abstract class EquipmentGridVisualSingle : MonoBehaviour
 {
-    private bool _isBusy; //Занято  
+    protected bool _isBusy; //Занято  
 
     public abstract void Init(float cellSize);
 

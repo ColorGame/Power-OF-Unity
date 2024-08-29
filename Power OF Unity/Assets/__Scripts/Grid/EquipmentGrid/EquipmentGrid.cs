@@ -234,6 +234,29 @@ public class EquipmentGrid : MonoBehaviour
         }
         return null;
     }
+
+    /// <summary>
+    /// Получить сетку для этого слота 
+    /// </summary><remarks>(!!СЕТКА МОЖЕТ БЫТЬ НЕ АКТИВНА)</remarks>
+    public GridSystemXY<GridObjectEquipmentXY> GetGridSystemXY(EquipmentSlot equipmentSlot)
+    {
+        foreach (GridSystemXY<GridObjectEquipmentXY> localGridSystem in _itemGridSystemXYList) // перберем список сеток предметов
+        {
+            if (localGridSystem.GetGridSlot() == equipmentSlot)
+            {
+                return localGridSystem;
+            }
+        }
+        foreach (GridSystemXY<GridObjectEquipmentXY> localGridSystem in _armorGridSystemXYList) // перберем список сеток брони
+        {
+            if (localGridSystem.GetGridSlot() == equipmentSlot)
+            {
+                return localGridSystem;
+            }
+        }
+        return null;
+    }
+
     public Canvas GetCanvasItemGrid() {  return _canvasItemGrid; }
     /*
         public void Save()

@@ -57,6 +57,7 @@ public class UnitSetupEntryPoint : MonoBehaviour, IEntryPoint
         _unitPortfolioUI.Init(container.Resolve<UnitManager>()); 
         _unitSelectAtEquipmentButtonsSystemUI.Init(container.Resolve<UnitManager>());
         _itemSelectButtonsSystemUI.Init(container.Resolve<TooltipUI>(), _pickUpDropPlacedObject, container.Resolve<WarehouseManager>());
+        _armorSelectButtonsSystemUI.Init(container.Resolve<TooltipUI>(), _pickUpDropPlacedObject, container.Resolve<WarehouseManager>());
         _unitManagerTabUI.Init(container.Resolve<UnitManager>(), container.Resolve<TooltipUI>());
         _gameMenuUI.Init(container.Resolve<GameInput>(), container.Resolve<OptionsSubMenuUI>(), _quitGameSubMenuUI,_saveGameSubMenuUI, container.Resolve<LoadGameSubMenuUI>());
         _quitGameSubMenuUI.Init(container.Resolve<GameInput>(), container.Resolve<ScenesService>());

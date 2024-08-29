@@ -7,6 +7,7 @@ public class EquipmentGridVisualSingleInScreenSpace : EquipmentGridVisualSingle
 {
     [SerializeField] private Image _image; // Будем менять материал для визуализиции сетки экипировки
 
+
     public override void Init(float cellSize)
     {
         RectTransform rectTransform = (RectTransform)transform;

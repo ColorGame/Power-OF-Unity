@@ -29,6 +29,7 @@ public class UnitEquipmentSystem :IToggleActivity
     public void SetActiveEquipmentGrid(EquipmentGrid.ActiveGridList activeGridList) 
     {
         _equipmentGrid.SetActiveGridList(activeGridList);
+
     }
 
     public void SetActive(bool active)

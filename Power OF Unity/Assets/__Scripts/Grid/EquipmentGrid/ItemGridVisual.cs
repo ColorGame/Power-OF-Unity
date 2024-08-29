@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Визуализация размещения в сетке экипировки
+/// Визуализация размещения в сетке предметов экипировки
 /// </summary>
 /// <remarks>Работает с типом PlacedObject</remarks>
-public class ItemGridVisual : MonoBehaviour ,IToggleActivity
+public class ItemGridVisual : MonoBehaviour, IToggleActivity
 {
 
     [Serializable] // Чтобы созданная структура могла отображаться в инспекторе
@@ -18,8 +18,8 @@ public class ItemGridVisual : MonoBehaviour ,IToggleActivity
 
     public enum GridVisualType //Визуальные состояния сетки
     {
-        Grey,       
-        Orange,        
+        Grey,
+        Orange,
     }
 
     [SerializeField] private List<GridVisualTypeMaterial> _gridVisualTypeMaterialList; // Список тип материала визуального состояния сетки Квадрат (Список из кастомного типа данных) визуального состояния сетки // В инспекторе под каждое состояние перетащить соответствующий материал сетки
@@ -35,7 +35,7 @@ public class ItemGridVisual : MonoBehaviour ,IToggleActivity
     private UnitEquipmentSystem _unitEquipmentSystem;
 
 
-    public void Init(PickUpDropPlacedObject pickUpDrop, EquipmentGrid equipmentGrid,UnitEquipmentSystem unitEquipmentSystem)
+    public void Init(PickUpDropPlacedObject pickUpDrop, EquipmentGrid equipmentGrid, UnitEquipmentSystem unitEquipmentSystem)
     {
         _pickUpDropPlacedObject = pickUpDrop;
         _equipmentGrid = equipmentGrid;
@@ -47,7 +47,7 @@ public class ItemGridVisual : MonoBehaviour ,IToggleActivity
 
     private void Setup()
     {
-        _canvasItemGrid = _equipmentGrid.GetCanvasItemGrid();       
+        _canvasItemGrid = _equipmentGrid.GetCanvasItemGrid();
         _gridNameIndexDictionary = new Dictionary<EquipmentSlot, int>();
 
         // Инициализируем сначала первую часть массива - Количество сеток
@@ -59,7 +59,6 @@ public class ItemGridVisual : MonoBehaviour ,IToggleActivity
         {
             _equipmentGridVisualSingleArray[i] = new EquipmentGridVisualSingle[_gridSystemXYList[i].GetWidth(), _gridSystemXYList[i].GetHeight()];
         }
-
 
         for (int i = 0; i < _gridSystemXYList.Count; i++) // переберем все сетки
         {
@@ -78,10 +77,10 @@ public class ItemGridVisual : MonoBehaviour ,IToggleActivity
                         default:
                         case RenderMode.ScreenSpaceOverlay:
                         case RenderMode.ScreenSpaceCamera:
-                        equipmentGridVisualSingle = Instantiate(GameAssets.Instance.EquipmentGridInVisualSingleScreenSpacePrefab, _equipmentGrid.GetWorldPositionCenterСornerCell(gridPosition, _gridSystemXYList[i]), Quaternion.Euler(rotation), AnchorGridTransform); // Создадим наш префаб в каждой позиции сетки
-                            break;                            
+                            equipmentGridVisualSingle = Instantiate(GameAssets.Instance.EquipmentGridInVisualSingleScreenSpacePrefab, _equipmentGrid.GetWorldPositionCenterСornerCell(gridPosition, _gridSystemXYList[i]), Quaternion.Euler(rotation), AnchorGridTransform); // Создадим наш префаб в каждой позиции сетки
+                            break;
                         case RenderMode.WorldSpace:
-                        equipmentGridVisualSingle = Instantiate(GameAssets.Instance.EquipmentGridInVisualSingleWorldSpacePrefab, _equipmentGrid.GetWorldPositionCenterСornerCell(gridPosition, _gridSystemXYList[i]), Quaternion.Euler(rotation), AnchorGridTransform); // Создадим наш префаб в каждой позиции сетки
+                            equipmentGridVisualSingle = Instantiate(GameAssets.Instance.EquipmentGridInVisualSingleWorldSpacePrefab, _equipmentGrid.GetWorldPositionCenterСornerCell(gridPosition, _gridSystemXYList[i]), Quaternion.Euler(rotation), AnchorGridTransform); // Создадим наш префаб в каждой позиции сетки
                             break;
                     }
 
@@ -91,12 +90,12 @@ public class ItemGridVisual : MonoBehaviour ,IToggleActivity
                     _equipmentGridVisualSingleArray[i][x, y] = equipmentGridVisualSingle; // Сохраняем компонент LevelGridVisualSingle в трехмерный массив где x,y,y это будут индексы массива.
                 }
             }
-        }        
+        }
     }
 
     public void SetActive(bool active)
     {
-       _canvasItemGrid.enabled = active;
+        _canvasItemGrid.enabled = active;
         if (active)
         {
             _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
@@ -122,23 +121,23 @@ public class ItemGridVisual : MonoBehaviour ,IToggleActivity
     /// <summary>
     /// Инвентарь очищен
     /// </summary>    
-    private void UnitEquipmentSystem_OnEquipmentGridsCleared(object sender, EventArgs e) 
+    private void UnitEquipmentSystem_OnEquipmentGridsCleared(object sender, EventArgs e)
     {
-        SetDefoltStste(); // Установить дефолтное состояние        
+        SetDefoltState(); // Установить дефолтное состояние        
     }
     /// <summary>
     /// Захваченый объект покинул сетку
     /// </summary>
-    private void PickUpDropManager_OnGrabbedObjectGridExits(object sender, EventArgs e)  
+    private void PickUpDropManager_OnGrabbedObjectGridExits(object sender, EventArgs e)
     {
-        UpdateVisual(); 
+        UpdateVisual();
     }
     /// <summary>
     /// позиция захваченного объекта на сетке изменилась
     /// </summary>
     private void PickUpDropManager_OnGrabbedObjectGridPositionChanged(object sender, PlacedObjectGridParameters e)
     {
-        UpdateVisual(); 
+        UpdateVisual();
         ShowPossibleGridPositions(e.slot, e.placedObject, e.gridPositioAnchor, GridVisualType.Orange); //показать возможные сеточные позиции
     }
     /// <summary>
@@ -177,7 +176,7 @@ public class ItemGridVisual : MonoBehaviour ,IToggleActivity
     /// <summary>
     /// Установить дефолтное состояние
     /// </summary>
-    private void SetDefoltStste() 
+    private void SetDefoltState()
     {
         for (int index = 0; index < _gridSystemXYList.Count; index++) // переберем все сетки
         {
@@ -185,7 +184,7 @@ public class ItemGridVisual : MonoBehaviour ,IToggleActivity
             {
                 for (int y = 0; y < _gridSystemXYList[index].GetHeight(); y++)  // и высоту
                 {
-                   _equipmentGridVisualSingleArray[index][x, y].SetIsBusyAndMaterial(false,GetGridVisualTypeMaterial(GridVisualType.Grey));                   
+                    _equipmentGridVisualSingleArray[index][x, y].SetIsBusyAndMaterial(false, GetGridVisualTypeMaterial(GridVisualType.Grey));
                 }
             }
         }
@@ -292,8 +291,8 @@ public class ItemGridVisual : MonoBehaviour ,IToggleActivity
         return null;
     }
 
-    private void OnDestroy() 
+    private void OnDestroy()
     {
-        _unitEquipmentSystem=null; // Очистим ссылки чтобы класс обнулился
+        _unitEquipmentSystem = null; // Очистим ссылки чтобы класс обнулился
     }
 }
