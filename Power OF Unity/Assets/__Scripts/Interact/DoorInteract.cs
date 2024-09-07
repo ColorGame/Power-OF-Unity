@@ -19,8 +19,8 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
 
     private static SoundManager _soundManager;
     private static LevelGrid _levelGrid;
+    private static HashAnimationName _hashAnimationName;
 
-    private HashAnimationName _animBase = new HashAnimationName();
     private bool _isActive;
     private float _timer; // Таймер который не будет позволять непрерывно взаимодействовать с дверью
     private Transform[] _transformChildrenDoorArray;  //Массив Дочерних объектов двери (это сама дверь[0] левая[1] b правая[2] дверь)
@@ -35,10 +35,11 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
 
     private List<GridPositionXZ> _doorGridPositionList = new List<GridPositionXZ>();
 
-    public static void Init(SoundManager soundManager, LevelGrid levelGrid)
+    public static void Init(SoundManager soundManager, LevelGrid levelGrid, HashAnimationName hashAnimationName)
     {
         _soundManager = soundManager;
         _levelGrid = levelGrid;
+        _hashAnimationName = hashAnimationName;
     }
 
     private void Awake()
@@ -118,7 +119,7 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
     private void OpenDoor() // Открыть дверь
     {
         _isOpen = true;
-        _animator.CrossFade(_animBase.DoorOpen, 0.2f);
+        _animator.CrossFade(_hashAnimationName.DoorOpen, 0.2f);
         //_animation.SetBool("IsOpen", _isOpen); // Настроим булевую переменную "GetIsOpen". Передадим ей значение _isOpen        
 
         foreach (GridPositionXZ gridPosition in _doorGridPositionList) // Переберем список сеточных позиции которые занимает Дверь
@@ -143,7 +144,7 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
             GraphNode graphNode = _levelGrid.GetGridNode(gridPosition); // Получим проверяемый узел
             if (BlockManager.Instance.NodeContainsAnyExcept(graphNode, selectorList)) // Если это узел заблокированна Юнитом. Есть другой (SingleNodeBlocker), занимающий тот же узел, что и дверь
             {
-                _animator.CrossFade(_animBase.DoorBlocked, 0.2f); // Дверь заблокирована
+                _animator.CrossFade(_hashAnimationName.DoorBlocked, 0.2f); // Дверь заблокирована
                 return; // выходим и игнорируем код ниже
             }
         }
@@ -156,7 +157,7 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
         }
 
         _isOpen = false;
-        _animator.CrossFade(_animBase.DoorClose, 0.2f);
+        _animator.CrossFade(_hashAnimationName.DoorClose, 0.2f);
         // _animation.SetBool("IsOpen", _isOpen); // Настроим булевую переменную "GetIsOpen". Передадим ей значение _isOpen
         _soundManager.PlayOneShot(SoundName.DoorOpen);
     }

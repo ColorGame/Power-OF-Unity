@@ -20,7 +20,7 @@ public class ArmorSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
     {
         base.Awake();
 
-        _typeSelectContainerArray = new Transform[] { _armorHeadSelectContainer, _armorBodySelectContainer };
+        _containerArray = new Transform[] { _armorHeadSelectContainer, _armorBodySelectContainer };
         _buttonSelectedImageArray = new Image[] { _armorHeadButtonSelectedImage, _armorBodyButtonSelectedImage };
     }
 
@@ -28,13 +28,13 @@ public class ArmorSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
     {
         _armorHeadButtonPanel.onClick.AddListener(() => //Добавим событие при нажатии на нашу кнопку// AddListener() в аргумент должен получить делегат- ссылку на функцию. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
         {
-            ShowContainer(_armorHeadSelectContainer);
+            ShowAndUpdateContainer(_armorHeadSelectContainer);
             ShowSelectedButton(_armorHeadButtonSelectedImage);
-        }); // _armorHeadButtonPanel.onClick.AddListener(delegate { ShowContainer(_unitOnMissionContainer); }); // Еще вариант объявления
+        }); // _armorHeadButtonPanel.onClick.AddListener(delegate { ShowAndUpdateContainer(_unitOnMissionContainer); }); // Еще вариант объявления
 
         _armorBodyButtonPanel.onClick.AddListener(() =>
         {
-            ShowContainer(_armorBodySelectContainer);
+            ShowAndUpdateContainer(_armorBodySelectContainer);
             ShowSelectedButton(_armorBodyButtonSelectedImage);
         });
     }
@@ -45,7 +45,7 @@ public class ArmorSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
 
         if (active)
         {
-            ShowContainer(_armorHeadSelectContainer);
+            ShowAndUpdateContainer(_armorHeadSelectContainer);
             ShowSelectedButton(_armorHeadButtonSelectedImage);
         }
         else
@@ -57,27 +57,30 @@ public class ArmorSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
     protected override void CreateSelectButtonsSystemInActiveContainer()
     {
         // Переберем список 
-        foreach (PlacedObjectTypeAndCount placedObjectTypeAndCount in _warehouseManager.GetPlacedObjectWithActionList())
+        foreach (PlacedObjectTypeSO placedObjectTypeSO in _warehouseManager.GetAllPlacedObjectTypeSOList())
         {
-            switch (placedObjectTypeAndCount.placedObjectTypeSO)
+            switch (placedObjectTypeSO)
             {
                 case ArmorHeadTypeSO:               
                     if (_activeContainer == _armorHeadSelectContainer)
-                        CreatePlacedObjectSelectButton(placedObjectTypeAndCount, _armorHeadSelectContainer);
+                        CreatePlacedObjectSelectButton(placedObjectTypeSO, _armorHeadSelectContainer);
                     break;
                
                 case ArmorBodyTypeSO:
                     if (_activeContainer == _armorBodySelectContainer)
-                        CreatePlacedObjectSelectButton(placedObjectTypeAndCount, _armorBodySelectContainer);
+                        CreatePlacedObjectSelectButton(placedObjectTypeSO, _armorBodySelectContainer);
                     break;
             }
         }
     }
 
-    protected override void CreatePlacedObjectSelectButton(PlacedObjectTypeAndCount placedObjectTypeAndCount, Transform containerTransform)
+    /// <summary>
+    /// Создать кнопку выбора размещенного объекта и поместить в контейнер
+    /// </summary>
+    private void CreatePlacedObjectSelectButton(PlacedObjectTypeSO placedObjectTypeSO, Transform containerTransform)
     {
         PlacedObjectSelectButtonUI placedObjectSelectButton = Instantiate(GameAssets.Instance.placedObjectSelectButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
-        Transform visualButton = Instantiate(placedObjectTypeAndCount.placedObjectTypeSO.GetVisual2D(), placedObjectSelectButton.transform); // Создадим Визуал кнопки в зависимости от типа размещаемого объекта и сделаем дочерним к кнопке 
+        Transform visualButton = Instantiate(placedObjectTypeSO.GetVisual2D(), placedObjectSelectButton.transform); // Создадим Визуал кнопки в зависимости от типа размещаемого объекта и сделаем дочерним к кнопке 
 
         if (_canvas.renderMode == RenderMode.WorldSpace)
         {
@@ -88,6 +91,6 @@ public class ArmorSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
             }
         }
 
-        placedObjectSelectButton.Init(_tooltipUI, _pickUpDrop, _warehouseManager, placedObjectTypeAndCount);
+        placedObjectSelectButton.Init(_tooltipUI, _pickUpDrop, _warehouseManager, placedObjectTypeSO);
     }
 }

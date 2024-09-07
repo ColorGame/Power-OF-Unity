@@ -122,7 +122,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -1550, y: -100}
+  m_AnchoredPosition: {x: -1700, y: -100}
   m_SizeDelta: {x: 350, y: 350}
   m_Pivot: {x: 0, y: 0}
 --- !u!1 &3548042107968979169
@@ -373,8 +373,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -1550, y: -950}
-  m_SizeDelta: {x: 600, y: 750}
+  m_AnchoredPosition: {x: -1700, y: -950}
+  m_SizeDelta: {x: 750, y: 750}
   m_Pivot: {x: 0, y: 0}
 --- !u!1 &6682495025160808694
 GameObject:
@@ -452,7 +452,7 @@ MonoBehaviour:
     anchorGridTransform: {fileID: 7796520923050303300}
     width: 1
     height: 1
-    cellSize: 600
+    cellSize: 750
 --- !u!114 &8820994456404669573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -856,7 +856,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1352334875049631957
 RectTransform:
   m_ObjectHideFlags: 0
@@ -886,7 +886,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8675107865379585558}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}

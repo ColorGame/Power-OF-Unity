@@ -30,7 +30,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     private UnitEquipmentSystem _unitEquipmentSystem;
     private ItemSelectButtonsSystemUI _itemSelectButtonsSystemUI;
     private ArmorSelectButtonsSystemUI _armorSelectButtonsSystemUI;
-    private UnitManagerTabUI _unitManagerTabUI;
+    private UnitSelectForManagementButtonsSystemUI _unitManagerTabUI;
 
 
     private Image[] _buttonSelectedImageArray; // массив изображений для веделения нужной кнопки
@@ -62,7 +62,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
         UnitEquipmentSystem unitEquipmentSystem,
         ItemSelectButtonsSystemUI itemSelectButtonsSystemUI,
         ArmorSelectButtonsSystemUI armorSelectButtonsSystemUI,
-        UnitManagerTabUI unitManagerTabUI)
+        UnitSelectForManagementButtonsSystemUI unitManagerTabUI)
     {
         _gameInput = gameInput;
         _gameMenuUI = gameMenuUI;
@@ -142,7 +142,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     private void ShowItemTab()
     {
         ShowSelectedButton(_selectedItemButtonImage);
-        _unitEquipmentSystem.SetActiveEquipmentGrid(EquipmentGrid.ActiveGridList.ItemGridList);
+        _unitEquipmentSystem.SetActiveEquipmentGrid(EquipmentGrid.GridState.ItemGrid);
         ShowTabs(new IToggleActivity[]
         {
             _pickUpDropPlacedObject,
@@ -156,7 +156,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     private void ShowArmorTab()
     {
         ShowSelectedButton(_selectedArmorButtonImage);
-        _unitEquipmentSystem.SetActiveEquipmentGrid(EquipmentGrid.ActiveGridList.ArmorGridList);
+        _unitEquipmentSystem.SetActiveEquipmentGrid(EquipmentGrid.GridState.ArmorGrid);
         ShowTabs(new IToggleActivity[]
         {
             _pickUpDropPlacedObject,

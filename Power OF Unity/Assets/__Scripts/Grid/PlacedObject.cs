@@ -23,9 +23,13 @@ public class PlacedObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         {          
             case EquipmentSlot.BagSlot:
                  worldPosition = gridSystemXY.GetWorldPositionLowerLeft—ornerCell(gridPositionAnchor);
-                break;            
+                break;    
+                
             case EquipmentSlot.MainWeaponSlot:
             case EquipmentSlot.OtherWeaponsSlot:
+            case EquipmentSlot.ArmorHeadSlot:
+            case EquipmentSlot.ArmorBodySlot:
+                
                 Vector3 offset = placedObjectTypeSO.GetOffsetVisual—enterFromAnchor()* canvas.scaleFactor;
                 worldPosition = gridSystemXY.GetWorldPositionGridCenter()- offset;
                 break;

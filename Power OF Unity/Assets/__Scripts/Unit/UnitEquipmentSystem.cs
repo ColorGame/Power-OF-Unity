@@ -14,27 +14,32 @@ public class UnitEquipmentSystem :IToggleActivity
     private PickUpDropPlacedObject _pickUpDropPlacedObject;
     private UnitManager _unitManager;
     private EquipmentGrid _equipmentGrid;
+
     private ItemGridVisual _itemGridVisual;
+    private ArmorGridVisual _armorGridVisual;
+
     private Unit _selectedUnit;
 
 
-    public void Init(PickUpDropPlacedObject pickUpDropPlacedObject, UnitManager unitManager, EquipmentGrid equipmentGrid, ItemGridVisual itemGridVisual)
+    public void Init(PickUpDropPlacedObject pickUpDropPlacedObject, UnitManager unitManager, EquipmentGrid equipmentGrid, ItemGridVisual itemGridVisual, ArmorGridVisual armorGridVisual)
     {
         _pickUpDropPlacedObject = pickUpDropPlacedObject;
         _unitManager = unitManager;
-        _equipmentGrid = equipmentGrid;
+        _equipmentGrid = equipmentGrid;  
         _itemGridVisual = itemGridVisual;
+        _armorGridVisual = armorGridVisual;
     }
 
-    public void SetActiveEquipmentGrid(EquipmentGrid.ActiveGridList activeGridList) 
+    public void SetActiveEquipmentGrid(EquipmentGrid.GridState activeGridList) 
     {
-        _equipmentGrid.SetActiveGridList(activeGridList);
-
+        ClearEquipmentGrid();//Перед переключением, очистим пред. сетку
+        _equipmentGrid.SetActiveGrid(activeGridList);
     }
 
     public void SetActive(bool active)
     {
-       _itemGridVisual.SetActive(active); // Сначала активируем визуал что бы он сделал все подписки (при откл это не актуально )
+        _itemGridVisual.SetActive(active);
+        _armorGridVisual.SetActive(active);
         if (active)
         {
             _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -9,10 +10,10 @@ using UnityEngine;
 /// </remarks>
 public class EquipmentGrid : MonoBehaviour
 {
-    public enum ActiveGridList
+    public enum GridState
     {
-        ItemGridList,
-        ArmorGridList
+        ItemGrid,
+        ArmorGrid
     }
 
     [SerializeField] private Canvas _canvasItemGrid;
@@ -21,14 +22,17 @@ public class EquipmentGrid : MonoBehaviour
     [SerializeField] private EquipmentGridParameters[] _armorGridParametersArray; // Массив параметров сеток брони
 
     private TooltipUI _tooltipUI;
-    private List<PlacedObject> _weaponPlacedObjectList = new List<PlacedObject>(); // Список размещенного оружия (для удаления placedObject.gameObject при чистки экипировки) 
+    private List<PlacedObject> _itemPlacedObjectList = new List<PlacedObject>(); // Список размещенных предметов (для удаления placedObject.gameObject при чистки экипировки) 
     private List<PlacedObject> _armorPlacedObjectList = new List<PlacedObject>(); // Список размещенной брони 
     private List<GridSystemXY<GridObjectEquipmentXY>> _itemGridSystemXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectEquipmentXY    
     private List<GridSystemXY<GridObjectEquipmentXY>> _armorGridSystemXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectEquipmentXY    
 
     // активные списки с которыми работает скрипт 
+    private GridState _gridState; // хэшированное состояние сетки
     private List<PlacedObject> _placedObjectActiveList;
     private List<GridSystemXY<GridObjectEquipmentXY>> _gridSystemActiveList;
+
+
 
     public void Init(TooltipUI tooltipUI)
     {
@@ -41,12 +45,14 @@ public class EquipmentGrid : MonoBehaviour
     {
         _itemGridSystemXYList = InitEquipmentGrid(_itemGridParametersArray, _canvasItemGrid);
         _armorGridSystemXYList = InitEquipmentGrid(_armorGridParametersArray, _canvasArmorGrid);
+
+        SetActiveGrid(GridState.ItemGrid);
     }
 
     private List<GridSystemXY<GridObjectEquipmentXY>> InitEquipmentGrid(EquipmentGridParameters[] gridParametersArray, Canvas canvas)
     {
         List<GridSystemXY<GridObjectEquipmentXY>> gridSystemXYList = new List<GridSystemXY<GridObjectEquipmentXY>>(); // Инициализируем список              
-               
+
         foreach (EquipmentGridParameters gridParameters in gridParametersArray)
         {
             GridSystemXY<GridObjectEquipmentXY> gridSystem = new GridSystemXY<GridObjectEquipmentXY>(canvas.scaleFactor, gridParameters,   // ПОСТРОИМ СЕТКУ  и в каждой ячейки создадим объект типа GridObjectEquipmentXY
@@ -56,22 +62,22 @@ public class EquipmentGrid : MonoBehaviour
         }
         return gridSystemXYList;
     }
-
-    public void SetActiveGridList(ActiveGridList activeGridList)
+    /// <summary>
+    /// Установить активную сетку
+    /// </summary>
+    public void SetActiveGrid(GridState stateGrid)
     {
-        switch (activeGridList)
+        _gridState= stateGrid;
+        switch (_gridState)
         {
-            case ActiveGridList.ItemGridList:
+            case GridState.ItemGrid:
                 _gridSystemActiveList = _itemGridSystemXYList;
-                _placedObjectActiveList = _weaponPlacedObjectList;
-                _canvasItemGrid.enabled = true;
-                _canvasArmorGrid.enabled = false;
+                _placedObjectActiveList = _itemPlacedObjectList;
                 break;
-            case ActiveGridList.ArmorGridList:
+
+            case GridState.ArmorGrid:
                 _gridSystemActiveList = _armorGridSystemXYList;
-                _placedObjectActiveList = _armorPlacedObjectList;
-                _canvasArmorGrid.enabled = true;
-                _canvasItemGrid.enabled = false;
+                _placedObjectActiveList = _armorPlacedObjectList;      
                 break;
         }
     }
@@ -223,7 +229,7 @@ public class EquipmentGrid : MonoBehaviour
     /// <summary>
     /// Получить АКТИВНКЮ сетку для этого слота
     /// </summary><remarks>Если нет активных вернет null</remarks>
-    public GridSystemXY<GridObjectEquipmentXY> GetActiveGridSystemXY(EquipmentSlot equipmentSlot) 
+    public GridSystemXY<GridObjectEquipmentXY> GetActiveGridSystemXY(EquipmentSlot equipmentSlot)
     {
         foreach (GridSystemXY<GridObjectEquipmentXY> localGridSystem in _gridSystemActiveList) // перберем активный список сеток
         {
@@ -257,11 +263,13 @@ public class EquipmentGrid : MonoBehaviour
         return null;
     }
 
-    public Canvas GetCanvasItemGrid() {  return _canvasItemGrid; }
+    public Canvas GetCanvasItemGrid() { return _canvasItemGrid; }
+    public Canvas GetCanvasArmorGrid() { return _canvasArmorGrid; }
+    public GridState GetStateGrid() { return _gridState; }
     /*
         public void Save()
         {
-            _weaponPlacedObjectList = new List<PlacedObjectGridParameters>();
+            _itemPlacedObjectList = new List<PlacedObjectGridParameters>();
             for (int i = 0; i < _itemGridSystemXYList.Count; i++) // переберем все сетки
             {
                 for (int x = 0; x < _itemGridSystemXYList[i].GetWidth(); x++) // для каждой сетки переберем длину
@@ -276,9 +284,9 @@ public class EquipmentGrid : MonoBehaviour
                             PlacedObjectGridParameters placedObjectParameters = new PlacedObjectGridParameters(
                                 slot = _itemGridSystemXYList[i]
                                 );
-                            if (!_weaponPlacedObjectList.Contains(gridObject.GetPlacedObject())) // Если этот объект еще не содержиться в списке то добавим его (PlacedObject может одновременно размещаться на нескольких GridObject, поэтому нужна проверка)
+                            if (!_itemPlacedObjectList.Contains(gridObject.GetPlacedObject())) // Если этот объект еще не содержиться в списке то добавим его (PlacedObject может одновременно размещаться на нескольких GridObject, поэтому нужна проверка)
                             {
-                                _weaponPlacedObjectList.Add(gridObject.GetPlacedObject());
+                                _itemPlacedObjectList.Add(gridObject.GetPlacedObject());
                             }
                         }
                     }

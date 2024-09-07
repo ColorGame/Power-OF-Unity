@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <remarks>
 /// Создается и инициализируется в каждой сцене
 /// </remarks>
-public class QuitGameSubMenuUI : ToggleVisibleAnimatioSubscribeMenuUI
+public class QuitGameSubMenuUI : ToggleVisibleAnimatioMenuUI
 {
     [SerializeField] private Button _mainMenuButton; //Выйти в главное меню
     [SerializeField] private Button _desktopButton;  //Выйти из игры на рабочий стол
@@ -15,12 +15,14 @@ public class QuitGameSubMenuUI : ToggleVisibleAnimatioSubscribeMenuUI
 
     private ScenesService _scenesService;
 
-    public void Init(GameInput gameInput, ScenesService scenesService)
+    public void Init(GameInput gameInput, ScenesService scenesService, HashAnimationName hashAnimationName)
     {
         _gameInput = gameInput;
         _scenesService = scenesService;
+        _hashAnimationName = hashAnimationName;
 
-        Setup();       
+        Setup();
+        SetAnimationOpenClose();
     }
 
     private void Setup()
@@ -36,7 +38,7 @@ public class QuitGameSubMenuUI : ToggleVisibleAnimatioSubscribeMenuUI
 
     protected override void SetAnimationOpenClose()
     {
-        _animationOpen = _animBase.QuitGameSubMenuOpen;
-        _animationClose = _animBase.QuitGameSubMenuClose;
+        _animationOpen = _hashAnimationName.QuitGameSubMenuOpen;
+        _animationClose = _hashAnimationName.QuitGameSubMenuClose;
     }
 }

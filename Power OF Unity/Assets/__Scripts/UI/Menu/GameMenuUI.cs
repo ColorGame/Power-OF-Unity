@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +7,7 @@ using UnityEngine.UI;
 /// <remarks>
 /// Создается и инициализируется в каждой сцене
 /// </remarks>
-public class GameMenuUI : ToggleVisibleAnimatioSubscribeMenuUI
+public class GameMenuUI : ToggleVisibleAnimatioMenuUI
 {
     [SerializeField] private Button _resumeGameButton; // продолжить
     [SerializeField] private Button _saveGameButton; // сохранить
@@ -22,15 +21,18 @@ public class GameMenuUI : ToggleVisibleAnimatioSubscribeMenuUI
     private SaveGameSubMenuUI _saveGameSubMenuUI;   
     private LoadGameSubMenuUI _loadGameSubMenuUI;
 
-    public void Init(GameInput gameInput, OptionsSubMenuUI optionsSubMenuUI, QuitGameSubMenuUI quitGameSubMenuUI, SaveGameSubMenuUI saveGameSubMenuUI, LoadGameSubMenuUI loadGameSubMenuUI)
+
+    public void Init(GameInput gameInput, HashAnimationName hashAnimationName, OptionsSubMenuUI optionsSubMenuUI, QuitGameSubMenuUI quitGameSubMenuUI, SaveGameSubMenuUI saveGameSubMenuUI, LoadGameSubMenuUI loadGameSubMenuUI)
     {
         _gameInput = gameInput;
+        _hashAnimationName = hashAnimationName;
         _optionsSubMenuUI = optionsSubMenuUI;
         _quitGameSubMenuUI = quitGameSubMenuUI;
         _saveGameSubMenuUI = saveGameSubMenuUI;
         _loadGameSubMenuUI = loadGameSubMenuUI;
 
         Setup();
+        SetAnimationOpenClose();
     }
 
     private void Setup()
@@ -61,7 +63,7 @@ public class GameMenuUI : ToggleVisibleAnimatioSubscribeMenuUI
 
     protected override void SetAnimationOpenClose()
     {
-        _animationOpen = _animBase.GameMenuOpen;
-        _animationClose = _animBase.GameMenuClose;
+        _animationOpen = _hashAnimationName.GameMenuOpen;
+        _animationClose = _hashAnimationName.GameMenuClose;
     }
 }

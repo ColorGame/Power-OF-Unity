@@ -62,7 +62,7 @@ public class GameplayEntryPoint : MonoBehaviour, IEntryPoint
         _gameEndUI.Init(container.Resolve<ScenesService>());
         _turnSystemUI.Init(_turnSystem);
 
-        DoorInteract.Init(container.Resolve<SoundManager>(), _levelGrid);
+        DoorInteract.Init(container.Resolve<SoundManager>(), _levelGrid, container.Resolve<HashAnimationName>());
         BarrelInteract.Init(container.Resolve<SoundManager>(), _levelGrid);
         DestructibleCrate.Init(container.Resolve<SoundManager>(), _levelGrid);
         SphereInteract.Init(container.Resolve<SoundManager>(), _levelGrid);

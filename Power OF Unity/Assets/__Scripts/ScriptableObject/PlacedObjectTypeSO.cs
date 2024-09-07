@@ -15,25 +15,28 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
                                                                                            //Сериализацией называется процесс записи состояния объекта (с возможной последующей передачей) в поток. Десериализация это процесс обратный сериализации – из данных,
                                                                                            //которые находятся в потоке, мы можем восстановить состояние объекта и использовать этот объект в другом месте.
 {
-    [Tooltip("Автоматически сгенерированный UUID для сохранения/загрузки. Очистите это поле, если вы хотите сгенерировать новое.")]
+    [Header("Автоматически сгенерированный UUID для сохранения/загрузки.\nОчистите это поле, если вы хотите сгенерировать новое.")]
     [SerializeField] private string _itemID = null;
-    [Tooltip("Тип размещаемого объекта")]
+    [Header("Тип размещаемого объекта")]
     [SerializeField] private PlacedObjectType _placedObjectType;
-    [Tooltip("Префаб размещаемого объекта 2D(для Canvas)")]
+    [Header("Префаб размещаемого объекта 2D(для Canvas)")]
     [SerializeField] private Transform _prefab2D;
-    [Tooltip("Визуальная часть размещаемого объекта 2D(для кнопок Canvas)")]
+    [Header("Визуальная часть размещаемого объекта 2D(для кнопок Canvas)")]
     [SerializeField] private Transform _visual2D;
-    [Tooltip("Сколько занимает клеток в ширину Х")]
+    [Header("Сколько занимает клеток в ширину Х")]
     [Range(1, 5)][SerializeField] private int _widthX;
-    [Tooltip("Сколько занимает клеток в высоту У")]
+    [Header("Сколько занимает клеток в высоту У")]
     [Range(1, 2)][SerializeField] private int _heightY;   
-    [Tooltip("Список слотов экипировки на которые можно разместить наш объект")]
+    [Header("Список слотов экипировки на которые можно разместить наш объект")]
     [SerializeField] private List<EquipmentSlot> _canPlacedOnSlotList;
-    [Tooltip("Вес размещаемого объекта в килограммах")]
+    [Header("Вес размещаемого объекта в килограммах")]
     [Range(0, 50)][SerializeField] private int _weight;
+    [Header("Цена ПОКУПКИ и ПРОДАЖИ на рынке")]
+    [SerializeField] private uint _priceBuy;
+    [SerializeField] private uint _priceSell;
 
-   /* [Tooltip("Префаб размещаемого объекта 3D/для создания и размещении на игроке")]
-    [SerializeField] private Transform _prefab3D;*/
+    /* [Tooltip("Префаб размещаемого объекта 3D/для создания и размещении на игроке")]
+     [SerializeField] private Transform _prefab3D;*/
 
     // КЭШИРОВАННОЕ СОСТАЯНИЕ
     static Dictionary<string, PlacedObjectTypeWithActionSO> placedObjectLookupCache; //кэшированный словарь поиска предмта типа PlacedObjectTypeWithActionSO// Статический словарь (Ключ-ID номер предмета, Значение)
@@ -87,6 +90,15 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
     /// </summary>
     public List<EquipmentSlot> GetCanPlacedOnSlotList() { return _canPlacedOnSlotList; }
        
+    /// <summary>
+    /// Получить цену покупки
+    /// </summary>
+    public uint GetPriceBuy() { return _priceBuy; }
+    /// <summary>
+    /// Получить цену продажи
+    /// </summary>
+    public uint GetPriceSell() { return _priceSell; }
+
     void ISerializationCallbackReceiver.OnBeforeSerialize()
     {
         // Сгенерируйте и сохраните новый UUID, если он пуст или там просто пустые пробелы.

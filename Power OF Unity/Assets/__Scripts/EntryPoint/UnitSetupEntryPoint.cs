@@ -6,6 +6,7 @@ public class UnitSetupEntryPoint : MonoBehaviour, IEntryPoint
     private PickUpDropPlacedObject _pickUpDropPlacedObject;
     private EquipmentGrid _equipmentGrid;
     private ItemGridVisual _itemGridVisual;
+    private ArmorGridVisual _armorGridVisual;
 
     private UnitPortfolioUI _unitPortfolioUI;
     private UnitSelectAtEquipmentButtonsSystemUI _unitSelectAtEquipmentButtonsSystemUI;
@@ -15,7 +16,7 @@ public class UnitSetupEntryPoint : MonoBehaviour, IEntryPoint
     private GameMenuUI _gameMenuUI;
     private QuitGameSubMenuUI _quitGameSubMenuUI;
     private SaveGameSubMenuUI _saveGameSubMenuUI;
-    private UnitManagerTabUI _unitManagerTabUI;
+    private UnitSelectForManagementButtonsSystemUI _unitSelectForManagementButtonsSystemUI;
 
     private SpawnerOnUnitSetupScen _unitSpawnerOnEquipmentMenu;
 
@@ -27,14 +28,13 @@ public class UnitSetupEntryPoint : MonoBehaviour, IEntryPoint
     }
 
     private void GetComponent()
-    {        
-
+    { 
         _unitPortfolioUI = GetComponentInChildren<UnitPortfolioUI>(true);
         _unitSelectAtEquipmentButtonsSystemUI = GetComponentInChildren<UnitSelectAtEquipmentButtonsSystemUI>(true);
         _itemSelectButtonsSystemUI = GetComponentInChildren<ItemSelectButtonsSystemUI>(true);
         _armorSelectButtonsSystemUI = GetComponentInChildren<ArmorSelectButtonsSystemUI>(true);
         _upperMenuBarOnUnitSetupUI = GetComponentInChildren<UpperMenuBarOnUnitSetupUI>(true);
-        _unitManagerTabUI = GetComponentInChildren<UnitManagerTabUI>(true);
+        _unitSelectForManagementButtonsSystemUI = GetComponentInChildren<UnitSelectForManagementButtonsSystemUI>(true);
         _gameMenuUI = GetComponentInChildren<GameMenuUI>(true);
         _quitGameSubMenuUI = GetComponentInChildren<QuitGameSubMenuUI>(true);
         _saveGameSubMenuUI = GetComponentInChildren<SaveGameSubMenuUI>(true);
@@ -44,6 +44,7 @@ public class UnitSetupEntryPoint : MonoBehaviour, IEntryPoint
         _pickUpDropPlacedObject = GetComponentInChildren<PickUpDropPlacedObject>(true);
         _equipmentGrid = GetComponentInChildren<EquipmentGrid>(true);
         _itemGridVisual = GetComponentInChildren<ItemGridVisual>(true);
+        _armorGridVisual = GetComponentInChildren<ArmorGridVisual>(true);
     }
 
     private void Register()
@@ -55,19 +56,20 @@ public class UnitSetupEntryPoint : MonoBehaviour, IEntryPoint
     {
 
         _unitPortfolioUI.Init(container.Resolve<UnitManager>()); 
-        _unitSelectAtEquipmentButtonsSystemUI.Init(container.Resolve<UnitManager>());
+        _unitSelectAtEquipmentButtonsSystemUI.Init(container.Resolve<UnitManager>(), container.Resolve<TooltipUI>());
         _itemSelectButtonsSystemUI.Init(container.Resolve<TooltipUI>(), _pickUpDropPlacedObject, container.Resolve<WarehouseManager>());
         _armorSelectButtonsSystemUI.Init(container.Resolve<TooltipUI>(), _pickUpDropPlacedObject, container.Resolve<WarehouseManager>());
-        _unitManagerTabUI.Init(container.Resolve<UnitManager>(), container.Resolve<TooltipUI>());
-        _gameMenuUI.Init(container.Resolve<GameInput>(), container.Resolve<OptionsSubMenuUI>(), _quitGameSubMenuUI,_saveGameSubMenuUI, container.Resolve<LoadGameSubMenuUI>());
-        _quitGameSubMenuUI.Init(container.Resolve<GameInput>(), container.Resolve<ScenesService>());
-        _saveGameSubMenuUI.Init(container.Resolve<GameInput>());
+        _unitSelectForManagementButtonsSystemUI.Init(container.Resolve<UnitManager>(), container.Resolve<TooltipUI>());
+        _gameMenuUI.Init(container.Resolve<GameInput>(), container.Resolve<HashAnimationName>(), container.Resolve<OptionsSubMenuUI>(), _quitGameSubMenuUI,_saveGameSubMenuUI, container.Resolve<LoadGameSubMenuUI>());
+        _quitGameSubMenuUI.Init(container.Resolve<GameInput>(), container.Resolve<ScenesService>(), container.Resolve<HashAnimationName>());
+        _saveGameSubMenuUI.Init(container.Resolve<GameInput>(), container.Resolve<HashAnimationName>());
 
         _unitSpawnerOnEquipmentMenu.Init(container.Resolve<UnitManager>());
 
         _equipmentGrid.Init(container.Resolve<TooltipUI>()); //1
 
         _itemGridVisual.Init(_pickUpDropPlacedObject, _equipmentGrid, _unitEquipmentSystem);//2
+        _armorGridVisual.Init(_pickUpDropPlacedObject, _equipmentGrid, _unitEquipmentSystem);
 
         _pickUpDropPlacedObject.Init(
             container.Resolve<GameInput>(), 
@@ -76,7 +78,7 @@ public class UnitSetupEntryPoint : MonoBehaviour, IEntryPoint
             container.Resolve<UnitManager>(),
             container.Resolve<WarehouseManager>()); //3
 
-        _unitEquipmentSystem.Init(_pickUpDropPlacedObject, container.Resolve<UnitManager>(), _equipmentGrid, _itemGridVisual); //4
+        _unitEquipmentSystem.Init(_pickUpDropPlacedObject, container.Resolve<UnitManager>(), _equipmentGrid, _itemGridVisual, _armorGridVisual); //4
         
         _upperMenuBarOnUnitSetupUI.Init(
             container.Resolve<GameInput>(), 
@@ -87,7 +89,7 @@ public class UnitSetupEntryPoint : MonoBehaviour, IEntryPoint
             _unitEquipmentSystem, 
             _itemSelectButtonsSystemUI, 
             _armorSelectButtonsSystemUI, 
-            _unitManagerTabUI);
+            _unitSelectForManagementButtonsSystemUI);
     }
 
     private void OnDestroy()

@@ -130,7 +130,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
         // Переберем экипировку юнита
         foreach (PlacedObjectGridParameters placedObjectGridParameters in _selectedUnit.GetUnitEquipment().GetPlacedObjectList())
         {
-            _warehouseManager.AddPlacedObjectTypeList(placedObjectGridParameters.placedObjectTypeSO);
+            _warehouseManager.AddCountPlacedObject(placedObjectGridParameters.placedObjectTypeSO);
         }
         _selectedUnit.GetUnitEquipment().ClearPlacedObjectList();
         RemoveUnitFriendList(_selectedUnit);
@@ -233,13 +233,24 @@ public class UnitManager // Менеджер (администратор) Юнитов
             _tooltipUI.ShowShortTooltipFollowMouse("Все 12 мест заняты", new TooltipUI.TooltipTimer { timer = 2f }); // Покажем подсказку и зададим новый таймер отображения подсказки
         }
     }
-
+    /// <summary>
+    /// Общий список  моих юнитов 
+    /// </summary>
     public List<Unit> GetUnitFriendList() { return _unitFriendList; }
+    /// <summary>
+    /// Мои юниты которые на МИССИИ
+    /// </summary>
     public List<Unit> GetUnitFriendOnMissionList() { return _unitFriendOnMissionList; }
+    /// <summary>
+    /// Мои юниты которые на БАЗЕ
+    /// </summary>
     public List<Unit> GetUnitFriendOnBarrackList() { return _unitFriendOnBarrackList; }
     public List<Unit> GetUnitEnemyList() { return _unitEnemyList; }
     public List<Unit> GetUnitFriendDeadList() { return _unitFriendDeadList; }
-    public List<Unit> GetHireUnitTypeSOList() { return _hireUnitList; }
+   /// <summary>
+   /// Юниты для найма
+   /// </summary>
+    public List<Unit> GetHireUnitList() { return _hireUnitList; }
     public Unit GetSelectedUnit() { return _selectedUnit; }
 
 }

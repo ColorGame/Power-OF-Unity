@@ -20,6 +20,7 @@ public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
     private JsonSaveableEntity _jsonSaveableEntity;
     private WarehouseManager _warehouseManager;
     private UnitManager _unitManager;
+    private HashAnimationName _hashAnimationName;
 
     public void Process(DIContainer rootContainer)
     {
@@ -40,6 +41,7 @@ public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
         _jsonSaveableEntity = new JsonSaveableEntity();
         _warehouseManager = new WarehouseManager(_tooltipUI);
         _unitManager = new UnitManager(_tooltipUI, _soundManager, _warehouseManager); // После реализации сохранения можно будет его создавать в каждой сцене
+        _hashAnimationName = new HashAnimationName();
     }
 
     private void Register(DIContainer rootContainer)
@@ -54,13 +56,14 @@ public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
         rootContainer.RegisterSingleton(c => _tooltipUI);
         rootContainer.RegisterSingleton(c => _warehouseManager);
         rootContainer.RegisterSingleton(c => _unitManager);
+        rootContainer.RegisterSingleton(c => _hashAnimationName);
     }
 
     private void Init()
     {
         _virtualMouseCustom.Init(_gameInput);
-        _optionsMenuUI.Init(_gameInput, _soundManager, _musicManager);
-        _loadGameSubMenuUI.Init(_gameInput);
+        _optionsMenuUI.Init(_gameInput, _soundManager, _musicManager, _hashAnimationName);
+        _loadGameSubMenuUI.Init(_gameInput, _hashAnimationName);
         _tooltipUI.Init(_gameInput, _virtualMouseCustom);        
     }
 

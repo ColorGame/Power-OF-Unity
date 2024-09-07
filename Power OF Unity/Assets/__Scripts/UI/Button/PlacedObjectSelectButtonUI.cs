@@ -12,9 +12,7 @@ public class PlacedObjectSelectButtonUI : MonoBehaviour
     private Button _button;
     private TooltipUI _tooltipUI;
     private PickUpDropPlacedObject _pickUpDrop;
-    private WarehouseManager _warehouseManager;
-
-    private PlacedObjectTypeAndCount _placedObjectTypeAndCount;
+    private WarehouseManager _warehouseManager;       
     private PlacedObjectTypeSO _placedObjectTypeSO;
 
     private void Awake()
@@ -22,19 +20,18 @@ public class PlacedObjectSelectButtonUI : MonoBehaviour
         _button = GetComponent<Button>();
     }
 
-    public void Init(TooltipUI tooltipUI, PickUpDropPlacedObject pickUpDrop, WarehouseManager warehouseManager, PlacedObjectTypeAndCount placedObjectTypeAndCount)
+    public void Init(TooltipUI tooltipUI, PickUpDropPlacedObject pickUpDrop, WarehouseManager warehouseManager, PlacedObjectTypeSO placedObjectTypeSO)
     {
         _tooltipUI = tooltipUI;
         _pickUpDrop = pickUpDrop;
-        _warehouseManager = warehouseManager;
-        _placedObjectTypeAndCount = placedObjectTypeAndCount;
-        _placedObjectTypeSO = placedObjectTypeAndCount.placedObjectTypeSO;
+        _warehouseManager = warehouseManager;       
+        _placedObjectTypeSO = placedObjectTypeSO;
         Setup();
     }
 
     private void Setup()
     {
-        _count.text = _placedObjectTypeAndCount.count.ToString();
+        _count.text = _warehouseManager.GetCountPlacedObject(_placedObjectTypeSO).ToString();
 
         _warehouseManager.OnChangCountPlacedObject += ResourcesManager_OnChangCountPlacedObject;
 

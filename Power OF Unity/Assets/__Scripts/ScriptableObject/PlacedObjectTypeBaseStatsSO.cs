@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.EditorCoroutines.Editor;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -251,7 +250,7 @@ public class PlacedObjectTypeBaseStatsSO : ScriptableObject
     private Dictionary<PlacedObjectType, List<PlacedObjectTooltip>> GetPlacedObjectTooltipDictionary()
     {
         //Инициализируем возвращаемый словарь
-        Dictionary<PlacedObjectType, List<PlacedObjectTooltip>> placedObjectTooltipDictionary = new Dictionary<PlacedObjectType, List<PlacedObjectTooltip>>();
+        Dictionary<PlacedObjectType, List<PlacedObjectTooltip>> placedObjectTooltipDictionary = new ();
 
         // Во всех списках последовательность PlacedObjectType и языков совподают поэтому переберем любой из них (нам нужны только индексы).
         for (int indexPlacedObject = 0; indexPlacedObject < _namesPlacedObjectList.Count; indexPlacedObject++)

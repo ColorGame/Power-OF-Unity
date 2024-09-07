@@ -12,12 +12,46 @@ public class ResourcesBasicListSO : ScriptableObject
     [Header("Стартовое количество МОНЕТ")]
     [SerializeField] private int _coin;
     [Header("Список предметов с ДЕЙСТВИЕМ(Action)")]
-    [SerializeField] private List<PlacedObjectTypeAndCount> _placedObjectWithActionList; // Список Типов Размещяемых объектов c ДЕЙСТВИЕМ
+    [SerializeField] private List <PlacedObjectTypeAndCount> _placedObjectWithActionList; 
     [Header("Список предметов БРОНИ(Armor)")]
-    [SerializeField] private List<PlacedObjectTypeAndCount> _placedObjectTypeArmorList; // Список Размещяемых объектов типа БРОНЯ
+    [SerializeField] private List<PlacedObjectTypeAndCount> _placedObjectTypeArmorList; 
+
+    private Dictionary<PlacedObjectTypeSO, uint> _allPlacedObjectCountDictionary = null;
 
 
+   
     public int GetCoin() {  return _coin; }
+
+    public Dictionary<PlacedObjectTypeSO, uint> GetAllPlacedObjectCountDictionary()
+    {
+        if (_allPlacedObjectCountDictionary == null)
+        {
+            _allPlacedObjectCountDictionary = CompleteDictionary();
+        }
+        return _allPlacedObjectCountDictionary;
+    }
+
+    private Dictionary<PlacedObjectTypeSO, uint> CompleteDictionary()
+    {
+        Dictionary<PlacedObjectTypeSO, uint> allPlacedObjectCountDictionary = new Dictionary<PlacedObjectTypeSO, uint>();
+
+        foreach (PlacedObjectTypeAndCount placedObjectTypeAndCount in _placedObjectWithActionList)
+        {
+            if(!allPlacedObjectCountDictionary.ContainsKey(placedObjectTypeAndCount.placedObjectTypeSO)) //Если этого типа нет в ключах словоря до добавим
+            {
+                allPlacedObjectCountDictionary[placedObjectTypeAndCount.placedObjectTypeSO] = placedObjectTypeAndCount.count;
+            }
+        }
+        foreach (PlacedObjectTypeAndCount placedObjectTypeAndCount in _placedObjectTypeArmorList)
+        {
+            if (!allPlacedObjectCountDictionary.ContainsKey(placedObjectTypeAndCount.placedObjectTypeSO)) //Если этого типа нет в ключах словоря до добавим
+            {
+                allPlacedObjectCountDictionary[placedObjectTypeAndCount.placedObjectTypeSO] = placedObjectTypeAndCount.count;
+            }
+        }
+        return allPlacedObjectCountDictionary;
+    }
+
     public List<PlacedObjectTypeAndCount> GetPlacedObjectWithActionList()
     {
         // ИСКЛЮЧИМ ДУБЛИКАТЫ PlacedObjectTypeSO

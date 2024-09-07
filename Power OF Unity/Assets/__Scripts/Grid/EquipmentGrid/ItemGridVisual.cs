@@ -6,7 +6,7 @@ using UnityEngine;
 /// Визуализация размещения в сетке предметов экипировки
 /// </summary>
 /// <remarks>Работает с типом PlacedObject</remarks>
-public class ItemGridVisual : MonoBehaviour, IToggleActivity
+public class ItemGridVisual : MonoBehaviour
 {
 
     [Serializable] // Чтобы созданная структура могла отображаться в инспекторе
@@ -95,19 +95,24 @@ public class ItemGridVisual : MonoBehaviour, IToggleActivity
 
     public void SetActive(bool active)
     {
-        _canvasItemGrid.enabled = active;
         if (active)
         {
-            _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
-            _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid += PickUpDropSystem_OnRemovePlacedObjectAtGrid;
-            _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged += PickUpDropManager_OnGrabbedObjectGridPositionChanged;
-            _pickUpDropPlacedObject.OnGrabbedObjectGridExits += PickUpDropManager_OnGrabbedObjectGridExits;
+            // Включать будем только если активна нужная СЕТКА 
+            if (_equipmentGrid.GetStateGrid() == EquipmentGrid.GridState.ItemGrid)
+            {
+                _canvasItemGrid.enabled = active;
+                _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
+                _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid += PickUpDropSystem_OnRemovePlacedObjectAtGrid;
+                _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged += PickUpDropManager_OnGrabbedObjectGridPositionChanged;
+                _pickUpDropPlacedObject.OnGrabbedObjectGridExits += PickUpDropManager_OnGrabbedObjectGridExits;
 
-            _unitEquipmentSystem.OnEquipmentGridsCleared += UnitEquipmentSystem_OnEquipmentGridsCleared;
-            _unitEquipmentSystem.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
+                _unitEquipmentSystem.OnEquipmentGridsCleared += UnitEquipmentSystem_OnEquipmentGridsCleared;
+                _unitEquipmentSystem.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
+            }
         }
         else
         {
+            _canvasItemGrid.enabled = active;
             _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid -= OnAddPlacedObjectAtGrid;
             _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid -= PickUpDropSystem_OnRemovePlacedObjectAtGrid;
             _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged -= PickUpDropManager_OnGrabbedObjectGridPositionChanged;

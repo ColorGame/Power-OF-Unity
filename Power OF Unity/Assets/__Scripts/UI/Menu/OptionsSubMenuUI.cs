@@ -10,7 +10,7 @@ using UnityEngine.UI;
 /// <remarks>
 /// Создается и инициализируется в PersistentEntryPoint
 /// </remarks>
-public class OptionsSubMenuUI : ToggleVisibleAnimatioSubscribeMenuUI 
+public class OptionsSubMenuUI : ToggleVisibleAnimatioMenuUI 
 {
     public event EventHandler<bool> OnEdgeScrollingChange;
 
@@ -41,13 +41,15 @@ public class OptionsSubMenuUI : ToggleVisibleAnimatioSubscribeMenuUI
     private List<GameObject> _panelList; // Список панелий которые будем скрывать и показывать
       
 
-    public void Init(GameInput gameInput, SoundManager soundManager, MusicManager musicManager)
+    public void Init(GameInput gameInput, SoundManager soundManager, MusicManager musicManager, HashAnimationName hashAnimationName)
     {
         _soundManager = soundManager;
         _musicManager = musicManager;
         _gameInput = gameInput;
+        _hashAnimationName = hashAnimationName;
 
         Setup();
+        SetAnimationOpenClose();
     }     
 
     private void Setup()
@@ -65,8 +67,8 @@ public class OptionsSubMenuUI : ToggleVisibleAnimatioSubscribeMenuUI
 
     protected override void SetAnimationOpenClose()
     {
-        _animationOpen = _animBase.OptionsSubMenuOpen;
-        _animationClose = _animBase.OptionsSubMenuClose;
+        _animationOpen = _hashAnimationName.OptionsSubMenuOpen;
+        _animationClose = _hashAnimationName.OptionsSubMenuClose;
     }
 
     private void InitButtons()

@@ -7,16 +7,18 @@ using UnityEngine.UI;
 /// <remarks>
 /// Создается и инициализируется в PersistentEntryPoint
 /// </remarks>
-public class LoadGameSubMenuUI : ToggleVisibleAnimatioSubscribeMenuUI
+public class LoadGameSubMenuUI : ToggleVisibleAnimatioMenuUI
 {
     [SerializeField] private Button _loadGameButton;    //Загрузить игру
     [SerializeField] private Button _deleteSaveButton;  //Удалить сохранение
     [SerializeField] private Button _quitButton;        //Выйти из меню
-    public void Init(GameInput gameInput)
+    public void Init(GameInput gameInput, HashAnimationName hashAnimationName)
     {
         _gameInput = gameInput;
+        _hashAnimationName = hashAnimationName;
 
         Setup();
+        SetAnimationOpenClose();
     }
 
     private void Setup()
@@ -28,7 +30,7 @@ public class LoadGameSubMenuUI : ToggleVisibleAnimatioSubscribeMenuUI
 
     protected override void SetAnimationOpenClose()
     {
-        _animationOpen = _animBase.LoadGameSubMenuOpen;
-        _animationClose = _animBase.LoadGameSubMenuClose;
+        _animationOpen = _hashAnimationName.LoadGameSubMenuOpen;
+        _animationClose = _hashAnimationName.LoadGameSubMenuClose;
     }
 }

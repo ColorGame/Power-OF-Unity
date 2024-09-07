@@ -193,6 +193,8 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
                 // для сетки Основного и Доп. оружия установим TargetPosition в центре сетки
                 case EquipmentSlot.MainWeaponSlot:
                 case EquipmentSlot.OtherWeaponsSlot:
+                case EquipmentSlot.ArmorHeadSlot:
+                case EquipmentSlot.ArmorBodySlot:
 
                     _placedObject.SetTargetPosition(_equipmentGrid.GetWorldPositionGridCenter(gridSystemXY) - _offset); //Чтобы объект был по середине сетки надо вычесть смещение центра визуала относительно якоря
                     if (_canvasRenderMode == RenderMode.WorldSpace)// Если канвас в мировом пространстве то учтем и его поворот
@@ -292,6 +294,8 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
             // для сетки Основного и Доп. оружия установим newMouseGridPosition (0,0)
             case EquipmentSlot.MainWeaponSlot:
             case EquipmentSlot.OtherWeaponsSlot:
+            case EquipmentSlot.ArmorHeadSlot:
+            case EquipmentSlot.ArmorBodySlot:               
 
                 gridPositionMouse = new Vector2Int(0, 0);
                 drop = TryAddPlacedObjectAtGridPosition(gridPositionMouse, placedObject, gridSystemXY);
@@ -307,7 +311,6 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
         bool drop = false;
         if (_equipmentGrid.TryAddPlacedObjectAtGridPosition(gridPositionMouse, placedObject, gridSystemXY))
         {
-
             // Звук удачного размещения
             OnAddPlacedObjectAtEquipmentGrid?.Invoke(this, placedObject); // Запустим событие (запускаю здесь а не в EquipmentGrid т.к. placedObject еще надо настроить кодом выше)
             ResetPlacedObject(); // Обнулим взятый размещяемый объект
@@ -360,11 +363,11 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
         return ray.GetPoint(planeDistance); // получим точку на луче где она пересекла плоскость
     }
     /// <summary>
-    /// Cбросить и добавить размещенный объект в разделе ресурсы
+    /// Cбросить и вернуть размещенный объект в разделе ресурсы
     /// </summary>
     private void DropAddPlacedObjectInResources()
     {
-        _warehouseManager.AddPlacedObjectTypeList(_placedObject.GetPlacedObjectTypeSO());
+        _warehouseManager.AddCountPlacedObject(_placedObject.GetPlacedObjectTypeSO());
         _placedObject.Drop();
         _placedObject.SetFlagMoveStartPosition(true);
         ResetPlacedObject();

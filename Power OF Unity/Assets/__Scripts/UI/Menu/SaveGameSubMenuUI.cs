@@ -7,16 +7,18 @@ using UnityEngine.UI;
 /// <remarks>
 /// Создается и инициализируется в каждой сцене
 /// </remarks>
-public class SaveGameSubMenuUI : ToggleVisibleAnimatioSubscribeMenuUI
+public class SaveGameSubMenuUI : ToggleVisibleAnimatioMenuUI
 {
     [SerializeField] private Button _saveGameButton;    //Сохранить игру
     [SerializeField] private Button _quitButton;        //Выйти из меню
 
-    public void Init(GameInput gameInput)
+    public void Init(GameInput gameInput, HashAnimationName hashAnimationName)
     {
         _gameInput = gameInput;
+        _hashAnimationName = hashAnimationName;
 
         Setup();
+        SetAnimationOpenClose();
     }
 
     private void Setup()
@@ -27,7 +29,7 @@ public class SaveGameSubMenuUI : ToggleVisibleAnimatioSubscribeMenuUI
 
     protected override void SetAnimationOpenClose()
     {
-        _animationOpen = _animBase.SaveGameSubMenuOpen;
-        _animationClose = _animBase.SaveGameSubMenuClose;
+        _animationOpen = _hashAnimationName.SaveGameSubMenuOpen;
+        _animationClose = _hashAnimationName.SaveGameSubMenuClose;
     }
 }

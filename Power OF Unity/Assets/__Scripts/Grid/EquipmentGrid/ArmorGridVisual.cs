@@ -29,6 +29,7 @@ public class ArmorGridVisual : MonoBehaviour
     private PickUpDropPlacedObject _pickUpDropPlacedObject;
     private EquipmentGrid _equipmentGrid;
     private UnitEquipmentSystem _unitEquipmentSystem;
+    private Canvas _canvasArmorGrid;
 
 
     public void Init(PickUpDropPlacedObject pickUpDrop, EquipmentGrid equipmentGrid, UnitEquipmentSystem unitEquipmentSystem)
@@ -36,25 +37,33 @@ public class ArmorGridVisual : MonoBehaviour
         _pickUpDropPlacedObject = pickUpDrop;
         _equipmentGrid = equipmentGrid;
         _unitEquipmentSystem = unitEquipmentSystem;
+
+        _canvasArmorGrid = _equipmentGrid.GetCanvasArmorGrid();
     }
-
-
 
     public void SetActive(bool active)
     {
         if (active)
         {
-            _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
-            _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid += PickUpDropSystem_OnRemovePlacedObjectAtGrid;
-            _pickUpDropPlacedObject.OnGrabbedObjectGridExits += PickUpDropManager_OnGrabbedObjectGridExits;
+            // Включать будем только если активна нужная СЕТКА 
+            if (_equipmentGrid.GetStateGrid() == EquipmentGrid.GridState.ArmorGrid)
+            {
+                _canvasArmorGrid.enabled = active;
+                _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
+                _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid += PickUpDropSystem_OnRemovePlacedObjectAtGrid;
+                _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged += PickUpDropManager_OnGrabbedObjectGridPositionChanged;
+                _pickUpDropPlacedObject.OnGrabbedObjectGridExits += PickUpDropManager_OnGrabbedObjectGridExits;
 
-            _unitEquipmentSystem.OnEquipmentGridsCleared += UnitEquipmentSystem_OnEquipmentGridsCleared;
-            _unitEquipmentSystem.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
+                _unitEquipmentSystem.OnEquipmentGridsCleared += UnitEquipmentSystem_OnEquipmentGridsCleared;
+                _unitEquipmentSystem.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
+            }
         }
         else
         {
+            _canvasArmorGrid.enabled = active;
             _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid -= OnAddPlacedObjectAtGrid;
             _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid -= PickUpDropSystem_OnRemovePlacedObjectAtGrid;
+            _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged -= PickUpDropManager_OnGrabbedObjectGridPositionChanged;
             _pickUpDropPlacedObject.OnGrabbedObjectGridExits -= PickUpDropManager_OnGrabbedObjectGridExits;
 
             _unitEquipmentSystem.OnEquipmentGridsCleared -= UnitEquipmentSystem_OnEquipmentGridsCleared;
@@ -78,6 +87,14 @@ public class ArmorGridVisual : MonoBehaviour
     }
 
     /// <summary>
+    /// позиция захваченного объекта на сетке изменилась
+    /// </summary>
+    private void PickUpDropManager_OnGrabbedObjectGridPositionChanged(object sender, PlacedObjectGridParameters e)
+    {
+       // UpdateVisual();
+        ShowPossibleGridPositions(e.slot, e.placedObject, e.gridPositioAnchor, GridVisualType.Orange); //показать возможные сеточные позиции
+    }
+    /// <summary>
     /// Объект удален из сетки и повис над ней
     /// </summary>
     private void PickUpDropSystem_OnRemovePlacedObjectAtGrid(object sender, PlacedObject placedObject)
@@ -95,15 +112,8 @@ public class ArmorGridVisual : MonoBehaviour
     /// Обновить визуал
     /// </summary>
     private void UpdateVisual()
-    {        
-        if (!_armorHeadGridVisual.GetIsBusy())// Если сетка не занята
-        {
-            _armorHeadGridVisual.Show(GetColorTypeMaterial(GridVisualType.Ocean));
-        }
-        if (!_armorBodyGridVisual.GetIsBusy())// Если сетка не занята
-        {
-            _armorBodyGridVisual.Show(GetColorTypeMaterial(GridVisualType.Ocean));
-        }
+    {
+        SetVisualTypeOnFreeGridPosition(GridVisualType.Ocean);
     }
     /// <summary>
     /// Установить дефолтное состояние
@@ -114,13 +124,11 @@ public class ArmorGridVisual : MonoBehaviour
         _armorBodyGridVisual.SetIsBusyAndColor(false, GetColorTypeMaterial(GridVisualType.Ocean));
     }
     /// <summary>
-    /// Установить занятость и материал
+    /// Установить занятость и тип визуализации
     /// </summary>
     private void SetIsBusyAndMaterial(PlacedObject placedObject, bool isBusy, GridVisualType gridVisualType = 0)
-    {
-        GridSystemXY<GridObjectEquipmentXY> gridSystemXY = placedObject.GetGridSystemXY(); // Сеточная система которую занимает объект
-        List<Vector2Int> OccupiesGridPositionList = placedObject.GetOccupiesGridPositionList(); // Список занимаемых сеточных позиций
-        EquipmentSlot equipmentSlot = gridSystemXY.GetGridSlot(); // Слот сетки
+    {        
+        EquipmentSlot equipmentSlot = placedObject.GetGridSystemXY().GetGridSlot(); // Слот сетки
 
         switch (equipmentSlot)
         {
@@ -133,6 +141,41 @@ public class ArmorGridVisual : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Показать возможные сеточные позиции
+    /// </summary>
+    private void ShowPossibleGridPositions(EquipmentSlot equipmentSlot, PlacedObject placedObject, Vector2Int gridPositioAnchor, GridVisualType gridVisualType)
+    {       
+        switch (equipmentSlot)
+        {
+            case EquipmentSlot.ArmorHeadSlot:
+                if (!_armorHeadGridVisual.GetIsBusy())// Если сетка не занята
+                {
+                    _armorHeadGridVisual.Show(GetColorTypeMaterial(gridVisualType));
+                }
+                break;
+            case EquipmentSlot.ArmorBodySlot:
+                if (!_armorBodyGridVisual.GetIsBusy())// Если сетка не занята
+                {
+                    _armorBodyGridVisual.Show(GetColorTypeMaterial(gridVisualType));
+                }
+                break;
+        }
+    }
+    /// <summary>
+    /// Установить переданный ТИП ВИЗУАЛИЗАЦИИ на свободные сеточные позиции
+    /// </summary>
+    private void SetVisualTypeOnFreeGridPosition(GridVisualType gridVisualType)
+    {
+        if (!_armorHeadGridVisual.GetIsBusy())// Если сетка не занята
+        {
+            _armorHeadGridVisual.Show(GetColorTypeMaterial(gridVisualType));
+        }
+        if (!_armorBodyGridVisual.GetIsBusy())// Если сетка не занята
+        {
+            _armorBodyGridVisual.Show(GetColorTypeMaterial(gridVisualType));
+        }
+    }
 
     /// <summary>
     /// (Вернуть Цвет в зависимости от Состояния) Получить Цвет для Сеточной Визуализации в зависимости от переданного в аргумент Состояния Сеточной Визуализации

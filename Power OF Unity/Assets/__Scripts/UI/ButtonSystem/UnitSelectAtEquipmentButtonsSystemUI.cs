@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Система кнопок - выбора  Юнита, для настройки экипировки
 /// </summary>
-public class UnitSelectAtEquipmentButtonsSystemUI : MonoBehaviour, IToggleActivity
+public class UnitSelectAtEquipmentButtonsSystemUI : UnitSelectButtonsSystemUI
 {
     [Header("Кнопки для переключения вкладок,\nи изображение для выделенной кнопки")]
     [SerializeField] private Button _unitsOnBarrackButtonPanel;  // Кнопка для включения панели Юнитов в БАРАКЕ
@@ -18,37 +18,18 @@ public class UnitSelectAtEquipmentButtonsSystemUI : MonoBehaviour, IToggleActivi
     [Header("Текс вкладки для переключения")]
     [SerializeField] private TextMeshProUGUI _onBarrackHeaderText; // Текс заголовка
     [SerializeField] private TextMeshProUGUI _onMissionHeaderText; // Текс заголовка
-       
-    private UnitManager _unitManager;
-    private ScrollRect _scrollRect; //Компонент прокрутки кнопок    
-    private Camera _cameraEquipmentUI;
-    private TooltipUI _tooltipUI;
-    private Canvas _canvas;
-   
+     
 
-    private void Awake()
+    protected override void Awake()
     {
-        _scrollRect = GetComponent<ScrollRect>();
-        _canvas = GetComponentInParent<Canvas>(true);
-        RenderMode canvasRenderMode = _canvas.renderMode;
-        if (canvasRenderMode == RenderMode.WorldSpace)// Если канвас в мировом пространстве то
-        {
-            _cameraEquipmentUI = GetComponentInParent<Camera>(); // Для канваса в мировом пространстве будем использовать отдельную дополнительную камеру
-        }
-        else
-        {
-            _cameraEquipmentUI = null;
-        }
-    }
+        base.Awake();
 
-    public void Init(UnitManager unitManager)
-    {
-        _unitManager = unitManager;
+        _containerArray = new Transform[] { _unitsOnBarrackContainer, _unitsOnMissionContainer };
+        _buttonSelectedImageArray = new Image[] { _barrackButtonSelectedImage, _missionButtonSelectedImage };
+        _headerTextArray = new TextMeshProUGUI[] { _onBarrackHeaderText, _onMissionHeaderText };
+    }  
 
-        Setup();
-    }
-
-    private void Setup()
+    protected override void SetDelegateContainerSelectionButton()
     {
         _unitsOnMissionButtonPanel.onClick.AddListener(() =>//Добавим событие при нажатии на нашу кнопку// AddListener() в аргумент должен получить делегат- ссылку на функцию. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
         {
@@ -61,19 +42,21 @@ public class UnitSelectAtEquipmentButtonsSystemUI : MonoBehaviour, IToggleActivi
         });
     }
 
-    public void SetActive(bool active)
+
+    public override void SetActive(bool active)
     {
         _canvas.enabled = active;
+
         if (active)
         {
-            CreateButtons(); // Создать систему кнопок для выбора Юнита     
             SelectFirstUnitAndShowTab();
         }
         else
         {
             _unitManager.ClearSelectedUnit(); // Очистим выделенного юнита чтобы сбросить 3D модель и ПОРТФОЛИО
+            ClearActiveButtonContainer();
         }
-    }
+    }  
 
 
     /// <summary>
@@ -96,73 +79,36 @@ public class UnitSelectAtEquipmentButtonsSystemUI : MonoBehaviour, IToggleActivi
 
     private void ShowMissionTab()
     {
-        SetActiveUnitsOnMissionTab(true);
-        SetActiveUnitsOnBarrackTab(false);
+        ShowAndUpdateContainer(_unitsOnMissionContainer);
+        ShowSelectedButton(_missionButtonSelectedImage);
+        ShowSelectedHeaderText(_onMissionHeaderText);
     }
     private void ShowBarrackTab()
     {
-        SetActiveUnitsOnBarrackTab(true);
-        SetActiveUnitsOnMissionTab(false);
-    }
-    private void SetActiveUnitsOnBarrackTab(bool active)
-    {
-        _barrackButtonSelectedImage.enabled = active;
-        _onBarrackHeaderText.enabled = active;
-        _unitsOnBarrackContainer.gameObject.SetActive(active);
-        if (active) { _scrollRect.content = (RectTransform)_unitsOnBarrackContainer; } //Если активна то Установим этот контейнер как контент для прокрутки        
+        ShowAndUpdateContainer(_unitsOnBarrackContainer);
+        ShowSelectedButton(_barrackButtonSelectedImage);
+        ShowSelectedHeaderText(_onBarrackHeaderText);
     }
 
-    private void SetActiveUnitsOnMissionTab(bool active)
-    {
-        _missionButtonSelectedImage.enabled = active;
-        _onMissionHeaderText.enabled = active;
-        _unitsOnMissionContainer.gameObject.SetActive(active);
-        if (active) { _scrollRect.content = (RectTransform)_unitsOnMissionContainer; } //Если активна то Установим этот контейнер как контент для прокрутки        
-    }
 
-    private void CreateButtons()
+    protected override void CreateSelectButtonsSystemInActiveContainer()
     {
-        CreateUnitSelectOnMissionButtonsSystem();
-        CreateUnitSelectOnBarrackButtonsSystem();
+        if (_activeContainer == _unitsOnBarrackContainer)
+            CreateUnitSelectButtonsSystem(_unitManager.GetUnitFriendOnBarrackList(),_unitsOnBarrackContainer);
+
+        if (_activeContainer == _unitsOnMissionContainer)
+            CreateUnitSelectButtonsSystem(_unitManager.GetUnitFriendOnMissionList(), _unitsOnMissionContainer);
     }
 
     /// <summary>
-    /// Создать кнопки выбора юнитов на ЗАДАНИИ
+    /// Создать кнопки выбора юнитов, из переданного списка в переданном контейнере
     /// </summary>
-    private void CreateUnitSelectOnMissionButtonsSystem()
+    private void CreateUnitSelectButtonsSystem(List<Unit> unitList, Transform containerTransform)
     {
-        foreach (Transform unitSelectButton in _unitsOnMissionContainer) // Переберем все трансформы в нашем контейнере
-        {
-            Destroy(unitSelectButton.gameObject); // Удалим игровой объект прикрипленный к Transform
+        for (int index = 0; index < unitList.Count; index++)
+        {           
+            UnitSelectAtEquipmentButtonUI unitSelectAtEquipmentButton = Instantiate(GameAssets.Instance.unitSelectAtEquipmentButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
+            unitSelectAtEquipmentButton.Init(unitList[index], _unitManager, index + 1);
         }
-        
-        List<Unit> unitFriendOnMissionList = _unitManager.GetUnitFriendOnMissionList();// список  моих юнитов на миссии
-        for (int index = 0; index < unitFriendOnMissionList.Count; index++)
-        {
-            CreateUnitSelectButton(unitFriendOnMissionList[index], _unitsOnMissionContainer, index + 1);
-        }
-        _scrollRect.verticalScrollbar.value = 1f; // переместим прокрутку панели в верх.
-    }
-    /// <summary>
-    /// Создать кнопки выбора юнитов на БАЗЕ
-    /// </summary>
-    private void CreateUnitSelectOnBarrackButtonsSystem()
-    {
-        foreach (Transform unitSelectButton in _unitsOnBarrackContainer) // Переберем все трансформы в нашем контейнере
-        {
-            Destroy(unitSelectButton.gameObject); // Удалим игровой объект прикрипленный к Transform
-        }
-
-        List<Unit> unitFriendOnBarrackList = _unitManager.GetUnitFriendOnBarrackList();// список  моих юнитов в казарме    
-        for (int index = 0; index < unitFriendOnBarrackList.Count; index++)
-        {
-            CreateUnitSelectButton(unitFriendOnBarrackList[index], _unitsOnBarrackContainer, index + 1);
-        }      
-        _scrollRect.verticalScrollbar.value = 1f; // переместим прокрутку панели в верх.
-    }
-    private void CreateUnitSelectButton(Unit unit, Transform containerTransform, int index) // Создать Кнопку Размещаемых объектов и поместим в контейнер
-    {
-        UnitSelectAtEquipmentButtonUI unitSelectAtEquipmentButton = Instantiate(GameAssets.Instance.unitSelectAtEquipmentButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
-        unitSelectAtEquipmentButton.Init(unit, _unitManager, index);
     }
 }

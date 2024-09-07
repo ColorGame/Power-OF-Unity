@@ -7,12 +7,12 @@ using System;
 public struct PlacedObjectTypeAndCount 
 { 
     public PlacedObjectTypeSO placedObjectTypeSO;
-    public int count;
+    public uint count;
 
     /// <summary>
     /// Размещаемый объект - ТИП и КОЛИЧЕСТВО. 
     /// </summary>
-    public PlacedObjectTypeAndCount(PlacedObjectTypeSO placedObjectTypeSO, int count)
+    public PlacedObjectTypeAndCount(PlacedObjectTypeSO placedObjectTypeSO, uint count)
     {
         this.placedObjectTypeSO = placedObjectTypeSO;
         this.count = count;
