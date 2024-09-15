@@ -27,7 +27,8 @@ public class GameAssets : ScriptableObject //Игровые Активы
 
     [Header("Кнопки - для динамического создания в UI")]
     public ActionButtonUI actionButtonUI; // Префаб кнопки выбора действия
-    public PlacedObjectSelectButtonUI placedObjectSelectButton; // Кнопка выбора оружия
+    public PlacedObjectSelectButtonUI placedObjectSelectButton; // Кнопка выбора объекта  типа PlacedObject
+    public PlacedObjectBuySellCountButtonUI placedObjectBuySellCountButton; //Кнопки изменения количества покупки и продажи объекта типа PlacedObject
     public UnitEnemySelectAtLevelButtonUI unitEnemySelectAtLevelButton; // Кнопка - выбора вражеского юнита на игровом уровне.
     public UnitFriendSelectAtLevelButtonUI unitFriendSelectAtLevelButton; // Кнопка - выбора дружественного юнита на игровом уровне.
     public UnitSelectAtEquipmentButtonUI unitSelectAtEquipmentButton; // Кнопка - выбора  Юнита, для настройки экипировки

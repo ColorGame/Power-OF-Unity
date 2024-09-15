@@ -10,7 +10,7 @@ using UnityEngine;
 public class ResourcesBasicListSO : ScriptableObject
 {
     [Header("Стартовое количество МОНЕТ")]
-    [SerializeField] private int _coin;
+    [SerializeField] private uint _coin;
     [Header("Список предметов с ДЕЙСТВИЕМ(Action)")]
     [SerializeField] private List <PlacedObjectTypeAndCount> _placedObjectWithActionList; 
     [Header("Список предметов БРОНИ(Armor)")]
@@ -20,7 +20,7 @@ public class ResourcesBasicListSO : ScriptableObject
 
 
    
-    public int GetCoin() {  return _coin; }
+    public uint GetCoin() {  return _coin; }
 
     public Dictionary<PlacedObjectTypeSO, uint> GetAllPlacedObjectCountDictionary()
     {

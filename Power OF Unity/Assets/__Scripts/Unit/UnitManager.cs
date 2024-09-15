@@ -115,12 +115,17 @@ public class UnitManager // Менеджер (администратор) Юнитов
         OnSelectedUnitChanged?.Invoke(this, _selectedUnit); // Подписываятся кнопки выбора юнита для настройки экипировки UnitSelectAtEquipmentButtonUI
     }
     /// <summary>
-    /// Нанять выбранного юнита
+    /// Попробую Нанять выбранного юнита
     /// </summary>
-    public void HireSelectedUnit()
+    public bool TryHireSelectedUnit()
     {
-        RemoveHireUnitList(_selectedUnit);
-        AddUnitFriendList(_selectedUnit);
+        if (_warehouseManager.TryMinusCoins(_selectedUnit.GetUnitTypeSO<UnitFriendSO>().GetPriceHiring()))
+        {
+            RemoveHireUnitList(_selectedUnit);
+            AddUnitFriendList(_selectedUnit);
+            return true;
+        }
+        else { return false; }
     }
     /// <summary>
     /// Уволить выбранного юнита
@@ -130,7 +135,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
         // Переберем экипировку юнита
         foreach (PlacedObjectGridParameters placedObjectGridParameters in _selectedUnit.GetUnitEquipment().GetPlacedObjectList())
         {
-            _warehouseManager.AddCountPlacedObject(placedObjectGridParameters.placedObjectTypeSO);
+            _warehouseManager.PlusCountPlacedObject(placedObjectGridParameters.placedObjectTypeSO);
         }
         _selectedUnit.GetUnitEquipment().ClearPlacedObjectList();
         RemoveUnitFriendList(_selectedUnit);
@@ -247,9 +252,9 @@ public class UnitManager // Менеджер (администратор) Юнитов
     public List<Unit> GetUnitFriendOnBarrackList() { return _unitFriendOnBarrackList; }
     public List<Unit> GetUnitEnemyList() { return _unitEnemyList; }
     public List<Unit> GetUnitFriendDeadList() { return _unitFriendDeadList; }
-   /// <summary>
-   /// Юниты для найма
-   /// </summary>
+    /// <summary>
+    /// Юниты для найма
+    /// </summary>
     public List<Unit> GetHireUnitList() { return _hireUnitList; }
     public Unit GetSelectedUnit() { return _selectedUnit; }
 

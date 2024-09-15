@@ -13,7 +13,7 @@ public class UnitFriendSO : UnitTypeSO
     [Header("Базовый тип брони юнита ")]
     [SerializeField] private UnitArmorType _basicAmorType; // Базовый тип брони юнита
     [Header("Стоимость юнита при найме ")]
-    [SerializeField] private int _priceHiring;
+    [SerializeField] private uint _priceHiring;
 
     public Transform GetUnitAvatarPortfolioVisualPrefab() { return _unitAvatarPortfolioVisualPrefab; }
     public Transform GetUnitVisualPrefab(UnitArmorType unitArmorType)
@@ -35,6 +35,6 @@ public class UnitFriendSO : UnitTypeSO
         }
     }
     public UnitArmorType GetUnitArmorType() { return _basicAmorType; }
-    public int GetPriceHiring() {  return _priceHiring; }
+    public uint GetPriceHiring() {  return _priceHiring; }
 
 }

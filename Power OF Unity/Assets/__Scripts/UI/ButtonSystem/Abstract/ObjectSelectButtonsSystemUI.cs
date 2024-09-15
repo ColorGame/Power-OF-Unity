@@ -30,9 +30,9 @@ public abstract class ObjectSelectButtonsSystemUI : MonoBehaviour, IToggleActivi
     /// <summary>
     /// установить делегат кнопке выбора контейнера
     /// </summary>
-    protected virtual void SetDelegateContainerSelectionButton() { }
+    protected abstract void SetDelegateContainerSelectionButton();
 
-    public virtual void SetActive(bool active) { }
+    public abstract void SetActive(bool active);
 
     protected void ShowSelectedButton(Image typeButtonSelectedImage) // Показать выделенную кнопку
     {
@@ -69,7 +69,7 @@ public abstract class ObjectSelectButtonsSystemUI : MonoBehaviour, IToggleActivi
     /// <summary>
     /// Очистим активный контейнер c кнопками
     /// </summary>
-    protected void ClearActiveButtonContainer()
+    protected virtual void ClearActiveButtonContainer()
     {
         if (_activeContainer != null)
         {
@@ -97,7 +97,7 @@ public abstract class ObjectSelectButtonsSystemUI : MonoBehaviour, IToggleActivi
     /// <summary>
     ///  Создать систему кнопок выбора(объектов) в активном контейнере
     /// </summary>
-    protected virtual void CreateSelectButtonsSystemInActiveContainer() { }   
+    protected abstract void CreateSelectButtonsSystemInActiveContainer();
 }
 
 

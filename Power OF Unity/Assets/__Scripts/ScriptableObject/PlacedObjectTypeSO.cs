@@ -32,8 +32,8 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
     [Header("Вес размещаемого объекта в килограммах")]
     [Range(0, 50)][SerializeField] private int _weight;
     [Header("Цена ПОКУПКИ и ПРОДАЖИ на рынке")]
-    [SerializeField] private uint _priceBuy;
-    [SerializeField] private uint _priceSell;
+    [SerializeField] private uint _priceBuy ;
+    [SerializeField] private uint _priceSell ;
 
     /* [Tooltip("Префаб размещаемого объекта 3D/для создания и размещении на игроке")]
      [SerializeField] private Transform _prefab3D;*/

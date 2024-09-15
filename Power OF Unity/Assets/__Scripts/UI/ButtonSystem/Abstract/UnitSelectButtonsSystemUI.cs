@@ -15,7 +15,7 @@ public abstract class UnitSelectButtonsSystemUI : ObjectSelectButtonsSystemUI
         Setup();
     }
 
-    protected void ShowSelectedHeaderText(TextMeshProUGUI selectHeaderText) // Показать выпранный текст оглавления
+    protected void ShowSelectedHeaderText(TextMeshProUGUI selectHeaderText) // Показать выбранный текст оглавления
     {
         foreach (TextMeshProUGUI headerText in _headerTextArray) // Переберем массив 
         {

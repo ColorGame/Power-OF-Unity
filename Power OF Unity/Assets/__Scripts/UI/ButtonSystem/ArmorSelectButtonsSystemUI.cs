@@ -9,9 +9,9 @@ public class ArmorSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
     [SerializeField] private Transform _armorHeadSelectContainer; // Контейнер для выбора шлема 
     [SerializeField] private Transform _armorBodySelectContainer; // Контейнер для выбора бронежилета   
     [Header("Кнопки переключения")]
-    [SerializeField] private Button _armorHeadButtonPanel;  // Кнопка для включения панели оружия
+    [SerializeField] private Button _armorHeadButton;  // Кнопка для включения панели оружия
     [SerializeField] private Image _armorHeadButtonSelectedImage; // Изображение выделенной кнопки оружия
-    [SerializeField] private Button _armorBodyButtonPanel;  // Кнопка для включения панели предмета
+    [SerializeField] private Button _armorBodyButton;  // Кнопка для включения панели предмета
     [SerializeField] private Image _armorBodyButtonSelectedImage; // Изображение выделенной кнопки предмета
 
 
@@ -26,13 +26,13 @@ public class ArmorSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
 
     protected override void SetDelegateContainerSelectionButton()
     {
-        _armorHeadButtonPanel.onClick.AddListener(() => //Добавим событие при нажатии на нашу кнопку// AddListener() в аргумент должен получить делегат- ссылку на функцию. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
+        _armorHeadButton.onClick.AddListener(() => //Добавим событие при нажатии на нашу кнопку// AddListener() в аргумент должен получить делегат- ссылку на функцию. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
         {
             ShowAndUpdateContainer(_armorHeadSelectContainer);
             ShowSelectedButton(_armorHeadButtonSelectedImage);
-        }); // _armorHeadButtonPanel.onClick.AddListener(delegate { ShowAndUpdateContainer(_unitOnMissionContainer); }); // Еще вариант объявления
+        }); // _armorHeadButton.onClick.AddListener(delegate { ShowAndUpdateContainer(_unitOnMissionContainer); }); // Еще вариант объявления
 
-        _armorBodyButtonPanel.onClick.AddListener(() =>
+        _armorBodyButton.onClick.AddListener(() =>
         {
             ShowAndUpdateContainer(_armorBodySelectContainer);
             ShowSelectedButton(_armorBodyButtonSelectedImage);
@@ -80,16 +80,7 @@ public class ArmorSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
     private void CreatePlacedObjectSelectButton(PlacedObjectTypeSO placedObjectTypeSO, Transform containerTransform)
     {
         PlacedObjectSelectButtonUI placedObjectSelectButton = Instantiate(GameAssets.Instance.placedObjectSelectButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
-        Transform visualButton = Instantiate(placedObjectTypeSO.GetVisual2D(), placedObjectSelectButton.transform); // Создадим Визуал кнопки в зависимости от типа размещаемого объекта и сделаем дочерним к кнопке 
-
-        if (_canvas.renderMode == RenderMode.WorldSpace)
-        {
-            Transform[] childrenArray = visualButton.GetComponentsInChildren<Transform>(); // Найдем все дочернии объекты визуала и изменим слой, что бы они не рендерились за гранимцами маски
-            foreach (Transform child in childrenArray)
-            {
-                child.gameObject.layer = 13;
-            }
-        }
+        Transform visualButton = Instantiate(placedObjectTypeSO.GetVisual2D(), placedObjectSelectButton.transform); // Создадим Визуал кнопки в зависимости от типа размещаемого объекта и сделаем дочерним к кнопке               
 
         placedObjectSelectButton.Init(_tooltipUI, _pickUpDrop, _warehouseManager, placedObjectTypeSO);
     }

@@ -59,7 +59,7 @@ public class UnitSelectAtManagementButtonUI : MonoBehaviour
         else// В противном слючаи - это юнит для найма
         {
             Destroy(_statusContainer.gameObject);
-            _priceText.text = unit.GetUnitTypeSO<UnitFriendSO>().GetPriceHiring().ToString();
+            _priceText.text = $"{unit.GetUnitTypeSO<UnitFriendSO>().GetPriceHiring().ToString("N0")} $";
         }
 
         _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;                     

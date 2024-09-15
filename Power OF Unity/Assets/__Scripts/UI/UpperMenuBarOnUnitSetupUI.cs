@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -30,6 +31,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     private UnitEquipmentSystem _unitEquipmentSystem;
     private ItemSelectButtonsSystemUI _itemSelectButtonsSystemUI;
     private ArmorSelectButtonsSystemUI _armorSelectButtonsSystemUI;
+    private MarketUI _marketUI;
     private UnitSelectForManagementButtonsSystemUI _unitManagerTabUI;
 
 
@@ -38,6 +40,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
 
     private GameInput _gameInput;
     private GameMenuUI _gameMenuUI;
+    private WarehouseManager _warehouseManager;
 
     private void Awake()
     {
@@ -55,6 +58,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
 
     public void Init(
         GameInput gameInput,
+        WarehouseManager warehouseManager,
         GameMenuUI gameMenuUI,
         UnitPortfolioUI unitPortfolioUI,
         UnitSelectAtEquipmentButtonsSystemUI unitSelectAtEquipmentButtonsSystemUI,
@@ -62,9 +66,11 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
         UnitEquipmentSystem unitEquipmentSystem,
         ItemSelectButtonsSystemUI itemSelectButtonsSystemUI,
         ArmorSelectButtonsSystemUI armorSelectButtonsSystemUI,
+        MarketUI marketUI,
         UnitSelectForManagementButtonsSystemUI unitManagerTabUI)
     {
         _gameInput = gameInput;
+        _warehouseManager = warehouseManager;
         _gameMenuUI = gameMenuUI;
 
         _unitPortfolioUI = unitPortfolioUI;
@@ -73,9 +79,8 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
         _unitEquipmentSystem = unitEquipmentSystem;
         _itemSelectButtonsSystemUI = itemSelectButtonsSystemUI;
         _armorSelectButtonsSystemUI = armorSelectButtonsSystemUI;
+        _marketUI = marketUI;
         _unitManagerTabUI = unitManagerTabUI;
-
-
 
         Setup();
     }
@@ -102,12 +107,22 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
             _itemSelectButtonsSystemUI,
             _armorSelectButtonsSystemUI,
             _unitSelectAtEquipmentButtonsSystemUI,
+            _marketUI,
             _unitManagerTabUI
        };
+
+        _coinCountText.text = $"{_warehouseManager.GetCountCoin().ToString("N0")}";
+        _warehouseManager.OnChangCoinCount += WarehouseManager_OnChangCoinCount;
 
         SubscribeAlternativeToggleVisible();
         ShowItemTab();
     }
+
+    private void WarehouseManager_OnChangCoinCount(object sender, uint count)
+    {
+        _coinCountText.text =$"{count.ToString("N0")}";
+    }
+
 
     /// <summary>
     /// Подписаться на альтернативное переключение видимости меню (обычно это ESC)
@@ -170,7 +185,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     private void ShowShopTab()
     {
         ShowSelectedButton(_selectedShopButtonImage);
-        ShowTabs(new IToggleActivity[] { });
+        ShowTabs(new IToggleActivity[] {_marketUI });
 
     }
     private void ShowMissionTab()
@@ -205,5 +220,11 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
         {
             buttonSelectedImage.enabled = (buttonSelectedImage == typeButtonSelectedImage);// Если это переданное нам изображение то включим его
         }
+    }
+
+    private void OnDestroy()
+    {
+        if(_warehouseManager!=null)
+        _warehouseManager.OnChangCoinCount -= WarehouseManager_OnChangCoinCount;
     }
 }

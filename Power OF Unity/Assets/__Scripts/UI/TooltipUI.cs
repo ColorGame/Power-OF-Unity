@@ -133,7 +133,7 @@ public class TooltipUI : MonoBehaviour
     {
         gameObject.SetActive(true);
         _tooltipTimer = tooltipTimer;
-        _contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize; // размер подсказки по горизонтали подстроиться под размер текста
+        _contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize; // размер подсказки по горизонтали подстроиться под размер текста      
 
         EnableShortTooltipsText(); // Включить текст коротких всплывающих подсказок
 
@@ -153,7 +153,7 @@ public class TooltipUI : MonoBehaviour
     public void ShowAnchoredPlacedObjectTooltip(PlacedObjectTooltip placedObjectTooltip, RectTransform slotRectTransform, Camera cameraSlotRender = null)
     {
         gameObject.SetActive(true);
-        _contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained; // Отключим автоматическое выставление ширины
+        _contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained; // Отключим автоматическое выставление ширины    
         _tooltipRectTransform.sizeDelta = new Vector2(_widthTooltip, 0); // Установим ширину подсказки (высота - будет выставляться автоматически) 
 
         EnablePlacedObjectTooltip();
@@ -184,7 +184,7 @@ public class TooltipUI : MonoBehaviour
     public void ShowAnchoredShortTooltip(string shortTooltipsText, RectTransform slotRectTransform, Camera cameraSlotRender = null)
     {
         gameObject.SetActive(true);
-        _contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained; // Отключим автоматическое выставление ширины
+        _contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained; // Отключим автоматическое выставление ширины     
         _tooltipRectTransform.sizeDelta = new Vector2(_widthTooltip, 0); // Установим ширину подсказки (высота - будет выставляться автоматически)
 
         EnableShortTooltipsText();

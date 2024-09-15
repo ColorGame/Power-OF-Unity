@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// </summary>
 public class PlacedObjectSelectButtonUI : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _count;
+    [SerializeField] private TextMeshProUGUI _countText;
 
     private Button _button;
     private TooltipUI _tooltipUI;
@@ -31,7 +31,7 @@ public class PlacedObjectSelectButtonUI : MonoBehaviour
 
     private void Setup()
     {
-        _count.text = _warehouseManager.GetCountPlacedObject(_placedObjectTypeSO).ToString();
+        _countText.text = _warehouseManager.GetCountPlacedObject(_placedObjectTypeSO).ToString();
 
         _warehouseManager.OnChangCountPlacedObject += ResourcesManager_OnChangCountPlacedObject;
 
@@ -44,7 +44,7 @@ public class PlacedObjectSelectButtonUI : MonoBehaviour
     private void ResourcesManager_OnChangCountPlacedObject(object sender, PlacedObjectTypeAndCount placedObjectTypeAndCount)
     {
         if (_placedObjectTypeSO == placedObjectTypeAndCount.placedObjectTypeSO) // Если это наш тип то обновим текст
-            _count.text = placedObjectTypeAndCount.count.ToString();
+            _countText.text = placedObjectTypeAndCount.count.ToString();
     }
 
     /// <summary>
@@ -54,13 +54,13 @@ public class PlacedObjectSelectButtonUI : MonoBehaviour
     {
         _button.onClick.AddListener(() =>
         {
-            if (_warehouseManager.TryDecreaseCountPlacedObjectType(_placedObjectTypeSO))
+            if (_warehouseManager.TryMinusCountPlacedObjectType(_placedObjectTypeSO))
             {
                 _pickUpDrop.CreatePlacedObject(transform.position, _placedObjectTypeSO);
             }
             else
             {
-                _tooltipUI.ShowShortTooltipFollowMouse($"не хватает {_placedObjectTypeSO.GetPlacedObjectTooltip().name}", new TooltipUI.TooltipTimer { timer = 1f }); // Покажем подсказку и зададим новый таймер отображения подсказки
+                _tooltipUI.ShowShortTooltipFollowMouse($"не хватает {_placedObjectTypeSO.GetPlacedObjectTooltip().name.ToUpper()}", new TooltipUI.TooltipTimer { timer = 1f }); // Покажем подсказку и зададим новый таймер отображения подсказки
             }
         });
     }

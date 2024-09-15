@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
@@ -19,7 +19,11 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
     [Header("Текс ОГЛАВЛЕНИЯ вкладки для переключения")]
     [SerializeField] private TextMeshProUGUI _myUnitsText; // Текст заголовка
     [SerializeField] private TextMeshProUGUI _hireUnitsText; // Текст заголовка
-    [Header("Иконки в оглавлении таблицы для переключения")]
+    [Header("Иконки в оглавлении таблицы для переключения\nи настройкм всплыв. подсказки")]
+    [SerializeField] private MouseEnterExitEventsUI _healthImage;
+    [SerializeField] private MouseEnterExitEventsUI _actionPointsImage;
+    [SerializeField] private MouseEnterExitEventsUI _powerImage;
+    [SerializeField] private MouseEnterExitEventsUI _accuracyImage;
     [SerializeField] private Image _barrackImage;
     [SerializeField] private Image _missionImage;
     [SerializeField] private Image _priceImage;
@@ -69,6 +73,27 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
         {
             DismissUnit();
         });
+
+
+        SetTooltip(_healthImage, "здоровье");
+        SetTooltip(_actionPointsImage, "едениц времени");
+        SetTooltip(_powerImage, "сила");
+        SetTooltip(_accuracyImage, "точность");
+        SetTooltip(_barrackImage.GetComponent<MouseEnterExitEventsUI>(), "отправить на базу");
+        SetTooltip(_missionImage.GetComponent<MouseEnterExitEventsUI>(), "отправить на задание");   
+        SetTooltip(_priceImage.GetComponent<MouseEnterExitEventsUI>(), "стоимость найма");   
+    }
+
+    private void SetTooltip(MouseEnterExitEventsUI mouseEnterExitEventsUI, string text)
+    {
+        mouseEnterExitEventsUI.OnMouseEnter += (object sender, EventArgs e) => // Подпишемся на событие
+        {
+            _tooltipUI.ShowShortTooltipFollowMouse(text, new TooltipUI.TooltipTimer { timer = 0.8f }); // Покажем подсказку и зададим новый таймер отображения подсказки
+        };
+        mouseEnterExitEventsUI.OnMouseExit += (object sender, EventArgs e) =>
+        {
+            _tooltipUI.Hide(); // При отведении мыши скроем подсказку
+        };
     }
 
     public override void SetActive(bool active)
@@ -97,7 +122,11 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
             _tooltipUI.ShowShortTooltipFollowMouse("ВЫБЕРИ ЮНИТА", new TooltipUI.TooltipTimer { timer = 0.5f }); // Покажем подсказку и зададим новый таймер отображения подсказки
             return; // Выходим игнор. код ниже
         }
-        _unitManager.HireSelectedUnit();
+       if(!_unitManager.TryHireSelectedUnit())
+        {
+            _tooltipUI.ShowShortTooltipFollowMouse("Недостаточно СРЕДСТВ", new TooltipUI.TooltipTimer { timer = 0.8f }); // Покажем подсказку и зададим новый таймер отображения подсказки
+            return; // Выходим игнор. код ниже
+        }
         ShowAndUpdateContainer(_hireUnitsContainer);
         _unitManager.ClearSelectedUnit(); // Очистим выделенного юнита чтобы сбросить 3D модель и ПОРТФОЛИО
     }
@@ -154,8 +183,8 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
         }
         else
         {
-            int price = unit.GetUnitTypeSO<UnitFriendSO>().GetPriceHiring();
-            _debitedText.text = $"-({price})";
+            uint price = unit.GetUnitTypeSO<UnitFriendSO>().GetPriceHiring();
+            _debitedText.text = $"-({price.ToString("N0")})";
         }
     }
 

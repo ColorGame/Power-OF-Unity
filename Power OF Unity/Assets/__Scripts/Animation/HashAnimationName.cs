@@ -24,9 +24,9 @@ public class HashAnimationName
     public int LoadGameSubMenuOpen = Animator.StringToHash("LoadGameSubMenuOpen");
     public int LoadGameSubMenuClose = Animator.StringToHash("LoadGameSubMenuClose");
 
-    public int PlacedObjectSellTabOpen = Animator.StringToHash("PlacedObjectSellTabOpen");
-    public int PlacedObjectSellTabClose = Animator.StringToHash("PlacedObjectSellTabClose");
-
     public int PlacedObjectBuyTabOpen = Animator.StringToHash("PlacedObjectBuyTabOpen");
-    public int PlacedObjectBuyTabClose = Animator.StringToHash("PlacedObjectBuyTabClose");
+    public int PlacedObjectSellTabOpen = Animator.StringToHash("PlacedObjectSellTabOpen");
+
+    public int PlacedObjectBuyTabFirstOpen = Animator.StringToHash("PlacedObjectBuyTabFirstOpen");
+    public int PlacedObjectSellTabFirstOpen = Animator.StringToHash("PlacedObjectSellTabFirstOpen");
 }

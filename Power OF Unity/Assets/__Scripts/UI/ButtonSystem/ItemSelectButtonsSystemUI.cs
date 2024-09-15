@@ -9,9 +9,9 @@ public class ItemSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
     [SerializeField] private Transform _weaponSelectContainer; // Контейнер для выбора оружия 
     [SerializeField] private Transform _itemSelectContainer; // Контейнер для выбора предмета   
     [Header("Кнопки переключения")]
-    [SerializeField] private Button _weaponButtonPanel;  // Кнопка для включения панели оружия
+    [SerializeField] private Button _weaponButton;  // Кнопка для включения панели оружия
     [SerializeField] private Image _weaponButtonSelectedImage; // Изображение выделенной кнопки оружия
-    [SerializeField] private Button _itemButtonPanel;  // Кнопка для включения панели предмета
+    [SerializeField] private Button _itemButton;  // Кнопка для включения панели предмета
     [SerializeField] private Image _itemButtonSelectedImage; // Изображение выделенной кнопки предмета
 
 
@@ -24,17 +24,15 @@ public class ItemSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
         _buttonSelectedImageArray = new Image[] { _weaponButtonSelectedImage, _itemButtonSelectedImage };
     }
 
-
-
     protected override void SetDelegateContainerSelectionButton()
     {
-        _weaponButtonPanel.onClick.AddListener(() => //Добавим событие при нажатии на нашу кнопку// AddListener() в аргумент должен получить делегат- ссылку на функцию. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
+        _weaponButton.onClick.AddListener(() => //Добавим событие при нажатии на нашу кнопку// AddListener() в аргумент должен получить делегат- ссылку на функцию. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
         {
             ShowAndUpdateContainer(_weaponSelectContainer);
             ShowSelectedButton(_weaponButtonSelectedImage);
-        }); // _armorHeadButtonPanel.onClick.AddListener(delegate { ShowAndUpdateContainer(_unitOnMissionContainer); }); // Еще вариант объявления
+        }); // _armorHeadButton.onClick.AddListener(delegate { ShowAndUpdateContainer(_unitOnMissionContainer); }); // Еще вариант объявления
 
-        _itemButtonPanel.onClick.AddListener(() =>
+        _itemButton.onClick.AddListener(() =>
         {
             ShowAndUpdateContainer(_itemSelectContainer);
             ShowSelectedButton(_itemButtonSelectedImage);

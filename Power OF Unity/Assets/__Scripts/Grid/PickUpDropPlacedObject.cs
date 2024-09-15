@@ -367,7 +367,7 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
     /// </summary>
     private void DropAddPlacedObjectInResources()
     {
-        _warehouseManager.AddCountPlacedObject(_placedObject.GetPlacedObjectTypeSO());
+        _warehouseManager.PlusCountPlacedObject(_placedObject.GetPlacedObjectTypeSO());
         _placedObject.Drop();
         _placedObject.SetFlagMoveStartPosition(true);
         ResetPlacedObject();

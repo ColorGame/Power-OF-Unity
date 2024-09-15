@@ -353,7 +353,7 @@ GameObject:
   - component: {fileID: 7892808097433129778}
   - component: {fileID: 4608526031476267464}
   m_Layer: 5
-  m_Name: ItemButtonPanel
+  m_Name: ItemButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1145,7 +1145,7 @@ GameObject:
   - component: {fileID: 6438983720597176968}
   - component: {fileID: 8453898284066073976}
   m_Layer: 5
-  m_Name: WeaponButtonPanel
+  m_Name: WeaponButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2274,9 +2274,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _weaponSelectContainer: {fileID: 8155922133661066098}
   _itemSelectContainer: {fileID: 6729793610098487668}
-  _weaponButtonPanel: {fileID: 6438983720597176968}
+  _weaponButton: {fileID: 6438983720597176968}
   _weaponButtonSelectedImage: {fileID: 6275952409669940473}
-  _itemButtonPanel: {fileID: 7892808097433129778}
+  _itemButton: {fileID: 7892808097433129778}
   _itemButtonSelectedImage: {fileID: 7097948205325902382}
 --- !u!1001 &918846200553770511
 PrefabInstance:

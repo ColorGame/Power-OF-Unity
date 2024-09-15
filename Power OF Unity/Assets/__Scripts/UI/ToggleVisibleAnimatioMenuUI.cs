@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// Переключение ВИДИМОСТИ, АНИМАЦИИ меню
