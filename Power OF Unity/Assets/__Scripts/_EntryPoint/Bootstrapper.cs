@@ -43,8 +43,11 @@ public class Bootstrapper
         _rootContainer = new DIContainer();
 
         //Создаем экземпляр LoadingScreen и регистрируем в DI контейнере
-        var LoadingScreenProvider = _rootContainer.RegisterSingleton(c => new LoadingScreenProvider()).CreateInstance();
-        await LoadingScreenProvider.Load();       
+        var loadingScreenProvider = _rootContainer.RegisterSingleton(c => new LoadingScreenProvider()).CreateInstance();
+        await loadingScreenProvider.Load();
+
+        //Создаем экземпляр ScenesService и регистрируем в DI контейнере
+        var scenesService = _rootContainer.RegisterSingleton(c => new ScenesService(_rootContainer,loadingScreenProvider)).CreateInstance();
 
         //Загружаю Неразрушаемую точку входа
         var persistentEntryPointAsset = new LocalAssetLoader();
@@ -56,35 +59,15 @@ public class Bootstrapper
         {
             await UniTask.Yield();
         }
+        scenesService.FindEntryPointInSceneAndInject(activeScene);
 
         //Выгружаю экран загрузки
         await UniTask.Delay(TimeSpan.FromSeconds(3f));
-        LoadingScreenProvider.Unload();
+        loadingScreenProvider.Unload();        
 
-        FindEntryPointAndInject(activeScene);
-
-        SceneManager.sceneLoaded += SceneManager_OnSceneLoaded; // Подпишемся СЦЕНА ЗАГРУЖЕНА для настройки EntryPoint при переходе на другую сцену. SceneManager.sceneLoaded вызывается после Awake() и OnEnable() объектов (!!!бывает сбои запкскается позже Start().)
-                
+        scenesService.TryFindStartSceneAndActivate(activeScene);
     }
-    private void SceneManager_OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        FindEntryPointAndInject(scene);
-    }
+   
     
-    /// <summary>
-    /// Поиск точки входа в сцену и внедряем зависимость
-    /// </summary>
-    private void FindEntryPointAndInject(Scene scene)
-    {
-        GameObject[] gameObjectArray = scene.GetRootGameObjects();
-        foreach (GameObject gameObject in gameObjectArray)
-        {
-            if (gameObject.TryGetComponent(out IEntryPoint entryPoint))
-            {
-                var childContainer = new DIContainer(_rootContainer); // Создадим дочерний контейнер и передадим корневой.
-                entryPoint.Inject(childContainer);// Передадим созданный контейнер в точку входа преданной нам сцены
-                return;
-            }
-        }
-    }
+    
 }

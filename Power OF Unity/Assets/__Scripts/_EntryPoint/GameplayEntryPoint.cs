@@ -25,7 +25,6 @@ public class GameplayEntryPoint : MonoBehaviour, IEntryPoint
         Init(container);
     }
 
-
     private void GetComponent()
     {
         _cameraFollow = GetComponentInChildren<CameraFollow>(true);

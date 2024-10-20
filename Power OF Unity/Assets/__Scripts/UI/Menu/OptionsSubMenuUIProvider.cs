@@ -23,7 +23,7 @@ public class OptionsSubMenuUIProvider : LocalAssetLoader
     /// <summary>
     /// Загрузить и переключи видимость. Принимает необязательный делегат, который вызовим, при закрытии меню
     /// </summary>
-    public async UniTask LoadAndToggleVisible(Action closeDelegate = null)
+    public async UniTask LoadAndToggleVisible(Action сloseDelegate = null)
     {
         if (_isStartedLoad == true)
             return;
@@ -33,7 +33,12 @@ public class OptionsSubMenuUIProvider : LocalAssetLoader
             _isStartedLoad = true;
             _optionsSubMenuUI = await Load<OptionsSubMenuUI>(AssetsConstants.OptionsSubMenu);
             _optionsSubMenuUI.Init(_gameInput, _soundManager, _musicManager, _hashAnimationName);
-            _optionsSubMenuUI.ToggleVisible(new List<Action> { closeDelegate, SetUnload });
+
+            if (сloseDelegate != null)
+                _optionsSubMenuUI.SetCloseDelegate(сloseDelegate);
+            _optionsSubMenuUI.SetUnloadDelegate(SetUnload);
+
+            _optionsSubMenuUI.ToggleVisible();
         }       
     }
 

@@ -30,7 +30,11 @@ public class QuitGameSubMenuUI : ToggleVisibleAnimatioMenuUI
 
     private void Setup()
     {
-        _mainMenuButton.onClick.AddListener(() => { ToggleVisible(new List<Action> { LoadMainMenu }); });
+        _mainMenuButton.onClick.AddListener(() => 
+        {
+            SetCloseDelegate(LoadMainMenu);
+            ToggleVisible(); 
+        });
         _desktopButton.onClick.AddListener(() => { Application.Quit(); });
         _cancelButton.onClick.AddListener(() => { ToggleVisible(); });
     }
@@ -42,7 +46,7 @@ public class QuitGameSubMenuUI : ToggleVisibleAnimatioMenuUI
     }
 
     private void LoadMainMenu()
-    {
+    {  
         _scenesService.LoadSceneByLoadingScreen(SceneName.MainMenu).Forget();
     }
 }

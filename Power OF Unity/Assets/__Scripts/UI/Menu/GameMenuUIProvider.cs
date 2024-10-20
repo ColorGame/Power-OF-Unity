@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Pathfinding.Ionic.Zip;
 using System;
 using System.Collections.Generic;
 
@@ -27,7 +28,7 @@ public class GameMenuUIProvider : LocalAssetLoader
     /// <summary>
     /// Загрузить и переключи видимость. Принимает необязательный делегат, который вызовим, при закрытии меню
     /// </summary>
-    public async UniTask LoadAndToggleVisible(Action closeDelegate = null)
+    public async UniTask LoadAndToggleVisible(Action сloseDelegate = null)
     {
         if (_isStartedLoad == true)
             return;
@@ -37,7 +38,12 @@ public class GameMenuUIProvider : LocalAssetLoader
             _isStartedLoad = true;
             _gameMenuUI = await Load<GameMenuUI>(AssetsConstants.GameMenu);
             _gameMenuUI.Init(_gameInput, _hashAnimationName, _optionsSubMenuUIProvider, _quitGameSubMenuUIProvider, _saveGameSubMenuUIProvider, _loadGameSubMenuUIProvider);
-            _gameMenuUI.ToggleVisible(new List<Action> { closeDelegate, SetUnload });
+            
+            if(сloseDelegate!=null)
+                _gameMenuUI.SetCloseDelegate(сloseDelegate);
+            _gameMenuUI.SetUnloadDelegate(SetUnload);
+
+            _gameMenuUI.ToggleVisible();
         }
     }
 

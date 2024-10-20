@@ -237,5 +237,6 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     {
         if (_warehouseManager != null)
             _warehouseManager.OnChangCoinCount -= WarehouseManager_OnChangCoinCount;
+        UnsubscribeAlternativeToggleVisible();
     }
 }

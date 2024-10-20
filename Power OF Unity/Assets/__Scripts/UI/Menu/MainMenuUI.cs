@@ -1,6 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -28,7 +27,6 @@ public class MainMenuUI : MonoBehaviour
         _hashAnimationName = hashAnimationName;
 
         Setup();
-        StartAnimation();
     }
 
     private void Setup()
@@ -39,7 +37,7 @@ public class MainMenuUI : MonoBehaviour
         _startGameButton.onClick.AddListener(() => { _scenesService.LoadSceneByLoadingScreen(SceneName.UnitSetup).Forget(); });
         _quitGameButton.onClick.AddListener(() => { Application.Quit(); });// Кнопка будет работать тоько после сборки  kd
     }
-    private void StartAnimation()
+    public void StartAnimation()
     {
         _animator.enabled = true;
         _animator.CrossFade(_hashAnimationName.MaiMenuOpen, 0);        

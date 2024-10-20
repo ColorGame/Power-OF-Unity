@@ -19,7 +19,7 @@ public class SaveGameSubMenuUIProvider : LocalAssetLoader
     /// <summary>
     /// Загрузить и переключи видимость. Принимает необязательный делегат, который вызовим, при закрытии меню
     /// </summary>
-    public async UniTask LoadAndToggleVisible(Action closeDelegate = null)
+    public async UniTask LoadAndToggleVisible(Action сloseDelegate = null)
     {
         if (_isStartedLoad == true)
             return;
@@ -30,14 +30,11 @@ public class SaveGameSubMenuUIProvider : LocalAssetLoader
             _saveGameSubMenuUI = await Load<SaveGameSubMenuUI>(AssetsConstants.SaveGameSubMenu);
             _saveGameSubMenuUI.Init(_gameInput, _hashAnimationName);
 
-            var closeDelegateList = new List<Action>();
-            if (closeDelegate != null)
-            {
-                closeDelegateList.Add(closeDelegate);            
-            }
-            closeDelegateList.Add(SetUnload);
+            if (сloseDelegate != null)
+                _saveGameSubMenuUI.SetCloseDelegate(сloseDelegate);
+            _saveGameSubMenuUI.SetUnloadDelegate(SetUnload);
 
-            _saveGameSubMenuUI.ToggleVisible(closeDelegateList);
+            _saveGameSubMenuUI.ToggleVisible();
         }
     }
 

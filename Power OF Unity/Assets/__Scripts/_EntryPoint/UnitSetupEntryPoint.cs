@@ -25,7 +25,6 @@ public class UnitSetupEntryPoint : MonoBehaviour, IEntryPoint
         Init(container);
     }
 
-
     private void GetComponent()
     {
         _unitPortfolioUI = GetComponentInChildren<UnitPortfolioUI>(true);

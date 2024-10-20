@@ -24,7 +24,9 @@ public abstract class ToggleVisibleAnimatioMenuUI : MonoBehaviour
     private bool _animationStart = false;
     private bool _toggleBool = false;
 
-    private List<Action> _closeDelegateList; //Делегаты которые будем вызывать при закрытии меню
+    //Делегаты, вызывим при закрытии меню
+    private Action _closeDelegate;   // Делегат подписки, для возврата функциональности предыдущему меню
+    private Action _unloadDelegate;  // Делегат выгрузки и удаления
 
 
     private void Awake()
@@ -72,16 +74,13 @@ public abstract class ToggleVisibleAnimatioMenuUI : MonoBehaviour
         ToggleVisible();
     }
     /// <summary>
-    /// Переключатель видимости меню. Принимает делегат, который вызовим и обнулим, при закрытии этого меню (обычно это подписка на альтернативный вызов меню)
+    /// Переключатель видимости меню. 
     /// </summary>
     /// <remarks>
-    /// Если передается делегат = null то он не переписывает предыдущий. Если надо переключить без анимации то передаем withAnimation = false
+    /// Если надо переключить без анимации то передаем withAnimation = false
     /// </remarks>
-    public void ToggleVisible(List<Action> closeDelegateList = null, bool withAnimation = true) // Переключатель видимости меню НАСТРОЙКИ (будем вызывать через инспектор кнопкой OptionsButton)
-    {
-        if (closeDelegateList != null)// если есть делегаты сохраним их
-            _closeDelegateList = closeDelegateList;
-
+    public void ToggleVisible(bool withAnimation = true) // Переключатель видимости меню НАСТРОЙКИ (будем вызывать через инспектор кнопкой OptionsButton)
+    {  
         if (!_toggleBool) // Если не активны(выключена) то активируем 
         {
             ShowMenu();
@@ -105,6 +104,23 @@ public abstract class ToggleVisibleAnimatioMenuUI : MonoBehaviour
             }
         }
     }
+    /// <summary>
+    /// Установить делегат, который вызовиться при закрытии меню
+    /// </summary>
+    /// <remarks>
+    /// Обычно это подписка на альтернативный вызов меню.
+    /// </remarks>
+    public void SetCloseDelegate(Action closeDelegate)
+    {
+        _closeDelegate = closeDelegate;
+    }
+    /// <summary>
+    /// Установить делегат выгрузки и удаления
+    /// </summary>
+    public void SetUnloadDelegate(Action unloadDelegate)
+    {
+        _unloadDelegate = unloadDelegate;
+    }
 
     private void ShowMenu()
     {
@@ -113,23 +129,14 @@ public abstract class ToggleVisibleAnimatioMenuUI : MonoBehaviour
         _toggleBool = true;
     }
     /// <summary>
-    /// Скроем меню. Если есть не нулевой делегат вызовим его и обнулим.
+    /// Скроем меню. Вызовим делегат
     /// </summary>
     private void HideMenuCallDelegate()
     {
         _canvas.enabled = false;
         _toggleBool = false;
         UnsubscribeAlternativeToggleVisible();
-
-        if (_closeDelegateList != null)
-        {
-            foreach (Action action in _closeDelegateList)
-            {
-                if (action != null)
-                    action();
-            }
-            _closeDelegateList.Clear();
-        }
+        CallDelegateAndClear();
     }
 
     private void StartAnimation()
@@ -139,10 +146,27 @@ public abstract class ToggleVisibleAnimatioMenuUI : MonoBehaviour
         _animationTimer = _animator.GetCurrentAnimatorStateInfo(0).length;
         _animationStart = true;
     }
+    /// <summary>
+    /// Если есть не нулевой делегат вызовим его и очистим.
+    /// </summary>
+    private void CallDelegateAndClear()
+    {
+        if(_closeDelegate != null)
+        {
+            _closeDelegate();
+            _closeDelegate=null;
+        }
+        if (_unloadDelegate != null)
+        {
+            _unloadDelegate();
+            _unloadDelegate = null;
+        }
+    }
 
     private void OnDestroy()
     {
         UnsubscribeAlternativeToggleVisible();
+        CallDelegateAndClear();
     }
 
 }

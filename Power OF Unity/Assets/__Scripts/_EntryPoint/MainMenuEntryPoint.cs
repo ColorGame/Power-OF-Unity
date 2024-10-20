@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MainMenuEntryPoint : MonoBehaviour, IEntryPoint
+public class MainMenuEntryPoint : MonoBehaviour, IEntryPoint, IStartScene
 {
    [SerializeField] private MainMenuUI _mainMenuUI;
 
@@ -8,7 +8,10 @@ public class MainMenuEntryPoint : MonoBehaviour, IEntryPoint
     {              
         Init(container);
     }
-
+    public void StartScene()
+    {
+        _mainMenuUI.StartAnimation();
+    }
 
     private void Init(DIContainer container)
     {

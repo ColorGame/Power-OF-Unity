@@ -1,15 +1,19 @@
 ﻿using Cysharp.Threading.Tasks;
+using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 /// <summary>
 /// Обслуживание сцен
 /// </summary>
 public class ScenesService
-{   
-    public ScenesService(LoadingScreenProvider loadingScreenProvider)
+{
+    public ScenesService(DIContainer rootContainer, LoadingScreenProvider loadingScreenProvider)
     {
+        _rootContainer = rootContainer;
         _loadingScreenProvider = loadingScreenProvider;
     }
 
+    private DIContainer _rootContainer;
     private LoadingScreenProvider _loadingScreenProvider;
 
     public string GetActiveSceneName()
@@ -23,17 +27,18 @@ public class ScenesService
 
     public void Load(SceneName scene)
     {
-        SceneManager.LoadScene((int)scene); 
+        SceneManager.LoadScene((int)scene);
     }
 
-    public async UniTask LoadSceneAsync(SceneName sceneName, LoadSceneMode loadSceneMode)
+    public async UniTask<Scene> LoadSceneAsync(SceneName sceneName, LoadSceneMode loadSceneMode)
     {
         var scene = SceneManager.LoadSceneAsync((int)sceneName, loadSceneMode);
         while (scene.isDone == false) //Если Операция не завершена
         {
             await UniTask.Yield();// как в кроутине "yield return null". Подождите до следующего обновления, чтобы продолжить
-        }        
-    }  
+        }
+        return GetScene(sceneName);
+    }
 
     public async UniTask UnloadScene(SceneName sceneName)
     {
@@ -47,17 +52,64 @@ public class ScenesService
     /// Загрузить сцену через загрузочный экран
     /// </summary>
     /// <remarks>
-    /// Сцена будет зашружена в режиме Single
+    /// Сцена будет загружена в режиме Single
     /// </remarks>
     public async UniTask LoadSceneByLoadingScreen(SceneName sceneName)
     {
         await _loadingScreenProvider.Load();
         _loadingScreenProvider.DontDestroyOnLoad();
 
-        await LoadSceneAsync(sceneName,LoadSceneMode.Single);
+        Scene scene =  await LoadSceneAsync(sceneName, LoadSceneMode.Single);
+        FindEntryPointInSceneAndInject(scene);
 
-       // await UniTask.Delay(TimeSpan.FromSeconds(2f));
+        await UniTask.Delay(TimeSpan.FromSeconds(2f));
         _loadingScreenProvider.Unload();
+        TryFindStartSceneAndActivate(scene);
+    }
 
+    /// <summary>
+    /// Поиск точки входа в активной сцену и внедряем зависимость
+    /// </summary>
+    public void FindEntryPointInSceneAndInject(Scene scene)
+    {
+        IEntryPoint entryPoint = GetRoot<IEntryPoint>(scene);
+        var childContainer = new DIContainer(_rootContainer); // Создадим дочерний контейнер и передадим корневой.
+        entryPoint.Inject(childContainer);// Передадим созданный контейнер в точку входа преданной нам сцены       
+    }
+
+    /// <summary>
+    /// Поробуем найти старта сцены и активировать ее
+    /// </summary>
+    /// <remarks>
+    /// Не у каждой сцены есть метод StartScene
+    /// </remarks>
+    public bool TryFindStartSceneAndActivate(Scene scene)
+    {
+        IStartScene startScene = GetRoot<IStartScene>(scene);
+        if (startScene != null)
+        {
+            startScene.StartScene();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static T GetRoot<T>(Scene scene)
+    {
+        var rootObjects = scene.GetRootGameObjects();
+
+        T result = default;
+        foreach (var go in rootObjects)
+        {
+            if (go.TryGetComponent(out result))
+            {
+                break;
+            }
+        }
+
+        return result;
     }
 }

@@ -4,12 +4,10 @@ using UnityEngine;
 /// Ќеразрушаема€ точка входа с подсистемами в качестве дочерних, или внутри если они не наследуют MonoBehaviour.
 /// </summary>.
 public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
-{
-    [SerializeField] private Camera _cameraUI;
+{    
     [SerializeField] private MusicManager _musicManager;
     [SerializeField] private SoundManager _soundManager;
-    [SerializeField] private TooltipUI _tooltipUI;
-    private ScenesService _scenesService;
+    [SerializeField] private TooltipUI _tooltipUI;   
     private VirtualMouseCustomProvider _virtualMouseCustomProvider;    
     private GameInput _gameInput;
     private JsonSaveableEntity _jsonSaveableEntity;
@@ -34,10 +32,9 @@ public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
         Register(rootContainer);
         Init();
     }
-
+  
     private void CreateInstanceClass(DIContainer container)
-    {         
-        _scenesService = new ScenesService(container.Resolve<LoadingScreenProvider>());
+    {   
         _gameInput = new GameInput();
         _virtualMouseCustomProvider = new VirtualMouseCustomProvider(_gameInput);
         _jsonSaveableEntity = new JsonSaveableEntity();
@@ -47,28 +44,26 @@ public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
         _optionsSubMenuUIProvider = new OptionsSubMenuUIProvider(_gameInput, _soundManager, _musicManager, _hashAnimationName);
         _loadGameSubMenuUIProvider = new LoadGameSubMenuUIProvider(_gameInput, _hashAnimationName);
         _saveGameSubMenuUIProvider = new SaveGameSubMenuUIProvider(_gameInput, _hashAnimationName);
-        _quitGameSubMenuUIProvider = new QuitGameSubMenuUIProvider(_gameInput,_scenesService, _hashAnimationName);
+        _quitGameSubMenuUIProvider = new QuitGameSubMenuUIProvider(_gameInput, container.Resolve<ScenesService>(), _hashAnimationName);
         _gameMenuUIProvider = new GameMenuUIProvider(_gameInput, _hashAnimationName, _optionsSubMenuUIProvider, _quitGameSubMenuUIProvider, _saveGameSubMenuUIProvider, _loadGameSubMenuUIProvider);
     }
 
-    private void Register(DIContainer rootContainer)
-    {
-        rootContainer.RegisterSingleton(c => _cameraUI);
-        rootContainer.RegisterSingleton(c => _scenesService);
-        rootContainer.RegisterSingleton(c => _gameInput);
-        rootContainer.RegisterSingleton(c => _jsonSaveableEntity);
-        rootContainer.RegisterSingleton(c => _virtualMouseCustomProvider);
-        rootContainer.RegisterSingleton(c => _soundManager);
-        rootContainer.RegisterSingleton(c => _musicManager);        
-        rootContainer.RegisterSingleton(c => _tooltipUI);
-        rootContainer.RegisterSingleton(c => _warehouseManager);
-        rootContainer.RegisterSingleton(c => _unitManager);
-        rootContainer.RegisterSingleton(c => _hashAnimationName);
-        rootContainer.RegisterSingleton(c => _optionsSubMenuUIProvider);
-        rootContainer.RegisterSingleton(c => _loadGameSubMenuUIProvider);
-        rootContainer.RegisterSingleton(c => _saveGameSubMenuUIProvider);
-        rootContainer.RegisterSingleton(c => _quitGameSubMenuUIProvider);
-        rootContainer.RegisterSingleton(c => _gameMenuUIProvider);
+    private void Register(DIContainer container)
+    {       
+        container.RegisterSingleton(c => _gameInput);
+        container.RegisterSingleton(c => _jsonSaveableEntity);
+        container.RegisterSingleton(c => _virtualMouseCustomProvider);
+        container.RegisterSingleton(c => _soundManager);
+        container.RegisterSingleton(c => _musicManager);        
+        container.RegisterSingleton(c => _tooltipUI);
+        container.RegisterSingleton(c => _warehouseManager);
+        container.RegisterSingleton(c => _unitManager);
+        container.RegisterSingleton(c => _hashAnimationName);
+        container.RegisterSingleton(c => _optionsSubMenuUIProvider);
+        container.RegisterSingleton(c => _loadGameSubMenuUIProvider);
+        container.RegisterSingleton(c => _saveGameSubMenuUIProvider);
+        container.RegisterSingleton(c => _quitGameSubMenuUIProvider);
+        container.RegisterSingleton(c => _gameMenuUIProvider);
     }
 
     private void Init()

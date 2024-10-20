@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
 using System;
-using System.Collections.Generic;
 
 public class LoadGameSubMenuUIProvider : LocalAssetLoader
 {
@@ -18,7 +17,7 @@ public class LoadGameSubMenuUIProvider : LocalAssetLoader
     /// <summary>
     /// Загрузить и переключи видимость. Принимает необязательный делегат, который вызовим, при закрытии меню
     /// </summary>
-    public async UniTask LoadAndToggleVisible(Action closeDelegate = null)
+    public async UniTask LoadAndToggleVisible(Action сloseDelegate = null)
     {
         if (_isStartedLoad == true)
             return;
@@ -28,7 +27,12 @@ public class LoadGameSubMenuUIProvider : LocalAssetLoader
             _isStartedLoad = true;
             _loadGameSubMenuUI = await Load<LoadGameSubMenuUI>(AssetsConstants.LoadGameSubMenu);
             _loadGameSubMenuUI.Init(_gameInput, _hashAnimationName);
-            _loadGameSubMenuUI.ToggleVisible(new List<Action> { closeDelegate, SetUnload });
+
+            if (сloseDelegate != null)
+                _loadGameSubMenuUI.SetCloseDelegate(сloseDelegate);
+            _loadGameSubMenuUI.SetUnloadDelegate(SetUnload);
+
+            _loadGameSubMenuUI.ToggleVisible();
         }        
     }
 

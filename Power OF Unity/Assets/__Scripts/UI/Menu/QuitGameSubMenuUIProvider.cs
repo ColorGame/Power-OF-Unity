@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class QuitGameSubMenuUIProvider : LocalAssetLoader
 {
-    public QuitGameSubMenuUIProvider(GameInput gameInput, ScenesService scenesService,HashAnimationName hashAnimationName)
+    public QuitGameSubMenuUIProvider(GameInput gameInput, ScenesService scenesService, HashAnimationName hashAnimationName)
     {
         _gameInput = gameInput;
         _scenesService = scenesService;
@@ -21,7 +21,7 @@ public class QuitGameSubMenuUIProvider : LocalAssetLoader
     /// <summary>
     /// Загрузить и переключи видимость. Принимает необязательный делегат, который вызовим, при закрытии меню
     /// </summary>
-    public async UniTask LoadAndToggleVisible(Action closeDelegate = null)
+    public async UniTask LoadAndToggleVisible(Action сloseDelegate = null)
     {
         if (_isStartedLoad == true)
             return;
@@ -31,7 +31,12 @@ public class QuitGameSubMenuUIProvider : LocalAssetLoader
             _isStartedLoad = true;
             _quitGameSubMenuUI = await Load<QuitGameSubMenuUI>(AssetsConstants.QuitGameSubMenu);
             _quitGameSubMenuUI.Init(_gameInput, _scenesService, _hashAnimationName);
-            _quitGameSubMenuUI.ToggleVisible(new List<Action> { closeDelegate, SetUnload });
+
+            if (сloseDelegate != null)
+                _quitGameSubMenuUI.SetCloseDelegate(сloseDelegate);
+            _quitGameSubMenuUI.SetUnloadDelegate(SetUnload);
+
+            _quitGameSubMenuUI.ToggleVisible();
         }
     }
 
