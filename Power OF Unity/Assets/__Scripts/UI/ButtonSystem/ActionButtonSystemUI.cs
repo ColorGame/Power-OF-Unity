@@ -159,10 +159,10 @@ public class ActionButtonSystemUI : MonoBehaviour
         /* foreach (BaseAction baseAction in _selectedUnit.GetBaseActionsArray()) // В цикле переберем массив базовых действий у выбранного юнита
          {
              Transform actionButtonTransform = Instantiate(GameAssets.Instance.actionButtonUI, _grenadeButtonContainer); // Для каждого baseAction создадим префаб кнопки и назначим родителя - Контейнер для кнопок
-             ActionButtonUI actionButtonUI = actionButtonTransform.GetComponent<ActionButtonUI>(); // У кнопки найдем компонент ActionButtonUI
+             ActionButtonUI actionButtonUI = actionButtonTransform.CreateInstanceClass<ActionButtonUI>(); // У кнопки найдем компонент ActionButtonUI
              actionButtonUI.SetBaseAction(baseAction, _unitActionSystem); //Назвать и Присвоить базовое действие (нашей кнопке)
 
-             MouseEnterExitEventsUI mouseEnterExitEvents = actionButtonTransform.GetComponent<MouseEnterExitEventsUI>(); // Найдем на кнопке компонент - События входа и выхода мышью 
+             MouseEnterExitEventsUI mouseEnterExitEvents = actionButtonTransform.CreateInstanceClass<MouseEnterExitEventsUI>(); // Найдем на кнопке компонент - События входа и выхода мышью 
              mouseEnterExitEvents.OnMouseEnter += (object sender, EventArgs e) => // Подпишемся на событие - ПРИ ВХОДЕ мыши на кнопку. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
              {
                  _tooltipUI.ShowAnchoredShortTooltip(baseAction.GetToolTip(), (RectTransform)actionButtonTransform); // При наведении на кнопку покажем подсказку и передадим текст

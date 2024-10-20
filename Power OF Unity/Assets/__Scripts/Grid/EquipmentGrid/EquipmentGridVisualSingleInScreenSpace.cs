@@ -10,8 +10,8 @@ public class EquipmentGridVisualSingleInScreenSpace : EquipmentGridVisualSingle
 
     public override void Init(float cellSize)
     {
-        RectTransform rectTransform = (RectTransform)transform;
-        rectTransform.sizeDelta = Vector2.one * cellSize;
+       /* RectTransform rectTransform = (RectTransform)transform;
+        rectTransform.sizeDelta = Vector2.one * cellSize;*/
     }   
 
     protected override  void Hide() // Скрыть

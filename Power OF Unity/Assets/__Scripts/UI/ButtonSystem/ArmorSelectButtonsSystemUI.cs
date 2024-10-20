@@ -42,7 +42,6 @@ public class ArmorSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
     public override void SetActive(bool active)
     {
         _canvas.enabled = active;
-
         if (active)
         {
             ShowAndUpdateContainer(_armorHeadSelectContainer);
@@ -61,12 +60,12 @@ public class ArmorSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
         {
             switch (placedObjectTypeSO)
             {
-                case ArmorHeadTypeSO:               
+                case HeadArmorTypeSO:               
                     if (_activeContainer == _armorHeadSelectContainer)
                         CreatePlacedObjectSelectButton(placedObjectTypeSO, _armorHeadSelectContainer);
                     break;
                
-                case ArmorBodyTypeSO:
+                case BodyArmorTypeSO:
                     if (_activeContainer == _armorBodySelectContainer)
                         CreatePlacedObjectSelectButton(placedObjectTypeSO, _armorBodySelectContainer);
                     break;

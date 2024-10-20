@@ -6,35 +6,43 @@ public class UnitFriendSO : UnitTypeSO
     [Header("Поля для префабов ЮНИТА")]
 
     [SerializeField] private Transform _unitAvatarPortfolioVisualPrefab;
-    [SerializeField] private Transform _unitBaseVisualPrefab;
-    [SerializeField] private Transform _unitEasyVisualPrefab;
-    [SerializeField] private Transform _unitMediumVisualPrefab;
-    [SerializeField] private Transform _unitHardVisualPrefab;
-    [Header("Базовый тип брони юнита ")]
-    [SerializeField] private UnitArmorType _basicAmorType; // Базовый тип брони юнита
+    [SerializeField] private UnitBigExoskeletonView _unitBigViewPrefab;
+    [SerializeField] private UnitSoldierView _unitSoldierViewPrefab;
+    [SerializeField] private UnitSpaceSolderView _unitSpaceSolderViewPrefab;
+   
     [Header("Стоимость юнита при найме ")]
     [SerializeField] private uint _priceHiring;
 
     public Transform GetUnitAvatarPortfolioVisualPrefab() { return _unitAvatarPortfolioVisualPrefab; }
-    public Transform GetUnitVisualPrefab(UnitArmorType unitArmorType)
+
+    /// <summary>
+    /// Вернуть визуал юнита в зависимости от типа БРОНИ которой он экипирован
+    /// </summary>
+    /// <remarks>Если передать null то вернется дефолтный визуал без брони</remarks>
+    public UnitView GetUnitViewPrefab(BodyArmorTypeSO  bodyArmorTypeSO)
     {
-        switch (unitArmorType)
+        if(bodyArmorTypeSO == null)
         {
-            default:
-            case UnitArmorType.Base:
-                return _unitBaseVisualPrefab;
-
-            case UnitArmorType.Easy:
-                return _unitEasyVisualPrefab;
-
-            case UnitArmorType.Medium:
-                return _unitMediumVisualPrefab;
-
-            case UnitArmorType.Hard:
-                return _unitHardVisualPrefab;
+            return _unitSpaceSolderViewPrefab;
         }
-    }
-    public UnitArmorType GetUnitArmorType() { return _basicAmorType; }
+        
+        switch (bodyArmorTypeSO.GetPlacedObjectType())
+        {
+            default:           
+             return _unitSpaceSolderViewPrefab;
+
+            case PlacedObjectType.BodyArmorMilitary:
+            case PlacedObjectType.BodyArmorMilitaryMod:
+                return _unitSoldierViewPrefab;
+
+            case PlacedObjectType.BodyArmorSpace:
+            case PlacedObjectType.BodyArmorSpaceMod:
+                return _unitSpaceSolderViewPrefab;              
+
+            case PlacedObjectType.BodyArmorBigExoskeleton:
+                return _unitBigViewPrefab;
+        }
+    }   
     public uint GetPriceHiring() {  return _priceHiring; }
 
 }

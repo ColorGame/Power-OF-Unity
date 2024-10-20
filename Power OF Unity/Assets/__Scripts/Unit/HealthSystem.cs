@@ -6,7 +6,7 @@ using System;
 /// <remarks>
 /// может использоваться для повреждения предметов
 /// </remarks>
-public class HealthSystem  
+public class HealthSystem
 {
     public HealthSystem(int health, SoundManager soundManager)
     {
@@ -58,7 +58,7 @@ public class HealthSystem
         OnDamageAndHealing?.Invoke(this, EventArgs.Empty); // Вызовим событие при восстановлении здоровья               
     }
 
-    private void Die() // Запуская событие код становится более гибким и мы можем через подписку выполнить любое действие
+    private void Die() 
     {
         OnDead?.Invoke(this, EventArgs.Empty); // запустим событие когда юнит умер (на нее будет подписываться Unit, UnitRagdollSpawner)        
     }

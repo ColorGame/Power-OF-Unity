@@ -121,7 +121,7 @@ namespace TMPro.Examples
 
                     float zoomFactor = 1.5f;
 
-                    // Init the Matrix for the scale change.
+                    // InitOnLoad the Matrix for the scale change.
                     m_matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one * zoomFactor);
 
                     // Apply Matrix operation on the given character.

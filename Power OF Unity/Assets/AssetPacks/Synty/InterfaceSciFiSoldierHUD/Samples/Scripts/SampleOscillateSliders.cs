@@ -13,7 +13,7 @@ using UnityEngine.UI;
 namespace Synty.Interface.SciFiSoldierHUD.Samples
 {
     /// <summary>
-    ///     Oscillates the value of a myUnitsBasiclist of sliders.
+    ///   Изменяет значение ползунков
     /// </summary>
     public class SampleOscillateSliders : MonoBehaviour
     {
@@ -23,7 +23,7 @@ namespace Synty.Interface.SciFiSoldierHUD.Samples
         [Header("Parameters")]
         public bool autoGetSliders = true;
         public float speed = 1f;
-        public float offset = 0.5f;
+        public float offset = 3f;
 
         private void Reset()
         {

@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-
-
 /// <summary>
 /// Система экипировки юнитов(звено между сеткой и экипировкой юнита). Отвечает за настройку и загрузку экипировки ВЫБРАННОГО юнита
 /// </summary>
@@ -14,20 +12,23 @@ public class UnitEquipmentSystem :IToggleActivity
     private PickUpDropPlacedObject _pickUpDropPlacedObject;
     private UnitManager _unitManager;
     private EquipmentGrid _equipmentGrid;
+    private ItemSelectButtonsSystemUI _itemSelectButtonsSystemUI;
 
     private ItemGridVisual _itemGridVisual;
     private ArmorGridVisual _armorGridVisual;
 
     private Unit _selectedUnit;
+    private bool _isActive;
 
 
-    public void Init(PickUpDropPlacedObject pickUpDropPlacedObject, UnitManager unitManager, EquipmentGrid equipmentGrid, ItemGridVisual itemGridVisual, ArmorGridVisual armorGridVisual)
+    public void Init(PickUpDropPlacedObject pickUpDropPlacedObject, UnitManager unitManager, EquipmentGrid equipmentGrid, ItemGridVisual itemGridVisual, ArmorGridVisual armorGridVisual, ItemSelectButtonsSystemUI itemSelectButtonsSystemUI)
     {
         _pickUpDropPlacedObject = pickUpDropPlacedObject;
         _unitManager = unitManager;
         _equipmentGrid = equipmentGrid;  
         _itemGridVisual = itemGridVisual;
         _armorGridVisual = armorGridVisual;
+        _itemSelectButtonsSystemUI = itemSelectButtonsSystemUI;
     }
 
     public void SetActiveEquipmentGrid(EquipmentGrid.GridState activeGridList) 
@@ -42,11 +43,13 @@ public class UnitEquipmentSystem :IToggleActivity
         _armorGridVisual.SetActive(active);
         if (active)
         {
-            _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
+            if (_isActive == false) // Если до этого было отключено то
+            {
+                _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
 
-            _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid += PickUpDrop_OnAddPlacedObjectAtEquipmentGrid;//  Объект добавлен в сетку Интвенторя
-            _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid += PickUpDrop_OnRemovePlacedObjectAtEquipmentGrid; // Объект удален из сетки Интвенторя
-
+                _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid += PickUpDrop_OnAddPlacedObjectAtEquipmentGrid;//  Объект добавлен в сетку Интвенторя
+                _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid += PickUpDrop_OnRemovePlacedObjectAtEquipmentGrid; // Объект удален из сетки Интвенторя
+            }
             _selectedUnit = _unitManager.GetSelectedUnit();
             UpdateEquipmentGrid();
         }
@@ -58,6 +61,7 @@ public class UnitEquipmentSystem :IToggleActivity
             _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid -= PickUpDrop_OnRemovePlacedObjectAtEquipmentGrid; // Объект удален из сетки Интвенторя
             ClearEquipmentGrid();
         }
+        _isActive = active;
     }
 
     private void UnitManager_OnSelectedUnitChanged(object sender, Unit newSelectedUnit)
@@ -95,7 +99,8 @@ public class UnitEquipmentSystem :IToggleActivity
             {
                 continue; // continue заставляет программу переходить к следующей итерации цикла 'for' игнорируя код ниже
             }
-            PlacedObject placedObject = PlacedObject.CreateInGrid(placedObjectGridParameters, _pickUpDropPlacedObject, gridSystemXY);
+            PlacedObject placedObject = PlacedObject.CreateInGrid(placedObjectGridParameters, _pickUpDropPlacedObject, gridSystemXY);           
+            placedObject.SetDropPositionWhenDeleted(_itemSelectButtonsSystemUI.GetWeaponSelectContainerTransform().position); // Пердадим середину контейнера оружия (можно передать любой контейнер т.к. они визуально распологаются в одном месте)
             // Попробуем добавить в сетку
             if (_equipmentGrid.TryAddPlacedObjectAtGridPosition(placedObject.GetGridPositionAnchor(), placedObject, placedObject.GetGridSystemXY()))
             {

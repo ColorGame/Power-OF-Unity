@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -6,31 +8,42 @@ using UnityEngine.UI;
 /// </summary>
 public class MainMenuUI : MonoBehaviour 
 {
+    [SerializeField] private Animator _animator; //Аниматор для меню
     [SerializeField] private Button _resumeGameButton; // продолжить
     [SerializeField] private Button _startGameButton; // старт новой
     [SerializeField] private Button _loadGameButton; // загрузить
     [SerializeField] private Button _optionGameButton; // настройки
     [SerializeField] private Button _quitGameButton; // выйти
-
-    private OptionsSubMenuUI _optionsMenuUI;
+    
+    private OptionsSubMenuUIProvider _optionsSubMenuUIProvider;
+    private LoadGameSubMenuUIProvider _loadGameSubMenuUIProvider;
     private ScenesService _scenesService;
-    private LoadGameSubMenuUI _loadGameSubMenuUI;
+    private HashAnimationName _hashAnimationName;
 
-    public void Init(OptionsSubMenuUI optionsMenuUI, ScenesService scenesService, LoadGameSubMenuUI loadGameSubMenuUI)
+    public void Init(OptionsSubMenuUIProvider optionsSubMenuUIProvider, LoadGameSubMenuUIProvider loadGameSubMenuUIProvider, ScenesService scenesService, HashAnimationName hashAnimationName)
     {
-        _optionsMenuUI = optionsMenuUI;
+        _optionsSubMenuUIProvider = optionsSubMenuUIProvider;
+        _loadGameSubMenuUIProvider = loadGameSubMenuUIProvider;
         _scenesService = scenesService;
-        _loadGameSubMenuUI = loadGameSubMenuUI;
+        _hashAnimationName = hashAnimationName;
 
         Setup();
+        StartAnimation();
     }
 
     private void Setup()
     {
         _resumeGameButton.onClick.AddListener(() => { Debug.Log("ЗАГЛУШКА_ПРОДОЛЖИТЬ"); });
-        _loadGameButton.onClick.AddListener(() => { _loadGameSubMenuUI.ToggleVisible();  });
-        _optionGameButton.onClick.AddListener(() => { _optionsMenuUI.ToggleVisible(); });
-        _startGameButton.onClick.AddListener(() => { _scenesService.Load(SceneName.UnitSetup); });
+        _loadGameButton.onClick.AddListener(() => { _loadGameSubMenuUIProvider.LoadAndToggleVisible().Forget();  });
+        _optionGameButton.onClick.AddListener(() => { _optionsSubMenuUIProvider.LoadAndToggleVisible().Forget(); });
+        _startGameButton.onClick.AddListener(() => { _scenesService.LoadSceneByLoadingScreen(SceneName.UnitSetup).Forget(); });
         _quitGameButton.onClick.AddListener(() => { Application.Quit(); });// Кнопка будет работать тоько после сборки  kd
     }
+    private void StartAnimation()
+    {
+        _animator.enabled = true;
+        _animator.CrossFade(_hashAnimationName.MaiMenuOpen, 0);        
+    }
+
+
 }

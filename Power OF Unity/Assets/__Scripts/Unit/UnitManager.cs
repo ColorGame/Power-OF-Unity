@@ -95,26 +95,6 @@ public class UnitManager // Менеджер (администратор) Юнитов
     }
 
     /// <summary>
-    /// Выбрать и вернуть первого юнита из списка
-    /// </summary>
-    public Unit SelectAndReturnFirstUnitFromList()
-    {
-        if (_unitFriendList.Count != 0)
-        {
-            SetSelectedUnit(_unitFriendList[0]);
-            return _unitFriendList[0];
-        }
-        else
-        {
-            return null;
-        }
-    }
-    public void SetSelectedUnit(Unit selectedUnit)
-    {
-        _selectedUnit = selectedUnit;
-        OnSelectedUnitChanged?.Invoke(this, _selectedUnit); // Подписываятся кнопки выбора юнита для настройки экипировки UnitSelectAtEquipmentButtonUI
-    }
-    /// <summary>
     /// Попробую Нанять выбранного юнита
     /// </summary>
     public bool TryHireSelectedUnit()
@@ -256,6 +236,32 @@ public class UnitManager // Менеджер (администратор) Юнитов
     /// Юниты для найма
     /// </summary>
     public List<Unit> GetHireUnitList() { return _hireUnitList; }
+    public void SetSelectedUnit(Unit selectedUnit)
+    {
+        _selectedUnit = selectedUnit;
+        OnSelectedUnitChanged?.Invoke(this, _selectedUnit); // Подписываятся кнопки выбора юнита для настройки экипировки UnitSelectAtEquipmentButtonUI
+    }
     public Unit GetSelectedUnit() { return _selectedUnit; }
+
+    /// <summary>
+    /// Обновить выбранного юнита и вернуть его.
+    /// </summary>
+    /// <remarks>Если все юниты погибли то вернем NULL</remarks>
+    public Unit UpdateSelectedUnitAndReturn()
+    {
+        if (_selectedUnit != null)
+            SetSelectedUnit(_selectedUnit);
+        else
+            SetSelectedUnitFirstOneFromList();
+        return _selectedUnit;
+    }
+    /// <summary>
+    /// Установить выбранного юнита, первого из списка
+    /// </summary>
+    private void SetSelectedUnitFirstOneFromList()
+    {
+        if (_unitFriendList.Count != 0)
+            SetSelectedUnit(_unitFriendList[0]);
+    }
 
 }

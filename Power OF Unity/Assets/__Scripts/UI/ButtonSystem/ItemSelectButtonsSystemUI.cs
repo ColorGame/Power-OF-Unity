@@ -42,7 +42,6 @@ public class ItemSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
     public override void SetActive(bool active)
     {
         _canvas.enabled = active;
-
         if (active)
         {
             ShowAndUpdateContainer(_weaponSelectContainer);
@@ -51,7 +50,7 @@ public class ItemSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
         else
         {
             ClearActiveButtonContainer();
-        }
+        }       
     }
 
     protected override void CreateSelectButtonsSystemInActiveContainer()
@@ -99,4 +98,6 @@ public class ItemSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
 
         placedObjectSelectButton.Init(_tooltipUI, _pickUpDrop, _warehouseManager, placedObjectTypeSO);       
     }   
+
+    public Transform GetWeaponSelectContainerTransform() {  return _weaponSelectContainer; }
 }

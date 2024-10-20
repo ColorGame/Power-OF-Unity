@@ -29,6 +29,7 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
     /// Запущено событие (Захваченый объект покинул сетку), чтобы не запускать событие каждый кадр сделал переключатель
     /// </summary>
     private bool _startEventOnGrabbedObjectGridExits = false;
+    private bool _isActive;
 
     private GameInput _gameInput;
     private TooltipUI _tooltipUI;
@@ -69,31 +70,32 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
         }
 
         _equipmentLayerMask = LayerMask.GetMask("Equipment");
-
-        _selectedUnit = _unitManager.GetSelectedUnit();
-
-        _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
-
-    }
-
-    private void UnitManager_OnSelectedUnitChanged(object sender, Unit newSelectedUnit)
-    {
-        _selectedUnit = newSelectedUnit;
-    }
+        _selectedUnit = _unitManager.GetSelectedUnit();      
+    }   
 
     public void SetActive(bool active)
     {
         _canvasPickUpDrop.enabled = active;
         if (active)
         {
-            _gameInput.OnClickAction += GameInput_OnClickAction;
+            if(_isActive == false)// Если до этого было отключено то
+            {
+                _gameInput.OnClickAction += GameInput_OnClickAction;
+                _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
+            }
         }
         else
         {
             _gameInput.OnClickAction -= GameInput_OnClickAction;
+            _unitManager.OnSelectedUnitChanged -= UnitManager_OnSelectedUnitChanged;
         }
+        _isActive = active;
     }
 
+    private void UnitManager_OnSelectedUnitChanged(object sender, Unit newSelectedUnit)
+    {
+        _selectedUnit = newSelectedUnit;
+    }
 
     private void GameInput_OnClickAction(object sender, EventArgs e) // Если мыш нажата 
     {
@@ -193,8 +195,8 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
                 // для сетки Основного и Доп. оружия установим TargetPosition в центре сетки
                 case EquipmentSlot.MainWeaponSlot:
                 case EquipmentSlot.OtherWeaponsSlot:
-                case EquipmentSlot.ArmorHeadSlot:
-                case EquipmentSlot.ArmorBodySlot:
+                case EquipmentSlot.HeadArmorSlot:
+                case EquipmentSlot.BodyArmorSlot:
 
                     _placedObject.SetTargetPosition(_equipmentGrid.GetWorldPositionGridCenter(gridSystemXY) - _offset); //Чтобы объект был по середине сетки надо вычесть смещение центра визуала относительно якоря
                     if (_canvasRenderMode == RenderMode.WorldSpace)// Если канвас в мировом пространстве то учтем и его поворот
@@ -234,9 +236,9 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
     }
 
     /// <summary>
-    /// Попробуем СХВАТИТЬ предмет
+    /// Попробуем СХВАТИТЬ предмет (с сетки инвенторя)
     /// </summary>
-    public void TryGrab()
+    private void TryGrab()
     {
         if (_canvasRenderMode == RenderMode.WorldSpace)// Если канвас в мировом пространстве то
         {
@@ -264,21 +266,41 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
                 _offset = _placedObject.GetOffsetCenterFromAnchor() * _canvasPickUpDrop.scaleFactor;
                 // Звук поднятия
                 OnRemovePlacedObjectAtEquipmentGrid?.Invoke(this, _placedObject); // Запустим событие
+
+                // Если это бронежилет то
+                if (_placedObject.GetPlacedObjectTypeSO() is BodyArmorTypeSO)
+                {
+                    RemoveHeadArmorInEquipmentGrid();
+                }
             }
         }
     }
     /// <summary>
+    /// Удалить ШЛЕМ из экипировки
+    /// </summary>
+    private void RemoveHeadArmorInEquipmentGrid()
+    {
+        // СНЯТЬ ШЛЕМ если он есть И ВЕРНУТЬ НА БАЗУ           
+        if (_equipmentGrid.TryGetPlacedObjectByType<HeadArmorTypeSO>(out PlacedObject placedObjectHeadArmor))
+        {
+            _equipmentGrid.RemovePlacedObjectAtGrid(placedObjectHeadArmor);// Удалим из текущей сеточной позиции     
+            _warehouseManager.PlusCountPlacedObject(placedObjectHeadArmor.GetPlacedObjectTypeSO());
+            placedObjectHeadArmor.SetFlagMoveStartPosition(true);
+            OnRemovePlacedObjectAtEquipmentGrid?.Invoke(this, placedObjectHeadArmor); // Запустим событие
+        }
+    }
+
+    /// <summary>
     /// Попробуем СБРОСИТЬ захваченный предмет
     /// </summary>
-    public bool TryDrop(GridSystemXY<GridObjectEquipmentXY> gridSystemXY, Vector2Int gridPositionMouse, PlacedObject placedObject)
+    private bool TryDrop(GridSystemXY<GridObjectEquipmentXY> gridSystemXY, Vector2Int gridPositionMouse, PlacedObject placedObject)
     {
         // Попробуем сбросить и разместить на сетке       
         EquipmentSlot gridName = gridSystemXY.GetGridSlot(); // Получим имя сетки
 
         if (!placedObject.GetCanPlacedOnGridList().Contains(gridName)) //Если нашей сетки НЕТ в списке сеток где можно разместить наш объект то
         {
-            _tooltipUI.ShowShortTooltipFollowMouse("попробуй другой слот", new TooltipUI.TooltipTimer { timer = 2f }); // Покажем подсказку и зададим новый таймер отображения подсказки
-
+            _tooltipUI.ShowShortTooltipFollowMouse("попробуй другой слот", new TooltipUI.TooltipTimer { timer = 2f });
             // Звук неудачи
             return false;
         }
@@ -286,27 +308,34 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
         bool drop = false;
         switch (gridName)
         {
-            case EquipmentSlot.BagSlot:
-
-                drop = TryAddPlacedObjectAtGridPosition(gridPositionMouse, placedObject, gridSystemXY);
-                break;
-
             // для сетки Основного и Доп. оружия установим newMouseGridPosition (0,0)
             case EquipmentSlot.MainWeaponSlot:
             case EquipmentSlot.OtherWeaponsSlot:
-            case EquipmentSlot.ArmorHeadSlot:
-            case EquipmentSlot.ArmorBodySlot:               
-
+            case EquipmentSlot.BodyArmorSlot:
                 gridPositionMouse = new Vector2Int(0, 0);
-                drop = TryAddPlacedObjectAtGridPosition(gridPositionMouse, placedObject, gridSystemXY);
+                break;
+
+            case EquipmentSlot.HeadArmorSlot:
+                // Если это шлем то проверим на совместимость с броней для тела(эту проверку можно не делать т.к. сверху я проверяю где можно разместить этот объект)
+                if (placedObject.GetPlacedObjectTypeSO() is HeadArmorTypeSO armorHeadTypeSO)
+                {
+                    if (!_selectedUnit.GetUnitEquipment().IsHeadArmorCompatibleWithBodyArmor(armorHeadTypeSO))
+                    {
+                        _tooltipUI.ShowShortTooltipFollowMouse("несовместимая броня", new TooltipUI.TooltipTimer { timer = 0.8f });
+                        // Звук неудачи
+                        return false;
+                    }
+                }
+                gridPositionMouse = new Vector2Int(0, 0);
                 break;
         }
+        drop = TryAddPlacedObjectAtGridPosition(gridPositionMouse, placedObject, gridSystemXY);
         return drop;
     }
     /// <summary>
     /// Попробую Добавить Размещаемый объект в Позицию Сетки
     /// </summary>   
-    public bool TryAddPlacedObjectAtGridPosition(Vector2Int gridPositionMouse, PlacedObject placedObject, GridSystemXY<GridObjectEquipmentXY> gridSystemXY)
+    private bool TryAddPlacedObjectAtGridPosition(Vector2Int gridPositionMouse, PlacedObject placedObject, GridSystemXY<GridObjectEquipmentXY> gridSystemXY)
     {
         bool drop = false;
         if (_equipmentGrid.TryAddPlacedObjectAtGridPosition(gridPositionMouse, placedObject, gridSystemXY))
@@ -314,13 +343,11 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
             // Звук удачного размещения
             OnAddPlacedObjectAtEquipmentGrid?.Invoke(this, placedObject); // Запустим событие (запускаю здесь а не в EquipmentGrid т.к. placedObject еще надо настроить кодом выше)
             ResetPlacedObject(); // Обнулим взятый размещяемый объект
-
             drop = true;
         }
         else
         {
             _tooltipUI.ShowShortTooltipFollowMouse("не удалось разместить", new TooltipUI.TooltipTimer { timer = 2f }); // Покажем подсказку и зададим новый таймер отображения подсказки
-
             // Звук неудачи
             drop = false;
         }
@@ -349,6 +376,7 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
         {
             _offset = placedObjectTypeSO.GetOffsetVisualСenterFromAnchor() * _canvasPickUpDrop.scaleFactor; // Чтобы объект был по середине мышки надо вычесть смещение центра визуала относительно якоря и учесть масштаб канваса         
             _placedObject = PlacedObject.CreateInWorld(worldPosition - _offset, placedObjectTypeSO, _canvasPickUpDrop.transform, this); // Создадим объект
+            _placedObject.SetDropPositionWhenDeleted(worldPosition - _offset);
             _placedObject.Grab(); // Схватим его
         }
     }
@@ -356,7 +384,7 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
     /// <summary>
     /// Получить позицию мыши на плоскости
     /// </summary>
-    public Vector3 GetMousePositionOnPlane()
+    private Vector3 GetMousePositionOnPlane()
     {
         Ray ray = _camera.ScreenPointToRay(_gameInput.GetMouseScreenPoint());//Возвращает луч, идущий от камеры через точку экрана где находиться курсор мыши 
         _planeForCanvasInWorldSpace.Raycast(ray, out float planeDistance); // Пересечем луч и плоскость и получим расстояние вдоль луча, где он пересекает плоскость.
@@ -366,12 +394,13 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
     /// Cбросить и вернуть размещенный объект в разделе ресурсы
     /// </summary>
     private void DropAddPlacedObjectInResources()
-    {
-        _warehouseManager.PlusCountPlacedObject(_placedObject.GetPlacedObjectTypeSO());
+    {        
         _placedObject.Drop();
+        _warehouseManager.PlusCountPlacedObject(_placedObject.GetPlacedObjectTypeSO());
         _placedObject.SetFlagMoveStartPosition(true);
         ResetPlacedObject();
     }
+
     /// <summary>
     /// Обнулим взятый размещяемый объект
     /// </summary>
@@ -386,7 +415,6 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
     }
 
     public Canvas GetCanvas() { return _canvasPickUpDrop; }
-
 
     /*  public Vector3 CalculateOffsetGrab() // вычислим смещение захвата
       {

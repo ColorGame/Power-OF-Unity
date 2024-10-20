@@ -46,10 +46,9 @@ public class UnitSelectAtEquipmentButtonsSystemUI : UnitSelectButtonsSystemUI
     public override void SetActive(bool active)
     {
         _canvas.enabled = active;
-
         if (active)
         {
-            SelectFirstUnitAndShowTab();
+            SetSelectedUnitAndShowTab();
         }
         else
         {
@@ -60,11 +59,12 @@ public class UnitSelectAtEquipmentButtonsSystemUI : UnitSelectButtonsSystemUI
 
 
     /// <summary>
-    /// Выбрать первого юнита из списка, и показать соответствующую выкладку(база/миссия)
+    /// Установить Выбранного юнита, и показать соответствующую выкладку(база/миссия)
     /// </summary>
-    private void SelectFirstUnitAndShowTab()
+    private void SetSelectedUnitAndShowTab()
     {     
-        Unit selectedUnit = _unitManager.SelectAndReturnFirstUnitFromList();
+        Unit selectedUnit = _unitManager.UpdateSelectedUnitAndReturn();
+
         if (selectedUnit == null) { return; }
         switch (selectedUnit.GetLocation()) // В зависимости от локации юнита включим нужную вкладку
         {

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// Под меню настроики ЗАГРУЗКИ... 
 /// </summary>
 /// <remarks>
-/// Создается и инициализируется в PersistentEntryPoint
+/// Создается через Addressable
 /// </remarks>
 public class LoadGameSubMenuUI : ToggleVisibleAnimatioMenuUI
 {

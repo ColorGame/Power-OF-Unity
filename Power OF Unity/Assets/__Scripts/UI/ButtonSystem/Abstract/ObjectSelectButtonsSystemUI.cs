@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
@@ -12,8 +10,7 @@ public abstract class ObjectSelectButtonsSystemUI : MonoBehaviour, IToggleActivi
     protected Image[] _buttonSelectedImageArray; // массив изображений для веделения нужной кнопки      
     protected ScrollRect _scrollRect; //Компонент прокрутки кнопок
     protected Canvas _canvas;
-    protected TooltipUI _tooltipUI;
-  
+    protected TooltipUI _tooltipUI;  
 
     protected virtual void Awake()
     {

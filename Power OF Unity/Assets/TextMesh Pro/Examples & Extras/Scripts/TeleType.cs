@@ -33,10 +33,10 @@ namespace TMPro.Examples
             //{
             //    GameObject canvas = new GameObject("Canvas", typeof(Canvas));
             //    gameObject.transform.SetParent(canvas.transform);
-            //    canvas.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
+            //    canvas.CreateInstanceClass<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
 
             //    // Set RectTransform Size
-            //    gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(500, 300);
+            //    gameObject.CreateInstanceClass<RectTransform>().sizeDelta = new Vector2(500, 300);
             //    m_textMeshPro.fontSize = 48;
             //}
 

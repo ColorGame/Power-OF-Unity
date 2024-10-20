@@ -20,22 +20,10 @@ public class Unit
 
     public Unit(UnitTypeSO unitTypeSO, SoundManager soundManager)
     {
-        _soundManager = soundManager;
-        _healthSystem = new HealthSystem(unitTypeSO.GetBasicHealth(), _soundManager);
-        _actionPointsSystem = new UnitActionPoints(this, unitTypeSO.GetBasicActionPoints());
-        _unitEquipment = new UnitEquipment();
-        _unitEquips = new UnitEquips(this);
-        _unitPowerSystem = new UnitPowerSystem(unitTypeSO.GetBasicPower());
-        _unitAccuracySystem = new UnitAccuracySystem(unitTypeSO.GetBasicAccuracy());
-        _location = Location.Barrack; // по умолчанию все юниты появляются в КАЗАРМЕ
-        _completedMissionsCount = 0;
-        _killedEnemiesCount = 0;
-
         switch (unitTypeSO)
         {
             case UnitFriendSO unitFriendSO:
                 _unitTypeSO = unitFriendSO;
-                _unitAmorType = unitFriendSO.GetUnitArmorType();
                 _isEnemy = false;
                 break;
             case UnitEnemySO unitEnemySO:
@@ -43,6 +31,19 @@ public class Unit
                 _isEnemy = true;
                 break;
         }
+
+        _soundManager = soundManager;
+        _healthSystem = new HealthSystem(unitTypeSO.GetBasicHealth(), _soundManager);
+        _actionPointsSystem = new UnitActionPoints(this, unitTypeSO.GetBasicActionPoints());
+        _unitEquipment = new UnitEquipment();
+        _unitEquipsView = new UnitEquipsView(this);
+        _unitPowerSystem = new UnitPowerSystem(unitTypeSO.GetBasicPower());
+        _unitAccuracySystem = new UnitAccuracySystem(unitTypeSO.GetBasicAccuracy());
+        _location = Location.Barrack; // по умолчанию все юниты появляются в КАЗАРМЕ
+        _completedMissionsCount = 0;
+        _killedEnemiesCount = 0;
+
+        
     }
 
 
@@ -58,13 +59,12 @@ public class Unit
     readonly HealthSystem _healthSystem;
     readonly UnitActionPoints _actionPointsSystem;
     readonly UnitEquipment _unitEquipment;
-    readonly UnitEquips _unitEquips;
+    readonly UnitEquipsView _unitEquipsView;
     readonly UnitPowerSystem _unitPowerSystem;
     readonly UnitAccuracySystem _unitAccuracySystem;
     private int _completedMissionsCount;
     private int _killedEnemiesCount;
-    private BaseAction[] _baseActionsArray; // Массив базовых действий 
-    private UnitArmorType _unitAmorType; //Тип брони юнита        
+    private BaseAction[] _baseActionsArray; // Массив базовых действий    
     private Transform _unitCoreTransform;
 
     private LevelGrid _levelGrid;
@@ -181,7 +181,7 @@ public class Unit
     public HealthSystem GetHealthSystem() { return _healthSystem; }
     public UnitActionPoints GetActionPointsSystem() { return _actionPointsSystem; }
     public UnitEquipment GetUnitEquipment() { return _unitEquipment; }
-    public UnitEquips GetUnitEquips() { return _unitEquips; }
+    public UnitEquipsView GetUnitEquips() { return _unitEquipsView; }
     public UnitPowerSystem GetUnitPowerSystem() { return _unitPowerSystem; }
     public UnitAccuracySystem GetUnitAccuracySystem() { return _unitAccuracySystem; }
     public int GetCompletedMissionsCount() {  return _completedMissionsCount; }
@@ -198,9 +198,7 @@ public class Unit
         }
         return null; // Если нет совпадений то вернем ноль
     }
-    public UnitTypeSO GetUnitTypeSO() { return _unitTypeSO; }
-    public UnitArmorType GetUnitArmorType() { return _unitAmorType; }
-    public void SetUnitArmorType(UnitArmorType unitArmorType) { _unitAmorType = unitArmorType; }
+    public UnitTypeSO GetUnitTypeSO() { return _unitTypeSO; }     
     public TurnSystem GetTurnSystem() { return _turnSystem; }
     public SoundManager GetSoundManager() { return _soundManager; }
     public UnitActionSystem GetUnitActionSystem() { return _unitActionSystem; }

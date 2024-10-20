@@ -52,6 +52,6 @@ public class UnitRagdollSpawner : MonoBehaviour, ISetupForSpawn // Юнит Тряпична
         Transform ragdollTransform = Instantiate(_ragdollPrefab, transform.position, transform.rotation); // Создадим куклу из префаба в позиции юнита
         UnitRagdoll unitRagdoll = ragdollTransform.GetComponent<UnitRagdoll>(); // Найдем компонент UnitRagdoll на префабе
 
-        unitRagdoll.Setup(_unitActionSystem, _originalRootBone, keelerUnit); // и передадим в метод Init трансформ Оригинальнай Корневой Кости и СТРЕЛКА
+        unitRagdoll.Setup(_unitActionSystem, _originalRootBone, keelerUnit); // и передадим в метод InitOnLoad трансформ Оригинальнай Корневой Кости и СТРЕЛКА
     }
 }

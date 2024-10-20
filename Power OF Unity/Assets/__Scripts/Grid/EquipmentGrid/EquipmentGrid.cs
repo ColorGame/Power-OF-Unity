@@ -22,14 +22,12 @@ public class EquipmentGrid : MonoBehaviour
     [SerializeField] private EquipmentGridParameters[] _armorGridParametersArray; // Массив параметров сеток брони
 
     private TooltipUI _tooltipUI;
-    private List<PlacedObject> _itemPlacedObjectList = new List<PlacedObject>(); // Список размещенных предметов (для удаления placedObject.gameObject при чистки экипировки) 
-    private List<PlacedObject> _armorPlacedObjectList = new List<PlacedObject>(); // Список размещенной брони 
-    private List<GridSystemXY<GridObjectEquipmentXY>> _itemGridSystemXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectEquipmentXY    
+     private List<GridSystemXY<GridObjectEquipmentXY>> _itemGridSystemXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectEquipmentXY    
     private List<GridSystemXY<GridObjectEquipmentXY>> _armorGridSystemXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectEquipmentXY    
 
     // активные списки с которыми работает скрипт 
     private GridState _gridState; // хэшированное состояние сетки
-    private List<PlacedObject> _placedObjectActiveList;
+    private List<PlacedObject> _placedObjectActiveList = new();
     private List<GridSystemXY<GridObjectEquipmentXY>> _gridSystemActiveList;
 
 
@@ -67,17 +65,15 @@ public class EquipmentGrid : MonoBehaviour
     /// </summary>
     public void SetActiveGrid(GridState stateGrid)
     {
-        _gridState= stateGrid;
+        _gridState = stateGrid;
         switch (_gridState)
         {
             case GridState.ItemGrid:
                 _gridSystemActiveList = _itemGridSystemXYList;
-                _placedObjectActiveList = _itemPlacedObjectList;
                 break;
 
             case GridState.ArmorGrid:
-                _gridSystemActiveList = _armorGridSystemXYList;
-                _placedObjectActiveList = _armorPlacedObjectList;      
+                _gridSystemActiveList = _armorGridSystemXYList; 
                 break;
         }
     }
@@ -204,6 +200,23 @@ public class EquipmentGrid : MonoBehaviour
 
     public List<GridSystemXY<GridObjectEquipmentXY>> GetItemGridSystemXYList() { return _itemGridSystemXYList; }
 
+    /// <summary>
+    /// Попробую вернуть размещенный объект по типу <T>
+    /// </summary>
+    public bool TryGetPlacedObjectByType<T>(out PlacedObject placedObjectTypeT) where T : PlacedObjectTypeSO
+    {
+        foreach (PlacedObject placedObject in _placedObjectActiveList)
+        {
+            if (placedObject.GetPlacedObjectTypeSO() is T)
+            {
+                placedObjectTypeT = placedObject;
+                return true;
+            }
+        }
+        placedObjectTypeT = null;
+        return false;
+    }
+
     // Получить сеточную позицию
     public Vector2Int GetGridPosition(Vector3 worldPosition, GridSystemXY<GridObjectEquipmentXY> gridSystemXY) => gridSystemXY.GetGridPosition(worldPosition);
 
@@ -224,8 +237,7 @@ public class EquipmentGrid : MonoBehaviour
 
     public Vector3 GetRotationAnchorGrid(GridSystemXY<GridObjectEquipmentXY> gridSystemXY) => gridSystemXY.GetRotationAnchorGrid();
     public Transform GetAnchorGrid(GridSystemXY<GridObjectEquipmentXY> gridSystemXY) => gridSystemXY.GetAnchorGrid();
-    public int GetWidth(GridSystemXY<GridObjectEquipmentXY> gridSystemXY) => gridSystemXY.GetWidth();
-    public int GetHeight(GridSystemXY<GridObjectEquipmentXY> gridSystemXY) => gridSystemXY.GetHeight();
+
     /// <summary>
     /// Получить АКТИВНКЮ сетку для этого слота
     /// </summary><remarks>Если нет активных вернет null</remarks>

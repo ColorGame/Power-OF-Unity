@@ -29,4 +29,6 @@ public class HashAnimationName
 
     public int PlacedObjectBuyTabFirstOpen = Animator.StringToHash("PlacedObjectBuyTabFirstOpen");
     public int PlacedObjectSellTabFirstOpen = Animator.StringToHash("PlacedObjectSellTabFirstOpen");
+
+    public int MaiMenuOpen = Animator.StringToHash("MaiMenuOpen");
 }

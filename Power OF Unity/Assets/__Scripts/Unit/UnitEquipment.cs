@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-
 /// <summary>
 /// Экипировка юнита (Хранилище для предметов, которыми оснащен игрок). 
 /// </summary>
@@ -10,19 +10,22 @@ public class UnitEquipment
     /// </summary>
     public UnitEquipment()
     {
-        //Здесь можно загрузить стандартную загрузку экипировки
-        _placedObjectList = new List<PlacedObjectGridParameters>();
+        //Здесь можно загрузить стандартную загрузку экипировки       
     }
 
-    private List<PlacedObjectGridParameters> _placedObjectList; // Список предметов экипировки
+    public event EventHandler<PlacedObjectTypeWithActionSO> OnChangeMainWeapon; // Изменено Основное оружие
+    public event EventHandler<HeadArmorTypeSO> OnChangeHeadArmor; // Изменена броня головы
+    public event EventHandler<BodyArmorTypeSO> OnChangeBodyArmor; // Изменена броня тела
+
+    private List<PlacedObjectGridParameters> _placedObjectList = new List<PlacedObjectGridParameters>(); // Список "Размещенных Объектов в Сетке Инвенторя"
 
     private PlacedObjectTypeWithActionSO _placedObjectMainWeaponSlot;
     private PlacedObjectTypeWithActionSO _placedObjectOtherWeaponSlot;
     private List<PlacedObjectTypeWithActionSO> _placedObjecеBagSlotList = new List<PlacedObjectTypeWithActionSO>();
-    private List<GrenadeTypeSO> _grenadeInBagSOList = new List<GrenadeTypeSO>(); // Список гранат в багаже
+    private List<GrenadeTypeSO> _grenadeInBagList = new List<GrenadeTypeSO>(); // Список гранат в багаже
 
-    private PlacedObjectTypeArmorSO _placedObjectArmorHeadSlot;
-    private PlacedObjectTypeArmorSO _placedObjectArmorBodySlot;
+    private HeadArmorTypeSO _headArmor;
+    private BodyArmorTypeSO _bodyArmor;
 
     /// <summary>
     /// Добавить полученный объект в Список "Размещенных Объектов в Сетке Инвенторя".
@@ -38,6 +41,7 @@ public class UnitEquipment
         {
             case EquipmentSlot.MainWeaponSlot:
                 _placedObjectMainWeaponSlot = (PlacedObjectTypeWithActionSO)placedObjectTypeSO;
+                OnChangeMainWeapon?.Invoke(this, _placedObjectMainWeaponSlot);
                 break;
             case EquipmentSlot.OtherWeaponsSlot:
                 _placedObjectOtherWeaponSlot = (PlacedObjectTypeWithActionSO)placedObjectTypeSO;
@@ -46,20 +50,22 @@ public class UnitEquipment
                 _placedObjecеBagSlotList.Add((PlacedObjectTypeWithActionSO)placedObjectTypeSO);
                 if (placedObjectTypeSO is GrenadeTypeSO grenadeTypeSO)
                 {
-                    _grenadeInBagSOList.Add(grenadeTypeSO);
+                    _grenadeInBagList.Add(grenadeTypeSO);
                 }
                 break;
-            case EquipmentSlot.ArmorHeadSlot:
-                _placedObjectArmorHeadSlot = (PlacedObjectTypeArmorSO)placedObjectTypeSO;
+            case EquipmentSlot.HeadArmorSlot:
+                _headArmor = (HeadArmorTypeSO)placedObjectTypeSO;
+                OnChangeHeadArmor?.Invoke(this, _headArmor);
                 break;
-            case EquipmentSlot.ArmorBodySlot:
-                _placedObjectArmorBodySlot = (PlacedObjectTypeArmorSO)placedObjectTypeSO;
+            case EquipmentSlot.BodyArmorSlot:
+                _bodyArmor = (BodyArmorTypeSO)placedObjectTypeSO;
+                OnChangeBodyArmor?.Invoke(this, _bodyArmor);
                 break;
         }
 
     }
     /// <summary>
-    /// Удалить полученный объект из Списока "Размещенных Объектов в Сетке Инвенторя".
+    /// Удалить полученный объект из Списка "Размещенных Объектов в Сетке Инвенторя".
     /// </summary>  
     public void RemovePlacedObjectList(PlacedObject placedObject)
     {
@@ -72,6 +78,7 @@ public class UnitEquipment
         {
             case EquipmentSlot.MainWeaponSlot:
                 _placedObjectMainWeaponSlot = null;
+                OnChangeMainWeapon?.Invoke(this, _placedObjectMainWeaponSlot);
                 break;
             case EquipmentSlot.OtherWeaponsSlot:
                 _placedObjectOtherWeaponSlot = null;
@@ -80,14 +87,16 @@ public class UnitEquipment
                 _placedObjecеBagSlotList.Remove((PlacedObjectTypeWithActionSO)placedObjectTypeSO);
                 if (placedObjectTypeSO is GrenadeTypeSO grenadeTypeSO)
                 {
-                    _grenadeInBagSOList.Remove(grenadeTypeSO);
+                    _grenadeInBagList.Remove(grenadeTypeSO);
                 }
                 break;
-            case EquipmentSlot.ArmorHeadSlot:
-                _placedObjectArmorHeadSlot = null;
+            case EquipmentSlot.HeadArmorSlot:
+                _headArmor = null;
+                OnChangeHeadArmor?.Invoke(this, _headArmor);
                 break;
-            case EquipmentSlot.ArmorBodySlot:
-                _placedObjectArmorBodySlot = null;
+            case EquipmentSlot.BodyArmorSlot:
+                _bodyArmor = null;
+                OnChangeBodyArmor?.Invoke(this, _bodyArmor);
                 break;
         }
     }
@@ -96,16 +105,28 @@ public class UnitEquipment
     /// </summary>
     public void ClearPlacedObjectList()
     {
-        _placedObjectList.Clear();       
+        _placedObjectList.Clear();
+    }
+
+    /// <summary>
+    /// Шлем совместим с броней для тела?
+    /// </summary>
+    public bool IsHeadArmorCompatibleWithBodyArmor(HeadArmorTypeSO headArmorTypeSO)
+    {
+        if (_bodyArmor != null)
+        {
+            return headArmorTypeSO.GetCompatibleArmorList().Contains(_bodyArmor.GetPlacedObjectType());
+        }
+        else { return false; }
     }
 
 
     public PlacedObjectTypeWithActionSO GetPlacedObjectOtherWeaponSlot() { return _placedObjectOtherWeaponSlot; }
     public PlacedObjectTypeWithActionSO GetPlacedObjectMainWeaponSlot() { return _placedObjectMainWeaponSlot; }
     public List<PlacedObjectTypeWithActionSO> GetPlacedObjectBagSlotList() { return _placedObjecеBagSlotList; }
-    public List<GrenadeTypeSO> GetGrenadeTypeSOList() { return _grenadeInBagSOList; }
-    public PlacedObjectTypeArmorSO GetPlacedObjectArmorHeadSlot() { return _placedObjectArmorHeadSlot; }
-    public PlacedObjectTypeArmorSO GetPlacedObjectArmorBodySlot() {  return _placedObjectArmorBodySlot; }
+    public List<GrenadeTypeSO> GetGrenadeTypeSOList() { return _grenadeInBagList; }
+    public HeadArmorTypeSO GetHeadArmor() { return _headArmor; }
+    public BodyArmorTypeSO GetBodyArmor() { return _bodyArmor; }
     public List<PlacedObjectGridParameters> GetPlacedObjectList() { return _placedObjectList; }
 
 

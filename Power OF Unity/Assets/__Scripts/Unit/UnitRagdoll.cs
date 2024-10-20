@@ -4,7 +4,7 @@ public class UnitRagdoll : MonoBehaviour //  Юнит Тряпичная кукла// Висит на Тря
 {
     [SerializeField] private Transform _ragdollRootBone; // Тряпичная кукла Корневая Кость
 
-    private float _explosionForce = 300; // Сила взрыва. У каждого экшн она будет настраиваться в Init() //НУЖНО НАСТРОИТЬ//
+    private float _explosionForce = 300; // Сила взрыва. У каждого экшн она будет настраиваться в InitOnLoad() //НУЖНО НАСТРОИТЬ//
 
 
     public void Setup(UnitActionSystem unitActionSystem, Transform originalRootBone, Unit keelerUnit) // Настройка тряпичной куклы (в аргумент передаем Оригинальную Корневую Кость(юнита) и Юнита который хочет нас убить - Киллер)

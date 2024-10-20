@@ -101,19 +101,19 @@ public class UnitSpawnerOnLevel : MonoBehaviour
     {        
         Transform unitCorePrefab = unitTypeSO.GetUnitCorePrefab();
 
-        Transform unitVisualPrefab = null;
+        UnitView unitViewPrefab = null;
         switch (unitTypeSO)
         {
             case UnitFriendSO unitFriendSO:
-                unitVisualPrefab = unitFriendSO.GetUnitVisualPrefab(unitFriendSO.GetUnitArmorType());
+                unitViewPrefab = unitFriendSO.GetUnitViewPrefab(unit.GetUnitEquipment().GetBodyArmor());
                 break;
             case UnitEnemySO unitEnemySO:
-                unitVisualPrefab = unitEnemySO.GetUnitEnemyVisualPrefab();
+                unitViewPrefab = unitEnemySO.GetUnitEnemyVisualPrefab();
                 break;
         }
 
         Transform unitCoreTransform = Instantiate(unitCorePrefab, pointSpawner); // создадим ядро юнита в точке спавна        
-        Instantiate(unitVisualPrefab, unitCoreTransform); // создадим визуал в ядре юнита    
+        Instantiate(unitViewPrefab, unitCoreTransform); // создадим визуал в ядре юнита    
 
         unit.SetupForSpawn( _levelGrid, _turnSystem, unitCoreTransform, _cameraFollow, _unitActionSystem);
     }

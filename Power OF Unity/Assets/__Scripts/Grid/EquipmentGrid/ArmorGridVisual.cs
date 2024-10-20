@@ -48,27 +48,41 @@ public class ArmorGridVisual : MonoBehaviour
             // Включать будем только если активна нужная СЕТКА 
             if (_equipmentGrid.GetStateGrid() == EquipmentGrid.GridState.ArmorGrid)
             {
-                _canvasArmorGrid.enabled = active;
-                _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
-                _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid += PickUpDropSystem_OnRemovePlacedObjectAtGrid;
-                _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged += PickUpDropManager_OnGrabbedObjectGridPositionChanged;
-                _pickUpDropPlacedObject.OnGrabbedObjectGridExits += PickUpDropManager_OnGrabbedObjectGridExits;
-
-                _unitEquipmentSystem.OnEquipmentGridsCleared += UnitEquipmentSystem_OnEquipmentGridsCleared;
-                _unitEquipmentSystem.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
+                Enable();
+            }
+            else
+            {
+                Disable();
             }
         }
         else
         {
-            _canvasArmorGrid.enabled = active;
-            _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid -= OnAddPlacedObjectAtGrid;
-            _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid -= PickUpDropSystem_OnRemovePlacedObjectAtGrid;
-            _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged -= PickUpDropManager_OnGrabbedObjectGridPositionChanged;
-            _pickUpDropPlacedObject.OnGrabbedObjectGridExits -= PickUpDropManager_OnGrabbedObjectGridExits;
-
-            _unitEquipmentSystem.OnEquipmentGridsCleared -= UnitEquipmentSystem_OnEquipmentGridsCleared;
-            _unitEquipmentSystem.OnAddPlacedObjectAtEquipmentGrid -= OnAddPlacedObjectAtGrid;
+            Disable();
         }
+    }
+
+    private void Enable()
+    {
+        _canvasArmorGrid.enabled = true;
+        _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
+        _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid += PickUpDropSystem_OnRemovePlacedObjectAtGrid;
+        _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged += PickUpDropManager_OnGrabbedObjectGridPositionChanged;
+        _pickUpDropPlacedObject.OnGrabbedObjectGridExits += PickUpDropManager_OnGrabbedObjectGridExits;
+
+        _unitEquipmentSystem.OnEquipmentGridsCleared += UnitEquipmentSystem_OnEquipmentGridsCleared;
+        _unitEquipmentSystem.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
+    }
+
+    private void Disable()
+    {
+        _canvasArmorGrid.enabled = false;
+        _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid -= OnAddPlacedObjectAtGrid;
+        _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid -= PickUpDropSystem_OnRemovePlacedObjectAtGrid;
+        _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged -= PickUpDropManager_OnGrabbedObjectGridPositionChanged;
+        _pickUpDropPlacedObject.OnGrabbedObjectGridExits -= PickUpDropManager_OnGrabbedObjectGridExits;
+
+        _unitEquipmentSystem.OnEquipmentGridsCleared -= UnitEquipmentSystem_OnEquipmentGridsCleared;
+        _unitEquipmentSystem.OnAddPlacedObjectAtEquipmentGrid -= OnAddPlacedObjectAtGrid;
     }
 
     /// <summary>
@@ -132,10 +146,10 @@ public class ArmorGridVisual : MonoBehaviour
 
         switch (equipmentSlot)
         {
-            case EquipmentSlot.ArmorHeadSlot:
+            case EquipmentSlot.HeadArmorSlot:
                 _armorHeadGridVisual.SetIsBusyAndColor(isBusy, GetColorTypeMaterial(gridVisualType));
                 break;
-            case EquipmentSlot.ArmorBodySlot:
+            case EquipmentSlot.BodyArmorSlot:
                 _armorBodyGridVisual.SetIsBusyAndColor(isBusy, GetColorTypeMaterial(gridVisualType));
                 break;
         }
@@ -148,13 +162,13 @@ public class ArmorGridVisual : MonoBehaviour
     {       
         switch (equipmentSlot)
         {
-            case EquipmentSlot.ArmorHeadSlot:
+            case EquipmentSlot.HeadArmorSlot:
                 if (!_armorHeadGridVisual.GetIsBusy())// Если сетка не занята
                 {
                     _armorHeadGridVisual.Show(GetColorTypeMaterial(gridVisualType));
                 }
                 break;
-            case EquipmentSlot.ArmorBodySlot:
+            case EquipmentSlot.BodyArmorSlot:
                 if (!_armorBodyGridVisual.GetIsBusy())// Если сетка не занята
                 {
                     _armorBodyGridVisual.Show(GetColorTypeMaterial(gridVisualType));

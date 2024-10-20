@@ -1,39 +1,63 @@
-﻿using System.Collections;
-using System.ComponentModel;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 /// <summary>
 /// Обслуживание сцен
 /// </summary>
-public class ScenesService 
-{
-    //private UIRootView _rootView;
-
-   /* public void Init(UIRootView rootView)
+public class ScenesService
+{   
+    public ScenesService(LoadingScreenProvider loadingScreenProvider)
     {
-        _rootView = rootView;
-    }*/
+        _loadingScreenProvider = loadingScreenProvider;
+    }
+
+    private LoadingScreenProvider _loadingScreenProvider;
 
     public string GetActiveSceneName()
     {
         return SceneManager.GetActiveScene().name;
     }
-
-    public void Load(SceneName scene) 
+    public Scene GetScene(SceneName sceneName)
     {
-        
-        SceneManager.LoadScene(scene.ToString()); //Загружает сцену по ее имени или индексу в настройках сборки.
-                                                  //Примечание: В большинстве случаев, чтобы избежать пауз или сбоев в производительности во время загрузки, вам следует использовать асинхронную версию этой команды, которая является: LoadSceneAsync.
-        
+        return SceneManager.GetSceneByBuildIndex((int)sceneName);
     }
 
-    public IEnumerator LoadAsync (SceneName scene)
+    public void Load(SceneName scene)
     {
-      //  _rootView.ShowLoadingScreen();
+        SceneManager.LoadScene((int)scene); 
+    }
 
-        // В момент когда загружена новая сцена старая еще до конца не уничтожена, и во избежании конфликтов в новую будем заходить через пустую сцену Bootstrap
-       // yield return SceneManager.LoadSceneAsync(SceneName.Bootstrap.ToString()); 
-        yield return SceneManager.LoadSceneAsync(scene.ToString());
+    public async UniTask LoadSceneAsync(SceneName sceneName, LoadSceneMode loadSceneMode)
+    {
+        var scene = SceneManager.LoadSceneAsync((int)sceneName, loadSceneMode);
+        while (scene.isDone == false) //Если Операция не завершена
+        {
+            await UniTask.Yield();// как в кроутине "yield return null". Подождите до следующего обновления, чтобы продолжить
+        }        
+    }  
 
-        //_rootView.HideLoadingScreen();
+    public async UniTask UnloadScene(SceneName sceneName)
+    {
+        var scene = SceneManager.UnloadSceneAsync((int)sceneName);
+        while (scene.isDone == false) //Если Операция не завершена
+        {
+            await UniTask.Yield();// как в кроутине "yield return null". Подождите до следующего обновления, чтобы продолжить
+        }
+    }
+    /// <summary>
+    /// Загрузить сцену через загрузочный экран
+    /// </summary>
+    /// <remarks>
+    /// Сцена будет зашружена в режиме Single
+    /// </remarks>
+    public async UniTask LoadSceneByLoadingScreen(SceneName sceneName)
+    {
+        await _loadingScreenProvider.Load();
+        _loadingScreenProvider.DontDestroyOnLoad();
+
+        await LoadSceneAsync(sceneName,LoadSceneMode.Single);
+
+       // await UniTask.Delay(TimeSpan.FromSeconds(2f));
+        _loadingScreenProvider.Unload();
+
     }
 }

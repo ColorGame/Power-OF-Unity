@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -39,7 +40,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     private IToggleActivity[] _toggleTabArray; // Массив вкладок которые будем переключать
 
     private GameInput _gameInput;
-    private GameMenuUI _gameMenuUI;
+    private GameMenuUIProvider _gameMenuUIProvider;
     private WarehouseManager _warehouseManager;
 
     private void Awake()
@@ -52,14 +53,12 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
             _selectedShopButtonImage,
             _selectedMissionButtonImage
         };
-
-
     }
 
     public void Init(
         GameInput gameInput,
         WarehouseManager warehouseManager,
-        GameMenuUI gameMenuUI,
+        GameMenuUIProvider GameMenuUIProvider,
         UnitPortfolioUI unitPortfolioUI,
         UnitSelectAtEquipmentButtonsSystemUI unitSelectAtEquipmentButtonsSystemUI,
         PickUpDropPlacedObject pickUpDropPlacedObject,
@@ -71,7 +70,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     {
         _gameInput = gameInput;
         _warehouseManager = warehouseManager;
-        _gameMenuUI = gameMenuUI;
+        _gameMenuUIProvider = GameMenuUIProvider;
 
         _unitPortfolioUI = unitPortfolioUI;
         _unitSelectAtEquipmentButtonsSystemUI = unitSelectAtEquipmentButtonsSystemUI;
@@ -90,7 +89,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
         _gameMenuButton.onClick.AddListener(() =>
         {
             UnsubscribeAlternativeToggleVisible();
-            _gameMenuUI.ToggleVisible(SubscribeAlternativeToggleVisible);
+            _gameMenuUIProvider.LoadAndToggleVisible(SubscribeAlternativeToggleVisible).Forget();
         });
 
         _unitManagerButtonButton.onClick.AddListener(() => { ShowManagerTab(); });
@@ -103,10 +102,10 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
        {
             _pickUpDropPlacedObject,
             _unitPortfolioUI,
+            _unitSelectAtEquipmentButtonsSystemUI,
             _unitEquipmentSystem,
             _itemSelectButtonsSystemUI,
             _armorSelectButtonsSystemUI,
-            _unitSelectAtEquipmentButtonsSystemUI,
             _marketUI,
             _unitManagerTabUI
        };
@@ -115,12 +114,13 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
         _warehouseManager.OnChangCoinCount += WarehouseManager_OnChangCoinCount;
 
         SubscribeAlternativeToggleVisible();
+        DisableAllToggleTabInArray();
         ShowItemTab();
-    }
+    }       
 
     private void WarehouseManager_OnChangCoinCount(object sender, uint count)
     {
-        _coinCountText.text =$"{count.ToString("N0")}";
+        _coinCountText.text = $"{count.ToString("N0")}";
     }
 
 
@@ -141,13 +141,13 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     private void GameInput_OnMenuAlternate(object sender, System.EventArgs e)
     {
         UnsubscribeAlternativeToggleVisible();
-        _gameMenuUI.ToggleVisible(SubscribeAlternativeToggleVisible);
+        _gameMenuUIProvider.LoadAndToggleVisible(SubscribeAlternativeToggleVisible).Forget();
     }
-
+   
     private void ShowManagerTab()
     {
         ShowSelectedButton(_selectedUnitManagerButtonImage);
-        ShowTabs(new IToggleActivity[]
+        ShowTabs(new HashSet<IToggleActivity>
         {
             _unitPortfolioUI,
             _unitManagerTabUI
@@ -158,7 +158,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     {
         ShowSelectedButton(_selectedItemButtonImage);
         _unitEquipmentSystem.SetActiveEquipmentGrid(EquipmentGrid.GridState.ItemGrid);
-        ShowTabs(new IToggleActivity[]
+        ShowTabs(new HashSet<IToggleActivity>
         {
             _pickUpDropPlacedObject,
             _unitPortfolioUI,
@@ -172,7 +172,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     {
         ShowSelectedButton(_selectedArmorButtonImage);
         _unitEquipmentSystem.SetActiveEquipmentGrid(EquipmentGrid.GridState.ArmorGrid);
-        ShowTabs(new IToggleActivity[]
+        ShowTabs(new HashSet<IToggleActivity>
         {
             _pickUpDropPlacedObject,
             _unitPortfolioUI,
@@ -185,33 +185,44 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     private void ShowShopTab()
     {
         ShowSelectedButton(_selectedShopButtonImage);
-        ShowTabs(new IToggleActivity[] {_marketUI });
+        ShowTabs(new HashSet<IToggleActivity> { _marketUI });
 
     }
     private void ShowMissionTab()
     {
         ShowSelectedButton(_selectedMissionButtonImage);
 
-        ShowTabs(new IToggleActivity[] { });
+        ShowTabs(new HashSet<IToggleActivity> { });
     }
+    /// <summary>
+    /// Отключить все Переключатели Вкладок В Массиве
+    /// </summary>
+    private void DisableAllToggleTabInArray()
+    {
+        foreach (IToggleActivity tab in _toggleTabArray) 
+        {
+            tab.SetActive(false);
+        } 
+    }
+
 
     /// <summary>
     /// Показать переданные вкладки
     /// </summary>
     /// <remarks>
-    /// Сначала все отключаем, потом активируем переданные. Такая система позваляет сбрасывать и обновлять все поля вкладок
-    /// </remarks>
-    private void ShowTabs(IToggleActivity[] showArray)
+    private void ShowTabs(HashSet<IToggleActivity> showArray)
     {
         foreach (IToggleActivity tab in _toggleTabArray)
         {
-            tab.SetActive(false);
-        }
-        foreach (IToggleActivity tab in showArray)
-        {
-            tab.SetActive(true);
-        }
-
+            if (showArray.Contains(tab))
+            {
+                tab.SetActive(true);               
+            }
+            else
+            {
+                tab.SetActive(false);
+            }
+        }     
     }
 
     private void ShowSelectedButton(Image typeButtonSelectedImage) // Показать визуализацию выбора кнопки
@@ -224,7 +235,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        if(_warehouseManager!=null)
-        _warehouseManager.OnChangCoinCount -= WarehouseManager_OnChangCoinCount;
+        if (_warehouseManager != null)
+            _warehouseManager.OnChangCoinCount -= WarehouseManager_OnChangCoinCount;
     }
 }

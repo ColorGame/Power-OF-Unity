@@ -14,7 +14,7 @@ using UnityEngine.UI;
 /// </remarks>
 public class TooltipUI : MonoBehaviour
 {
-
+    [SerializeField] private Canvas _canvas;
     [SerializeField] private TextMeshProUGUI _shortTooltipsText; // Текст подсказки (тип TextMeshProUGUI надо выбрать и буквами UI)
     [SerializeField] private TextMeshProUGUI _nameText; // Текст подсказки (тип TextMeshProUGUI надо выбрать и буквами UI)
     [SerializeField] private TextMeshProUGUI _descriptionText; // Текст подсказки (тип TextMeshProUGUI надо выбрать и буквами UI)
@@ -29,12 +29,12 @@ public class TooltipUI : MonoBehaviour
     private float _widthTooltip; // Ширина подсказки для PlacedObjectTooltip (когда включается всплывающуая подсказка, которая следует за мышью. ширина сбивается)
 
 
-    private VirtualMouseCustom _virtualMouseCustom;
+    private VirtualMouseCustomProvider _virtualMouseCustomProvider;
     private GameInput _gameInput;
 
-    public void Init(GameInput gameInput, VirtualMouseCustom virtualMouseCustom)
+    public void Init(GameInput gameInput, VirtualMouseCustomProvider Provider)
     {
-        _virtualMouseCustom = virtualMouseCustom;
+        _virtualMouseCustomProvider = Provider;
         _gameInput = gameInput;
 
         Setup();
@@ -61,7 +61,7 @@ public class TooltipUI : MonoBehaviour
             _sideEffectsTooltipsText = transform.Find("sideEffectsTooltipsText").GetComponent<TextMeshProUGUI>();
 
         _widthTooltip = _tooltipRectTransform.sizeDelta.x; // сохраним оригинальную ширину
-        //_backgroundRectTransform = transform.Find("background").GetComponent<RectTransform>();
+        //_backgroundRectTransform = transform.Find("background").CreateInstanceClass<RectTransform>();
 
         Hide(); // скроем подсказки
     }
@@ -106,7 +106,7 @@ public class TooltipUI : MonoBehaviour
                 anchoredPosition = Input.mousePosition / _canvasTooltipRectTransform.localScale.x; //Позицию мыши Поделим на масштаб холста (Будем использовать только Х компонент т.к. Y Z меняются пропорционально)
                 break;
             case GameInput.GameDevice.Gamepad:
-                anchoredPosition = _virtualMouseCustom.cursorTransform.anchoredPosition / _canvasTooltipRectTransform.localScale.x;
+                anchoredPosition = _virtualMouseCustomProvider.GetVirtualMouseCustom().cursorTransform.anchoredPosition / _canvasTooltipRectTransform.localScale.x;
                 break;
         }
 
@@ -131,7 +131,7 @@ public class TooltipUI : MonoBehaviour
     /// </remarks>
     public void ShowShortTooltipFollowMouse(string shortTooltipsText, TooltipTimer tooltipTimer = null)
     {
-        gameObject.SetActive(true);
+        _canvas.enabled = true;
         _tooltipTimer = tooltipTimer;
         _contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize; // размер подсказки по горизонтали подстроиться под размер текста      
 
@@ -152,7 +152,7 @@ public class TooltipUI : MonoBehaviour
     /// </remarks>
     public void ShowAnchoredPlacedObjectTooltip(PlacedObjectTooltip placedObjectTooltip, RectTransform slotRectTransform, Camera cameraSlotRender = null)
     {
-        gameObject.SetActive(true);
+        _canvas.enabled = true;
         _contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained; // Отключим автоматическое выставление ширины    
         _tooltipRectTransform.sizeDelta = new Vector2(_widthTooltip, 0); // Установим ширину подсказки (высота - будет выставляться автоматически) 
 
@@ -183,7 +183,7 @@ public class TooltipUI : MonoBehaviour
     /// </remarks>
     public void ShowAnchoredShortTooltip(string shortTooltipsText, RectTransform slotRectTransform, Camera cameraSlotRender = null)
     {
-        gameObject.SetActive(true);
+        _canvas.enabled = true;
         _contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained; // Отключим автоматическое выставление ширины     
         _tooltipRectTransform.sizeDelta = new Vector2(_widthTooltip, 0); // Установим ширину подсказки (высота - будет выставляться автоматически)
 
@@ -263,7 +263,7 @@ public class TooltipUI : MonoBehaviour
 
         Vector3 offset = slotCornerArray[slotCornerIndex] - tooltipCornerArray[tooltipCornerIndex]; //Текущее смещение между этими углами - на которое надо сместить якорь подсказки
 
-        Vector2 anchoredPosition = _tooltipRectTransform.anchoredPosition + (Vector2)offset / _canvasTooltipRectTransform.localScale.x;// Вычислим предварительное смещение подсказки // offset Поделим на масштаб холста (Будем использовать только Х компонент т.к. Y Z меняются пропорционально)
+        Vector2 anchoredPosition = _tooltipRectTransform.anchoredPosition + (Vector2)offset / _canvasTooltipRectTransform.localScale.x;// Вычислим предварительное смещение подсказки // _offset Поделим на масштаб холста (Будем использовать только Х компонент т.к. Y Z меняются пропорционально)
 
         // Позаботимся что бы подсказка всегда оставалась на экране. Будем контролировать только верхнию и нижнию сторону, т.к. правую и левую мы выислили до этого через GetCornerIndex
         if (anchoredPosition.y + _tooltipRectTransform.rect.height > _canvasTooltipRectTransform.rect.height)// Если размер подсказки выходит за верхнию сторону холста то ...
@@ -288,7 +288,7 @@ public class TooltipUI : MonoBehaviour
 
     public void Hide() // Скрытие подсказки
     {
-        gameObject.SetActive(false);
+        _canvas.enabled = false;
     }
 
 

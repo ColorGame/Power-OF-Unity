@@ -1,3 +1,6 @@
+using Cysharp.Threading.Tasks;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,18 +30,19 @@ public class QuitGameSubMenuUI : ToggleVisibleAnimatioMenuUI
 
     private void Setup()
     {
-        _mainMenuButton.onClick.AddListener(() => 
-        {
-            ToggleVisible();
-            _scenesService.Load(SceneName.MainMenu); 
-        }); 
-        _desktopButton.onClick.AddListener(() => { Application.Quit(); }); 
-        _cancelButton.onClick.AddListener(() => { ToggleVisible(); }); 
+        _mainMenuButton.onClick.AddListener(() => { ToggleVisible(new List<Action> { LoadMainMenu }); });
+        _desktopButton.onClick.AddListener(() => { Application.Quit(); });
+        _cancelButton.onClick.AddListener(() => { ToggleVisible(); });
     }
 
     protected override void SetAnimationOpenClose()
     {
         _animationOpen = _hashAnimationName.QuitGameSubMenuOpen;
         _animationClose = _hashAnimationName.QuitGameSubMenuClose;
+    }
+
+    private void LoadMainMenu()
+    {
+        _scenesService.LoadSceneByLoadingScreen(SceneName.MainMenu).Forget();
     }
 }

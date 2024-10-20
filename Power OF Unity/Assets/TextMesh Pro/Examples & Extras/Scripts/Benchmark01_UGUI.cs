@@ -41,7 +41,7 @@ namespace TMPro.Examples
             if (BenchmarkType == 0) // TextMesh Pro Component
             {
                 m_textMeshPro = gameObject.AddComponent<TextMeshProUGUI>();
-                //m_textContainer = GetComponent<TextContainer>();
+                //m_textContainer = CreateInstanceClass<TextContainer>();
 
 
                 //m_textMeshPro.anchorDampening = true;

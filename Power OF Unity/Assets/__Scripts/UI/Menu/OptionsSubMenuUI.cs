@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// Пол меню настроек звука видео... 
 /// </summary>
 /// <remarks>
-/// Создается и инициализируется в PersistentEntryPoint
+/// Создается через Addressable
 /// </remarks>
 public class OptionsSubMenuUI : ToggleVisibleAnimatioMenuUI 
 {

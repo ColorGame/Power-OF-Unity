@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public enum MarketState
 {
-    //None,
+    //NoneWeapon,
     Buy,
     Sell
 }
@@ -142,7 +142,6 @@ public class MarketUI : ObjectSelectButtonsSystemUI
     public override void SetActive(bool active)
     {
         _canvas.enabled = active;
-
         if (active)
         {
             SetAndShowContainer(_weaponSelectContainer, _weaponButtonSelectedImage);
@@ -275,12 +274,12 @@ public class MarketUI : ObjectSelectButtonsSystemUI
                         CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _itemSelectContainer);
                     break;
 
-                case ArmorHeadTypeSO:
+                case HeadArmorTypeSO:
                     if (_activeContainer == _armorHeadSelectContainer)
                         CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _armorHeadSelectContainer);
                     break;
 
-                case ArmorBodyTypeSO:
+                case BodyArmorTypeSO:
                     if (_activeContainer == _armorBodySelectContainer)
                         CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _armorBodySelectContainer);
                     break;

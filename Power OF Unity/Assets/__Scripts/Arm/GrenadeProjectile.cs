@@ -118,7 +118,7 @@ public class GrenadeProjectile : MonoBehaviour // Гранатный снаряд
 
             Destroy(gameObject);
 
-            _onGrenadeBehaviorComplete(); // Вызовим сохраненный делегат который нам передала функция Init(). В нашем случае это ActionComplete() он снимает занятость с кнопок UI
+            _onGrenadeBehaviorComplete(); // Вызовим сохраненный делегат который нам передала функция InitOnLoad(). В нашем случае это ActionComplete() он снимает занятость с кнопок UI
 
         }
         //БЕЗЬЕ//
@@ -178,7 +178,7 @@ public class GrenadeProjectile : MonoBehaviour // Гранатный снаряд
 
              Destroy(gameObject);
 
-             _onGrenadeBehaviorComplete(); // Вызовим сохраненный делегат который нам передала функция Init(). В нашем случае это ActionComplete() он снимает занятость с кнопок UI
+             _onGrenadeBehaviorComplete(); // Вызовим сохраненный делегат который нам передала функция InitOnLoad(). В нашем случае это ActionComplete() он снимает занятость с кнопок UI
          }
          //АНИМ.КРИВАЯ.У//*/
     }

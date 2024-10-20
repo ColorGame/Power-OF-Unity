@@ -35,7 +35,7 @@ public class LevelGrid : MonoBehaviour // Основной скрипт который управляет СЕТК
 
     private void Start()
     {
-        //  PathfindingMonkey.Instance.Init(_gridParameters, _floorAmount); // ПОСТРОИМ СЕТКУ УЗЛОВ ПОИСКА ПУТИ // УБЕДИМСЯ ЧТО ЭТОТ МЕТОД СТАРТУЕТ РАНЬШЕ до того как ктонибудь совершит поиск пути
+        //  PathfindingMonkey.Instance.InitOnLoad(_gridParameters, _floorAmount); // ПОСТРОИМ СЕТКУ УЗЛОВ ПОИСКА ПУТИ // УБЕДИМСЯ ЧТО ЭТОТ МЕТОД СТАРТУЕТ РАНЬШЕ до того как ктонибудь совершит поиск пути
     }
 
     private GridSystemXZ<GridObjectUnitXZ> GetGridSystem(int floor) // Получить Сеточную систему для данного этажа

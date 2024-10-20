@@ -9,5 +9,5 @@ public class UnitTypeBasicListSO : ScriptableObject// ÁÓÄÅÒ ÂÑÅÃÎ ÎÄÈÍ İÊÇÅÌÏËßĞ
     [SerializeField] private List<UnitTypeSO> hireUnitsBasiclist; // Áàçîâûé cïèñîê Şíèòîâ äëÿ íàéìà
 
     public List<UnitTypeSO> GetMyUnitsBasicList() {  return myUnitsBasiclist; }
-    public List<UnitTypeSO> GetHireUnitsBasiclist() {  return myUnitsBasiclist; }
+    public List<UnitTypeSO> GetHireUnitsBasiclist() {  return hireUnitsBasiclist; }
 }

@@ -14,7 +14,7 @@ public class GameInput
         Init();
     }
     /*
-        private GameInput() { Init(); } // Конструктор private что бы нельзя было создать  new GameInput() 
+        private GameInput() { InitOnLoad(); } // Конструктор private что бы нельзя было создать  new GameInput() 
 
         // Тип Lazy потокобезопасная. Ленивая загрузка. Все, что вам нужно сделать, это передать делегат конструктору, который вызывает конструктор Singleton, которому передается лямбда-выражение:
         private static readonly Lazy<GameInput> lazy =
@@ -31,7 +31,7 @@ public class GameInput
     public event EventHandler<float> OnCameraZoomAction;
 
     public event EventHandler OnBindingRebind; // При повторной привязке
-    public event EventHandler OnGameDeviceChanged;
+    public event EventHandler<GameDevice> OnGameDeviceChanged;
    
     public enum GameDevice
     {
@@ -106,12 +106,12 @@ public class GameInput
 
     private void ChangeActiveGameDevice(GameDevice activeGameDevice)
     {
-        this._activeGameDevice = activeGameDevice; // Установим активное устройство
+        _activeGameDevice = activeGameDevice; // Установим активное устройство
         Debug.Log("Новый Активный Игровой Девайс: " + activeGameDevice);
 
         Cursor.visible = activeGameDevice == GameDevice.KeyboardMouse;
 
-        OnGameDeviceChanged?.Invoke(this, EventArgs.Empty);
+        OnGameDeviceChanged?.Invoke(this, _activeGameDevice);
     }
 
     public GameDevice GetActiveGameDevice()

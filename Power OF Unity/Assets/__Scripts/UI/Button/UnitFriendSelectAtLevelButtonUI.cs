@@ -31,7 +31,7 @@ public class UnitFriendSelectAtLevelButtonUI : MonoBehaviour
         _unit = unit;
         _unitActionSystem = unitActionSystem;
 
-        _nameUnitText.text = _unit.GetUnitTypeSO<UnitTypeSO>().GetName().ToUpper(); // Зададим имя с ЗАГЛАВНОЙ БУКВЫ
+        _nameUnitText.text = _unit.GetUnitTypeSO().GetName().ToUpper(); // Зададим имя с ЗАГЛАВНОЙ БУКВЫ
         _actionPointsText.text = _unit.GetActionPointsSystem().GetActionPointsCount().ToString();
         _healthBarImage.fillAmount = _unit.GetHealthSystem().GetHealthNormalized();
 

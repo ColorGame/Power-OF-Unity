@@ -262,10 +262,10 @@ namespace UnityEngine.InputSystem.UI
             get => m_ScrollWheelAction;
             set => SetAction(ref m_ScrollWheelAction, value);
         }
-        
-        public void Init(GameInput gameInput)
+
+        public void InitOnLoad()
         {
-            _gameInput = gameInput;
+           // _gameInput = gameInput;
             Setup();
         }
 
@@ -318,19 +318,20 @@ namespace UnityEngine.InputSystem.UI
 
             m_Canvas.sortingOrder = 100; //Canvas с более высоким порядком сортировки всегда будет отображаться над Canvas с более низким порядком сортировки. 
 
-            _gameInput.OnGameDeviceChanged += GameInput_OnGameDeviceChanged;
+          //  _gameInput.OnGameDeviceChanged += GameInput_OnGameDeviceChanged;
 
             ResetMouseToCenter();
-            UpdateVisibility();
+           // UpdateVisibility(_gameInput.GetActiveGameDevice());
         }
-
-        private void OnEnable()
-        {   
-            if(_gameInput!=null)
-                Setup();            
-        }       
-
-        protected void OnDisable()
+        /*
+                private void OnEnable()
+                {   
+                    if(_gameInput!=null)
+                        Setup();            
+                }
+        */
+        
+        public void Unload()//  protected void OnDisable()
         {
             // Удалите устройство мыши.
             if (m_VirtualMouse != null && m_VirtualMouse.added)
@@ -371,14 +372,14 @@ namespace UnityEngine.InputSystem.UI
             }
 
             m_LastTime = default;
-            m_LastStickValue = default;           
+            m_LastStickValue = default;
         }
-                       
+
         private void OnDestroy()
         {
             // Если отписаться в OnEnable() то когда мы вызовим Hide(){gameObject.SetActive(false);} и отключим этот объект то он автоматически отпишется, и мы не сможем больше его включить, 
             // а так подписка срабатывает даже если gameObject.SetActive(false) и при смене девайса мы сможем включить этот объект  
-            _gameInput.OnGameDeviceChanged -= GameInput_OnGameDeviceChanged;
+            //_gameInput.OnGameDeviceChanged -= GameInput_OnGameDeviceChanged;
         }
 
         private void ScrollWheelAction_canceled(InputAction.CallbackContext obj) { _pressedForWhile = false; }
@@ -554,7 +555,7 @@ namespace UnityEngine.InputSystem.UI
         private Action<InputAction.CallbackContext> m_ButtonActionTriggeredDelegate;
         private double m_LastTime;
         private Vector2 m_LastStickValue;
-        private GameInput _gameInput;
+       // private GameInput _gameInput;
 
         /// <summary>
         /// Нажата в течение некоторого времени
@@ -659,14 +660,14 @@ namespace UnityEngine.InputSystem.UI
             HardwareCursorIfAvailable,
         }
 
-        private void GameInput_OnGameDeviceChanged(object sender, System.EventArgs e)
+       /* private void GameInput_OnGameDeviceChanged(object sender, GameInput.GameDevice gameDevice)
         {
-            UpdateVisibility();           
-        }
-
-        private void UpdateVisibility()
+            UpdateVisibility(gameDevice);
+        }*/
+/*
+        private void UpdateVisibility(GameInput.GameDevice gameDevice)
         {
-            if (_gameInput.GetActiveGameDevice() == GameInput.GameDevice.Gamepad)
+            if (gameDevice == GameInput.GameDevice.Gamepad)
             {
                 ResetMouseToCenter();
                 Show();
@@ -692,7 +693,7 @@ namespace UnityEngine.InputSystem.UI
             {
                 Debug.LogError("VirtualCursorUI" + e.ToString());
             }
-        }
+        }*/
 
         private void ResetMouseToCenter()
         {

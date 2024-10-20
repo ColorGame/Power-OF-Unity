@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,20 +17,20 @@ public class GameMenuUI : ToggleVisibleAnimatioMenuUI
     [SerializeField] private Button _quitGameButton; // выйти
 
 
-    private OptionsSubMenuUI _optionsSubMenuUI;
-    private QuitGameSubMenuUI _quitGameSubMenuUI;
-    private SaveGameSubMenuUI _saveGameSubMenuUI;   
-    private LoadGameSubMenuUI _loadGameSubMenuUI;
+    private OptionsSubMenuUIProvider _optionsSubMenuUIProvider;
+    private QuitGameSubMenuUIProvider _quitGameSubMenuUIProvider;
+    private SaveGameSubMenuUIProvider _saveGameSubMenuUIProvider;   
+    private LoadGameSubMenuUIProvider _loadGameSubMenuUIProvider;
 
 
-    public void Init(GameInput gameInput, HashAnimationName hashAnimationName, OptionsSubMenuUI optionsSubMenuUI, QuitGameSubMenuUI quitGameSubMenuUI, SaveGameSubMenuUI saveGameSubMenuUI, LoadGameSubMenuUI loadGameSubMenuUI)
+    public void Init(GameInput gameInput, HashAnimationName hashAnimationName, OptionsSubMenuUIProvider optionsSubMenuUIProvider, QuitGameSubMenuUIProvider quitGameSubMenuUIProvider, SaveGameSubMenuUIProvider saveGameSubMenuUIProvider, LoadGameSubMenuUIProvider loadGameSubMenuUIProvider)
     {
         _gameInput = gameInput;
         _hashAnimationName = hashAnimationName;
-        _optionsSubMenuUI = optionsSubMenuUI;
-        _quitGameSubMenuUI = quitGameSubMenuUI;
-        _saveGameSubMenuUI = saveGameSubMenuUI;
-        _loadGameSubMenuUI = loadGameSubMenuUI;
+        _optionsSubMenuUIProvider = optionsSubMenuUIProvider;
+        _quitGameSubMenuUIProvider = quitGameSubMenuUIProvider;
+        _saveGameSubMenuUIProvider = saveGameSubMenuUIProvider;
+        _loadGameSubMenuUIProvider = loadGameSubMenuUIProvider;
 
         Setup();
         SetAnimationOpenClose();
@@ -39,25 +40,26 @@ public class GameMenuUI : ToggleVisibleAnimatioMenuUI
     {             
         _resumeGameButton.onClick.AddListener(() => {ToggleVisible(); }); 
 
+        // Передадим делегат (подписка на альтернативное переключение этого меню). При выключении вложенного меню, этот делегат будет вызван, и подписка востановиться.
         _saveGameButton.onClick.AddListener(() => 
         {
             UnsubscribeAlternativeToggleVisible();
-            _saveGameSubMenuUI.ToggleVisible(SubscribeAlternativeToggleVisible); 
+            _saveGameSubMenuUIProvider.LoadAndToggleVisible(SubscribeAlternativeToggleVisible).Forget(); 
         }); 
         _loadGameButton.onClick.AddListener(() => 
         {
             UnsubscribeAlternativeToggleVisible();
-            _loadGameSubMenuUI.ToggleVisible(SubscribeAlternativeToggleVisible); 
+            _loadGameSubMenuUIProvider.LoadAndToggleVisible(SubscribeAlternativeToggleVisible).Forget(); 
         });
         _optionGameButton.onClick.AddListener(() => 
         {
             UnsubscribeAlternativeToggleVisible();
-            _optionsSubMenuUI.ToggleVisible(SubscribeAlternativeToggleVisible);
+            _optionsSubMenuUIProvider.LoadAndToggleVisible(SubscribeAlternativeToggleVisible).Forget();
         }); 
         _quitGameButton.onClick.AddListener(() => 
         {
             UnsubscribeAlternativeToggleVisible();
-            _quitGameSubMenuUI.ToggleVisible(SubscribeAlternativeToggleVisible);
+            _quitGameSubMenuUIProvider.LoadAndToggleVisible(SubscribeAlternativeToggleVisible).Forget();
         }); 
     }
 

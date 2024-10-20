@@ -18,9 +18,7 @@ public class SpawnerOnUnitSetupScen : MonoBehaviour
     }
 
     private void Setup()
-    {
-        //UpdateSpawn(_unitManager.GetSelectedUnit());
-
+    {      
         _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
 
         _selectedUnit = _unitManager.GetSelectedUnit();
@@ -39,8 +37,7 @@ public class SpawnerOnUnitSetupScen : MonoBehaviour
 
         if (_selectedUnit != null)
         {
-            Transform unitVisualPrefab = _selectedUnit.GetUnitTypeSO<UnitFriendSO>().GetUnitVisualPrefab(_selectedUnit.GetUnitArmorType());
-            Instantiate(unitVisualPrefab, transform);
+            _selectedUnit.GetUnitEquips().InstantiateOnlyUnitView(transform);            
         }
     }
 

@@ -99,14 +99,12 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
     public override void SetActive(bool active)
     {
         _canvas.enabled = active;
-
         if (active)
         {
             ShowMuUnitsTab();
         }
         else
-        {
-            _unitManager.ClearSelectedUnit(); // Очистим выделенного юнита чтобы сбросить 3D модель и ПОРТФОЛИО
+        {          
             ClearActiveButtonContainer();
         }
     }

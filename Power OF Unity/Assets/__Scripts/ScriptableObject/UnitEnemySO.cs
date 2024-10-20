@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class UnitEnemySO : UnitTypeSO
 {
-    [SerializeField] private Transform _unitEnemyVisualPrefab;
+    [SerializeField] private UnitView _unitEnemyViewPrefab;
     [Header("SO основного предмета(оружи€) которым владеет враг\n(дл€ экипировки при спавне)")]
     [SerializeField] private PlacedObjectTypeWithActionSO _mainplacedObjectTypeWithActionSO;
     [Header("ћассив SO дополнительных предметов(оружи€) которым владеет враг")]
@@ -14,6 +14,6 @@ public class UnitEnemySO : UnitTypeSO
 
     public PlacedObjectTypeWithActionSO GetMainplacedObjectTypeWithActionSO() { return _mainplacedObjectTypeWithActionSO; }
     public PlacedObjectTypeWithActionSO[] GetOtherplacedObjectTypeWithActionSOArray() {  return _otherplacedObjectTypeWithActionSOArray; }
-    public Transform GetUnitEnemyVisualPrefab() { return _unitEnemyVisualPrefab; }
+    public UnitView GetUnitEnemyVisualPrefab() { return _unitEnemyViewPrefab; }
 
 }

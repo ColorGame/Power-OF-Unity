@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -9,32 +11,27 @@ using UnityEngine;
 /// </remarks>
 public abstract class ToggleVisibleAnimatioMenuUI : MonoBehaviour
 {
+    [SerializeField] private Canvas _canvas;
+    [SerializeField] private Animator _animator; //Аниматор для меню
+
     protected GameInput _gameInput;
     protected HashAnimationName _hashAnimationName;
     protected int _animationOpen;
     protected int _animationClose;
 
-    private Animator _animator; //Аниматор для меню
     private float _animationTimer;
     private int _stateHashNameAnimation;
     private bool _animationStart = false;
     private bool _toggleBool = false;
 
-    private Action _menuClosed; // Делегат будем вызывать при закрытии меню
+    private List<Action> _closeDelegateList; //Делегаты которые будем вызывать при закрытии меню
 
-    private Canvas _canvas;
 
     private void Awake()
     {
-        if (TryGetComponent(out Animator animator))
-        {
-            _animator = animator;
-        }
-        _canvas = GetComponentInParent<Canvas>(true);
-       
         HideMenuCallDelegate();
     }
-       
+
     protected abstract void SetAnimationOpenClose();
 
 
@@ -70,7 +67,7 @@ public abstract class ToggleVisibleAnimatioMenuUI : MonoBehaviour
         if (_gameInput != null) // При загрузки _gameInput еще не иницилизирован 
             _gameInput.OnMenuAlternate -= GameInput_OnMenuAlternateToggleVisible;
     }
-    private void GameInput_OnMenuAlternateToggleVisible(object sender, System.EventArgs e)
+    private void GameInput_OnMenuAlternateToggleVisible(object sender, EventArgs e)
     {
         ToggleVisible();
     }
@@ -80,10 +77,10 @@ public abstract class ToggleVisibleAnimatioMenuUI : MonoBehaviour
     /// <remarks>
     /// Если передается делегат = null то он не переписывает предыдущий. Если надо переключить без анимации то передаем withAnimation = false
     /// </remarks>
-    public void ToggleVisible(Action menuClosed = null, bool withAnimation = true) // Переключатель видимости меню НАСТРОЙКИ (будем вызывать через инспектор кнопкой OptionsButton)
+    public void ToggleVisible(List<Action> closeDelegateList = null, bool withAnimation = true) // Переключатель видимости меню НАСТРОЙКИ (будем вызывать через инспектор кнопкой OptionsButton)
     {
-        if (menuClosed != null)
-            _menuClosed = menuClosed;
+        if (closeDelegateList != null)// если есть делегаты сохраним их
+            _closeDelegateList = closeDelegateList;
 
         if (!_toggleBool) // Если не активны(выключена) то активируем 
         {
@@ -105,29 +102,33 @@ public abstract class ToggleVisibleAnimatioMenuUI : MonoBehaviour
             else // В противном случае просто скроем меню
             {
                 HideMenuCallDelegate();
-            }                
+            }
         }
     }
 
     private void ShowMenu()
-    {      
+    {
         _canvas.enabled = true;
         SubscribeAlternativeToggleVisible();
-        _toggleBool=true;       
+        _toggleBool = true;
     }
     /// <summary>
     /// Скроем меню. Если есть не нулевой делегат вызовим его и обнулим.
     /// </summary>
     private void HideMenuCallDelegate()
-    {        
+    {
         _canvas.enabled = false;
-        UnsubscribeAlternativeToggleVisible();
         _toggleBool = false;
-      
-        if (_menuClosed != null)
+        UnsubscribeAlternativeToggleVisible();
+
+        if (_closeDelegateList != null)
         {
-            _menuClosed();
-            _menuClosed = null;
+            foreach (Action action in _closeDelegateList)
+            {
+                if (action != null)
+                    action();
+            }
+            _closeDelegateList.Clear();
         }
     }
 
