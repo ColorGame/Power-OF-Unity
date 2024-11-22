@@ -55,9 +55,9 @@ public class UnitBigExoskeletonView : UnitView
         };
     }
 
-    public override void SetBodyArmor(BodyArmorTypeSO bodyArmorTypeSO)
+    protected override void SetBodyArmor(BodyArmorTypeSO bodyArmorTypeSO)
     {
-        // Пустой метод       
+        // Пустой метод (у этого визуала только один вид брони)       
     }
 
     public override void SetHeadArmor(HeadArmorTypeSO headArmorTypeSO)
@@ -116,11 +116,7 @@ public class UnitBigExoskeletonView : UnitView
                 break;
         }
     }
-
-    public override void SetMainWeapon(PlacedObjectTypeWithActionSO placedObjectTypeWithActionSO)
-    {
-
-    }
+       
     
     private void ShowArray(HashSet<MeshRenderer[]> showHashList)
     {

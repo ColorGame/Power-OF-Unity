@@ -18,7 +18,7 @@ public class Unit
         Mission,
     }
 
-    public Unit(UnitTypeSO unitTypeSO, SoundManager soundManager)
+    public Unit(UnitTypeSO unitTypeSO, SoundManager soundManager, HashAnimationName hashAnimationName)
     {
         switch (unitTypeSO)
         {
@@ -36,7 +36,7 @@ public class Unit
         _healthSystem = new HealthSystem(unitTypeSO.GetBasicHealth(), _soundManager);
         _actionPointsSystem = new UnitActionPoints(this, unitTypeSO.GetBasicActionPoints());
         _unitEquipment = new UnitEquipment();
-        _unitEquipsView = new UnitEquipsView(this);
+        _unitEquipsViewFarm = new UnitEquipsViewFarm(this, hashAnimationName);
         _unitPowerSystem = new UnitPowerSystem(unitTypeSO.GetBasicPower());
         _unitAccuracySystem = new UnitAccuracySystem(unitTypeSO.GetBasicAccuracy());
         _location = Location.Barrack; // по умолчанию все юниты по€вл€ютс€ в  ј«ј–ћ≈
@@ -59,7 +59,7 @@ public class Unit
     readonly HealthSystem _healthSystem;
     readonly UnitActionPoints _actionPointsSystem;
     readonly UnitEquipment _unitEquipment;
-    readonly UnitEquipsView _unitEquipsView;
+    readonly UnitEquipsViewFarm _unitEquipsViewFarm;
     readonly UnitPowerSystem _unitPowerSystem;
     readonly UnitAccuracySystem _unitAccuracySystem;
     private int _completedMissionsCount;
@@ -181,7 +181,7 @@ public class Unit
     public HealthSystem GetHealthSystem() { return _healthSystem; }
     public UnitActionPoints GetActionPointsSystem() { return _actionPointsSystem; }
     public UnitEquipment GetUnitEquipment() { return _unitEquipment; }
-    public UnitEquipsView GetUnitEquips() { return _unitEquipsView; }
+    public UnitEquipsViewFarm GetUnitEquipsViewFarm() { return _unitEquipsViewFarm; }
     public UnitPowerSystem GetUnitPowerSystem() { return _unitPowerSystem; }
     public UnitAccuracySystem GetUnitAccuracySystem() { return _unitAccuracySystem; }
     public int GetCompletedMissionsCount() {  return _completedMissionsCount; }

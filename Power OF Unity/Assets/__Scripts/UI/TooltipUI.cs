@@ -83,6 +83,7 @@ public class TooltipUI : MonoBehaviour
             if (_tooltipTimer.timer <= 0) //ѕо истечении времени скроем подсказку
             {
                 _tooltipTimer = null;
+                _followMouse=false;
                 Hide();
             }
         }

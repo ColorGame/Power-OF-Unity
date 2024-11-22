@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class UnitManager // Менеджер (администратор) Юнитов
 {
-    public UnitManager(TooltipUI tooltipUI, SoundManager soundManager, WarehouseManager warehouseManager)
+    public UnitManager(TooltipUI tooltipUI, SoundManager soundManager, WarehouseManager warehouseManager, HashAnimationName hashAnimationName)
     {
-        Init(tooltipUI, soundManager, warehouseManager);
+        Init(tooltipUI, soundManager, warehouseManager, hashAnimationName);
     }
 
     public event EventHandler<Unit> OnSelectedUnitChanged; // Изменен выбранный юнит
@@ -28,20 +28,20 @@ public class UnitManager // Менеджер (администратор) Юнитов
     private Unit _selectedUnit;
 
 
-    private void Init(TooltipUI tooltipUI, SoundManager soundManager, WarehouseManager warehouseManager)
+    private void Init(TooltipUI tooltipUI, SoundManager soundManager, WarehouseManager warehouseManager, HashAnimationName hashAnimationName)
     {
         _tooltipUI = tooltipUI;
         _soundManager = soundManager;
         _warehouseManager = warehouseManager;
 
-        InitUnits(firstStart: true);
+        InitUnits(firstStart: true, hashAnimationName);
 
         Unit.OnAnyEnemyUnitSpawned += Unit_OnAnyEnemyUnitSpawned; // Подпишемся на событие (Любой Рожденный(созданный) Вражеский Юнит)
         Unit.OnAnyUnitDead += Unit_OnAnyUnitDead;  // Подпишемся на событие (Любой Мертвый Юнит)
 
     }
 
-    private void InitUnits(bool firstStart)
+    private void InitUnits(bool firstStart , HashAnimationName hashAnimationName)
     {
         if (firstStart)
         {
@@ -49,13 +49,13 @@ public class UnitManager // Менеджер (администратор) Юнитов
 
             foreach (UnitTypeSO unitFriendTypeSO in unitTypeBasicListSO.GetMyUnitsBasicList())
             {
-                Unit unit = new Unit(unitFriendTypeSO, _soundManager);
+                Unit unit = new Unit(unitFriendTypeSO, _soundManager, hashAnimationName);
                 AddUnitFriendList(unit);
             }
 
             foreach (UnitTypeSO unitFriendTypeSO in unitTypeBasicListSO.GetHireUnitsBasiclist())
             {
-                Unit hireUnit = new Unit(unitFriendTypeSO, _soundManager);
+                Unit hireUnit = new Unit(unitFriendTypeSO, _soundManager, hashAnimationName);
                 AddHireUnitList(hireUnit);
             }
         }
@@ -244,12 +244,12 @@ public class UnitManager // Менеджер (администратор) Юнитов
     public Unit GetSelectedUnit() { return _selectedUnit; }
 
     /// <summary>
-    /// Обновить выбранного юнита и вернуть его.
+    /// Обновить выбранного юнита и вернуть его (если он в моей команде).
     /// </summary>
     /// <remarks>Если все юниты погибли то вернем NULL</remarks>
     public Unit UpdateSelectedUnitAndReturn()
     {
-        if (_selectedUnit != null)
+        if (_selectedUnit != null & _unitFriendList.Contains(_selectedUnit)) // Если это юнит не нулевой и он мой
             SetSelectedUnit(_selectedUnit);
         else
             SetSelectedUnitFirstOneFromList();
@@ -262,6 +262,8 @@ public class UnitManager // Менеджер (администратор) Юнитов
     {
         if (_unitFriendList.Count != 0)
             SetSelectedUnit(_unitFriendList[0]);
+        else
+            SetSelectedUnit(null);
     }
 
 }

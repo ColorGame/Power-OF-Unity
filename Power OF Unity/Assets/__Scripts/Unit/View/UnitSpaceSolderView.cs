@@ -55,7 +55,7 @@ public class UnitSpaceSolderView : UnitView
         _beardMeshRendererArray = _beard.GetComponentsInChildren<MeshRenderer>();
     }
 
-    public override void SetBodyArmor(BodyArmorTypeSO bodyArmorTypeSO)
+    protected override void SetBodyArmor(BodyArmorTypeSO bodyArmorTypeSO)
     {
         if (bodyArmorTypeSO == null)
         {
@@ -147,9 +147,5 @@ public class UnitSpaceSolderView : UnitView
                 break;
         }
     }
-
-    public override void SetMainWeapon(PlacedObjectTypeWithActionSO placedObjectTypeWithActionSO)
-    {
-
-    }   
+  
 }

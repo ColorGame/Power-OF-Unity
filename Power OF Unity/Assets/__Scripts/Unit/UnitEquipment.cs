@@ -106,6 +106,12 @@ public class UnitEquipment
     public void ClearPlacedObjectList()
     {
         _placedObjectList.Clear();
+        _placedObjectMainWeaponSlot = null;
+        OnChangeMainWeapon?.Invoke(this, _placedObjectMainWeaponSlot);
+        _headArmor = null;
+        OnChangeHeadArmor?.Invoke(this, _headArmor);
+        _bodyArmor = null;
+        OnChangeBodyArmor?.Invoke(this, _bodyArmor);
     }
 
     /// <summary>

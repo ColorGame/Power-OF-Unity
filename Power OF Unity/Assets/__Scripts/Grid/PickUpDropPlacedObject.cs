@@ -2,10 +2,11 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// Поднятие Бросание и Размещение объектов(в сетке). Через этот класс идет взаимодействие с EquipmentGrid
+/// Поднятие Бросание и Размещение объектов(в сетке). Через этот класс идет взаимодействие с EquipmentGrid.<br/>
+/// Отвечает за ЛОГИКУ экипировки(размещение на сетке) оружия или брони.
 /// </summary>
 /// <remarks>
-/// Во время размещения, в PlacedObject передается сетка размещения и позиция якоря предмета на сетки.
+/// Во время размещения, в PlacedObject передается сетка размещения и позиция якоря предмета на сетки.<br/>
 /// Работает в паре с классом ItemSelectButtonsSystemUI
 /// </remarks>
 public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity

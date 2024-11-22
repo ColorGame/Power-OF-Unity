@@ -106,6 +106,7 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
         else
         {          
             ClearActiveButtonContainer();
+
         }
     }
 
@@ -185,7 +186,6 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
             _debitedText.text = $"-({price.ToString("N0")})";
         }
     }
-
 
     protected override void CreateSelectButtonsSystemInActiveContainer()
     {

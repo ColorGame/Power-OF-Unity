@@ -37,7 +37,7 @@ public class SpawnerOnUnitSetupScen : MonoBehaviour
 
         if (_selectedUnit != null)
         {
-            _selectedUnit.GetUnitEquips().InstantiateOnlyUnitView(transform);            
+            _selectedUnit.GetUnitEquipsViewFarm().InstantiateOnlyUnitView(transform);            
         }
     }
 

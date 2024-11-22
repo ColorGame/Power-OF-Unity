@@ -166,7 +166,11 @@ public abstract class ToggleVisibleAnimatioMenuUI : MonoBehaviour
     private void OnDestroy()
     {
         UnsubscribeAlternativeToggleVisible();
-        CallDelegateAndClear();
+        if (_unloadDelegate != null)
+        {
+            _unloadDelegate();
+            _unloadDelegate = null;
+        }
     }
 
 }

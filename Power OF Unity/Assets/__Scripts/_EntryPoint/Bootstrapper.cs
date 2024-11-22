@@ -11,11 +11,7 @@ using UnityEngine.SceneManagement;
 public class Bootstrapper
 {
     private static Bootstrapper _instance;
-    private DIContainer _rootContainer;
-
-    //private Coroutines _coroutines;
-    //private UIRootView _uiRoot;
-    //private ScenesService _scenesService;
+    private DIContainer _rootContainer;    
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]//Используйте этот атрибут для получения обратного вызова при запуске среды выполнения и загрузке первой сцены.
                                                                                     //Используйте различные параметры для RuntimeInitializeLoadType, чтобы контролировать, когда метод вызывается в последовательности запуска.
@@ -66,8 +62,5 @@ public class Bootstrapper
         loadingScreenProvider.Unload();        
 
         scenesService.TryFindStartSceneAndActivate(activeScene);
-    }
-   
-    
-    
+    } 
 }

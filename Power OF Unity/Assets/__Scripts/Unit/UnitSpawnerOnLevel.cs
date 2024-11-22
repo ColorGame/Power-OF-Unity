@@ -52,7 +52,7 @@ public class UnitSpawnerOnLevel : MonoBehaviour
     }
 
 
-    public void Init(UnitManager unitManager, TurnSystem turnSystem, SoundManager soundManager, LevelGrid levelGrid, UnitActionSystem unitActionSystem, CameraFollow cameraFollow)
+    public void Init(UnitManager unitManager, TurnSystem turnSystem, SoundManager soundManager, LevelGrid levelGrid, UnitActionSystem unitActionSystem, CameraFollow cameraFollow, HashAnimationName hashAnimationName)
     {
         _unitManager = unitManager;
         _turnSystem = turnSystem;
@@ -62,7 +62,7 @@ public class UnitSpawnerOnLevel : MonoBehaviour
         _cameraFollow = cameraFollow;
 
         UnitFriendSpawn();
-        UnitEnemySpawn();
+        UnitEnemySpawn(hashAnimationName);
     }
 
     private void UnitFriendSpawn()
@@ -83,14 +83,14 @@ public class UnitSpawnerOnLevel : MonoBehaviour
         }
         else { Debug.Log("НЕ ХВАТАЕТ точек спавна для моих юнотов!!!"); }
     }
-    private void UnitEnemySpawn()
+    private void UnitEnemySpawn(HashAnimationName hashAnimationName)
     {
         // получим тип и создадим юнита для каждой точки спавна 
         foreach (Transform pointSpawner in _enemyPointSpawnerArray)
         {
             UnitEnemySO unitEnemySO = pointSpawner.GetComponent<EnemyPointSpawner>().GetUnitEnemySO(); // Получим UnitEnemySO вражеского юнита для этого спавна
                         
-            Unit unitEnemy = new Unit(unitEnemySO, _soundManager); ;  // инициализируем нового юнита         
+            Unit unitEnemy = new Unit(unitEnemySO, _soundManager, hashAnimationName); ;  // инициализируем нового юнита         
 
             SetupAndInstantiateUnit(pointSpawner, unitEnemySO, unitEnemy);
             // можно спавн сделать дочерним к unitEnemy и сохранять его последнее положение, или удалять после спавна юнита

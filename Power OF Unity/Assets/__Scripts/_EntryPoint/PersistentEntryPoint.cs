@@ -10,10 +10,10 @@ public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
     [SerializeField] private TooltipUI _tooltipUI;   
     private VirtualMouseCustomProvider _virtualMouseCustomProvider;    
     private GameInput _gameInput;
+    private HashAnimationName _hashAnimationName;
     private JsonSaveableEntity _jsonSaveableEntity;
     private WarehouseManager _warehouseManager;
     private UnitManager _unitManager;
-    private HashAnimationName _hashAnimationName;
     private OptionsSubMenuUIProvider _optionsSubMenuUIProvider;
     private LoadGameSubMenuUIProvider _loadGameSubMenuUIProvider;
     private SaveGameSubMenuUIProvider _saveGameSubMenuUIProvider;
@@ -36,11 +36,11 @@ public class PersistentEntryPoint : MonoBehaviour, IEntryPoint
     private void CreateInstanceClass(DIContainer container)
     {   
         _gameInput = new GameInput();
+        _hashAnimationName = new HashAnimationName();
         _virtualMouseCustomProvider = new VirtualMouseCustomProvider(_gameInput);
         _jsonSaveableEntity = new JsonSaveableEntity();
         _warehouseManager = new WarehouseManager(_tooltipUI);
-        _unitManager = new UnitManager(_tooltipUI, _soundManager, _warehouseManager); // После реализации сохранения можно будет его создавать в каждой сцене
-        _hashAnimationName = new HashAnimationName();
+        _unitManager = new UnitManager(_tooltipUI, _soundManager, _warehouseManager, _hashAnimationName); // После реализации сохранения можно будет его создавать в каждой сцене
         _optionsSubMenuUIProvider = new OptionsSubMenuUIProvider(_gameInput, _soundManager, _musicManager, _hashAnimationName);
         _loadGameSubMenuUIProvider = new LoadGameSubMenuUIProvider(_gameInput, _hashAnimationName);
         _saveGameSubMenuUIProvider = new SaveGameSubMenuUIProvider(_gameInput, _hashAnimationName);

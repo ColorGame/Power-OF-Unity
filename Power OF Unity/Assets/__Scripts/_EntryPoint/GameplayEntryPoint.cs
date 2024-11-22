@@ -52,7 +52,7 @@ public class GameplayEntryPoint : MonoBehaviour, IEntryPoint
         FloorVisibility.Init(_levelGrid, _cameraFollow); // инициализировать до спавна юнитов
         _mouseOnGameGrid.Init(container.Resolve<GameInput>(), _levelGrid);
         _unitActionSystem.Init(container.Resolve<GameInput>(), container.Resolve<UnitManager>(), _turnSystem, _levelGrid, _mouseOnGameGrid);
-        _unitSpawnerOnLevel.Init(container.Resolve<UnitManager>(), _turnSystem, container.Resolve<SoundManager>(), _levelGrid, _unitActionSystem, _cameraFollow);
+        _unitSpawnerOnLevel.Init(container.Resolve<UnitManager>(), _turnSystem, container.Resolve<SoundManager>(), _levelGrid, _unitActionSystem, _cameraFollow, container.Resolve<HashAnimationName>());
         _unitSelectAtLevelButtonsSystemUI.Init(container.Resolve<UnitManager>(), _turnSystem, _unitActionSystem, _cameraFollow);
         _optionsMenagerUI.Init(container.Resolve<UnitManager>(), _unitActionSystem);
         _actionButtonSystemUI.Init(_unitActionSystem, _turnSystem, container.Resolve<TooltipUI>());

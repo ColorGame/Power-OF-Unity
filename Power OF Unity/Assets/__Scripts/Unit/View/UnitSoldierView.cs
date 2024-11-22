@@ -40,9 +40,9 @@ public class UnitSoldierView : UnitView
         _beardMeshRendererArray = _beard.GetComponentsInChildren<MeshRenderer>();
     }
 
-    public override void SetBodyArmor(BodyArmorTypeSO bodyArmorTypeSO)
+    protected override void SetBodyArmor(BodyArmorTypeSO bodyArmorTypeSO)
     {
-        // Этот тип визуала не может принять в аргументе null
+        // Этот тип визуала не может принять в аргументе null (null может принять только UnitSpaceSolderView т.к. содержит дефолтное состояние брони)
 
         switch (bodyArmorTypeSO.GetPlacedObjectType())
         {
@@ -98,8 +98,4 @@ public class UnitSoldierView : UnitView
         }
     }
 
-    public override void SetMainWeapon(PlacedObjectTypeWithActionSO placedObjectTypeWithActionSO)
-    {
-       
-    }
 }

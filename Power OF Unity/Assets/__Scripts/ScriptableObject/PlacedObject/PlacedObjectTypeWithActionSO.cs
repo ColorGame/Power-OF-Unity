@@ -13,6 +13,7 @@ public abstract class PlacedObjectTypeWithActionSO : PlacedObjectTypeSO
 {
     [Header("Префаб размещаемого объекта 3D(для создания в МИРЕ)")]
     [SerializeField] private Transform _prefab3D;
+    [SerializeField] private AnimatorOverrideController _animatorOverrideController = null;
     /// <summary>
     /// Получить базовое действие для данного PlacedObjectTypeWithActionSO
     /// </summary>
@@ -21,5 +22,8 @@ public abstract class PlacedObjectTypeWithActionSO : PlacedObjectTypeSO
     /// </remarks>
     public abstract BaseAction GetAction(Unit unit);
 
+    public AnimatorOverrideController GetAnimatorOverrideController() {  return _animatorOverrideController; }
     protected Transform GetPrefab3D() {  return _prefab3D; }
+
+
 }
