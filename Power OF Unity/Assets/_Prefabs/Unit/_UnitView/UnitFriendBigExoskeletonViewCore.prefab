@@ -27,12 +27,27 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 665505826795041013, guid: 602eca0fe7b206a45828fc1718ba728a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 665609998703801899, guid: 602eca0fe7b206a45828fc1718ba728a,
         type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 665771125713159813, guid: 602eca0fe7b206a45828fc1718ba728a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 665968163934867675, guid: 602eca0fe7b206a45828fc1718ba728a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 666368599856991693, guid: 602eca0fe7b206a45828fc1718ba728a,
         type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -143,12 +158,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: -1071995964615396303}
   m_SourcePrefab: {fileID: 100100000, guid: 602eca0fe7b206a45828fc1718ba728a, type: 3}
---- !u!4 &302977288749633250 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 253148852627120163, guid: 602eca0fe7b206a45828fc1718ba728a,
-    type: 3}
-  m_PrefabInstance: {fileID: 555976538937224897}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1045195621213887912 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 663856904290874217, guid: 602eca0fe7b206a45828fc1718ba728a,
@@ -164,36 +173,6 @@ Transform:
 --- !u!95 &1142443709093448818 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 607422137705751219, guid: 602eca0fe7b206a45828fc1718ba728a,
-    type: 3}
-  m_PrefabInstance: {fileID: 555976538937224897}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &2295667712033837532 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1760028018556911389, guid: 602eca0fe7b206a45828fc1718ba728a,
-    type: 3}
-  m_PrefabInstance: {fileID: 555976538937224897}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &2929396443482508864 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3391341619509502081, guid: 602eca0fe7b206a45828fc1718ba728a,
-    type: 3}
-  m_PrefabInstance: {fileID: 555976538937224897}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &3315115959598911151 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3005750131435954286, guid: 602eca0fe7b206a45828fc1718ba728a,
-    type: 3}
-  m_PrefabInstance: {fileID: 555976538937224897}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &3863556319414555112 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3614461647317794601, guid: 602eca0fe7b206a45828fc1718ba728a,
-    type: 3}
-  m_PrefabInstance: {fileID: 555976538937224897}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &5280114561229830866 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5688474592129405971, guid: 602eca0fe7b206a45828fc1718ba728a,
     type: 3}
   m_PrefabInstance: {fileID: 555976538937224897}
   m_PrefabAsset: {fileID: 0}
@@ -218,23 +197,11 @@ MonoBehaviour:
   _handLeft: {fileID: 1053410112227657684}
   _handRight: {fileID: 1045195621213887912}
   _animator: {fileID: 1142443709093448818}
-  _headArmorBigCoverClear: {fileID: 8525773376261557516}
-  _headArmorBigCover: {fileID: 302977288749633250}
-  _headArmorSpaceNoFace: {fileID: 5280114561229830866}
-  _headArmorMilitary: {fileID: 3315115959598911151}
-  _headArmorJunker: {fileID: 2295667712033837532}
-  _headWithFace: {fileID: 3863556319414555112}
-  _hair: {fileID: 8453174063076920799}
-  _beard: {fileID: 2929396443482508864}
---- !u!4 &8453174063076920799 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8284526208213000990, guid: 602eca0fe7b206a45828fc1718ba728a,
-    type: 3}
-  m_PrefabInstance: {fileID: 555976538937224897}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &8525773376261557516 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8207414504166810573, guid: 602eca0fe7b206a45828fc1718ba728a,
-    type: 3}
-  m_PrefabInstance: {fileID: 555976538937224897}
-  m_PrefabAsset: {fileID: 0}
+  _headArmorBigCoverClear: {fileID: 0}
+  _headArmorBigCover: {fileID: 0}
+  _headArmorSpaceNoFace: {fileID: 0}
+  _headArmorMilitary: {fileID: 0}
+  _headArmorJunker: {fileID: 0}
+  _headWithFace: {fileID: 0}
+  _hair: {fileID: 0}
+  _beard: {fileID: 0}

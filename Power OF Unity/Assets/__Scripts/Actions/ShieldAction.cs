@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShieldAction : BaseAction // Вращение
+public class ShieldAction : BaseAction // Щит
 {
 
     private float _totalSpinAmount; // Общая сумма вращения

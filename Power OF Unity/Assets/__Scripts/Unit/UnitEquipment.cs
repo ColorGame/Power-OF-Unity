@@ -10,17 +10,18 @@ public class UnitEquipment
     /// </summary>
     public UnitEquipment()
     {
-        //Здесь можно загрузить стандартную загрузку экипировки       
+        //Здесь можно загрузить стандартную загрузку экипировки и экипировку врагов   
     }
 
     public event EventHandler<PlacedObjectTypeWithActionSO> OnChangeMainWeapon; // Изменено Основное оружие
+    public event EventHandler<PlacedObjectTypeWithActionSO> OnChangeOtherWeapon; // Изменено Дополнительное оружие
     public event EventHandler<HeadArmorTypeSO> OnChangeHeadArmor; // Изменена броня головы
     public event EventHandler<BodyArmorTypeSO> OnChangeBodyArmor; // Изменена броня тела
 
     private List<PlacedObjectGridParameters> _placedObjectList = new List<PlacedObjectGridParameters>(); // Список "Размещенных Объектов в Сетке Инвенторя"
 
     private PlacedObjectTypeWithActionSO _placedObjectMainWeaponSlot;
-    private PlacedObjectTypeWithActionSO _placedObjectOtherWeaponSlot;
+    private PlacedObjectTypeWithActionSO _placedObjectOtherWeaponSlot; 
     private List<PlacedObjectTypeWithActionSO> _placedObjecеBagSlotList = new List<PlacedObjectTypeWithActionSO>();
     private List<GrenadeTypeSO> _grenadeInBagList = new List<GrenadeTypeSO>(); // Список гранат в багаже
 
@@ -45,6 +46,7 @@ public class UnitEquipment
                 break;
             case EquipmentSlot.OtherWeaponsSlot:
                 _placedObjectOtherWeaponSlot = (PlacedObjectTypeWithActionSO)placedObjectTypeSO;
+                OnChangeOtherWeapon?.Invoke(this, _placedObjectOtherWeaponSlot);
                 break;
             case EquipmentSlot.BagSlot:
                 _placedObjecеBagSlotList.Add((PlacedObjectTypeWithActionSO)placedObjectTypeSO);
@@ -82,6 +84,7 @@ public class UnitEquipment
                 break;
             case EquipmentSlot.OtherWeaponsSlot:
                 _placedObjectOtherWeaponSlot = null;
+                OnChangeOtherWeapon?.Invoke(this, _placedObjectOtherWeaponSlot);
                 break;
             case EquipmentSlot.BagSlot:
                 _placedObjecеBagSlotList.Remove((PlacedObjectTypeWithActionSO)placedObjectTypeSO);
@@ -121,7 +124,7 @@ public class UnitEquipment
     {
         if (_bodyArmor != null)
         {
-            return headArmorTypeSO.GetCompatibleArmorList().Contains(_bodyArmor.GetPlacedObjectType());
+            return headArmorTypeSO.GetCompatibleArmorList().Contains(_bodyArmor.GetBodyArmorType());
         }
         else { return false; }
     }

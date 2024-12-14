@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +23,7 @@ public class ActionButtonSystemUI : MonoBehaviour
     [SerializeField] private Transform _grenadeButtonContainer; // Контейнер для кнопок гранат
     [SerializeField] private Button _unitEquipmentButton; // Кнопка экипировка юнита
 
+    private Dictionary<GrenadeType, int> _grenadeTypeCountDict = new();// Словарь КЛЮЧ - тип гранаты, ЗНАЧЕНИЕ - количество
 
     private TooltipUI _tooltipUI;
     private UnitActionSystem _unitActionSystem;
@@ -93,11 +95,11 @@ public class ActionButtonSystemUI : MonoBehaviour
         _moveActionButton.SetMoveAction(_selectedUnit.GetAction<MoveAction>(), _unitActionSystem);
         _actionButtonUIList.Add(_moveActionButton);
 
-        PlacedObjectTypeWithActionSO mainWeaponplacedObjectTypeWithActionSO = _selectedUnit.GetUnitEquipment().GetPlacedObjectMainWeaponSlot(); // У выбранного юнита, в слоте ОСНОВНОГО ОРУЖИЯ, получим тип объекта
-        if (mainWeaponplacedObjectTypeWithActionSO != null)
+        PlacedObjectTypeWithActionSO mainWeaponSO = _selectedUnit.GetUnitEquipment().GetPlacedObjectMainWeaponSlot(); // У выбранного юнита, в слоте ОСНОВНОГО ОРУЖИЯ, получим тип объекта
+        if (mainWeaponSO != null)
         {
-            BaseAction baseAction = mainWeaponplacedObjectTypeWithActionSO.GetAction(_selectedUnit); // Получим у выбранного юнита, Базовое Действие для данного типа PlacedObjectTypeWithActionSO
-            _mainWeaponButton.SetBaseActionAndplacedObjectTypeWithActionSO(baseAction, mainWeaponplacedObjectTypeWithActionSO, _unitActionSystem);
+            BaseAction baseAction = mainWeaponSO.GetAction(_selectedUnit); // Получим у выбранного юнита, Базовое Действие для данного типа PlacedObjectTypeWithActionSO
+            _mainWeaponButton.SetBaseActionAndplacedObjectTypeWithActionSO(baseAction, mainWeaponSO, _unitActionSystem);
             _actionButtonUIList.Add(_mainWeaponButton); // Добавим в список полученный компонент ActionButtonUI
         }
         else
@@ -105,11 +107,11 @@ public class ActionButtonSystemUI : MonoBehaviour
             _mainWeaponButton.InteractableDesabled();
         }
 
-        PlacedObjectTypeWithActionSO otherWeaponplacedObjectTypeWithActionSO = _selectedUnit.GetUnitEquipment().GetPlacedObjectOtherWeaponSlot(); // У выбранного юнита, в слоте ОСНОВНОГО ОРУЖИЯ, получим тип объекта
-        if (otherWeaponplacedObjectTypeWithActionSO != null)
+        PlacedObjectTypeWithActionSO otherWeaponSO = _selectedUnit.GetUnitEquipment().GetPlacedObjectOtherWeaponSlot(); // У выбранного юнита, в слоте ОСНОВНОГО ОРУЖИЯ, получим тип объекта
+        if (otherWeaponSO != null)
         {
-            BaseAction baseAction = otherWeaponplacedObjectTypeWithActionSO.GetAction(_selectedUnit); // Получим Базовое Действие для данного типа PlacedObjectTypeWithActionSO
-            _otherWeaponButton.SetBaseActionAndplacedObjectTypeWithActionSO(baseAction, otherWeaponplacedObjectTypeWithActionSO, _unitActionSystem);
+            BaseAction baseAction = otherWeaponSO.GetAction(_selectedUnit); // Получим Базовое Действие для данного типа PlacedObjectTypeWithActionSO
+            _otherWeaponButton.SetBaseActionAndplacedObjectTypeWithActionSO(baseAction, otherWeaponSO, _unitActionSystem);
             _actionButtonUIList.Add(_otherWeaponButton); // Добавим в список полученный компонент ActionButtonUI
         }
         else
@@ -121,40 +123,28 @@ public class ActionButtonSystemUI : MonoBehaviour
         foreach (Transform buttonTransform in _grenadeButtonContainer) // Очистим контейнер с кнопками
         {
             Destroy(buttonTransform.gameObject); // Удалим игровой объект прикрипленный к Transform
-        }
+        }      
+               
 
-        List<GrenadeTypeSO> GrenadeFragList = new List<GrenadeTypeSO>();
-        List<GrenadeTypeSO> GrenadeSmokeList = new List<GrenadeTypeSO>();
-        List<GrenadeTypeSO> GrenadeElectroshockList = new List<GrenadeTypeSO>();
-        List<GrenadeTypeSO> GrenadePlasmaList = new List<GrenadeTypeSO>();
-
-        foreach (GrenadeTypeSO grenadeTypeSO in _selectedUnit.GetUnitEquipment().GetGrenadeTypeSOList()) // Переберем гранаты в багаже и распределим по спискам
+        foreach (GrenadeTypeSO grenadeTypeSO in _selectedUnit.GetUnitEquipment().GetGrenadeTypeSOList())// Переберем гранаты в багаже и заполним словарь
         {
-            PlacedObjectType placedObjectType = grenadeTypeSO.GetPlacedObjectType();
-            switch (placedObjectType)
+            GrenadeType grenadeType = grenadeTypeSO.GetGrenadeType();
+
+            if (!_grenadeTypeCountDict.ContainsKey(grenadeType))
             {
-                case PlacedObjectType.GrenadeFrag:
-                    GrenadeFragList.Add(grenadeTypeSO);
-                    break;
-                case PlacedObjectType.GrenadeSmoke:
-                    GrenadeSmokeList.Add(grenadeTypeSO);
-                    break;
-                case PlacedObjectType.GrenadeStun:
-                    GrenadeElectroshockList.Add(grenadeTypeSO);
-                    break;
-                case PlacedObjectType.GrenadePlasma:
-                    GrenadePlasmaList.Add(grenadeTypeSO);
-                    break;
+                _grenadeTypeCountDict.Add(grenadeType, 1);
             }
+            else
+            {
+                _grenadeTypeCountDict[grenadeType] += 1;
+            }
+
+            
         }
 
+        // создадим кнопку для данного типа гранаты и передадим количество
 
-
-        if (GrenadeFragList.Count != 0)
-        {
-            // создадим кнопку для данного типа гранаты и передадим количество GrenadeFragList.Count данного типа
             ///  ActionButtonUI grenadeFragButton = Instantiate<ActionButtonUI>(GameAssets.Instance.actionButtonUI, _grenadeButtonContainer);
-        }
 
         /* foreach (BaseAction baseAction in _selectedUnit.GetBaseActionsArray()) // В цикле переберем массив базовых действий у выбранного юнита
          {

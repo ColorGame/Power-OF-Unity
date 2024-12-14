@@ -593,6 +593,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: UnitFriendMale_1_SolderViewCore
       objectReference: {fileID: 0}
+    - target: {fileID: 8878693808706820111, guid: 2cffb7f814e09dd478d8d0f1a82f6a58,
+        type: 3}
+      propertyPath: m_WarningMessage
+      value: "\nBinding warning: Some generic clip(s) animate transforms that are
+        already bound by a Humanoid avatar. These transforms can only be changed
+        by Humanoid clips.\n\tTransform 'Hand_L'\n\tFrom animation clip 'Firing Rifle'"
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1036,6 +1043,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8682238094555172725, guid: 353e50977afb3f54f95fbbec041fd2cf,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8878119811095561599, guid: 353e50977afb3f54f95fbbec041fd2cf,
         type: 3}

@@ -1,52 +1,69 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
 /// Визуал ЮНИТА. Абстрактный класс
 /// </summary>
 public abstract class UnitView : MonoBehaviour
 {
-    [SerializeField] private Transform _handLeft;
-    [SerializeField] private Transform _handRight;
+    [SerializeField] private Transform _attachPointShieldLeft;
+    [SerializeField] private Transform _attachPointSwordRight;
+    [SerializeField] private Transform _attachPointGunRight;
+    [SerializeField] private Transform _attachPointGrenade;
     [SerializeField] private Animator _animator;
 
-    private HashAnimationName _hashAnimationName;
-    public void Init(UnitEquipment unitEquipment, HashAnimationName hashAnimationName)
+    [Header("Контейнеры в которых будем переключать\nвидимость MeshRenderer")]
+    [SerializeField] protected Transform _hair;
+    [SerializeField] protected Transform _headArmorMilitary;
+    [SerializeField] protected Transform _headArmorJunker;
+    [SerializeField] protected Transform _headArmorCyberNoFace;
+    [SerializeField] protected Transform _headArmorCyberZenica;
+    [SerializeField] protected Transform _headArmorCyberXO;
+    [SerializeField] protected Transform _beard;
+    
+    /// <summary>
+    /// Список Вьюшек головы
+    /// </summary>
+    protected List<MeshRenderer[]> _headViewList;
+
+    protected MeshRenderer[] _headArmorMilitaryMeshArray;     // Стандартый военный шлем
+    protected MeshRenderer[] _headArmorJunkerMeshArray;       // Улучшеный военный шлем
+    protected MeshRenderer[] _headArmorCyberNoFaceMeshArray;  // Кибер шлем закрывающий все лицо
+    protected MeshRenderer[] _headArmorCyberZenicaMeshArray;  // Кибер шлем Зеница
+    protected MeshRenderer[] _headArmorCyberXOMeshArray;      // Кибер шлем XO
+
+    protected MeshRenderer[] _hairMeshArray;                  // Волосы
+    protected MeshRenderer[] _beardMeshArray;                 // Борода
+
+
+    protected void InitMeshRender()
     {
-        _hashAnimationName = hashAnimationName;
-        SetBodyAndHeadArmor(unitEquipment.GetBodyArmor(), unitEquipment.GetHeadArmor());
-        SetMainWeapon(unitEquipment.GetPlacedObjectMainWeaponSlot());
-      //  _animator.CrossFade(_hashAnimationName.IdleHold,0f);
+        _headArmorMilitaryMeshArray = _headArmorMilitary.GetComponentsInChildren<MeshRenderer>();
+        _headArmorJunkerMeshArray = _headArmorJunker.GetComponentsInChildren<MeshRenderer>();
+        _headArmorCyberNoFaceMeshArray = _headArmorCyberNoFace.GetComponentsInChildren<MeshRenderer>();
+        _headArmorCyberZenicaMeshArray = _headArmorCyberZenica.GetComponentsInChildren<MeshRenderer>();
+        _headArmorCyberXOMeshArray = _headArmorCyberXO.GetComponentsInChildren<MeshRenderer>();
+
+        _hairMeshArray = _hair.GetComponentsInChildren<MeshRenderer>();
+        _beardMeshArray = _beard.GetComponentsInChildren<MeshRenderer>();
+
+        _headViewList = new List<MeshRenderer[]>
+        {
+            _headArmorMilitaryMeshArray,
+            _headArmorJunkerMeshArray,
+            _headArmorCyberNoFaceMeshArray,
+            _headArmorCyberZenicaMeshArray,
+            _headArmorCyberXOMeshArray,
+            _hairMeshArray,
+            _beardMeshArray,
+        };
     }
+
     /// <summary>
     /// Настройка брони головы
     /// </summary>
-    public abstract void SetHeadArmor(HeadArmorTypeSO headArmorTypeSO);
-    /// <summary>
-    /// Настройка брони тела.<br/>
-    /// При смене брони тела, сбрасывается шлем.<br/>
-    /// Поэтому после надо вызвать метод "SetHeadArmor()"
-    /// </summary>
-    protected abstract void SetBodyArmor(BodyArmorTypeSO bodyArmorTypeSO);
-    public void SetMainWeapon(PlacedObjectTypeWithActionSO placedObjectTypeWithActionSO) 
-    {
-        if (placedObjectTypeWithActionSO != null)
-        {
-            SetAnimatorOverrideController(placedObjectTypeWithActionSO);
-        }
-        
+    public abstract void SetHeadArmor(HeadArmorTypeSO headArmorTypeSO);  
 
-        // поменять оружие
-    }
-    /// <summary>
-    /// В зависимости от типа оружия переопределим анимации юнита
-    /// </summary>
-    private void SetAnimatorOverrideController(PlacedObjectTypeWithActionSO placedObjectTypeWithActionSO)
-    {        
-        AnimatorOverrideController animatorOverrideController = placedObjectTypeWithActionSO.GetAnimatorOverrideController();
-        if (animatorOverrideController != null)
-        {
-            _animator.runtimeAnimatorController = animatorOverrideController;
-        }
-    }
     /// <summary>
     /// Настройка брони тела и головы.<br/>
     /// При смене брони тела, сбрасывается броня головы,<br/>
@@ -57,22 +74,113 @@ public abstract class UnitView : MonoBehaviour
         SetBodyArmor(bodyArmorTypeSO);
         SetHeadArmor(headArmorTypeSO);
     }
-    public virtual Transform GetHandLeft() { return _handLeft; }
-    public virtual Transform GetHandRight() { return _handRight; }
-    public virtual Animator GetAnimator() { return _animator; }
+    /// <summary>
+    /// Настройка брони тела.
+    /// </summary>
+    protected abstract void SetBodyArmor(BodyArmorTypeSO bodyArmorTypeSO);
+    /// <summary>
+    /// Очистить руки от предметов
+    /// </summary>
+    public void CleanHands()
+    {
+        CleanAttachPointShield();
+        CleanAttachPointSword();
+        CleanAttachPointGun();
+        CleanAttachPointGrenade();
+    }
+
+    public void CleanAttachPointShield()
+    {
+        ClearTransform(_attachPointShieldLeft);       
+    }
+    public void CleanAttachPointSword()
+    {
+        ClearTransform(_attachPointSwordRight);       
+    }
+    public void CleanAttachPointGun()
+    {
+        ClearTransform(_attachPointGunRight);       
+    }
+    public void CleanAttachPointGrenade()
+    {
+        ClearTransform(_attachPointGrenade);
+    }
+
+    private void ClearTransform(Transform transform)
+    {
+        foreach (Transform childTransform in transform)
+        {
+            Destroy(childTransform.gameObject);
+        }
+    }
+       
 
     /// <summary>
-    /// Показать
+    /// Натроить переданныи HashSet список<br/> 
+    /// Переберет "_headViewList" и скроет все, кроме переданного HashSet списка
     /// </summary>
-    protected void Show(MeshRenderer[] meshRendererArray)
+    protected void SetMeshArrayInHeadViewList(HashSet<MeshRenderer[]> showHashList)
     {
-        foreach (MeshRenderer meshRenderer in meshRendererArray) { meshRenderer.enabled = true; }
+        SetMeshInEnumerable(showHashList, _headViewList);
+    }
+
+    /// <summary>
+    /// Настроить переданный HashSet список<br/> 
+    /// Переберет переданное перечисление "MeshRenderer[]" и скроет все, кроме переданного HashSet списка
+    /// </summary>
+    protected void SetMeshInEnumerable(HashSet<MeshRenderer[]> showHashList, IEnumerable<MeshRenderer[]> enumerable)
+    {
+        foreach (MeshRenderer[] viewHead in enumerable)
+        {
+            bool contains = showHashList.Contains(viewHead);
+            foreach (MeshRenderer view in viewHead)
+            {
+                view.enabled = contains;
+            }
+        }
     }
     /// <summary>
-    /// Скрыть
+    /// Настроить переданный HashSet список<br/> 
+    /// Переберет переданное перечисление "SkinnedMeshRenderer" и скроет все, кроме переданного HashSet списка
     /// </summary>
-    protected void Hide(MeshRenderer[] meshRendererArray)
+    protected void SetSkinMeshInEnumerable(HashSet<SkinnedMeshRenderer> showHashList, IEnumerable<SkinnedMeshRenderer> enumerable)
     {
-        foreach (MeshRenderer meshRenderer in meshRendererArray) { meshRenderer.enabled = false; }
+        foreach (SkinnedMeshRenderer skinMesh in enumerable)
+        {
+            skinMesh.enabled = showHashList.Contains(skinMesh);          
+        }
     }
+
+    /// <summary>
+    /// Показать все MeshRenderer в переданном перечисление
+    /// </summary>    
+    protected void ShowMeshInEnumerable(IEnumerable<MeshRenderer[]> enumerable)
+    {
+        foreach (MeshRenderer[] viewHead in enumerable)
+        {
+            foreach (MeshRenderer view in viewHead)
+            {
+                view.enabled = false;
+            }
+        }
+    }
+    /// <summary>
+    /// Скрыть все MeshRenderer в переданном перечисление
+    /// </summary>    
+    protected void HideMeshInEnumerable(IEnumerable<MeshRenderer[]> enumerable)
+    {
+        foreach (MeshRenderer[] viewHead in enumerable)
+        {           
+            foreach (MeshRenderer view in viewHead)
+            {
+                view.enabled = false;
+            }
+        }
+    }    
+
+    public virtual Animator GetAnimator() { return _animator; }
+    public Transform GetAttachPointShield() {return _attachPointShieldLeft; }
+    public Transform GetAttachPointSword() {return _attachPointSwordRight; }
+    public Transform GetAttachPointGun() {return _attachPointGunRight; }
+    public Transform GetAttachPointGrenade() {return _attachPointGrenade; }
 }

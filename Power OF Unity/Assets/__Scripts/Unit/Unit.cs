@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// Основной класс Юнита без MonoBehaviour
+/// Основной класс Юнита (без MonoBehaviour)
 /// </summary>
 /// <remarks>
 /// Инициализирует подсистемы юнита
@@ -36,7 +36,8 @@ public class Unit
         _healthSystem = new HealthSystem(unitTypeSO.GetBasicHealth(), _soundManager);
         _actionPointsSystem = new UnitActionPoints(this, unitTypeSO.GetBasicActionPoints());
         _unitEquipment = new UnitEquipment();
-        _unitEquipsViewFarm = new UnitEquipsViewFarm(this, hashAnimationName);
+        _unitEquipsViewFarm = new UnitEquipsViewFarm(this);
+        _unitAnimator = new UnitAnimator(this,hashAnimationName);
         _unitPowerSystem = new UnitPowerSystem(unitTypeSO.GetBasicPower());
         _unitAccuracySystem = new UnitAccuracySystem(unitTypeSO.GetBasicAccuracy());
         _location = Location.Barrack; // по умолчанию все юниты появляются в КАЗАРМЕ
@@ -60,6 +61,7 @@ public class Unit
     readonly UnitActionPoints _actionPointsSystem;
     readonly UnitEquipment _unitEquipment;
     readonly UnitEquipsViewFarm _unitEquipsViewFarm;
+    readonly UnitAnimator _unitAnimator;
     readonly UnitPowerSystem _unitPowerSystem;
     readonly UnitAccuracySystem _unitAccuracySystem;
     private int _completedMissionsCount;

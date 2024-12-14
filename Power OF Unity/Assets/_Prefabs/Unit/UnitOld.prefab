@@ -683,7 +683,6 @@ GameObject:
   - component: {fileID: 7574804518558064477}
   - component: {fileID: 1934392247483854235}
   - component: {fileID: 6995008053834411764}
-  - component: {fileID: 4830986332008438710}
   - component: {fileID: 4233964869486218640}
   - component: {fileID: -4672128768459207291}
   - component: {fileID: -3717358109818683237}
@@ -887,23 +886,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 614681e07c22f004ea30e1d31bb4789f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4830986332008438710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3013477999232598442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58500a70fdccbde479916d09b2059c99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animator: {fileID: 2920104538325494493}
-  _rifleTransformHand_R: {fileID: 3009086815215739296}
-  _rifleTransformHand_L: {fileID: 2108006252176003363}
-  _swordTransform: {fileID: 4262246980154383821}
-  _binocularsTransform: {fileID: 3634715769727178440}
 --- !u!114 &4233964869486218640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3637,12 +3619,6 @@ PrefabInstance:
 --- !u!4 &2108006252176003363 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3788409931833284006, guid: 2f3e27eecb190e44a9af50723c394274,
-    type: 3}
-  m_PrefabInstance: {fileID: 3013477999979578501}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &2920104538325494493 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 95787105524477528, guid: 2f3e27eecb190e44a9af50723c394274,
     type: 3}
   m_PrefabInstance: {fileID: 3013477999979578501}
   m_PrefabAsset: {fileID: 0}

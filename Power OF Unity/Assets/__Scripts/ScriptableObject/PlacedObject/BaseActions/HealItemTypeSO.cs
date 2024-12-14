@@ -1,11 +1,27 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "ScriptableObjects/HealItemType")]
 
 public class HealItemTypeSO : PlacedObjectTypeWithActionSO
 {
+    [Header("Тип размещаемого объекта")]
+    [SerializeField] HealItemType _healItemType;
     public override BaseAction GetAction(Unit unit)
     {
         return unit.GetAction<HealAction>();
+    }
+
+    /// <summary>
+    /// Получить всплывающую подсказку для данного размещенного объекта 
+    /// </summary>
+    public override PlacedObjectTooltip GetPlacedObjectTooltip()
+    {
+        return PlacedObjectTypeBaseStatsSO.Instance.GetTooltipPlacedObject(this, _healItemType);
+    }
+
+    public HealItemType GetHealItemType()
+    {
+        return _healItemType;
     }
 }

@@ -425,7 +425,6 @@ GameObject:
   - component: {fileID: 591424564500887994}
   - component: {fileID: 1038163711715851208}
   - component: {fileID: 2245190387780501782}
-  - component: {fileID: 4830986332008438710}
   - component: {fileID: -4672128768459207291}
   - component: {fileID: 4233964869486218640}
   - component: {fileID: 1481299886574317604}
@@ -531,23 +530,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53864b7620e5c6b4ea123f35e6da0ec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4830986332008438710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3013477999232598442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58500a70fdccbde479916d09b2059c99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
-  _rifleTransformHand_R: {fileID: 0}
-  _rifleTransformHand_L: {fileID: 0}
-  _swordTransform: {fileID: 0}
-  _binocularsTransform: {fileID: 0}
 --- !u!114 &-4672128768459207291
 MonoBehaviour:
   m_ObjectHideFlags: 0

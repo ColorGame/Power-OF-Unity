@@ -16,9 +16,7 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
                                                                                            //которые находятся в потоке, мы можем восстановить состояние объекта и использовать этот объект в другом месте.
 {
     [Header("Автоматически сгенерированный UUID для сохранения/загрузки.\nОчистите это поле, если вы хотите сгенерировать новое.")]
-    [SerializeField] private string _itemID = null;
-    [Header("Тип размещаемого объекта")]
-    [SerializeField] protected PlacedObjectType _placedObjectType;
+    [SerializeField] private string _itemID = null;   
     [Header("Префаб размещаемого объекта 2D(для Canvas)")]
     [SerializeField] private Transform _prefab2D;
     [Header("Визуальная часть размещаемого объекта 2D(для кнопок Canvas)")]
@@ -40,10 +38,8 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
     // КЭШИРОВАННОЕ СОСТАЯНИЕ
     static Dictionary<string, PlacedObjectTypeWithActionSO> placedObjectLookupCache; //кэшированный словарь поиска предмта типа PlacedObjectTypeWithActionSO// Статический словарь (Ключ-ID номер предмета, Значение)
 
-    public virtual PlacedObjectTooltip GetPlacedObjectTooltip() // Получить всплывающую подсказку для данного размещенного объекта // virtual- переопределим в наследуемых классах
-    {
-        return PlacedObjectTypeBaseStatsSO.Instance.GetTooltipPlacedObject(_placedObjectType);
-    }
+    public abstract PlacedObjectTooltip GetPlacedObjectTooltip(); // Получить всплывающую подсказку для данного размещенного объекта // Для каждого типа своя реализация
+    
 
     /// <summary>
     /// Список сеточных позиций которые занимает объект относительно переданной сеточной позиции
@@ -61,8 +57,7 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
         }
         return gridPositionList;
     }
-
-    public PlacedObjectType GetPlacedObjectType() { return _placedObjectType; } 
+   
     public Transform GetPrefab2D() { return _prefab2D; }
     public Transform GetVisual2D() { return _visual2D; }
 
@@ -113,9 +108,9 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
             _itemID = Guid.NewGuid().ToString();
         }
 
-        // Получим тип размещаемого объекта в этой строке
+       /* // Получим тип размещаемого объекта в этой строке
         if (name!=null)
-            _placedObjectType = SheetProcessor.ParseEnum<PlacedObjectType>(name);// Преобразуем данные из ячейки в Enum типа<PlacedObjectType>        
+            _placedObjectType = SheetProcessor.ParseEnum<PlacedObjectType>(name);// Преобразуем данные из ячейки в Enum типа<PlacedObjectType>   */     
     }
     void ISerializationCallbackReceiver.OnAfterDeserialize()
     {

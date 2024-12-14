@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
 /// Визуал юнита "Космический солдат". 
@@ -11,141 +12,135 @@ public class UnitSpaceSolderView : UnitView
     [SerializeField] private Transform _viewBodyArmorSpaceMod;
     [SerializeField] private Transform _viewHeadArmorSpaceNoFace;
     [SerializeField] private Transform _viewHead;
-    [Header("Контейнеры в которых будем переключать\nвидимость MeshRenderer")]
-    [SerializeField] private Transform _hair;
-    [SerializeField] private Transform _headArmorMilitary;
-    [SerializeField] private Transform _headArmorJunker;
-    [SerializeField] private Transform _beard;
 
 
-    private SkinnedMeshRenderer _viewDefaultRenderer;               // Без брони
-    private SkinnedMeshRenderer _viewBodyArmorSpaceRenderer;        // Космический бронежилет
-    private SkinnedMeshRenderer _viewBodyArmorSpaceModRenderer;     // Модификации для космического бронежилет (дополнение)
+    private SkinnedMeshRenderer _viewDefaultSkinMesh;               // Без брони
+    private SkinnedMeshRenderer _viewBodyArmorSpaceSkinMesh;        // Космический бронежилет
+    private SkinnedMeshRenderer _viewBodyArmorSpaceModSkinMesh;     // Модификации для космического бронежилет (дополнение)
 
-    private SkinnedMeshRenderer _viewHeadArmorSpaceNoFaceRenderer;  // Космический шлем закрывающий все лицо
-    private SkinnedMeshRenderer _viewHeadRenderer;                  // Бюст головы, когда нет брони будем отключать его
-    private MeshRenderer[] _headArmorMilitaryMeshRendererArray;     // Стандартый военный шлем
-    private MeshRenderer[] _headArmorJunkerMeshRendererArray;       // Улучшеный военный шлем
-    private MeshRenderer[] _hairMeshRendererArray;                  // Волосы
-    private MeshRenderer[] _beardMeshRendererArray;                 // Борода
+    private SkinnedMeshRenderer[] _viewBodySkinMeshArray;
 
-   
+    private SkinnedMeshRenderer _viewHeadArmorSpaceNoFaceSkinMesh;  // Космический шлем закрывающий все лицо
+    private SkinnedMeshRenderer _viewHeadSkinMesh;                  // Бюст головы, когда нет брони будем отключать его
+
+
     /// <summary>
-    /// Броня надета?
+    /// Космическая броня надета?
     /// </summary>
     /// <remarks>Если true то надо включить бюст головы</remarks>
-    private bool _isArmorOn = false;
+    private bool _isBodyArmorSpaceOn = false;
 
     private void Awake()
     {
-        InitHashData();       
+        _viewDefaultSkinMesh = _viewDefault.GetComponentInChildren<SkinnedMeshRenderer>();
+        _viewBodyArmorSpaceSkinMesh = _viewBodyArmorSpace.GetComponentInChildren<SkinnedMeshRenderer>();
+        _viewBodyArmorSpaceModSkinMesh = _viewBodyArmorSpaceMod.GetComponentInChildren<SkinnedMeshRenderer>();
+
+        _viewBodySkinMeshArray = new SkinnedMeshRenderer[]
+        {
+            _viewDefaultSkinMesh,
+            _viewBodyArmorSpaceSkinMesh,
+            _viewBodyArmorSpaceModSkinMesh,
+        };
+
+        _viewHeadArmorSpaceNoFaceSkinMesh = _viewHeadArmorSpaceNoFace.GetComponentInChildren<SkinnedMeshRenderer>();
+        _viewHeadSkinMesh = _viewHead.GetComponentInChildren<SkinnedMeshRenderer>();
+
+        InitMeshRender();
     }
 
-    private void InitHashData()
-    {
-        _viewDefaultRenderer = _viewDefault.GetComponentInChildren<SkinnedMeshRenderer>();
-        _viewBodyArmorSpaceRenderer = _viewBodyArmorSpace.GetComponentInChildren<SkinnedMeshRenderer>();
-        _viewBodyArmorSpaceModRenderer = _viewBodyArmorSpaceMod.GetComponentInChildren<SkinnedMeshRenderer>();
-        _viewHeadArmorSpaceNoFaceRenderer = _viewHeadArmorSpaceNoFace.GetComponentInChildren<SkinnedMeshRenderer>();
-        _viewHeadRenderer = _viewHead.GetComponentInChildren<SkinnedMeshRenderer>();
-
-        _headArmorMilitaryMeshRendererArray = _headArmorMilitary.GetComponentsInChildren<MeshRenderer>();
-        _headArmorJunkerMeshRendererArray = _headArmorJunker.GetComponentsInChildren<MeshRenderer>();
-        _hairMeshRendererArray = _hair.GetComponentsInChildren<MeshRenderer>();
-        _beardMeshRendererArray = _beard.GetComponentsInChildren<MeshRenderer>();
-    }
 
     protected override void SetBodyArmor(BodyArmorTypeSO bodyArmorTypeSO)
     {
         if (bodyArmorTypeSO == null)
         {
-            // показать
-            _viewDefaultRenderer.enabled = true;
-            // скрыть 
-            _viewBodyArmorSpaceRenderer.enabled = false;
-            _viewBodyArmorSpaceModRenderer.enabled = false;
+            SetSkinMeshInEnumerable(new HashSet<SkinnedMeshRenderer> { _viewDefaultSkinMesh }, _viewBodySkinMeshArray);           
             // настроить 
-            _isArmorOn = false;
-            return; // выходим и игнорируем код ниже
+            _isBodyArmorSpaceOn = false;
+            return; 
         }
 
-        switch (bodyArmorTypeSO.GetPlacedObjectType())
+        // настроить 
+        _isBodyArmorSpaceOn = true;       
+
+        switch (bodyArmorTypeSO.GetBodyArmorType())
         {
-            case PlacedObjectType.BodyArmorSpace:
-                // показать
-                _viewBodyArmorSpaceRenderer.enabled = true;
-                // скрыть 
-                _viewDefaultRenderer.enabled = false;
-                _viewBodyArmorSpaceModRenderer.enabled = false;
-                // настроить 
-                _isArmorOn = true;
+            case BodyArmorType.BodyArmorSpace:
+                SetSkinMeshInEnumerable(new HashSet<SkinnedMeshRenderer> { _viewBodyArmorSpaceSkinMesh }, _viewBodySkinMeshArray);               
                 break;
 
-            case PlacedObjectType.BodyArmorSpaceMod:
-                // показать
-                _viewBodyArmorSpaceRenderer.enabled = true;
-                _viewBodyArmorSpaceModRenderer.enabled = true;
-                // скрыть 
-                _viewDefaultRenderer.enabled = false;
-                // настроить 
-                _isArmorOn = true;
+            case BodyArmorType.BodyArmorSpaceMod:
+                SetSkinMeshInEnumerable(
+                    new HashSet<SkinnedMeshRenderer> { _viewBodyArmorSpaceSkinMesh, _viewBodyArmorSpaceModSkinMesh }, 
+                    _viewBodySkinMeshArray);               
                 break;
         }
     }
 
     public override void SetHeadArmor(HeadArmorTypeSO headArmorTypeSO)
     {
+        _viewHeadSkinMesh.enabled = _isBodyArmorSpaceOn; // Покажем или скроем бюст головы в зависимости от состояния брони(BodyArmor)
+        _viewHeadArmorSpaceNoFaceSkinMesh.enabled = false; // Отключим Космический шлем закрывающий все лицо (и включим только в блоке  case HeadArmorType.HeadArmorSpaceNoFace:)
+
         if (headArmorTypeSO == null)
-        {
-            // показать
-            Show(_hairMeshRendererArray);
-            Show(_beardMeshRendererArray);
-            // скрыть 
-            _viewHeadArmorSpaceNoFaceRenderer.enabled = false;
-            Hide(_headArmorMilitaryMeshRendererArray);
-            Hide(_headArmorJunkerMeshRendererArray);
-            // настроить 
-            _viewHeadRenderer.enabled = _isArmorOn; // Покажем или скроем бюст головы в зависимости от состояния брони(BodyArmor)
+        {            
+            SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+            {
+                _hairMeshArray,
+                _beardMeshArray,
+            });               
             return; // выходим и игнорируем код ниже
         }
 
-        switch (headArmorTypeSO.GetPlacedObjectType())
+        switch (headArmorTypeSO.GetHeadArmorType())
         {
-            case PlacedObjectType.HeadArmorMilitary:
-                // показать               
-                Show(_headArmorMilitaryMeshRendererArray);
-                Show(_beardMeshRendererArray);
-                // скрыть 
-                _viewHeadArmorSpaceNoFaceRenderer.enabled = false;
-                Hide(_hairMeshRendererArray);
-                Hide(_headArmorJunkerMeshRendererArray);
-                // настроить 
-                _viewHeadRenderer.enabled = _isArmorOn; // Покажем или скроем бюст головы в зависимости от состояния брони(BodyArmor)
+            case HeadArmorType.HeadArmorMilitary:               
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorMilitaryMeshArray,
+                    _beardMeshArray,
+                });                            
                 break;
 
-            case PlacedObjectType.HeadArmorJunker:
-                // показать
-                Show(_headArmorJunkerMeshRendererArray);
-                Show(_beardMeshRendererArray);
-                // скрыть 
-                _viewHeadArmorSpaceNoFaceRenderer.enabled = false;
-                Hide(_hairMeshRendererArray);
-                Hide(_headArmorMilitaryMeshRendererArray);
-                // настроить 
-                _viewHeadRenderer.enabled = _isArmorOn; // Покажем или скроем бюст головы в зависимости от состояния брони(BodyArmor)
+            case HeadArmorType.HeadArmorJunker:               
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorJunkerMeshArray,
+                    _beardMeshArray,
+                });                       
                 break;
 
-            case PlacedObjectType.HeadArmorSpaceNoFace:
+            case HeadArmorType.HeadArmorSpaceNoFace:
                 // показать
-                _viewHeadArmorSpaceNoFaceRenderer.enabled = true;
+                _viewHeadArmorSpaceNoFaceSkinMesh.enabled = true;
                 // скрыть 
-                _viewHeadRenderer.enabled = false;
-                Hide(_hairMeshRendererArray);
-                Hide(_beardMeshRendererArray);
-                Hide(_headArmorMilitaryMeshRendererArray);
-                Hide(_headArmorJunkerMeshRendererArray);
+                _viewHeadSkinMesh.enabled = false; // Бюст не нужен т.к. _viewHeadArmorSpaceNoFaceSkinMesh идет уже с головой и шеей
+                HideMeshInEnumerable(_headViewList);
+                break;
+
+            case HeadArmorType.HeadArmorCyberNoFace:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorCyberNoFaceMeshArray
+                });                
+                break;
+
+            case HeadArmorType.HeadArmorCyberZenica:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorCyberZenicaMeshArray,
+                    _beardMeshArray,
+                });               
+                break;
+
+            case HeadArmorType.HeadArmorCyberXO:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorCyberXOMeshArray,
+                    _beardMeshArray,
+                });
                 break;
         }
     }
-  
+
 }

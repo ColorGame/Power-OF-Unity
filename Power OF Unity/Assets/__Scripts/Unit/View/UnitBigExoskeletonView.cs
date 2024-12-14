@@ -6,54 +6,37 @@ using UnityEngine;
 /// <remarks>сотояние брони - 1.BodyArmorBigExoskeleton </remarks>
 public class UnitBigExoskeletonView : UnitView
 {
-    [Header("Контейнеры в которых будем переключать\nвидимость MeshRenderer")]
+    [Header("Доп. контйнеры для BigExoskeleton\nв которых будем переключатьвидимость MeshRenderer")]
     [SerializeField] private Transform _headArmorBigCoverClear;
     [SerializeField] private Transform _headArmorBigCover;
     [SerializeField] private Transform _headArmorSpaceNoFace;
-    [SerializeField] private Transform _headArmorMilitary;
-    [SerializeField] private Transform _headArmorJunker;
-    [SerializeField] private Transform _headWithFace;
-    [SerializeField] private Transform _hair;
-    [SerializeField] private Transform _beard;
+    [SerializeField] private Transform _head;
 
-    private MeshRenderer[] _headArmorBigCoverClearMeshRendererArray;
-    private MeshRenderer[] _headArmorBigCoverMeshRendererArray;
-    private MeshRenderer[] _headArmorSpaceNoFaceMeshRendererArray;
-    private MeshRenderer[] _headArmorMilitaryMeshRendererArray;
-    private MeshRenderer[] _headArmorJunkerMeshRendererArray;
-    private MeshRenderer[] _headWithFaceMeshRendererArray;
-    private MeshRenderer[] _hairMeshRendererArray;
-    private MeshRenderer[] _beardMeshRendererArray;
 
-    private IEnumerable<MeshRenderer[]> _enumerableHeadArmorView;
+    private MeshRenderer[] _headArmorBigCoverClearMeshArray;
+    private MeshRenderer[] _headArmorBigCoverMeshArray;
+    private MeshRenderer[] _headArmorSpaceNoFaceMeshArray;
+    private MeshRenderer[] _headMeshArray;
+
+
     private void Awake()
     {
-        InitHashData();
-    }
+        _headArmorBigCoverClearMeshArray = _headArmorBigCoverClear.GetComponentsInChildren<MeshRenderer>();
+        _headArmorBigCoverMeshArray = _headArmorBigCover.GetComponentsInChildren<MeshRenderer>();
+        _headArmorSpaceNoFaceMeshArray = _headArmorSpaceNoFace.GetComponentsInChildren<MeshRenderer>();
+        _headMeshArray = _head.GetComponentsInChildren<MeshRenderer>();
+        InitMeshRender();
 
-    private void InitHashData()
-    {
-        _headArmorBigCoverClearMeshRendererArray = _headArmorBigCoverClear.GetComponentsInChildren<MeshRenderer>();
-        _headArmorBigCoverMeshRendererArray = _headArmorBigCover.GetComponentsInChildren<MeshRenderer>();
-        _headArmorSpaceNoFaceMeshRendererArray = _headArmorSpaceNoFace.GetComponentsInChildren<MeshRenderer>();
-        _headArmorMilitaryMeshRendererArray = _headArmorMilitary.GetComponentsInChildren<MeshRenderer>();
-        _headArmorJunkerMeshRendererArray = _headArmorJunker.GetComponentsInChildren<MeshRenderer>();
-        _headWithFaceMeshRendererArray = _headWithFace.GetComponentsInChildren<MeshRenderer>();
-        _hairMeshRendererArray = _hair.GetComponentsInChildren<MeshRenderer>();
-        _beardMeshRendererArray = _beard.GetComponentsInChildren<MeshRenderer>();
-
-        _enumerableHeadArmorView = new MeshRenderer[][] 
+        _headViewList.AddRange(new List<MeshRenderer[]>
         {
-            _headArmorBigCoverClearMeshRendererArray,
-            _headArmorBigCoverMeshRendererArray,
-            _headArmorSpaceNoFaceMeshRendererArray,
-            _headArmorMilitaryMeshRendererArray,
-            _headArmorJunkerMeshRendererArray,
-            _headWithFaceMeshRendererArray,
-            _hairMeshRendererArray,
-            _beardMeshRendererArray,
-        };
+            _headArmorBigCoverClearMeshArray,
+            _headArmorBigCoverMeshArray,
+            _headArmorSpaceNoFaceMeshArray,
+            _headMeshArray,
+        });
     }
+
+
 
     protected override void SetBodyArmor(BodyArmorTypeSO bodyArmorTypeSO)
     {
@@ -64,69 +47,87 @@ public class UnitBigExoskeletonView : UnitView
     {
         if (headArmorTypeSO == null)
         {
-            ShowArray(new HashSet<MeshRenderer[]>
+            SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
             {
-                _hairMeshRendererArray,
-                _beardMeshRendererArray,
-                _headWithFaceMeshRendererArray,
-            });           
+                _hairMeshArray,
+                _beardMeshArray,
+                _headMeshArray,
+            });
             return; // выходим и игнорируем код ниже
         }
 
-        switch (headArmorTypeSO.GetPlacedObjectType())
+        switch (headArmorTypeSO.GetHeadArmorType())
         {
-            case PlacedObjectType.HeadArmorMilitary:
-                ShowArray(new HashSet<MeshRenderer[]>
+            case HeadArmorType.HeadArmorMilitary:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
                 {
-                    _headArmorMilitaryMeshRendererArray,
-                    _beardMeshRendererArray,
-                    _headWithFaceMeshRendererArray,
-                });                
-                break;
-
-            case PlacedObjectType.HeadArmorJunker:
-                ShowArray(new HashSet<MeshRenderer[]>
-                {
-                    _headArmorJunkerMeshRendererArray,
-                    _beardMeshRendererArray,
-                    _headWithFaceMeshRendererArray,
-                });                
-                break;
-
-            case PlacedObjectType.HeadArmorSpaceNoFace:
-                ShowArray(new HashSet<MeshRenderer[]>
-                {
-                    _headArmorSpaceNoFaceMeshRendererArray,
+                    _headArmorMilitaryMeshArray,
+                    _beardMeshArray,
+                    _headMeshArray,
                 });
                 break;
-            case PlacedObjectType.HeadArmorBigCoverClear:
-                ShowArray(new HashSet<MeshRenderer[]>
+
+            case HeadArmorType.HeadArmorJunker:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
                 {
-                    _headArmorBigCoverClearMeshRendererArray,
-                    _hairMeshRendererArray,
-                    _beardMeshRendererArray,
-                    _headWithFaceMeshRendererArray,
+                    _headArmorJunkerMeshArray,
+                    _beardMeshArray,
+                    _headMeshArray,
                 });
                 break;
-            case PlacedObjectType.HeadArmorBigCover:
-                ShowArray(new HashSet<MeshRenderer[]>
+
+            case HeadArmorType.HeadArmorSpaceNoFace:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
                 {
-                    _headArmorBigCoverMeshRendererArray,                    
+                    _headArmorSpaceNoFaceMeshArray,
+                });
+                break;
+
+            case HeadArmorType.HeadArmorCyberNoFace:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorCyberNoFaceMeshArray,                    
+                    _headMeshArray,
+                });
+                break;
+
+            case HeadArmorType.HeadArmorCyberZenica:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorCyberZenicaMeshArray,
+                    _beardMeshArray,
+                    _headMeshArray,
+                });
+                break;
+
+            case HeadArmorType.HeadArmorCyberXO:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorCyberXOMeshArray,
+                    _beardMeshArray,
+                    _headMeshArray,
+                });
+                break;
+
+            case HeadArmorType.HeadArmorBigCoverClear:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorBigCoverClearMeshArray,
+                    _hairMeshArray,
+                    _beardMeshArray,
+                    _headMeshArray,
+                });
+                break;
+
+            case HeadArmorType.HeadArmorBigCover:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorBigCoverMeshArray,
                 });
                 break;
         }
     }
-       
-    
-    private void ShowArray(HashSet<MeshRenderer[]> showHashList)
-    {
-        foreach (MeshRenderer[] viewHead in _enumerableHeadArmorView)
-        {            
-            bool contains = showHashList.Contains(viewHead);
-            foreach (MeshRenderer view in viewHead)
-            {
-                view.enabled = contains;
-            }
-        }
-    }
+
+
+
 }

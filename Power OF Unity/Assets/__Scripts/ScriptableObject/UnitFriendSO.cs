@@ -7,7 +7,7 @@ public class UnitFriendSO : UnitTypeSO
 
     [SerializeField] private Transform _unitAvatarPortfolioVisualPrefab;
     [SerializeField] private UnitBigExoskeletonView _unitBigViewPrefab;
-    [SerializeField] private UnitSoldierView _unitSoldierViewPrefab;
+    [SerializeField] private UnitMilitaryAndCyberSoldier _unitSoldierViewPrefab;
     [SerializeField] private UnitSpaceSolderView _unitSpaceSolderViewPrefab;
    
     [Header("Стоимость юнита при найме ")]
@@ -26,20 +26,20 @@ public class UnitFriendSO : UnitTypeSO
             return _unitSpaceSolderViewPrefab;
         }
         
-        switch (bodyArmorTypeSO.GetPlacedObjectType())
+        switch (bodyArmorTypeSO.GetBodyArmorType())
         {
             default:           
              return _unitSpaceSolderViewPrefab;
 
-            case PlacedObjectType.BodyArmorMilitary:
-            case PlacedObjectType.BodyArmorMilitaryMod:
+            case BodyArmorType.BodyArmorMilitary:
+            case BodyArmorType.BodyArmorMilitaryMod:
                 return _unitSoldierViewPrefab;
 
-            case PlacedObjectType.BodyArmorSpace:
-            case PlacedObjectType.BodyArmorSpaceMod:
+            case BodyArmorType.BodyArmorSpace:
+            case BodyArmorType.BodyArmorSpaceMod:
                 return _unitSpaceSolderViewPrefab;              
 
-            case PlacedObjectType.BodyArmorBigExoskeleton:
+            case BodyArmorType.BodyArmorBigExoskeleton:
                 return _unitBigViewPrefab;
         }
     }   
