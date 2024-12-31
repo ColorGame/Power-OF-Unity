@@ -69,10 +69,17 @@ public class UnitSetupEntryPoint : MonoBehaviour, IEntryPoint
             container.Resolve<GameInput>(),
             container.Resolve<TooltipUI>(),
             _equipmentGrid,
-            container.Resolve<UnitManager>(),
-            container.Resolve<WarehouseManager>()); //3
+             container.Resolve<WarehouseManager>(),
+            container.Resolve<UnitManager>()); //3
 
-        _unitEquipmentSystem.Init(_pickUpDropPlacedObject, container.Resolve<UnitManager>(), _equipmentGrid, _itemGridVisual, _armorGridVisual, _itemSelectButtonsSystemUI); //4
+        _unitEquipmentSystem.Init(
+            _pickUpDropPlacedObject,
+            container.Resolve<UnitManager>(),
+            _equipmentGrid,
+            container.Resolve<WarehouseManager>(), 
+            _itemGridVisual, 
+            _armorGridVisual,
+            _itemSelectButtonsSystemUI); //4
 
         _upperMenuBarOnUnitSetupUI.Init(
             container.Resolve<GameInput>(),

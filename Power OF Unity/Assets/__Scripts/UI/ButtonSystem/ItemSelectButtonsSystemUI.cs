@@ -71,7 +71,7 @@ public class ItemSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
                 case HealItemTypeSO:
                 case ShieldItemTypeSO:
                 case SpotterFireItemTypeSO:
-                case VisionItemTypeSO:
+                case CombatDroneTypeSO:
                     if (_activeContainer == _itemSelectContainer)
                         CreatePlacedObjectSelectButton(placedObjectTypeSO, _itemSelectContainer);
                     break;

@@ -7,31 +7,19 @@ using UnityEngine;
 public class UnitBigExoskeletonView : UnitView
 {
     [Header("Доп. контйнеры для BigExoskeleton\nв которых будем переключатьвидимость MeshRenderer")]
-    [SerializeField] private Transform _headArmorBigCoverClear;
-    [SerializeField] private Transform _headArmorBigCover;
-    [SerializeField] private Transform _headArmorSpaceNoFace;
-    [SerializeField] private Transform _head;
-
-
-    private MeshRenderer[] _headArmorBigCoverClearMeshArray;
-    private MeshRenderer[] _headArmorBigCoverMeshArray;
-    private MeshRenderer[] _headArmorSpaceNoFaceMeshArray;
-    private MeshRenderer[] _headMeshArray;
+    [SerializeField] private MeshRenderer[] _headArmorBigCoverClearMeshArray;
+    [SerializeField] private MeshRenderer[] _headArmorBigCoverMeshArray;   
+    [SerializeField] private MeshRenderer[] _headMeshArray;
 
 
     private void Awake()
-    {
-        _headArmorBigCoverClearMeshArray = _headArmorBigCoverClear.GetComponentsInChildren<MeshRenderer>();
-        _headArmorBigCoverMeshArray = _headArmorBigCover.GetComponentsInChildren<MeshRenderer>();
-        _headArmorSpaceNoFaceMeshArray = _headArmorSpaceNoFace.GetComponentsInChildren<MeshRenderer>();
-        _headMeshArray = _head.GetComponentsInChildren<MeshRenderer>();
+    {       
         InitMeshRender();
 
         _headViewList.AddRange(new List<MeshRenderer[]>
         {
             _headArmorBigCoverClearMeshArray,
-            _headArmorBigCoverMeshArray,
-            _headArmorSpaceNoFaceMeshArray,
+            _headArmorBigCoverMeshArray,           
             _headMeshArray,
         });
     }
@@ -80,16 +68,9 @@ public class UnitBigExoskeletonView : UnitView
                 SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
                 {
                     _headArmorSpaceNoFaceMeshArray,
-                });
-                break;
-
-            case HeadArmorType.HeadArmorCyberNoFace:
-                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
-                {
-                    _headArmorCyberNoFaceMeshArray,                    
                     _headMeshArray,
                 });
-                break;
+                break;            
 
             case HeadArmorType.HeadArmorCyberZenica:
                 SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
@@ -105,6 +86,22 @@ public class UnitBigExoskeletonView : UnitView
                 {
                     _headArmorCyberXOMeshArray,
                     _beardMeshArray,
+                    _headMeshArray,
+                });
+                break;
+
+            case HeadArmorType.HeadArmorCyberNoFace:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorCyberNoFaceMeshArray,
+                    _headMeshArray,
+                });
+                break;
+
+            case HeadArmorType.HeadArmorCyberModNoFace:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorCyberModNoFaceMeshArray,
                     _headMeshArray,
                 });
                 break;

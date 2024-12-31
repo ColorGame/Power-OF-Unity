@@ -269,7 +269,7 @@ public class MarketUI : ObjectSelectButtonsSystemUI
                 case HealItemTypeSO:
                 case ShieldItemTypeSO:
                 case SpotterFireItemTypeSO:
-                case VisionItemTypeSO:
+                case CombatDroneTypeSO:
                     if (_activeContainer == _itemSelectContainer)
                         CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _itemSelectContainer);
                     break;

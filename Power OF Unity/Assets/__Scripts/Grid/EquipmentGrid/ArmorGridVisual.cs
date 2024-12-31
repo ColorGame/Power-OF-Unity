@@ -64,8 +64,8 @@ public class ArmorGridVisual : MonoBehaviour
     private void Enable()
     {
         _canvasArmorGrid.enabled = true;
-        _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
-        _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid += PickUpDropSystem_OnRemovePlacedObjectAtGrid;
+        _equipmentGrid.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
+        _equipmentGrid.OnRemovePlacedObjectAtEquipmentGrid += EquipmentGrid_OnRemovePlacedObjectAtGrid;
         _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged += PickUpDropManager_OnGrabbedObjectGridPositionChanged;
         _pickUpDropPlacedObject.OnGrabbedObjectGridExits += PickUpDropManager_OnGrabbedObjectGridExits;
 
@@ -76,8 +76,8 @@ public class ArmorGridVisual : MonoBehaviour
     private void Disable()
     {
         _canvasArmorGrid.enabled = false;
-        _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid -= OnAddPlacedObjectAtGrid;
-        _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid -= PickUpDropSystem_OnRemovePlacedObjectAtGrid;
+        _equipmentGrid.OnAddPlacedObjectAtEquipmentGrid -= OnAddPlacedObjectAtGrid;
+        _equipmentGrid.OnRemovePlacedObjectAtEquipmentGrid -= EquipmentGrid_OnRemovePlacedObjectAtGrid;
         _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged -= PickUpDropManager_OnGrabbedObjectGridPositionChanged;
         _pickUpDropPlacedObject.OnGrabbedObjectGridExits -= PickUpDropManager_OnGrabbedObjectGridExits;
 
@@ -111,7 +111,7 @@ public class ArmorGridVisual : MonoBehaviour
     /// <summary>
     /// Объект удален из сетки и повис над ней
     /// </summary>
-    private void PickUpDropSystem_OnRemovePlacedObjectAtGrid(object sender, PlacedObject placedObject)
+    private void EquipmentGrid_OnRemovePlacedObjectAtGrid(object sender, PlacedObject placedObject)
     {
         SetIsBusyAndMaterial(placedObject, false, GridVisualType.Orange);
     }

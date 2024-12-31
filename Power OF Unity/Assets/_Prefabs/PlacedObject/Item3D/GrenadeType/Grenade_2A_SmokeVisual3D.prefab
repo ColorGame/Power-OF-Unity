@@ -61,7 +61,7 @@ PrefabInstance:
     - target: {fileID: 6619333253739986675, guid: 97c5d4866894d5240a463086a798069b,
         type: 3}
       propertyPath: m_Name
-      value: Grenade_2.1_SmokeVisual3D
+      value: Grenade_2A_SmokeVisual3D
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -92,6 +92,10 @@ PrefabInstance:
     - target: {fileID: 1561613347566756, guid: 54ee5dcc42af009428263eb530ea9b01, type: 3}
       propertyPath: m_Name
       value: SM_Wep_Grenade_Smoke_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1561613347566756, guid: 54ee5dcc42af009428263eb530ea9b01, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4196212763604476, guid: 54ee5dcc42af009428263eb530ea9b01, type: 3}
       propertyPath: m_LocalPosition.x
@@ -133,7 +137,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 23154783700961290, guid: 54ee5dcc42af009428263eb530ea9b01,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 8dc323c1ab67edb4a958718017f2f640, type: 2}
+    m_RemovedComponents:
+    - {fileID: 64098311636323698, guid: 54ee5dcc42af009428263eb530ea9b01, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

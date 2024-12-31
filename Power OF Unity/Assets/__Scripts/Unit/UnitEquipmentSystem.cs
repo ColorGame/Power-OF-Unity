@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 /// <summary>
-/// Система экипировки юнитов(звено между сеткой и экипировкой юнита). Отвечает за настройку и загрузку экипировки ВЫБРАННОГО юнита
+/// Система экипировки юнитов(звено между сеткой и экипировкой юнита). Отвечает за настройку и загрузку экипировки ВЫБРАННОГО юнита.<br/>
+/// Отвечает за ЛОГИКУ экипировки(размещение на сетке) оружия или брони.
 /// </summary>
 public class UnitEquipmentSystem :IToggleActivity
 {
@@ -12,6 +13,7 @@ public class UnitEquipmentSystem :IToggleActivity
     private PickUpDropPlacedObject _pickUpDropPlacedObject;
     private UnitManager _unitManager;
     private EquipmentGrid _equipmentGrid;
+    private WarehouseManager _warehouseManager;
     private ItemSelectButtonsSystemUI _itemSelectButtonsSystemUI;
 
     private ItemGridVisual _itemGridVisual;
@@ -21,7 +23,7 @@ public class UnitEquipmentSystem :IToggleActivity
     private bool _isActive;
 
 
-    public void Init(PickUpDropPlacedObject pickUpDropPlacedObject, UnitManager unitManager, EquipmentGrid equipmentGrid, ItemGridVisual itemGridVisual, ArmorGridVisual armorGridVisual, ItemSelectButtonsSystemUI itemSelectButtonsSystemUI)
+    public void Init(PickUpDropPlacedObject pickUpDropPlacedObject, UnitManager unitManager, EquipmentGrid equipmentGrid, WarehouseManager resourcesManager, ItemGridVisual itemGridVisual, ArmorGridVisual armorGridVisual, ItemSelectButtonsSystemUI itemSelectButtonsSystemUI)
     {
         _pickUpDropPlacedObject = pickUpDropPlacedObject;
         _unitManager = unitManager;
@@ -47,8 +49,8 @@ public class UnitEquipmentSystem :IToggleActivity
             {
                 _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
 
-                _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid += PickUpDrop_OnAddPlacedObjectAtEquipmentGrid;//  Объект добавлен в сетку Интвенторя
-                _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid += PickUpDrop_OnRemovePlacedObjectAtEquipmentGrid; // Объект удален из сетки Интвенторя
+                _equipmentGrid.OnAddPlacedObjectAtEquipmentGrid += EquipmentGrid_OnAddPlacedObjectAtEquipmentGrid;//  Объект добавлен в сетку Интвенторя
+                _equipmentGrid.OnRemovePlacedObjectAtEquipmentGrid += EquipmentGrid_OnRemovePlacedObjectAtEquipmentGrid; // Объект удален из сетки Интвенторя
             }
             _selectedUnit = _unitManager.GetSelectedUnit();
             UpdateEquipmentGrid();
@@ -57,8 +59,8 @@ public class UnitEquipmentSystem :IToggleActivity
         { 
             _unitManager.OnSelectedUnitChanged -= UnitManager_OnSelectedUnitChanged;
 
-            _pickUpDropPlacedObject.OnAddPlacedObjectAtEquipmentGrid -= PickUpDrop_OnAddPlacedObjectAtEquipmentGrid;//  Объект добавлен в сетку Интвенторя
-            _pickUpDropPlacedObject.OnRemovePlacedObjectAtEquipmentGrid -= PickUpDrop_OnRemovePlacedObjectAtEquipmentGrid; // Объект удален из сетки Интвенторя
+            _equipmentGrid.OnAddPlacedObjectAtEquipmentGrid -= EquipmentGrid_OnAddPlacedObjectAtEquipmentGrid;//  Объект добавлен в сетку Интвенторя
+            _equipmentGrid.OnRemovePlacedObjectAtEquipmentGrid -= EquipmentGrid_OnRemovePlacedObjectAtEquipmentGrid; // Объект удален из сетки Интвенторя
             ClearEquipmentGrid();
         }
         _isActive = active;
@@ -116,16 +118,36 @@ public class UnitEquipmentSystem :IToggleActivity
     /// <summary>
     /// Добавить полученный объект в Список "Размещенных Объектов в Сетке Инвенторя".
     /// </summary>
-    private void PickUpDrop_OnAddPlacedObjectAtEquipmentGrid(object sender, PlacedObject placedObject)
+    private void EquipmentGrid_OnAddPlacedObjectAtEquipmentGrid(object sender, PlacedObject placedObject)
     {
         _selectedUnit.GetUnitEquipment().AddPlacedObjectList(placedObject);
     }
     /// <summary>
     /// Удалим полученный объект из Список "Размещенных Объектов в Сетке Инвенторя".
     /// </summary>
-    private void PickUpDrop_OnRemovePlacedObjectAtEquipmentGrid(object sender, PlacedObject placedObject)
+    private void EquipmentGrid_OnRemovePlacedObjectAtEquipmentGrid(object sender, PlacedObject placedObject)
     {
         _selectedUnit.GetUnitEquipment().RemovePlacedObjectList(placedObject);
+
+        // Если это бронежилет то
+        if (placedObject.GetPlacedObjectTypeSO() is BodyArmorTypeSO)
+        {
+            RemoveHeadArmorInEquipmentGrid();
+        }
+    }
+
+    /// <summary>
+    /// Удалить ШЛЕМ из экипировки
+    /// </summary>
+    private void RemoveHeadArmorInEquipmentGrid()
+    {
+        // СНЯТЬ ШЛЕМ если он есть И ВЕРНУТЬ НА БАЗУ           
+        if (_equipmentGrid.TryGetPlacedObjectByType<HeadArmorTypeSO>(out PlacedObject placedObjectHeadArmor))
+        {
+            _equipmentGrid.RemovePlacedObjectAtGrid(placedObjectHeadArmor);// Удалим из текущей сеточной позиции  (внутри сработает событие OnRemovePlacedObjectAtEquipmentGrid)   
+            _warehouseManager.PlusCountPlacedObject(placedObjectHeadArmor.GetPlacedObjectTypeSO());
+            placedObjectHeadArmor.SetFlagMoveStartPosition(true);           
+        }
     }
 
     public void OnDestroy()

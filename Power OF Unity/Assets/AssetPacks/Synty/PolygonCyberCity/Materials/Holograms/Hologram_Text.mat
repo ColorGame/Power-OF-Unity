@@ -16,6 +16,7 @@ Material:
   m_InvalidKeywords:
   - _ALBEDO_FLATCOLOURSWITCH_ON
   - _EMISSIONMASK_FLATCOLOURSWITCH_ON
+  - _RECEIVESHADOWS_OFF
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -26,16 +27,72 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Albedo:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _AlbedoTexture:
-        m_Texture: {fileID: 2800000, guid: 18f698a95ab215742a622c214015079e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 42599c3b8a92a2b42bafc37ee6c37592, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Back:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ceiling:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Colour_Multiply:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMask:
         m_Texture: {fileID: 2800000, guid: 31993c12d00def94f877434602256422, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Emissive_01:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Floor:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _HoloLines:
         m_Texture: {fileID: 2800000, guid: c6f333e0336a6e54bad50e8d1ed26f02, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Normals:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PolygonSciFiCyberCity_Texture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Props:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TriplanarTexture_1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TriplanarTexture_2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Wall:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WindowAlpha:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _skin_Mask:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
@@ -58,23 +115,55 @@ Material:
     m_Floats:
     - _Albedo_FlatColourSwitch: 1
     - _AlphaCutoff: 0.5
+    - _BackWallTexTiling: 0
+    - _CeilingTexTiling: 0
     - _Cutoff: 0.5
+    - _DecalTransparency_1: 1
+    - _DecalTransparency_2: 1
     - _EmissionMask_FlatColourSwitch: 1
     - _EmissionMask_TintSwitch: 0
-    - _Emission_Power: 10
+    - _Emission_Power: 1.5
+    - _Emissive: 1
     - _EnvironmentReflections: 1
-    - _Metallic: 0
-    - _Opacity: 0.147
+    - _FacadeSmoothness: 0.2
+    - _FacadeTiling: 0
+    - _FloorTexTiling: 0
+    - _GrungeDecalSwitch_1: 1
+    - _GrungeDecalSwitch_2: 1
+    - _LinkTiling_1useXonly: 1
+    - _LinkTiling_2useXonly: 1
+    - _Metallic: 1
+    - _NormalAmount: 1
+    - _Opacity: 0.2
+    - _PropsTexTiling: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 0
-    - _Scroll_Speed: 0.11
+    - _RoomEmission: 1
+    - _RoomTile: 0
+    - _Scroll_Speed: 0
+    - _ShowFacade: 0
     - _Smoothness: 0
+    - _Spec_Metallic: 0
+    - _Spec_Smoothness: 0.2
     - _SpecularHighlights: 1
+    - _SwitchPlane: 0
+    - _TogglePropLayer: 0
+    - _TriplanarTiling_1_X: 1
+    - _TriplanarTiling_1_Y: 1
+    - _TriplanarTiling_2_X: 1
+    - _TriplanarTiling_2_Y: 1
+    - _WallEmission: 1
+    - _WallGlowThreshold: 0.95
+    - _WalltexTiling: 0
     - __dirty: 0
     m_Colors:
     - _BaseColour: {r: 0, g: 0.82828283, b: 1, a: 1}
+    - _Colour_Skin: {r: 0.26038077, g: 0.22743526, b: 0.31764707, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Neon_Colour_01: {r: 0, g: 0.5883774, b: 1, a: 0}
+    - _Neon_Colour_01: {r: 0, g: 0.5883774, b: 1, a: 1}
+    - _PositionOffsetXYZroomsWprops: {r: 0, g: 0, b: 0, a: 0}
+    - _RoomTint: {r: 0, g: 0, b: 0, a: 0}
+    - _RoomsXYZPropsW: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

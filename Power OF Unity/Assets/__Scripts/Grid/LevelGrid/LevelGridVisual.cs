@@ -277,7 +277,7 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
                 gridVisualType = GridVisualType.White;
                 break;
 
-            case VisionAction spinAction: // Во время ПОВОРОТА -ГОЛУБОЙ
+            case CombatDroneAction spinAction: // Во время ПОВОРОТА -ГОЛУБОЙ
                 gridVisualType = GridVisualType.Blue;
                 break;
 

@@ -61,7 +61,7 @@ PrefabInstance:
     - target: {fileID: 6619333253739986675, guid: 97c5d4866894d5240a463086a798069b,
         type: 3}
       propertyPath: m_Name
-      value: Grenade_1.1_FragVisual3D
+      value: Grenade_1A_FragVisual3D
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -133,7 +133,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 64437766984368316, guid: b4d03276b0a281849b746a4dee949c24, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

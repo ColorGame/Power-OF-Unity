@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "ScriptableObjects/SpotterFireItemType")]
+[CreateAssetMenu(menuName = "ScriptableObjects/PlacedObjectType_WithAction/SpotterFireItemType")]
 
 public class SpotterFireItemTypeSO : PlacedObjectTypeWithActionSO
 {

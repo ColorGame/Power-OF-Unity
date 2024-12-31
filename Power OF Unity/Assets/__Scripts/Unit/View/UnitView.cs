@@ -12,38 +12,30 @@ public abstract class UnitView : MonoBehaviour
     [SerializeField] private Transform _attachPointGrenade;
     [SerializeField] private Animator _animator;
 
-    [Header("Контейнеры в которых будем переключать\nвидимость MeshRenderer")]
+    [Header("Броня для головы")]
+    [SerializeField] protected MeshRenderer[] _headArmorMilitaryMeshArray;       // Стандартый военный шлем
+    [SerializeField] protected MeshRenderer[] _headArmorJunkerMeshArray;         // Улучшеный военный шлем
+    [SerializeField] protected MeshRenderer[] _headArmorSpaceNoFaceMeshArray;    // Космический шлем закрывающий все лицо
+    [SerializeField] protected MeshRenderer[] _headArmorCyberXOMeshArray;        // Кибер шлем XO
+    [SerializeField] protected MeshRenderer[] _headArmorCyberZenicaMeshArray;    // Кибер шлем Зеница
+    [SerializeField] protected MeshRenderer[] _headArmorCyberNoFaceMeshArray;    // Кибер шлем закрывающий все лицо
+    [SerializeField] protected MeshRenderer[] _headArmorCyberModNoFaceMeshArray; // Кибер шлем улучшенный закрывающий все лицо
+    // Чтобы не настраивать волосы и бороду для каждого юнита, закинем в общем префабе контейнеры в которых храняться нужные вьюхи
+    [Header("Контейнеры для волос и бороды")]
     [SerializeField] protected Transform _hair;
-    [SerializeField] protected Transform _headArmorMilitary;
-    [SerializeField] protected Transform _headArmorJunker;
-    [SerializeField] protected Transform _headArmorCyberNoFace;
-    [SerializeField] protected Transform _headArmorCyberZenica;
-    [SerializeField] protected Transform _headArmorCyberXO;
     [SerializeField] protected Transform _beard;
-    
+
     /// <summary>
     /// Список Вьюшек головы
     /// </summary>
-    protected List<MeshRenderer[]> _headViewList;
-
-    protected MeshRenderer[] _headArmorMilitaryMeshArray;     // Стандартый военный шлем
-    protected MeshRenderer[] _headArmorJunkerMeshArray;       // Улучшеный военный шлем
-    protected MeshRenderer[] _headArmorCyberNoFaceMeshArray;  // Кибер шлем закрывающий все лицо
-    protected MeshRenderer[] _headArmorCyberZenicaMeshArray;  // Кибер шлем Зеница
-    protected MeshRenderer[] _headArmorCyberXOMeshArray;      // Кибер шлем XO
+    protected List<MeshRenderer[]> _headViewList;  
 
     protected MeshRenderer[] _hairMeshArray;                  // Волосы
     protected MeshRenderer[] _beardMeshArray;                 // Борода
 
 
     protected void InitMeshRender()
-    {
-        _headArmorMilitaryMeshArray = _headArmorMilitary.GetComponentsInChildren<MeshRenderer>();
-        _headArmorJunkerMeshArray = _headArmorJunker.GetComponentsInChildren<MeshRenderer>();
-        _headArmorCyberNoFaceMeshArray = _headArmorCyberNoFace.GetComponentsInChildren<MeshRenderer>();
-        _headArmorCyberZenicaMeshArray = _headArmorCyberZenica.GetComponentsInChildren<MeshRenderer>();
-        _headArmorCyberXOMeshArray = _headArmorCyberXO.GetComponentsInChildren<MeshRenderer>();
-
+    {     
         _hairMeshArray = _hair.GetComponentsInChildren<MeshRenderer>();
         _beardMeshArray = _beard.GetComponentsInChildren<MeshRenderer>();
 
@@ -51,9 +43,11 @@ public abstract class UnitView : MonoBehaviour
         {
             _headArmorMilitaryMeshArray,
             _headArmorJunkerMeshArray,
-            _headArmorCyberNoFaceMeshArray,
-            _headArmorCyberZenicaMeshArray,
+            _headArmorSpaceNoFaceMeshArray,
             _headArmorCyberXOMeshArray,
+            _headArmorCyberZenicaMeshArray,
+            _headArmorCyberNoFaceMeshArray,
+            _headArmorCyberModNoFaceMeshArray,
             _hairMeshArray,
             _beardMeshArray,
         };
@@ -62,7 +56,74 @@ public abstract class UnitView : MonoBehaviour
     /// <summary>
     /// Настройка брони головы
     /// </summary>
-    public abstract void SetHeadArmor(HeadArmorTypeSO headArmorTypeSO);  
+    public virtual void SetHeadArmor(HeadArmorTypeSO headArmorTypeSO)
+    {
+        if (headArmorTypeSO == null)
+        {
+            SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+            {
+                _hairMeshArray,
+                _beardMeshArray,
+            });
+            return; // выходим и игнорируем код ниже
+        }
+
+        switch (headArmorTypeSO.GetHeadArmorType())
+        {
+            case HeadArmorType.HeadArmorMilitary:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorMilitaryMeshArray,
+                    _beardMeshArray,
+                });
+                break;
+
+            case HeadArmorType.HeadArmorJunker:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorJunkerMeshArray,
+                    _beardMeshArray,
+                });
+                break;
+
+            case HeadArmorType.HeadArmorSpaceNoFace:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorSpaceNoFaceMeshArray,
+                });
+                break;
+
+            case HeadArmorType.HeadArmorCyberXO:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorCyberXOMeshArray,
+                    _beardMeshArray,
+                });
+                break;
+
+            case HeadArmorType.HeadArmorCyberZenica:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorCyberZenicaMeshArray,
+                    _beardMeshArray,
+                });
+                break;
+
+            case HeadArmorType.HeadArmorCyberNoFace:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorCyberNoFaceMeshArray,
+                });
+                break;
+
+            case HeadArmorType.HeadArmorCyberModNoFace:
+                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
+                {
+                    _headArmorCyberModNoFaceMeshArray,
+                });
+                break;
+        }
+    }
 
     /// <summary>
     /// Настройка брони тела и головы.<br/>
@@ -121,14 +182,14 @@ public abstract class UnitView : MonoBehaviour
     /// </summary>
     protected void SetMeshArrayInHeadViewList(HashSet<MeshRenderer[]> showHashList)
     {
-        SetMeshInEnumerable(showHashList, _headViewList);
+        SetMeshArrayInEnumerable(showHashList, _headViewList);
     }
 
     /// <summary>
     /// Настроить переданный HashSet список<br/> 
     /// Переберет переданное перечисление "MeshRenderer[]" и скроет все, кроме переданного HashSet списка
     /// </summary>
-    protected void SetMeshInEnumerable(HashSet<MeshRenderer[]> showHashList, IEnumerable<MeshRenderer[]> enumerable)
+    protected void SetMeshArrayInEnumerable(HashSet<MeshRenderer[]> showHashList, IEnumerable<MeshRenderer[]> enumerable)
     {
         foreach (MeshRenderer[] viewHead in enumerable)
         {
@@ -152,31 +213,46 @@ public abstract class UnitView : MonoBehaviour
     }
 
     /// <summary>
-    /// Показать все MeshRenderer в переданном перечисление
+    /// Показать все массивы MeshRenderer в переданном перечисление
     /// </summary>    
-    protected void ShowMeshInEnumerable(IEnumerable<MeshRenderer[]> enumerable)
+    protected void ShowMeshArrayInEnumerable(IEnumerable<MeshRenderer[]> enumerable)
     {
         foreach (MeshRenderer[] viewHead in enumerable)
         {
-            foreach (MeshRenderer view in viewHead)
-            {
-                view.enabled = false;
-            }
+            ShowMeshEnumerable(viewHead);            
         }
     }
     /// <summary>
-    /// Скрыть все MeshRenderer в переданном перечисление
+    /// Скрыть все массивы MeshRenderer в переданном перечисление
     /// </summary>    
-    protected void HideMeshInEnumerable(IEnumerable<MeshRenderer[]> enumerable)
+    protected void HideMeshArrayInEnumerable(IEnumerable<MeshRenderer[]> enumerable)
     {
         foreach (MeshRenderer[] viewHead in enumerable)
-        {           
-            foreach (MeshRenderer view in viewHead)
-            {
-                view.enabled = false;
-            }
+        {
+            HideMeshEnumerable(viewHead);
         }
-    }    
+    }
+
+    /// <summary>
+    /// Показать все MeshRenderer в переданном перечисление
+    /// </summary>    
+    protected void ShowMeshEnumerable(IEnumerable<MeshRenderer> enumerable)
+    {
+        foreach (MeshRenderer view in enumerable)
+        {
+            view.enabled = true;
+        }
+    }
+    /// <summary>
+    /// Показать все MeshRenderer в переданном перечисление
+    /// </summary>    
+    protected void HideMeshEnumerable(IEnumerable<MeshRenderer> enumerable)
+    {
+        foreach (MeshRenderer view in enumerable)
+        {
+            view.enabled = false;
+        }
+    }
 
     public virtual Animator GetAnimator() { return _animator; }
     public Transform GetAttachPointShield() {return _attachPointShieldLeft; }

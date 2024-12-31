@@ -172,7 +172,7 @@ public class PlacedObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     // для канваса в режиме ScrenSpace
 
-    public void OnPointerEnter(PointerEventData eventData) /// Если мыш над этим объектом то передадим этот объект в PickUpDropPlacedObject
+    public void OnPointerEnter(PointerEventData eventData)// Если мыш над этим объектом то передадим этот объект в PickUpDropPlacedObject
     {
         _pickUpDropPlacedObject.SetPlacedObjectMouseEnter(this);
     }

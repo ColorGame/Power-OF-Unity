@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "ScriptableObjects/HeadArmorType")]
+[CreateAssetMenu(menuName = "ScriptableObjects/PlacedObjectType_Armor/HeadArmorType")]
 public class HeadArmorTypeSO : PlacedObjectTypeArmorSO
 {
     [Header("Тип размещаемого объекта")]

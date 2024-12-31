@@ -3,58 +3,48 @@ using UnityEngine;
 /// <summary>
 /// Визуал юнита "Солдат". 
 /// </summary>
-/// <remarks>сотояние брони - 1.BodyArmorMilitary 2.BodyArmorMilitaryMod 3.BodyArmorCyber</remarks>
+/// <remarks>сотояние брони - 1.BodyArmorMilitary 2.BodyArmorMilitaryMod 3.BodyArmorCyber 4.BodyArmorCyberMod</remarks>
 public class UnitMilitaryAndCyberSoldier : UnitView
 {
-    [Header("Контейнеры в которых будем переключать\nвидимость SkinnedMeshRenderer")]
-    [SerializeField] private Transform _viewBodyArmorMilitary;
-    [SerializeField] private Transform _viewBodyArmorMilitaryMod;
-    [SerializeField] private Transform _viewBodyArmorCyber;
-    [Header("Контейнеры для крепления дополнительных предметов")]
-    [SerializeField] private Transform _attachSpine01;     //Крепление дополнительных карманов для брони
-    [SerializeField] private Transform _attachSpine02;     //Крепление богажа
-    [SerializeField] private Transform _attachSpine03;     //Крепление рации
-    [SerializeField] private Transform _attachNeck;        //Крепление шарфа
-
+    // Чтобы не настраивать визуал для каждого юнита, закинем в общем префабе контейнеры в которых храняться нужные вьюхи
+    [Header("Контейнер визуала брони для тела")]
+    [SerializeField] private Transform _viewBodyArmorMilitary;       
+    [SerializeField] private Transform _viewBodyArmorMilitaryMod;    
+    [SerializeField] private Transform _viewBodyArmorCyber;          
+    [SerializeField] private Transform _viewBodyArmorCyberMod;       
+    [Header("Список доп. предметов для Military")]
+    [SerializeField] private MeshRenderer[] _attachMeshMilitaryArray;
+    [Header("Список доп. предметов для CuberMod")]
+    [SerializeField] private MeshRenderer[] _attachMeshCuberModArray;
 
     private SkinnedMeshRenderer _viewBodyArmorMilitarySkinMesh;       // Военный бронежилет
-    private SkinnedMeshRenderer _viewBodyArmorMilitaryModSkinMesh;    // Улучшенный военный бронежилет 
+    private SkinnedMeshRenderer _viewBodyArmorMilitaryModSkinMesh;    // Военный бронежилет улучшенный
     private SkinnedMeshRenderer _viewBodyArmorCyberSkinMesh;          // Кибер бронежилет
+    private SkinnedMeshRenderer _viewBodyArmorCyberModSkinMesh;       // Кибер бронежилет улучшенный
 
-    private SkinnedMeshRenderer[] _viewBodySkinMeshArray;
 
-    private MeshRenderer[] _attachSpine01MeshArray;
-    private MeshRenderer[] _attachSpine02MeshArray;
-    private MeshRenderer[] _attachSpine03MeshArray;
-    private MeshRenderer[] _attachNeckMeshArray;
-
-    private MeshRenderer[][] _attachViewMeshArray;
-
+    private MeshRenderer[][] _attachFullMeshArray;   
+    private SkinnedMeshRenderer[] _viewFullBodySkinMeshArray;
 
     private void Awake()
     {
         _viewBodyArmorMilitarySkinMesh = _viewBodyArmorMilitary.GetComponentInChildren<SkinnedMeshRenderer>();
         _viewBodyArmorMilitaryModSkinMesh = _viewBodyArmorMilitaryMod.GetComponentInChildren<SkinnedMeshRenderer>();
-        _viewBodyArmorCyberSkinMesh = _viewBodyArmorCyber.GetComponentInChildren<SkinnedMeshRenderer>();
+        _viewBodyArmorCyberSkinMesh = _viewBodyArmorCyber.GetComponentInChildren<SkinnedMeshRenderer>();      
+        _viewBodyArmorCyberModSkinMesh = _viewBodyArmorCyberMod.GetComponentInChildren<SkinnedMeshRenderer>();   
 
-        _viewBodySkinMeshArray = new SkinnedMeshRenderer[] 
+        _viewFullBodySkinMeshArray = new SkinnedMeshRenderer[]
         {
             _viewBodyArmorMilitarySkinMesh,
             _viewBodyArmorMilitaryModSkinMesh,
             _viewBodyArmorCyberSkinMesh,
+            _viewBodyArmorCyberModSkinMesh,
         };
 
-        _attachSpine01MeshArray = _attachSpine01.GetComponentsInChildren<MeshRenderer>();
-        _attachSpine02MeshArray = _attachSpine02.GetComponentsInChildren<MeshRenderer>();
-        _attachSpine03MeshArray = _attachSpine03.GetComponentsInChildren<MeshRenderer>();
-        _attachNeckMeshArray = _attachNeck.GetComponentsInChildren<MeshRenderer>();
-
-        _attachViewMeshArray = new MeshRenderer[][]
+        _attachFullMeshArray = new MeshRenderer[][]
         {
-            _attachSpine01MeshArray,
-            _attachSpine02MeshArray,
-            _attachSpine03MeshArray,
-            _attachNeckMeshArray
+            _attachMeshMilitaryArray,
+            _attachMeshCuberModArray,
         };
 
         InitMeshRender();
@@ -66,76 +56,27 @@ public class UnitMilitaryAndCyberSoldier : UnitView
 
         switch (bodyArmorTypeSO.GetBodyArmorType())
         {
-            case BodyArmorType.BodyArmorMilitary:              
-                ShowMeshInEnumerable(_attachViewMeshArray);
-                SetSkinMeshInEnumerable(new HashSet<SkinnedMeshRenderer> { _viewBodyArmorMilitarySkinMesh }, _viewBodySkinMeshArray);                
+            case BodyArmorType.BodyArmorMilitary:
+                SetMeshArrayInEnumerable(new HashSet<MeshRenderer[]> { _attachMeshMilitaryArray }, _attachFullMeshArray);
+                SetSkinMeshInEnumerable(new HashSet<SkinnedMeshRenderer> { _viewBodyArmorMilitarySkinMesh }, _viewFullBodySkinMeshArray);
                 break;
 
-            case BodyArmorType.BodyArmorMilitaryMod:                
-                ShowMeshInEnumerable(_attachViewMeshArray);
-                SetSkinMeshInEnumerable(new HashSet<SkinnedMeshRenderer> { _viewBodyArmorMilitaryModSkinMesh }, _viewBodySkinMeshArray);                
+            case BodyArmorType.BodyArmorMilitaryMod:
+                SetMeshArrayInEnumerable(new HashSet<MeshRenderer[]> { _attachMeshMilitaryArray }, _attachFullMeshArray);
+                SetSkinMeshInEnumerable(new HashSet<SkinnedMeshRenderer> { _viewBodyArmorMilitaryModSkinMesh }, _viewFullBodySkinMeshArray);
                 break;
 
-            case BodyArmorType.BodyArmorCyber:               
-                HideMeshInEnumerable( _attachViewMeshArray);
-                SetSkinMeshInEnumerable(new HashSet<SkinnedMeshRenderer> { _viewBodyArmorCyberSkinMesh }, _viewBodySkinMeshArray);                
-                break;
-        }
-    }
-
-    public override void SetHeadArmor(HeadArmorTypeSO headArmorTypeSO)
-    {
-        if (headArmorTypeSO == null)
-        {
-            SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
-            {
-                _hairMeshArray,
-                _beardMeshArray,
-            });
-            return; // выходим и игнорируем код ниже
-        }
-
-        switch (headArmorTypeSO.GetHeadArmorType())
-        {
-            case HeadArmorType.HeadArmorMilitary:
-                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
-                {
-                    _headArmorMilitaryMeshArray,
-                    _beardMeshArray,
-                });
+            case BodyArmorType.BodyArmorCyber:
+                HideMeshArrayInEnumerable(_attachFullMeshArray);
+                SetSkinMeshInEnumerable(new HashSet<SkinnedMeshRenderer> { _viewBodyArmorCyberSkinMesh }, _viewFullBodySkinMeshArray);
                 break;
 
-            case HeadArmorType.HeadArmorJunker:
-                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
-                {
-                    _headArmorJunkerMeshArray,
-                    _beardMeshArray,
-                });
-                break;
-
-            case HeadArmorType.HeadArmorCyberNoFace:
-                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
-                {
-                    _headArmorCyberNoFaceMeshArray,
-                });
-                break;
-
-            case HeadArmorType.HeadArmorCyberZenica:
-                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
-                {
-                    _headArmorCyberZenicaMeshArray,
-                    _beardMeshArray,
-                });
-                break;
-
-            case HeadArmorType.HeadArmorCyberXO:
-                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
-                {
-                    _headArmorCyberXOMeshArray,
-                    _beardMeshArray,
-                });
+            case BodyArmorType.BodyArmorCyberMod:
+                SetMeshArrayInEnumerable(new HashSet<MeshRenderer[]> { _attachMeshCuberModArray }, _attachFullMeshArray);
+                SetSkinMeshInEnumerable(new HashSet<SkinnedMeshRenderer> { _viewBodyArmorCyberModSkinMesh }, _viewFullBodySkinMeshArray);
                 break;
         }
     }
+
 
 }

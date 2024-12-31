@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "ScriptableObjects/GrappleType")]
+[CreateAssetMenu(menuName = "ScriptableObjects/PlacedObjectType_WithAction/GrappleType")]
 
 public class GrappleTypeSO : PlacedObjectTypeWithActionSO
 {

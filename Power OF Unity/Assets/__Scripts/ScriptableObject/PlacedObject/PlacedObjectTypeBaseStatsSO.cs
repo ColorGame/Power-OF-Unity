@@ -103,6 +103,7 @@ public class PlacedObjectTypeBaseStatsSO : ScriptableObject
     private Dictionary<PlacedObjectType, List<PlacedObjectTooltip>> _placedObjectTooltipDictionary = null;
 
     private Dictionary<BodyArmorType, List<PlacedObjectTooltip>> _bodyArmorTypeTooltipDict = null;
+    private Dictionary<CombatDroneType, List<PlacedObjectTooltip>> _swordTypeTooltipDict = null;
     private Dictionary<GrappleType, List<PlacedObjectTooltip>> _grappleTypeTooltipDict = null;
     private Dictionary<GrenadeType, List<PlacedObjectTooltip>> _grenadeTypeTooltipDict = null;
     private Dictionary<HeadArmorType, List<PlacedObjectTooltip>> _headArmorTypeTooltipDict = null;
@@ -110,8 +111,8 @@ public class PlacedObjectTypeBaseStatsSO : ScriptableObject
     private Dictionary<ShieldItemType, List<PlacedObjectTooltip>> _shieldItemTypeTooltipDict = null;
     private Dictionary<ShootingWeaponType, List<PlacedObjectTooltip>> _shootingWeaponTypeTooltipDict = null;
     private Dictionary<SpotterFireItemType, List<PlacedObjectTooltip>> _spotterFireItemTypeTooltipDict = null;
-    private Dictionary<SwordType, List<PlacedObjectTooltip>> _swordTypeTooltipDict = null;
-    private Dictionary<VisionItemType, List<PlacedObjectTooltip>> _visionItemTypeTooltipDict = null;
+    private Dictionary<SwordType, List<PlacedObjectTooltip>> _ombatDroneTypeTooltipDict = null;
+    
 
 
     public PlacedObjectTooltip GetTooltipPlacedObject(PlacedObjectTypeSO placedObjectTypeSO, Enum enumPlacedObject)

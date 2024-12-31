@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "ScriptableObjects/HealItemType")]
+[CreateAssetMenu(menuName = "ScriptableObjects/PlacedObjectType_WithAction/HealItemType")]
 
 public class HealItemTypeSO : PlacedObjectTypeWithActionSO
 {

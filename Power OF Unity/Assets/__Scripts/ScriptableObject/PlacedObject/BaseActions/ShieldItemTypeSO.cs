@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "ScriptableObjects/ShieldItemType")]
+[CreateAssetMenu(menuName = "ScriptableObjects/PlacedObjectType_WithAction/ShieldItemType")]
 
-public class ShieldItemTypeSO : PlacedObjectTypeWithActionSO
+public class ShieldItemTypeSO : PlacedObjectTypeWithActionSO//(нельзя положить в рюкзак)
 {
     [Header("Тип размещаемого объекта")]
     [SerializeField] ShieldItemType _shieldItemType;

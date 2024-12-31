@@ -21,6 +21,9 @@ public class EquipmentGrid : MonoBehaviour
     [SerializeField] private EquipmentGridParameters[] _itemGridParametersArray; // Массив параметров сеток предметов
     [SerializeField] private EquipmentGridParameters[] _armorGridParametersArray; // Массив параметров сеток брони
 
+    public event EventHandler<PlacedObject> OnAddPlacedObjectAtEquipmentGrid; // Объект добавлен в сетку Интвенторя
+    public event EventHandler<PlacedObject> OnRemovePlacedObjectAtEquipmentGrid; // Объект удален из сетки Интвенторя   
+
     private TooltipUI _tooltipUI;
      private List<GridSystemXY<GridObjectEquipmentXY>> _itemGridSystemXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectEquipmentXY    
     private List<GridSystemXY<GridObjectEquipmentXY>> _armorGridSystemXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectEquipmentXY    
@@ -156,6 +159,8 @@ public class EquipmentGrid : MonoBehaviour
             placedObject.SetGridSystemXY(gridSystemXY); //Установим сетку на которую добавили наш оббъект
 
             _placedObjectActiveList.Add(placedObject);
+
+            OnAddPlacedObjectAtEquipmentGrid?.Invoke(this, placedObject); // Запустим событие 
         }
         return canPlace;
     }
@@ -172,6 +177,8 @@ public class EquipmentGrid : MonoBehaviour
             gridObject.RemovePlacedObject(); // удалим Размещаемый объект 
         }
         _placedObjectActiveList.Remove(placedObject);
+
+        OnRemovePlacedObjectAtEquipmentGrid?.Invoke(this, placedObject); // Запустим событие
     }
 
     /// <summary>

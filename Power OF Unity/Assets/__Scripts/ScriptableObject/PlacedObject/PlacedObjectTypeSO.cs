@@ -100,7 +100,7 @@ public abstract class PlacedObjectTypeSO : ScriptableObject, ISerializationCallb
 
    
 
-    void ISerializationCallbackReceiver.OnBeforeSerialize()
+    void  ISerializationCallbackReceiver.OnBeforeSerialize()
     {
         // —генерируйте и сохраните новый UUID, если он пуст или там просто пустые пробелы.
         if (string.IsNullOrWhiteSpace(_itemID))

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "ScriptableObjects/GrenadeType")]
+[CreateAssetMenu(menuName = "ScriptableObjects/PlacedObjectType_WithAction/GrenadeType")]
 
 public class GrenadeTypeSO : PlacedObjectTypeWithActionSO
 {

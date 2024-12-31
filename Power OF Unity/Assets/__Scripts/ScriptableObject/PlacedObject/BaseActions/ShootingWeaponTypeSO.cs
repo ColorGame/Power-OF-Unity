@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 
-[CreateAssetMenu(menuName = "ScriptableObjects/ShootingWeaponType")]
+[CreateAssetMenu(menuName = "ScriptableObjects/PlacedObjectType_WithAction/ShootingWeaponType")]
 public class ShootingWeaponTypeSO : PlacedObjectTypeWithActionSO //Стреляющее оружие Оружие - объект типа SO (наследует класс Размещенного объекта)
 {
     [Header("Тип размещаемого объекта")]

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "ScriptableObjects/BodyArmorType")]
+[CreateAssetMenu(menuName = "ScriptableObjects/PlacedObjectType_Armor/BodyArmorType")]
 public class BodyArmorTypeSO  : PlacedObjectTypeArmorSO
 {
     [Header("Тип размещаемого объекта")]

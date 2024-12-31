@@ -2,8 +2,7 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// Поднятие Бросание и Размещение объектов(в сетке). Через этот класс идет взаимодействие с EquipmentGrid.<br/>
-/// Отвечает за ЛОГИКУ экипировки(размещение на сетке) оружия или брони.
+/// Поднятие Бросание и Размещение объектов(в сетке). Через этот класс идет взаимодействие с EquipmentGrid.
 /// </summary>
 /// <remarks>
 /// Во время размещения, в PlacedObject передается сетка размещения и позиция якоря предмета на сетки.<br/>
@@ -11,17 +10,18 @@ using UnityEngine;
 /// </remarks>
 public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
 {
-    public event EventHandler OnGrabbedObjectGridExits; // Захваченый объект покинул сетку
-    public event EventHandler<PlacedObject> OnAddPlacedObjectAtEquipmentGrid; // Объект добавлен в сетку Интвенторя
-    public event EventHandler<PlacedObject> OnRemovePlacedObjectAtEquipmentGrid; // Объект удален из сетки Интвенторя   
+    public event EventHandler OnGrabbedObjectGridExits; // Захваченый объект покинул сетку   
     public event EventHandler<PlacedObjectGridParameters> OnGrabbedObjectGridPositionChanged; // позиция захваченного объекта на сетке изменилась 
 
     private LayerMask _equipmentLayerMask; // Для экипировки настроить слой как Equipment // Настроим на объекте где есть коллайдер 
     private Canvas _canvasPickUpDrop;
     private Camera _camera;
     private RenderMode _canvasRenderMode;
-    private PlacedObject _placedObject; // Размещенный объект    
-    private PlacedObject _placedObjectMouseEnter; // Размещенный объект  над которым вошла мышь
+    private PlacedObject _placedObject; // Размещенный объект
+    /// <summary>
+    /// Размещенный объект  над которым вошла мышь
+    /// </summary>
+    private PlacedObject _placedObjectMouseEnter;
     private Vector3 _offset; //смещение центра визуала относительно якоря
     private Plane _planeForCanvasInWorldSpace; // плоскость(по которой будем перемещять захваченные объекты) для канваса в мировом пространстве    
     private Vector2Int _mouseGridPosition;  // сеточная позиция мыши
@@ -35,17 +35,18 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
     private GameInput _gameInput;
     private TooltipUI _tooltipUI;
     private EquipmentGrid _equipmentGrid;
+    private WarehouseManager _warehouseManager;
     private UnitManager _unitManager;
     private Unit _selectedUnit;
-    private WarehouseManager _warehouseManager;
 
-    public void Init(GameInput gameInput, TooltipUI tooltipUI, EquipmentGrid equipmentGrid, UnitManager unitManager, WarehouseManager resourcesManager)
+    public void Init(GameInput gameInput, TooltipUI tooltipUI, EquipmentGrid equipmentGrid, WarehouseManager warehouseManager, UnitManager unitManager)
     {
         _gameInput = gameInput;
         _tooltipUI = tooltipUI;
         _equipmentGrid = equipmentGrid;
+        _warehouseManager = warehouseManager;
         _unitManager = unitManager;
-        _warehouseManager = resourcesManager;
+       
 
 
         Setup();
@@ -133,8 +134,9 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
                 TryDrop(gridSystemXY, mouseGridPosition, _placedObject);
             }
         }
-        else //Если НЕ над сеткой 
+        else //Если НЕ над сеткой (ДОП ПРОВЕРКА) if(не над кнопками созданмя предметов)  
         {
+            
             if (_placedObject != null) // Если Есть захваченый объект 
             {
                 DropAddPlacedObjectInResources();
@@ -247,13 +249,11 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
             if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, _equipmentLayerMask)) // Вернет true если попадет в инвертарь.
             {
                 _placedObject = raycastHit.transform.GetComponentInParent<PlacedObject>();
-                if (_placedObject != null) // Если у родителя объекта в который попали есть PlacedObject то можно его схватить (на кнопка висит просто визуал и там нет род объекта)
+                if (_placedObject != null) // Если у родителя объекта в который попали есть PlacedObject то можно его схватить (на кнопке висит просто визуал и там нет род объекта)
                 {
                     _placedObject.Grab(); // Схватим его
-                    _equipmentGrid.RemovePlacedObjectAtGrid(_placedObject);// Удалим из текущей сеточной позиции               
-
-                    // Звук поднятия
-                    OnRemovePlacedObjectAtEquipmentGrid?.Invoke(this, _placedObject); // Запустим событие
+                    _equipmentGrid.RemovePlacedObjectAtGrid(_placedObject);// Удалим из текущей сеточной позиции  
+                    // Звук поднятия                    
                 }
             }
         }
@@ -263,33 +263,13 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
             {
                 _placedObject = _placedObjectMouseEnter;
                 _placedObject.Grab(); // Схватим его
-                _equipmentGrid.RemovePlacedObjectAtGrid(_placedObject);// Удалим из текущей сеточной позиции               
                 _offset = _placedObject.GetOffsetCenterFromAnchor() * _canvasPickUpDrop.scaleFactor;
-                // Звук поднятия
-                OnRemovePlacedObjectAtEquipmentGrid?.Invoke(this, _placedObject); // Запустим событие
-
-                // Если это бронежилет то
-                if (_placedObject.GetPlacedObjectTypeSO() is BodyArmorTypeSO)
-                {
-                    RemoveHeadArmorInEquipmentGrid();
-                }
+                _equipmentGrid.RemovePlacedObjectAtGrid(_placedObject);// Удалим из текущей сеточной позиции               
+                // Звук поднятия            
             }
         }
     }
-    /// <summary>
-    /// Удалить ШЛЕМ из экипировки
-    /// </summary>
-    private void RemoveHeadArmorInEquipmentGrid()
-    {
-        // СНЯТЬ ШЛЕМ если он есть И ВЕРНУТЬ НА БАЗУ           
-        if (_equipmentGrid.TryGetPlacedObjectByType<HeadArmorTypeSO>(out PlacedObject placedObjectHeadArmor))
-        {
-            _equipmentGrid.RemovePlacedObjectAtGrid(placedObjectHeadArmor);// Удалим из текущей сеточной позиции     
-            _warehouseManager.PlusCountPlacedObject(placedObjectHeadArmor.GetPlacedObjectTypeSO());
-            placedObjectHeadArmor.SetFlagMoveStartPosition(true);
-            OnRemovePlacedObjectAtEquipmentGrid?.Invoke(this, placedObjectHeadArmor); // Запустим событие
-        }
-    }
+
 
     /// <summary>
     /// Попробуем СБРОСИТЬ захваченный предмет
@@ -341,9 +321,8 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
         bool drop = false;
         if (_equipmentGrid.TryAddPlacedObjectAtGridPosition(gridPositionMouse, placedObject, gridSystemXY))
         {
-            // Звук удачного размещения
-            OnAddPlacedObjectAtEquipmentGrid?.Invoke(this, placedObject); // Запустим событие (запускаю здесь а не в EquipmentGrid т.к. placedObject еще надо настроить кодом выше)
             ResetPlacedObject(); // Обнулим взятый размещяемый объект
+            // Звук удачного размещения           
             drop = true;
         }
         else
@@ -409,7 +388,9 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
     {
         _placedObject = null;
     }
-
+    /// <summary>
+    /// Установить PlacedObject над которым вошла мышь
+    /// </summary>
     public void SetPlacedObjectMouseEnter(PlacedObject placedObject)
     {
         _placedObjectMouseEnter = placedObject;
