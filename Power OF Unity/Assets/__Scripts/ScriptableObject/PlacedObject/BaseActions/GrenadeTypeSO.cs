@@ -25,4 +25,19 @@ public class GrenadeTypeSO : PlacedObjectTypeWithActionSO
     {
         return _grenadeType;
     }
+
+    [ContextMenu("Автозаполнение")]
+    protected override void AutoCompletion()
+    {
+        _grenadeType = SheetProcessor.ParseEnum<GrenadeType>(name);
+
+        Search2DPrefabAndVisual(
+          name,
+          PlacedObjectGeneralListForAutoCompletionSO.Instance.Grenade2DArray);
+
+        Search3DPrefab(name,
+           PlacedObjectGeneralListForAutoCompletionSO.Instance.GrenadePrefab3DArray);
+
+        base.AutoCompletion();
+    }
 }

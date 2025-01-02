@@ -148,7 +148,7 @@ public class ActionButtonSystemUI : MonoBehaviour
 
         /* foreach (BaseAction baseAction in _selectedUnit.GetBaseActionsArray()) // В цикле переберем массив базовых действий у выбранного юнита
          {
-             Transform actionButtonTransform = Instantiate(GameAssets.Instance.actionButtonUI, _grenadeButtonContainer); // Для каждого baseAction создадим префаб кнопки и назначим родителя - Контейнер для кнопок
+             Transform actionButtonTransform = Instantiate(GameAssetsSO.Instance.actionButtonUI, _grenadeButtonContainer); // Для каждого baseAction создадим префаб кнопки и назначим родителя - Контейнер для кнопок
              ActionButtonUI actionButtonUI = actionButtonTransform.CreateInstanceClass<ActionButtonUI>(); // У кнопки найдем компонент ActionButtonUI
              actionButtonUI.SetBaseAction(baseAction, _unitActionSystem); //Назвать и Присвоить базовое действие (нашей кнопке)
 

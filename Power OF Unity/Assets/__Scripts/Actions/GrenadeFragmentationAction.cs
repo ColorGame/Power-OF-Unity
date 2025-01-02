@@ -11,7 +11,7 @@ public class GrenadeFragmentationAction : GrenadeAction // Осколочная граната
     {
         if (_unit.GetUnitActionSystem().GetSelectedAction() == this) // Проверим наше действие активное (выбранно) // Все виды гранат подписаны на событие в АНИМАЦИИ, если не сделать проверку то Юнит создат все гранаты одновременно
         {
-            Transform grenadeProjectileTransform = Instantiate(GameAssets.Instance.grenadeProjectilePrefab, _grenadeSpawnTransform.position, Quaternion.identity); // Создадим префаб гранаты 
+            Transform grenadeProjectileTransform = Instantiate(GameAssetsSO.Instance.grenadeProjectilePrefab, _grenadeSpawnTransform.position, Quaternion.identity); // Создадим префаб гранаты 
             GrenadeProjectile grenadeProjectile = grenadeProjectileTransform.GetComponent<GrenadeProjectile>(); // Возьмем у гранаты компонент GrenadeProjectile
 
             grenadeProjectile.Init(_targetGridPositin, TypeGrenade.Fragmentation, OnGrenadeBehaviorComplete, _grenadeDamage, _unit.GetSoundManager(),_unit.GetTurnSystem(), _unit.GetLevelGrid()); // И вызовим функцию InitOnLoad() передав в нее целевую позицию (сеточныая позиция курсора мыши) Тип ГРАНАТЫ и передадим в делегат функцию OnGrenadeBehaviorComplete ( при взрыве гранаты будем вызывать эту функцию)

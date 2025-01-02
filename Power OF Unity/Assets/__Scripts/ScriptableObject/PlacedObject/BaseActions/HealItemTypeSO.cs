@@ -24,4 +24,20 @@ public class HealItemTypeSO : PlacedObjectTypeWithActionSO
     {
         return _healItemType;
     }
+
+
+    [ContextMenu("Автозаполнение")]
+    protected override void AutoCompletion()
+    {
+        _healItemType = SheetProcessor.ParseEnum<HealItemType>(name);
+
+        Search2DPrefabAndVisual(
+          name,
+          PlacedObjectGeneralListForAutoCompletionSO.Instance.HealItem2DArray);
+
+        Search3DPrefab(name,
+           PlacedObjectGeneralListForAutoCompletionSO.Instance.HealItemPrefab3DArray);
+
+        base.AutoCompletion();
+    }
 }

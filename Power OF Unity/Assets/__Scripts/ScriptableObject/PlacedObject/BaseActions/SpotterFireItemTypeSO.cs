@@ -24,5 +24,22 @@ public class SpotterFireItemTypeSO : PlacedObjectTypeWithActionSO
     {
         return _spotterFireItemType;
     }
-   
+
+
+
+    [ContextMenu("Автозаполнение")]
+    protected override void AutoCompletion()
+    {
+        _spotterFireItemType = SheetProcessor.ParseEnum<SpotterFireItemType>(name);
+
+        Search2DPrefabAndVisual(
+          name,
+          PlacedObjectGeneralListForAutoCompletionSO.Instance.SpotterFireItem2DArray);
+
+        Search3DPrefab(name,
+           PlacedObjectGeneralListForAutoCompletionSO.Instance.SpotterFireItemPrefab3DArray);
+
+        base.AutoCompletion();
+    }
+
 }

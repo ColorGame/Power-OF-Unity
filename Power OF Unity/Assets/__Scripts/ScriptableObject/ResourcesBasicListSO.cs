@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Базовый список объектов размещения. БУДЕТ ВСЕГО ОДИН ЭКЗЕМПЛЯР (один список)
 /// </summary>
-[CreateAssetMenu(fileName = "ResourcesBasicListSO", menuName = "ScriptableObjects/ResourcesBasicListSO")]
+[CreateAssetMenu(fileName = "ResourcesBasicListSO", menuName = "ScriptableObjects/Date/ResourcesBasicListSO")]
 public class ResourcesBasicListSO : ScriptableObject
 {
     [Header("Стартовое количество МОНЕТ")]

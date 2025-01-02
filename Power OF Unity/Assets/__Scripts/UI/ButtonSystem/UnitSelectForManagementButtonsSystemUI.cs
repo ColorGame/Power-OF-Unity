@@ -203,7 +203,7 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
     {
         for (int index = 0; index < unitList.Count; index++)
         {
-            UnitSelectAtManagementButtonUI unitSelectAtManagementButton = Instantiate(GameAssets.Instance.unitSelectAtManagementButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
+            UnitSelectAtManagementButtonUI unitSelectAtManagementButton = Instantiate(GameAssetsSO.Instance.unitSelectAtManagementButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
             unitSelectAtManagementButton.Init(unitList[index], _unitManager, index + 1);            
         }
     }

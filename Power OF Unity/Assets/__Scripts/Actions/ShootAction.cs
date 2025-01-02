@@ -200,7 +200,7 @@ public class ShootAction : BaseAction
         // Вычислить попадание или промах
         _hit = UnityEngine.Random.Range(0, 1f) < GetHitPercent(_targetUnit);
 
-        Transform bulletProjectilePrefabTransform = Instantiate(GameAssets.Instance.bulletProjectilePrefab, _shootPointTransform.position, Quaternion.identity); // Создадим префаб пули в точке выстрела
+        Transform bulletProjectilePrefabTransform = Instantiate(GameAssetsSO.Instance.bulletProjectilePrefab, _shootPointTransform.position, Quaternion.identity); // Создадим префаб пули в точке выстрела
         BulletProjectile bulletProjectile = bulletProjectilePrefabTransform.GetComponent<BulletProjectile>(); // Вернем компонент BulletProjectile созданной пули
 
         _unit.GetSoundManager().PlayOneShot(SoundName.Shoot); // Воспроизведем звук 

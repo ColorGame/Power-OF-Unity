@@ -14,5 +14,5 @@ public enum GrenadeType
 
     Grenade_3A_Stun = 7,
     Grenade_3B_Stun = 8,
-    Grenade_3C_Stun = 8,
+    Grenade_3C_Stun = 9,
 }

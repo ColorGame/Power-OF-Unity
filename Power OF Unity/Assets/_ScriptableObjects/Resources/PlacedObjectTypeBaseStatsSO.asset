@@ -1,0 +1,2530 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af35309eeca89a840951c4fced925910, type: 3}
+  m_Name: PlacedObjectTypeBaseStatsSO
+  m_EditorClassIdentifier: 
+  _namesPlacedObjectList:
+  - placedObjectType: 1
+    textList:
+    - "\u0412\u043E\u0435\u043D\u043D\u044B\u0439 \u0431\u0440\u043E\u043D\u0435\u0436\u0438\u043B\u0435\u0442"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - "\u0412\u043E\u0435\u043D\u043D\u044B\u0439 \u0431\u0440\u043E\u043D\u0435\u0436\u0438\u043B\u0435\u0442
+      \u0423\u043B\u0443\u0447\u0448\u0435\u043D\u043D\u044B\u0439"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - "\u041A\u043E\u0441\u043C\u0438\u0447\u0435\u0441\u043A\u0438\u0439 \u0431\u0440\u043E\u043D\u0435\u0436\u0438\u043B\u0435\u0442"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - "\u041C\u043E\u0434\u0438\u0444\u0438\u043A\u0430\u0446\u0438\u0438 \u0434\u043B\u044F
+      \u043A\u043E\u0441\u043C\u0438\u0447\u0435\u0441\u043A\u043E\u0433\u043E \u0431\u0440\u043E\u043D\u0435\u0436\u0438\u043B\u0435\u0442
+      (\u0434\u043E\u043F\u043E\u043B\u043D\u0435\u043D\u0438\u0435)"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - "\u041A\u0438\u0431\u0435\u0440 \u0431\u0440\u043E\u043D\u0435\u0436\u0438\u043B\u0435\u0442"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - "\u041A\u0438\u0431\u0435\u0440 \u0431\u0440\u043E\u043D\u0435\u0436\u0438\u043B\u0435\u0442
+      \u0423\u043B\u0443\u0447\u0448\u0435\u043D\u043D\u044B\u0439"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - "\u0411\u0440\u043E\u043D\u0435\u0436\u0438\u043B\u0435\u0442 \u0411\u043E\u043B\u044C\u0448\u043E\u0439
+      \u044D\u043A\u0437\u043E\u0441\u043A\u0435\u043B\u0435\u0442"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - "\u0421\u0442\u0430\u043D\u0434\u0430\u0440\u0442\u044B\u0439 \u0432\u043E\u0435\u043D\u043D\u044B\u0439
+      \u0448\u043B\u0435\u043C"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - "\u0423\u043B\u0443\u0447\u0448\u0435\u043D\u044B\u0439 \u0432\u043E\u0435\u043D\u043D\u044B\u0439
+      \u0448\u043B\u0435\u043C"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - "\u041A\u043E\u0441\u043C\u0438\u0447\u0435\u0441\u043A\u0438\u0439 \u0448\u043B\u0435\u043C
+      \u0437\u0430\u043A\u0440\u044B\u0432\u0430\u044E\u0449\u0438\u0439 \u0432\u0441\u0435
+      \u043B\u0438\u0446\u043E"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - "\u041A\u0438\u0431\u0435\u0440 \u0448\u043B\u0435\u043C \u0437\u0430\u043A\u0440\u044B\u0432\u0430\u044E\u0449\u0438\u0439
+      \u0432\u0441\u0435 \u043B\u0438\u0446\u043E"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - "\u041A\u0438\u0431\u0435\u0440 \u0448\u043B\u0435\u043C \u0423\u041B\u0423\u0427\u0428\u0415\u041D\u041D\u042B\u0419
+      \u0437\u0430\u043A\u0440\u044B\u0432\u0430\u044E\u0449\u0438\u0439 \u0432\u0441\u0435
+      \u043B\u0438\u0446\u043E"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - "\u041A\u0438\u0431\u0435\u0440 \u0448\u043B\u0435\u043C \u0417\u0435\u043D\u0438\u0446\u0430"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - "\u041A\u0438\u0431\u0435\u0440 \u0448\u043B\u0435\u043C XO"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - "\u041F\u0440\u043E\u0437\u0440\u0430\u0447\u043D\u0430\u044F \u043A\u0440\u044B\u0448\u043A\u0430
+      \u0434\u043B\u044F \u0431\u043E\u043B\u044C\u0448\u043E\u0433\u043E \u0441\u043E\u043B\u0434\u0430\u0442\u0430"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - "\u041A\u0440\u044B\u0448\u043A\u0430 \u0434\u043B\u044F \u0431\u043E\u043B\u044C\u0448\u043E\u0433\u043E
+      \u0441\u043E\u043B\u0434\u0430\u0442\u0430"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 3
+    textList:
+    - "\u0411\u043E\u0435\u0432\u043E\u0439 \u0434\u0440\u043E\u043D \u0426\u0418\u041B\u0418\u041D\u0414\u0420"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 3
+    textList:
+    - "\u0411\u043E\u0435\u0432\u043E\u0439 \u0434\u0440\u043E\u043D \u0416\u0423\u041A"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 3
+    textList:
+    - "\u0411\u043E\u0435\u0432\u043E\u0439 \u0434\u0440\u043E\u043D \u0425\u0418\u0429\u041D\u0418\u041A"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 3
+    textList:
+    - "\u0411\u043E\u0435\u0432\u043E\u0439 \u0434\u0440\u043E\u043D \u041E\u0425\u041E\u0422\u041D\u0418\u041A"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 4
+    textList:
+    - "\u041A\u0440\u044E\u043A \u0431\u0430\u0437\u043E\u0432\u044B\u0439"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 4
+    textList:
+    - "\u041A\u0440\u044E\u043A \u0441 \u043F\u043E\u0432\u044B\u0448\u0435\u043D\u043D\u044B\u043C
+      \u0440\u0430\u0434\u0438\u0443\u0441\u043E\u043C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 4
+    textList:
+    - "\u041A\u0440\u044E\u043A \u0443\u043B\u0443\u0447\u0448\u0435\u043D\u043D\u044B\u0439"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 6
+    textList:
+    - "\u041C\u0435\u0434 \u043F\u0430\u043A\u0435\u0442"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 6
+    textList:
+    - "\u041C\u0435\u0434 \u043F\u0430\u043A\u0435\u0442"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 6
+    textList:
+    - "\u041C\u0435\u0434 \u043F\u0430\u043A\u0435\u0442"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 6
+    textList:
+    - "\u0428\u043F\u0438\u0440\u0446 \u043F\u0438\u0441\u0442\u043E\u043B\u0435\u0442"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 7
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 7
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 7
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 9
+    textList:
+    - "\u0411\u0438\u043D\u043E\u043A\u043B\u044C"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 9
+    textList:
+    - "\u0414\u0440\u043E\u043D \u043A\u0432\u0430\u0434\u0440\u043E\u043A\u043E\u043F\u0442\u0435\u0440"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 9
+    textList:
+    - "\u0414\u0440\u043E\u043D \u0448\u0430\u0440"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 9
+    textList:
+    - "\u0414\u0440\u043E\u043D \u043A\u0430\u043C\u0435\u0440\u0430"
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - 
+  _descriptionsPlacedObjectList:
+  - placedObjectType: 1
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - "\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0435\u0442\u0441\u044F \u0434\u043B\u044F
+      \u043F\u043E\u0434\u0442\u0430\u0441\u043A\u0438\u0432\u0430\u043D\u0438\u044F
+      \u0432\u0440\u0430\u0433\u043E\u0432 \u0438\u043B\u0438 \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u043E\u0432
+      \u043A \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044E.
+      \u0414\u043B\u044F \u043F\u043E\u0434\u0442\u0430\u0441\u043A\u0438\u0432\u0430\u043D\u0438\u044F
+      \u0432\u0440\u0430\u0433\u0430 \u043D\u0443\u0436\u043D\u043E 2 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F.
+      \u0418\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0435\u0442\u0441\u044F \u0434\u043B\u044F
+      \u043F\u043E\u0434\u0442\u0430\u0441\u043A\u0438\u0432\u0430\u043D\u0438\u044F
+      \u0432\u0440\u0430\u0433\u043E\u0432 \u0438\u043B\u0438 \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u043E\u0432
+      \u043A \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044E.
+      \u0414\u043B\u044F \u043F\u043E\u0434\u0442\u0430\u0441\u043A\u0438\u0432\u0430\u043D\u0438\u044F
+      \u0432\u0440\u0430\u0433\u0430 \u043D\u0443\u0436\u043D\u043E 2 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F.\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0435\u0442\u0441\u044F
+      \u0434\u043B\u044F \u043F\u043E\u0434\u0442\u0430\u0441\u043A\u0438\u0432\u0430\u043D\u0438\u044F
+      \u0432\u0440\u0430\u0433\u043E\u0432 \u0438\u043B\u0438 \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u043E\u0432
+      \u043A \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044E.
+      \u0414\u043B\u044F \u043F\u043E\u0434\u0442\u0430\u0441\u043A\u0438\u0432\u0430\u043D\u0438\u044F
+      \u0432\u0440\u0430\u0433\u0430 \u043D\u0443\u0436\u043D\u043E 2 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F.\u0418\u0441\u043F\u043E\u043B\u044C\u0437\u0443\u0435\u0442\u0441\u044F
+      \u0434\u043B\u044F \u043F\u043E\u0434\u0442\u0430\u0441\u043A\u0438\u0432\u0430\u043D\u0438\u044F
+      \u0432\u0440\u0430\u0433\u043E\u0432 \u0438\u043B\u0438 \u043F\u0440\u0435\u0434\u043C\u0435\u0442\u043E\u0432
+      \u043A \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044E.
+      \u0414\u043B\u044F \u043F\u043E\u0434\u0442\u0430\u0441\u043A\u0438\u0432\u0430\u043D\u0438\u044F
+      \u0432\u0440\u0430\u0433\u0430 \u043D\u0443\u0436\u043D\u043E 2 \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F."
+    - It is used to pull enemies or objects towards the user. It takes 2 users to
+      pull up an enemy.
+    - "\u5B83\u7528\u4E8E\u5C06\u654C\u4EBA\u6216\u7269\u4F53\u62C9\u5411\u7528\u6237\u3002
+      \u62C9\u8D77\u4E00\u4E2A\u654C\u4EBA\u9700\u89812\u4E2A\u7528\u6237\u3002"
+    - "\"Es wird verwendet, um Feinde oder Gegenst\xE4nde in Richtung des Benutzers
+      zu ziehen. Es braucht 2 Benutzer, um einen Feind hochzuziehen.\"\r"
+  - placedObjectType: 1
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 3
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 3
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 3
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 3
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 4
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 4
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 4
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 6
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 6
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 6
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 6
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 7
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 7
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 7
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 9
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 9
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 9
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 9
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - 
+  _detailsPlacedObjectList:
+  - placedObjectType: 1
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - "\u0423\u0440\u043E\u043D - 100<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 50<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 20<br>\u0412\u0435\u0441 - 30"
+    - Damage - 100<br>Distance - 50<br>Cost of action - 20<br>Weight - 30
+    - "\u635F\u574F - 100<br>\u8DDD\u79BB - 50<br>\u884C\u52A8\u6210\u672C - 20<br>\u91CD\u91CF
+      - 30"
+    - "Schaden - 100<br>Distanz - 50<br>Kosten der Aktion - 20<br>Gewicht - 30\r"
+  - placedObjectType: 1
+    textList:
+    - "\u0423\u0440\u043E\u043D - 10<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 10<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 10<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 10<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 1
+    textList:
+    - "\u0423\u0440\u043E\u043D - 5<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 5<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 5<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 5<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 1
+    textList:
+    - "\u0423\u0440\u043E\u043D - 2<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 2<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 2<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 2<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 1
+    textList:
+    - "\u0423\u0440\u043E\u043D - 5<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 5<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 5<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 5<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 1
+    textList:
+    - "\u0423\u0440\u043E\u043D - 1<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 1<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 1<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 1<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 2
+    textList:
+    - "\u0423\u0440\u043E\u043D - 6<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 6<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 6<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 6<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 2
+    textList:
+    - "\u0423\u0440\u043E\u043D - 8<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 8<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 8<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 8<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 2
+    textList:
+    - "\u0423\u0440\u043E\u043D - 1<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 1<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 1<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 1<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 2
+    textList:
+    - "\u0423\u0440\u043E\u043D - 3<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 3<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 3<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 3<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 2
+    textList:
+    - "\u0423\u0440\u043E\u043D - 8<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 8<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 8<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 8<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 2
+    textList:
+    - "\u0423\u0440\u043E\u043D - 8<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 8<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 8<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 8<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 2
+    textList:
+    - "\u0423\u0440\u043E\u043D - 5<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 5<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 5<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 5<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 2
+    textList:
+    - "\u0423\u0440\u043E\u043D - 7<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 7<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 7<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 7<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 2
+    textList:
+    - "\u0423\u0440\u043E\u043D - 2<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 2<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 2<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 2<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 3
+    textList:
+    - "\u0423\u0440\u043E\u043D - 1<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 1<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 1<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 1<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 3
+    textList:
+    - "\u0423\u0440\u043E\u043D - 2<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 2<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 2<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 2<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 3
+    textList:
+    - "\u0423\u0440\u043E\u043D - 1<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 1<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 1<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 1<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 3
+    textList:
+    - "\u0423\u0440\u043E\u043D - 6<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 6<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 6<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 6<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 4
+    textList:
+    - "\u0423\u0440\u043E\u043D - 61<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 61<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 61<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 61<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 4
+    textList:
+    - "\u0423\u0440\u043E\u043D - 0<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 0<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 0<br>\u0412\u0435\u0441 - 0"
+    - Damage - 0<br>Distance - 0<br>Cost of action - 0<br>Weight - 0
+    - "\u635F\u574F - 0<br>\u8DDD\u79BB - 0<br>\u884C\u52A8\u6210\u672C - 0<br>\u91CD\u91CF
+      - 0"
+    - "Schaden - 0<br>Distanz - 0<br>Kosten der Aktion - 0<br>Gewicht - 0\r"
+  - placedObjectType: 4
+    textList:
+    - "\u0423\u0440\u043E\u043D - 10<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 10<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 10<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 10<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 5
+    textList:
+    - "\u0423\u0440\u043E\u043D - 6<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 6<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 6<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 6<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 5
+    textList:
+    - "\u0423\u0440\u043E\u043D - 8<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 8<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 8<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 8<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 5
+    textList:
+    - "\u0423\u0440\u043E\u043D - 1<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 1<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 1<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 1<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 5
+    textList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 5
+    textList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 5
+    textList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 5
+    textList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 6
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 6
+    textList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 6
+    textList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 6
+    textList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 7
+    textList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 7
+    textList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 7
+    textList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 8
+    textList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 8
+    textList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 8
+    textList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 8
+    textList:
+    - "\u0423\u0440\u043E\u043D - 4<br>\u0414\u0438\u0441\u0442\u0430\u043D\u0446\u0438\u044F
+      - 5<br>\u0421\u0442\u043E\u0438\u043C\u043E\u0441\u0442\u044C \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044F
+      - 2<br>\u0412\u0435\u0441 - 3"
+    - Damage - 4<br>Distance - 5<br>Cost of action - 2<br>Weight - 3
+    - "\u635F\u574F - 4<br>\u8DDD\u79BB - 5<br>\u884C\u52A8\u6210\u672C - 2<br>\u91CD\u91CF
+      - 3"
+    - "Schaden - 4<br>Distanz - 5<br>Kosten der Aktion - 2<br>Gewicht - 3\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 9
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 9
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 9
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 9
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - 
+  _sideEffectsPlacedObjectList:
+  - placedObjectType: 1
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - "\u041F\u043E\u0431\u043E\u0447\u043D\u044B\u0439 \u044D\u0444\u0444\u0435\u043A\u0442
+      - \u0428\u041E\u041A \u0443 \u0432\u0440\u0430\u0433\u0430."
+    - The side effect is the SHOCK of the enemy.
+    - "\u526F\u4F5C\u7528\u662F\u654C\u4EBA\u7684\u9707\u60CA\u3002"
+    - "Der Nebeneffekt ist der SCHOCK des Feindes.\r"
+  - placedObjectType: 1
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 1
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 2
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 3
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 3
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 3
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 3
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 4
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 4
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 4
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 5
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 6
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 6
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 6
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 6
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 7
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 7
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 7
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 8
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 9
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 9
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 9
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 9
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - "\r"
+  - placedObjectType: 10
+    textList:
+    - 
+    - 
+    - 
+    - 

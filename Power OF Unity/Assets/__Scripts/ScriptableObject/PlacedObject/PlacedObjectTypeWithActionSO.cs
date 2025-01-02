@@ -1,4 +1,5 @@
 
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -12,7 +13,7 @@ using UnityEngine;
 public abstract class PlacedObjectTypeWithActionSO : PlacedObjectTypeSO
 {
     [Header("Префаб размещаемого объекта 3D(для создания в МИРЕ)")]
-    [SerializeField] private Transform _prefab3D;
+    [SerializeField] protected Transform _prefab3D;
     [Header("Контролер переопределения АНИМАЦИИ")]
     [SerializeField] private AnimatorOverrideController _animatorOverrideController = null;
     
@@ -28,4 +29,26 @@ public abstract class PlacedObjectTypeWithActionSO : PlacedObjectTypeSO
     public Transform GetPrefab3D() { return _prefab3D; }
 
 
+
+    protected void Search3DPrefab(string nameFail, GameObject[] prefab3DArray)
+    {
+        int prefabDeleteLastCharName = 3; // Количество символов для удаления в имени префаба (чтобы убрать _3D )
+      
+
+        foreach (GameObject go in prefab3DArray)
+        {
+            string prefabName = go.name.Remove(go.name.Length - prefabDeleteLastCharName); // Получим имя префаба без последних 2 символов
+            if (nameFail.Equals(prefabName, StringComparison.OrdinalIgnoreCase)) // Сравним имя SO с полученым без учета регистра
+            {
+                _prefab3D = go.transform;
+            }
+        }
+       
+
+        if (_prefab3D == null)
+        {
+            Debug.Log($"Не удалось заполнить (_prefab3D). Проверь имя {name}");
+        }
+        
+    }
 }

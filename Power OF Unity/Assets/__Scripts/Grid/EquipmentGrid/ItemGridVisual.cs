@@ -77,10 +77,10 @@ public class ItemGridVisual : MonoBehaviour
                         default:
                         case RenderMode.ScreenSpaceOverlay:
                         case RenderMode.ScreenSpaceCamera:
-                            equipmentGridVisualSingle = Instantiate(GameAssets.Instance.EquipmentGridInVisualSingleScreenSpacePrefab, _equipmentGrid.GetWorldPositionCenterСornerCell(gridPosition, _gridSystemXYList[i]), Quaternion.Euler(rotation), AnchorGridTransform); // Создадим наш префаб в каждой позиции сетки
+                            equipmentGridVisualSingle = Instantiate(GameAssetsSO.Instance.EquipmentGridInVisualSingleScreenSpacePrefab, _equipmentGrid.GetWorldPositionCenterСornerCell(gridPosition, _gridSystemXYList[i]), Quaternion.Euler(rotation), AnchorGridTransform); // Создадим наш префаб в каждой позиции сетки
                             break;
                         case RenderMode.WorldSpace:
-                            equipmentGridVisualSingle = Instantiate(GameAssets.Instance.EquipmentGridInVisualSingleWorldSpacePrefab, _equipmentGrid.GetWorldPositionCenterСornerCell(gridPosition, _gridSystemXYList[i]), Quaternion.Euler(rotation), AnchorGridTransform); // Создадим наш префаб в каждой позиции сетки
+                            equipmentGridVisualSingle = Instantiate(GameAssetsSO.Instance.EquipmentGridInVisualSingleWorldSpacePrefab, _equipmentGrid.GetWorldPositionCenterСornerCell(gridPosition, _gridSystemXYList[i]), Quaternion.Euler(rotation), AnchorGridTransform); // Создадим наш префаб в каждой позиции сетки
                             break;
                     }
 

@@ -101,7 +101,7 @@ public class UnitSelectAtLevelButtonsSystemUI : MonoBehaviour
         {
             if (unit.GetTransform().gameObject.activeSelf) // Если юнит активный то 
             {
-                UnitEnemySelectAtLevelButtonUI unitEnemySelectAtLevelButton = Instantiate(GameAssets.Instance.unitEnemySelectAtLevelButton, _enemyUnitButonContainerTransform); // Для каждого ЮНИТА создадим префаб кнопки и назначим родителя - Контейнер для кнопок               
+                UnitEnemySelectAtLevelButtonUI unitEnemySelectAtLevelButton = Instantiate(GameAssetsSO.Instance.unitEnemySelectAtLevelButton, _enemyUnitButonContainerTransform); // Для каждого ЮНИТА создадим префаб кнопки и назначим родителя - Контейнер для кнопок               
                 unitEnemySelectAtLevelButton.Init(unit, _cameraFollow);//Назвать и Присвоить
 
                 _enemyUnitButonUIList.Add(unitEnemySelectAtLevelButton);// Добавим в список нашу кнопку
@@ -120,7 +120,7 @@ public class UnitSelectAtLevelButtonsSystemUI : MonoBehaviour
 
         foreach (Unit unit in _unitManager.GetUnitFriendList())// Переберем дружественных юнитов
         {
-            UnitFriendSelectAtLevelButtonUI UnitFriendSelectAtLevelButton = Instantiate(GameAssets.Instance.unitFriendSelectAtLevelButton, _friendlyUnitButonContainerTransform); // Для каждого ЮНИТА создадим префаб кнопки и назначим родителя - Контейнер для кнопок
+            UnitFriendSelectAtLevelButtonUI UnitFriendSelectAtLevelButton = Instantiate(GameAssetsSO.Instance.unitFriendSelectAtLevelButton, _friendlyUnitButonContainerTransform); // Для каждого ЮНИТА создадим префаб кнопки и назначим родителя - Контейнер для кнопок
             UnitFriendSelectAtLevelButton.Init(unit, _unitActionSystem,_cameraFollow);//Назвать и Присвоить
 
             _friendlyUnitButtonList.Add(UnitFriendSelectAtLevelButton);     

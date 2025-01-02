@@ -84,7 +84,7 @@ public class ItemSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
     /// </summary>
     private void CreatePlacedObjectSelectButton(PlacedObjectTypeSO  placedObjectTypeSO, Transform containerTransform) 
     {
-        PlacedObjectSelectButtonUI placedObjectSelectButton = Instantiate(GameAssets.Instance.placedObjectSelectButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
+        PlacedObjectSelectButtonUI placedObjectSelectButton = Instantiate(GameAssetsSO.Instance.placedObjectSelectButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
         Transform visualButton = Instantiate(placedObjectTypeSO.GetVisual2D(), placedObjectSelectButton.transform); // Создадим Визуал кнопки в зависимости от типа размещаемого объекта и сделаем дочерним к кнопке 
 
         if (_canvas.renderMode == RenderMode.WorldSpace)

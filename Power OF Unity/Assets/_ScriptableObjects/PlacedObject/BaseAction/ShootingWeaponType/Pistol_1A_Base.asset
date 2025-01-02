@@ -12,11 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f3beb8e28e58c540b93f0005b857c3e, type: 3}
   m_Name: Pistol_1A_Base
   m_EditorClassIdentifier: 
-  _itemID: d4ebb006-41d6-4f9c-85a0-d4d395d70160
-  _placedObjectType: 8
   _prefab2D: {fileID: 3324843693884112870, guid: 7e77f15e9f04f724e8f47f5bbaa47f37,
     type: 3}
-  _visual2D: {fileID: 7404412928878719274, guid: 6e267bafd59d1ad4eb2eee7c160dbfc4,
+  _visual2D: {fileID: 2282406363872699384, guid: bfc6e35ac50b08c42b751aa92784f552,
     type: 3}
   _widthX: 3
   _heightY: 2
@@ -24,9 +22,12 @@ MonoBehaviour:
   _weight: 0
   _priceBuy: 200
   _priceSell: 150
-  _prefab3D: {fileID: 0}
+  _prefab3D: {fileID: 4642074870129579035, guid: 56b4d0a272b269443b22669fe524d343,
+    type: 3}
   _animatorOverrideController: {fileID: 22100000, guid: 23e170a7bbbf9a445b4a0fe149785d45,
     type: 2}
+  _shootingWeaponType: 1
+  _isOneHand: 0
   numberShotInOneAction: 2
   delayShot: 0.5
   maxShootDistance: 7

@@ -37,4 +37,16 @@ public class HeadArmorTypeSO : PlacedObjectTypeArmorSO
     {
         return _headArmorType;
     }
+
+
+
+    [ContextMenu("Автозаполнение")]
+    protected override void AutoCompletion()
+    {
+        _headArmorType = SheetProcessor.ParseEnum<HeadArmorType>(name);
+        Search2DPrefabAndVisual(
+           name,
+           PlacedObjectGeneralListForAutoCompletionSO.Instance.HeadArmor2DArray);
+        base.AutoCompletion();
+    }
 }

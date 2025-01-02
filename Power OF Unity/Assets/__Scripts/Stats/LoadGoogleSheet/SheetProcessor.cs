@@ -103,10 +103,8 @@ public class SheetProcessor  // Обрабатывает исходный текст
         object result;
         if (!Enum.TryParse(typeof(T), value, true, out result))
         {
-            Debug.Log($"Не удается преобразовать {value} в Enum");
-            result = PlacedObjectType.NoneWeapon;
+            Debug.Log($"Не удается преобразовать {value} в Enum");          
         }
-
         return (T)result;
     }
 

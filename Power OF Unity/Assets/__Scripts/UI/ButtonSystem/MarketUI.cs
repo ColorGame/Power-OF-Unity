@@ -292,7 +292,7 @@ public class MarketUI : ObjectSelectButtonsSystemUI
     /// </summary>
     private void CreatePlacedObjectBuySellCountButton(PlacedObjectTypeSO placedObjectTypeSO, Transform containerTransform)
     {
-        PlacedObjectBuySellCountButtonUI buySellCountButton = Instantiate(GameAssets.Instance.placedObjectBuySellCountButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
+        PlacedObjectBuySellCountButtonUI buySellCountButton = Instantiate(GameAssetsSO.Instance.placedObjectBuySellCountButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
         Transform visualButton = Instantiate(placedObjectTypeSO.GetVisual2D(), buySellCountButton.transform); // Создадим Визуал кнопки в зависимости от типа размещаемого объекта и сделаем дочерним к кнопке               
         visualButton.GetComponentInChildren<Image>(true).raycastTarget = false;
         buySellCountButton.Init(this, _warehouseManager, placedObjectTypeSO, _hashAnimationName, _tooltipUI);

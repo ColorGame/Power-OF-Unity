@@ -113,7 +113,7 @@ public class MainMenuAnimatorUI : MonoBehaviour
                 _stateTimer = 3;
                 HideAllEquip(); // выключим экипировку
                 _animator.SetTrigger("Heal");// 
-                Instantiate(GameAssets.Instance.healFXPrefab, transform.position, Quaternion.LookRotation(transform.up));
+                Instantiate(GameAssetsSO.Instance.healFXPrefab, transform.position, Quaternion.LookRotation(transform.up));
                 break;
 
             case State.HealAction:
@@ -127,7 +127,7 @@ public class MainMenuAnimatorUI : MonoBehaviour
                 _stateTimer = 3;
                 EquipBinoculars();// Экипировка Биноклем
                 _animator.SetBool("IsLooking", true);
-                _spotterFireFX = Instantiate(GameAssets.Instance.spotterFireFXPrefab, transform.position +transform.up*1.7f, Quaternion.identity);
+                _spotterFireFX = Instantiate(GameAssetsSO.Instance.spotterFireFXPrefab, transform.position +transform.up*1.7f, Quaternion.identity);
                 break;
 
             case State.SpotterFireAction:
@@ -149,7 +149,7 @@ public class MainMenuAnimatorUI : MonoBehaviour
     private void Shoot()
     {
         _animator.SetTrigger("Shoot");
-        Transform bulletProjectilePrefabTransform = Instantiate(GameAssets.Instance.bulletProjectilePrefab, _shootPointTransform.position, Quaternion.identity); // Создадим префаб пули в точке выстрела
+        Transform bulletProjectilePrefabTransform = Instantiate(GameAssetsSO.Instance.bulletProjectilePrefab, _shootPointTransform.position, Quaternion.identity); // Создадим префаб пули в точке выстрела
         BulletProjectile bulletProjectile = bulletProjectilePrefabTransform.GetComponent<BulletProjectile>(); // Вернем компонент BulletProjectile созданной пули
         Vector3 targetPosition = transform.forward * 20 + Vector3.up*2f; // позицию Прицеливания целевого юнита. 
         bulletProjectile.Setup(targetPosition, true); // В аргумент предали позицию Прицеливания целевого юнита

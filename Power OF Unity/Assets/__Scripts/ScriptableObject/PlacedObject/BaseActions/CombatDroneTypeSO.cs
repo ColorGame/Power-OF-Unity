@@ -24,4 +24,19 @@ public class CombatDroneTypeSO : PlacedObjectTypeWithActionSO
     {
         return _combatDroneType;
     }
+
+    [ContextMenu("Автозаполнение")]
+    protected override void AutoCompletion()
+    {
+        _combatDroneType = SheetProcessor.ParseEnum<CombatDroneType>(name);
+
+        Search2DPrefabAndVisual(
+          name,
+          PlacedObjectGeneralListForAutoCompletionSO.Instance.CombatDrone2DArray);
+
+        Search3DPrefab(name,
+           PlacedObjectGeneralListForAutoCompletionSO.Instance.CombatDronePrefab3DArray);
+
+        base.AutoCompletion();
+    }
 }

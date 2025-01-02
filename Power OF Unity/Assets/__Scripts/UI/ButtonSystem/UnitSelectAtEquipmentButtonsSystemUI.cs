@@ -107,7 +107,7 @@ public class UnitSelectAtEquipmentButtonsSystemUI : UnitSelectButtonsSystemUI
     {
         for (int index = 0; index < unitList.Count; index++)
         {           
-            UnitSelectAtEquipmentButtonUI unitSelectAtEquipmentButton = Instantiate(GameAssets.Instance.unitSelectAtEquipmentButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
+            UnitSelectAtEquipmentButtonUI unitSelectAtEquipmentButton = Instantiate(GameAssetsSO.Instance.unitSelectAtEquipmentButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
             unitSelectAtEquipmentButton.Init(unitList[index], _unitManager, index + 1);
         }
     }

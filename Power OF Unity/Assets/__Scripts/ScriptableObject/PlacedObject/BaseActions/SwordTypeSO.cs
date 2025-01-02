@@ -30,4 +30,20 @@ public class SwordTypeSO : PlacedObjectTypeWithActionSO
     {
         return _swordType;
     }
+
+
+    [ContextMenu("Автозаполнение")]
+    protected override void AutoCompletion()
+    {
+        _swordType = SheetProcessor.ParseEnum<SwordType>(name);
+
+        Search2DPrefabAndVisual(
+          name,
+          PlacedObjectGeneralListForAutoCompletionSO.Instance.Sword2DArray);
+
+        Search3DPrefab(name,
+           PlacedObjectGeneralListForAutoCompletionSO.Instance.SwordPrefab3DArray);
+
+        base.AutoCompletion();
+    }
 }

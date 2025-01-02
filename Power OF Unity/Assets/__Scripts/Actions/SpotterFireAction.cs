@@ -174,8 +174,8 @@ public class SpotterFireAction : BaseAction // Действие Корректировщик огня НАСЛ
         Transform partnerAimPoinTransform = _partnerUnit.GetHeadTransform();
         _spotterFireFXList = new List<Transform> // Создадим волны и добавим в список
         {
-            Instantiate(GameAssets.Instance.spotterFireFXPrefab, unitAimPoinTransform.position, Quaternion.identity, unitAimPoinTransform),
-            Instantiate(GameAssets.Instance.spotterFireFXPrefab, partnerAimPoinTransform.position, Quaternion.identity ,partnerAimPoinTransform)
+            Instantiate(GameAssetsSO.Instance.spotterFireFXPrefab, unitAimPoinTransform.position, Quaternion.identity, unitAimPoinTransform),
+            Instantiate(GameAssetsSO.Instance.spotterFireFXPrefab, partnerAimPoinTransform.position, Quaternion.identity ,partnerAimPoinTransform)
         };
 
         _unit.GetSoundManager().PlayOneShot(SoundName.Spotter);

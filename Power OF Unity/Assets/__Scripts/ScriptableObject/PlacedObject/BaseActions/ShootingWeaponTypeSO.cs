@@ -48,4 +48,20 @@ public class ShootingWeaponTypeSO : PlacedObjectTypeWithActionSO //Стреляющее ор
     {
         return _shootingWeaponType;
     }
+
+
+    [ContextMenu("Автозаполнение")]
+    protected override void AutoCompletion()
+    {
+        _shootingWeaponType = SheetProcessor.ParseEnum<ShootingWeaponType>(name);
+
+        Search2DPrefabAndVisual(
+          name,
+          PlacedObjectGeneralListForAutoCompletionSO.Instance.Shooting2DArray);
+
+        Search3DPrefab(name,
+           PlacedObjectGeneralListForAutoCompletionSO.Instance.ShootingPrefab3DArray);
+
+        base.AutoCompletion();
+    }
 }

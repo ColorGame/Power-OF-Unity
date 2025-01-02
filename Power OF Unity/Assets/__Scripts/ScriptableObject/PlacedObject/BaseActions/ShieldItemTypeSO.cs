@@ -25,4 +25,21 @@ public class ShieldItemTypeSO : PlacedObjectTypeWithActionSO//(нельзя по
     {
         return _shieldItemType;
     }
+
+
+
+    [ContextMenu("Автозаполнение")]
+    protected override void AutoCompletion()
+    {
+        _shieldItemType = SheetProcessor.ParseEnum<ShieldItemType>(name);
+
+        Search2DPrefabAndVisual(
+          name,
+          PlacedObjectGeneralListForAutoCompletionSO.Instance.ShieldItem2DArray);
+
+        Search3DPrefab(name,
+           PlacedObjectGeneralListForAutoCompletionSO.Instance.ShieldItemPrefab3DArray);
+
+        base.AutoCompletion();
+    }
 }

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "UnitTypeBasicListSO", menuName = "ScriptableObjects/UnitTypeBasicList")]
+[CreateAssetMenu(fileName = "UnitTypeBasicListSO", menuName = "ScriptableObjects/Date/UnitTypeBasicList")]
 public class UnitTypeBasicListSO : ScriptableObject// БУДЕТ ВСЕГО ОДИН ЭКЗЕМПЛЯР (один список)
 {
     [SerializeField] private List<UnitTypeSO> myUnitsBasiclist; // Базовый список моих Юнитов

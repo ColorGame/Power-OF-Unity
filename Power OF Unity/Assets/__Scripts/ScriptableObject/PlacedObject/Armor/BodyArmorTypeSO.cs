@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [CreateAssetMenu(menuName = "ScriptableObjects/PlacedObjectType_Armor/BodyArmorType")]
 public class BodyArmorTypeSO  : PlacedObjectTypeArmorSO
@@ -19,4 +20,20 @@ public class BodyArmorTypeSO  : PlacedObjectTypeArmorSO
     {
         return _bodyArmorType;
     }
+
+
+
+    [ContextMenu("Автозаполнение")]
+    protected override void AutoCompletion()
+    {             
+        _bodyArmorType = SheetProcessor.ParseEnum<BodyArmorType>(name);
+
+        Search2DPrefabAndVisual(
+            name,            
+            PlacedObjectGeneralListForAutoCompletionSO.Instance.BodyArmor2DArray);
+
+        base.AutoCompletion();       
+    }
+
+    
 }

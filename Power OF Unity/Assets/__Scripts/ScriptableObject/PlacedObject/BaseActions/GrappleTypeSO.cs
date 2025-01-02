@@ -29,4 +29,20 @@ public class GrappleTypeSO : PlacedObjectTypeWithActionSO
     /// Это оружие для одной руки (для отображения с ЩИТОМ)
     /// </summary>
     public bool GetIsOneHand() { return _isOneHand; }
+
+
+    [ContextMenu("Автозаполнение")]
+    protected override void AutoCompletion()
+    {
+        _grappleType = SheetProcessor.ParseEnum<GrappleType>(name);
+
+        Search2DPrefabAndVisual(
+          name,
+          PlacedObjectGeneralListForAutoCompletionSO.Instance.Grapple2DArray);
+
+        Search3DPrefab(name,
+           PlacedObjectGeneralListForAutoCompletionSO.Instance.GrapplePrefab3DArray);
+
+        base.AutoCompletion();
+    }
 }

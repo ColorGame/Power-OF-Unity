@@ -212,14 +212,14 @@ public class GrenadeProjectile : MonoBehaviour // Гранатный снаряд
 
                 _soundManager.PlayOneShot(SoundName.GrenadeExplosion);
 
-                Instantiate(GameAssets.Instance.grenadeExplosionFXPrefab, _targetPosition, Quaternion.identity); //Создадим частьички взрыва. 
+                Instantiate(GameAssetsSO.Instance.grenadeExplosionFXPrefab, _targetPosition, Quaternion.identity); //Создадим частьички взрыва. 
 
                 break;
 
             case TypeGrenade.Smoke:
 
                 _soundManager.PlayOneShot(SoundName.GrenadeSmoke);
-                Transform grenadeSmokeFX = Instantiate(GameAssets.Instance.grenadeSmokeFXPrefab, _targetPosition, Quaternion.identity); //Создадим Дым в месте взрыва гранаты.
+                Transform grenadeSmokeFX = Instantiate(GameAssetsSO.Instance.grenadeSmokeFXPrefab, _targetPosition, Quaternion.identity); //Создадим Дым в месте взрыва гранаты.
                 grenadeSmokeFX.GetComponent<SmokeDeactivation>().Init(_turnSystem);
                 break;
 
@@ -247,8 +247,8 @@ public class GrenadeProjectile : MonoBehaviour // Гранатный снаряд
                     }
                 }
                 _soundManager.PlayOneShot(SoundName.GrenadeStun);
-                Instantiate(GameAssets.Instance.grenadeExplosionFXPrefab, _targetPosition, Quaternion.identity); //Создадим частички взрыва.
-                Transform electricityWhiteFX = Instantiate(GameAssets.Instance.electricityWhiteFXPrefab, _targetPosition, Quaternion.identity); //Создадим электромагнитное облако.
+                Instantiate(GameAssetsSO.Instance.grenadeExplosionFXPrefab, _targetPosition, Quaternion.identity); //Создадим частички взрыва.
+                Transform electricityWhiteFX = Instantiate(GameAssetsSO.Instance.electricityWhiteFXPrefab, _targetPosition, Quaternion.identity); //Создадим электромагнитное облако.
                 new DestroyNextTurn(electricityWhiteFX.gameObject, _turnAmountToDestroyFX, DestroyNextTurn.State.Destroy, _turnSystem);
 
                 break;

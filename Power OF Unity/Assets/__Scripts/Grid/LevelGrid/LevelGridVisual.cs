@@ -72,7 +72,7 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
                 {
                     GridPositionXZ gridPosition = new GridPositionXZ(x, z, floor);
 
-                    Transform gridSystemVisualSingleTransform = Instantiate(GameAssets.Instance.LevelGridVisualSinglePrefab, _levelGrid.GetWorldPosition(gridPosition), Quaternion.identity); // Создадим наш префаб в каждой позиции сетки
+                    Transform gridSystemVisualSingleTransform = Instantiate(GameAssetsSO.Instance.LevelGridVisualSinglePrefab, _levelGrid.GetWorldPosition(gridPosition), Quaternion.identity); // Создадим наш префаб в каждой позиции сетки
 
                     _gridSystemVisualSingleArray[x, z, floor] = gridSystemVisualSingleTransform.GetComponent<LevelGridVisualSingle>(); // Сохраняем компонент LevelGridVisualSingle в трехмерный массив где x,y,_floor это будут индексы массива.
                 }

@@ -32,7 +32,7 @@ public abstract class GrenadeAction : BaseAction // Граната ДЕйствие. Наследует 
         base.Awake();
 
         _handleAnimationEvents = GetComponentInChildren<HandleAnimationEvents>();
-        _grenadeProjectile = GameAssets.Instance.grenadeProjectilePrefab.GetComponent<GrenadeProjectile>();
+        _grenadeProjectile = GameAssetsSO.Instance.grenadeProjectilePrefab.GetComponent<GrenadeProjectile>();
     }
 
     protected override void Start()

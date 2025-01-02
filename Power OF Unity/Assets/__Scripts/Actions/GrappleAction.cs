@@ -97,7 +97,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
         {
             case State.ComboSearchPartner:
 
-                _instantiateFXPrefab = Instantiate(GameAssets.Instance.comboPartnerFXPrefab, _unit.GetTransformPosition()+ Vector3.up * 1.7f, Quaternion.identity); // Создадим частички взаимодействия
+                _instantiateFXPrefab = Instantiate(GameAssetsSO.Instance.comboPartnerFXPrefab, _unit.GetTransformPosition()+ Vector3.up * 1.7f, Quaternion.identity); // Создадим частички взаимодействия
                 _instantiateFXPrefab.LookAt(_unitPartner.GetTransformPosition() + Vector3.up * 1.7f); // И разверну в сторону партнера
 
                 _state = State.ComboSearchEnemy;

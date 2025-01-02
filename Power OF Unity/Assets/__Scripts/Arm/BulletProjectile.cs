@@ -43,7 +43,7 @@ public class BulletProjectile : MonoBehaviour // Снаряд пули
             
             if (_hit) //Если попали то создадим частички
             {
-                Instantiate(GameAssets.Instance.bulletHitFXPrefab, _targetPosition, Quaternion.identity); // Создадим префаб частиц (Не забудь в инспекторе включить у частиц Stop Action - Destroy)
+                Instantiate(GameAssetsSO.Instance.bulletHitFXPrefab, _targetPosition, Quaternion.identity); // Создадим префаб частиц (Не забудь в инспекторе включить у частиц Stop Action - Destroy)
             }
         }
     }

@@ -13,7 +13,7 @@ public class GrenadeStunAction : GrenadeAction
     {
         if (_unit.GetUnitActionSystem().GetSelectedAction() == this) // Проверим наше действие активное (выбранно) // Все виды гранат подписаны на событие в АНИМАЦИИ, если не сделать проверку то Юнит создат все гранаты одновременно
         {
-            Transform grenadeProjectileTransform = Instantiate(GameAssets.Instance.grenadeProjectilePrefab, _grenadeSpawnTransform.position, Quaternion.identity); // Создадим префаб гранаты 
+            Transform grenadeProjectileTransform = Instantiate(GameAssetsSO.Instance.grenadeProjectilePrefab, _grenadeSpawnTransform.position, Quaternion.identity); // Создадим префаб гранаты 
            
             GrenadeProjectile grenadeProjectile = grenadeProjectileTransform.GetComponent<GrenadeProjectile>(); // Возьмем у гранаты компонент GrenadeProjectile
 
