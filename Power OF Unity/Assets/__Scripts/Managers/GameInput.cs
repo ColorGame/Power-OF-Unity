@@ -24,6 +24,7 @@ public class GameInput
     */
 
     public event EventHandler OnClickAction;
+    public event EventHandler OnClickRemoveAction;
     public event EventHandler OnMenuAlternate;
     public event EventHandler OnCameraMovementStarted;
     public event EventHandler OnCameraMovementCanceled;
@@ -69,6 +70,8 @@ public class GameInput
         InputSystem.onActionChange += InputSystem_onActionChange; // Срабатывает когда игрок коснется любого ввода
 
         _playerInpytActions.Player.Click.performed += (Context) => { OnClickAction?.Invoke(this, EventArgs.Empty); };
+        _playerInpytActions.Player.ClickRemove.performed += (Context) => { OnClickRemoveAction?.Invoke(this, EventArgs.Empty); };
+        
         _playerInpytActions.Player.MenuAlternate.performed += (Context) => { OnMenuAlternate?.Invoke(this, EventArgs.Empty); };
         _playerInpytActions.Player.Scroll_CameraZoom.performed += (Context) => { OnCameraZoomAction?.Invoke(this, Context.ReadValue<float>()); };
         _playerInpytActions.Player.CameraRotate.performed += (Context) => { OnCameraRotateAction?.Invoke(this, Context.ReadValue<float>()); };

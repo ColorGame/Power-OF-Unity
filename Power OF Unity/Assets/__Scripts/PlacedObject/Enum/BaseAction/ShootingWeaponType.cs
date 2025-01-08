@@ -13,20 +13,20 @@ public enum ShootingWeaponType
     Pistol_2A_Laser = 4,            
     Pistol_2B_LaserMod = 5,
     //Revolver                      //3*2       Доп оруж Урон сопостовим с автоматом ну или дробовиком (мощное доп оружие)
-    Revolver_1A_Laser = 6,          
-    Revolver_1B_LaserMod = 7,          
+    Revolver_1A_Base = 6,
+    Revolver_2A_Laser = 7,          
     //Rifle                         //4*2       Осн оруж
     Rifle_1A_BaseSmall = 8,         
     Rifle_1B_Base = 9,
+    Rifle_1C_BaseMod = 10,
 
-    Rifle_2A_LaserSmall = 10,
-    Rifle_2B_LaserBase = 11,
-    Rifle_2C_LaserBaseMode = 12,
+    Rifle_2A_LaserSmall = 11,
+    Rifle_2B_LaserBase = 12,
+    Rifle_2C_LaserBaseMod = 13,
 
-    Rifle_3A_PlasmaSmall = 13,
-    Rifle_3B_PlasmaSmallMod = 14,
-    Rifle_3C_PlasmaBase = 15,
-    Rifle_3D_PlasmaBaseMod = 16,
+    Rifle_3A_PlasmaSmall = 14,    
+    Rifle_3B_PlasmaBase = 15,
+    Rifle_3C_PlasmaBaseMod = 16,
     //Shotgun                       //4*2       Осн оруж
     Shotgun_1A_Base = 17,
     Shotgun_2A_Laser = 18,

@@ -116,25 +116,29 @@ public class ItemGridVisual : MonoBehaviour
     private void Enable()
     {
         _canvasItemGrid.enabled = true;
-        _equipmentGrid.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
-        _equipmentGrid.OnRemovePlacedObjectAtEquipmentGrid += EquipmentGrid_OnRemovePlacedObjectAtGrid;
+
+        _equipmentGrid.OnAddInEquipmentGrid += EquipmentGrid_OnAddInEquipmentGrid;
+        _equipmentGrid.OnRemoveFromEquipmentGridAndHung += EquipmentGrid_OnRemoveFromEquipmentGridAndHung;
+        _equipmentGrid.OnRemoveFromEquipmentGridAndMoveStartPosition += EquipmentGrid_OnRemoveFromEquipmentGridAndMoveStartPosition;
+
         _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged += PickUpDropManager_OnGrabbedObjectGridPositionChanged;
         _pickUpDropPlacedObject.OnGrabbedObjectGridExits += PickUpDropManager_OnGrabbedObjectGridExits;
 
-        _unitEquipmentSystem.OnEquipmentGridsCleared += UnitEquipmentSystem_OnEquipmentGridsCleared;
-        _unitEquipmentSystem.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
+        _unitEquipmentSystem.OnEquipmentGridsCleared += UnitEquipmentSystem_OnEquipmentGridsCleared;       
     }
 
     private void Disable()
     {
         _canvasItemGrid.enabled = false;
-        _equipmentGrid.OnAddPlacedObjectAtEquipmentGrid -= OnAddPlacedObjectAtGrid;
-        _equipmentGrid.OnRemovePlacedObjectAtEquipmentGrid -= EquipmentGrid_OnRemovePlacedObjectAtGrid;
+
+        _equipmentGrid.OnAddInEquipmentGrid -= EquipmentGrid_OnAddInEquipmentGrid;
+        _equipmentGrid.OnRemoveFromEquipmentGridAndHung -= EquipmentGrid_OnRemoveFromEquipmentGridAndHung;
+        _equipmentGrid.OnRemoveFromEquipmentGridAndMoveStartPosition -= EquipmentGrid_OnRemoveFromEquipmentGridAndMoveStartPosition;
+
         _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged -= PickUpDropManager_OnGrabbedObjectGridPositionChanged;
         _pickUpDropPlacedObject.OnGrabbedObjectGridExits -= PickUpDropManager_OnGrabbedObjectGridExits;
 
         _unitEquipmentSystem.OnEquipmentGridsCleared -= UnitEquipmentSystem_OnEquipmentGridsCleared;
-        _unitEquipmentSystem.OnAddPlacedObjectAtEquipmentGrid -= OnAddPlacedObjectAtGrid;
     }
 
     /// <summary>
@@ -162,14 +166,21 @@ public class ItemGridVisual : MonoBehaviour
     /// <summary>
     /// Объект удален из сетки и повис над ней
     /// </summary>
-    private void EquipmentGrid_OnRemovePlacedObjectAtGrid(object sender, PlacedObject placedObject)
+    private void EquipmentGrid_OnRemoveFromEquipmentGridAndHung(object sender, PlacedObject placedObject)
     {
         SetIsBusyAndMaterial(placedObject, false, GridVisualType.Orange);
     }
     /// <summary>
+    /// Объект удален из сетки и движется в стартовую позицию
+    /// </summary>
+    private void EquipmentGrid_OnRemoveFromEquipmentGridAndMoveStartPosition(object sender, PlacedObject placedObject)
+    {
+        SetIsBusyAndMaterial(placedObject, false, GridVisualType.Grey);
+    }
+    /// <summary>
     /// Объект добавлен в сетку 
     /// </summary>
-    private void OnAddPlacedObjectAtGrid(object sender, PlacedObject placedObject)
+    private void EquipmentGrid_OnAddInEquipmentGrid(object sender, PlacedObject placedObject)
     {
         SetIsBusyAndMaterial(placedObject, true);
     }
@@ -261,7 +272,7 @@ public class ItemGridVisual : MonoBehaviour
 
                 int index = _gridNameIndexDictionary[equipmentSlot]; //получу из словоря Индекс сетки в _equipmentGridVisualSingleArray                
                 List<Vector2Int> TryOccupiesGridPositionList = placedObject.GetTryOccupiesGridPositionList(gridPositioAnchor); // Список сеточных позиций которые хотим занять
-                foreach (Vector2Int gridPosition in TryOccupiesGridPositionList) // Переберем список позиций которые хоти занять
+                foreach (Vector2Int gridPosition in TryOccupiesGridPositionList) // Переберем список позиций которые хотим занять
                 {
                     if (gridSystemXY.IsValidGridPosition(gridPosition)) // Если позиция допустима то...
                     {

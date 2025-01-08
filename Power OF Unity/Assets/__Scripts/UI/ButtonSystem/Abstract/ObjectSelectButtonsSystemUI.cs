@@ -7,7 +7,7 @@ public abstract class ObjectSelectButtonsSystemUI : MonoBehaviour, IToggleActivi
 {
     protected Transform[] _containerArray; // массив контейнеров
     protected Transform _activeContainer;
-    protected Image[] _buttonSelectedImageArray; // массив изображений для веделения нужной кнопки      
+    protected Image[] _buttonSelectedImageArray; // массив изображений для выделения нужной кнопки      
     protected ScrollRect _scrollRect; //Компонент прокрутки кнопок
     protected Canvas _canvas;
     protected TooltipUI _tooltipUI;  

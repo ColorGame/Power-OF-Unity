@@ -64,25 +64,29 @@ public class ArmorGridVisual : MonoBehaviour
     private void Enable()
     {
         _canvasArmorGrid.enabled = true;
-        _equipmentGrid.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
-        _equipmentGrid.OnRemovePlacedObjectAtEquipmentGrid += EquipmentGrid_OnRemovePlacedObjectAtGrid;
+
+        _equipmentGrid.OnAddInEquipmentGrid += EquipmentGrid_OnAddEquipmentGrid;
+        _equipmentGrid.OnRemoveFromEquipmentGridAndHung += EquipmentGrid_OnRemoveFromEquipmentGridAndHung;
+        _equipmentGrid.OnRemoveFromEquipmentGridAndMoveStartPosition += EquipmentGrid_OnRemoveFromEquipmentGridAndMoveStartPosition;
+
         _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged += PickUpDropManager_OnGrabbedObjectGridPositionChanged;
         _pickUpDropPlacedObject.OnGrabbedObjectGridExits += PickUpDropManager_OnGrabbedObjectGridExits;
 
-        _unitEquipmentSystem.OnEquipmentGridsCleared += UnitEquipmentSystem_OnEquipmentGridsCleared;
-        _unitEquipmentSystem.OnAddPlacedObjectAtEquipmentGrid += OnAddPlacedObjectAtGrid;
+        _unitEquipmentSystem.OnEquipmentGridsCleared += UnitEquipmentSystem_OnEquipmentGridsCleared;       
     }
 
     private void Disable()
     {
         _canvasArmorGrid.enabled = false;
-        _equipmentGrid.OnAddPlacedObjectAtEquipmentGrid -= OnAddPlacedObjectAtGrid;
-        _equipmentGrid.OnRemovePlacedObjectAtEquipmentGrid -= EquipmentGrid_OnRemovePlacedObjectAtGrid;
+
+        _equipmentGrid.OnAddInEquipmentGrid -= EquipmentGrid_OnAddEquipmentGrid;
+        _equipmentGrid.OnRemoveFromEquipmentGridAndHung -= EquipmentGrid_OnRemoveFromEquipmentGridAndHung;
+        _equipmentGrid.OnRemoveFromEquipmentGridAndMoveStartPosition += EquipmentGrid_OnRemoveFromEquipmentGridAndMoveStartPosition;
+
         _pickUpDropPlacedObject.OnGrabbedObjectGridPositionChanged -= PickUpDropManager_OnGrabbedObjectGridPositionChanged;
         _pickUpDropPlacedObject.OnGrabbedObjectGridExits -= PickUpDropManager_OnGrabbedObjectGridExits;
 
-        _unitEquipmentSystem.OnEquipmentGridsCleared -= UnitEquipmentSystem_OnEquipmentGridsCleared;
-        _unitEquipmentSystem.OnAddPlacedObjectAtEquipmentGrid -= OnAddPlacedObjectAtGrid;
+        _unitEquipmentSystem.OnEquipmentGridsCleared -= UnitEquipmentSystem_OnEquipmentGridsCleared;       
     }
 
     /// <summary>
@@ -111,14 +115,22 @@ public class ArmorGridVisual : MonoBehaviour
     /// <summary>
     /// Объект удален из сетки и повис над ней
     /// </summary>
-    private void EquipmentGrid_OnRemovePlacedObjectAtGrid(object sender, PlacedObject placedObject)
+    private void EquipmentGrid_OnRemoveFromEquipmentGridAndHung(object sender, PlacedObject placedObject)
     {
         SetIsBusyAndMaterial(placedObject, false, GridVisualType.Orange);
+    }
+
+    /// <summary>
+    /// Объект удален из сетки и движется в стартовую позицию
+    /// </summary>
+    private void EquipmentGrid_OnRemoveFromEquipmentGridAndMoveStartPosition(object sender, PlacedObject placedObject)
+    {
+        SetIsBusyAndMaterial(placedObject, false, GridVisualType.Ocean);
     }
     /// <summary>
     /// Объект добавлен в сетку 
     /// </summary>
-    private void OnAddPlacedObjectAtGrid(object sender, PlacedObject placedObject)
+    private void EquipmentGrid_OnAddEquipmentGrid(object sender, PlacedObject placedObject)
     {
         SetIsBusyAndMaterial(placedObject, true);
     }

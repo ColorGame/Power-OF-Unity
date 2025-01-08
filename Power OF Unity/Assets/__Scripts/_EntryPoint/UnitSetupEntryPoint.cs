@@ -69,7 +69,7 @@ public class UnitSetupEntryPoint : MonoBehaviour, IEntryPoint
             container.Resolve<GameInput>(),
             container.Resolve<TooltipUI>(),
             _equipmentGrid,
-             container.Resolve<WarehouseManager>(),
+            _unitEquipmentSystem,            
             container.Resolve<UnitManager>()); //3
 
         _unitEquipmentSystem.Init(

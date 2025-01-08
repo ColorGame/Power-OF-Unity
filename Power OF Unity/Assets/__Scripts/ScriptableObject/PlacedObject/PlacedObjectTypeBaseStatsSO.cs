@@ -43,21 +43,6 @@ public class PlacedObjectTypeBaseStatsSO : ScriptableObject
             this.textList = stringList;
         }
     }
-    /// <summary>
-    /// Структура для отображения в инспекторе ТИПА размещенного объекта и СПИСКА текста
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    [Serializable]
-    public struct TextListType<T> where T : Enum
-    {
-        public T placedObjectType;
-        public List<string> textList;
-        public TextListType(T placedObjectType, List<string> textList)
-        {
-            this.placedObjectType = placedObjectType;
-            this.textList = textList;
-        }
-    }
 
     /// <summary>
     /// Индекс СТОЛБЦА в таблице где перечислены ТИПЫ (placedObjectType) размещенных объектов. 2й столбец(индекс=1)
@@ -342,7 +327,7 @@ public class PlacedObjectTypeBaseStatsSO : ScriptableObject
                 _spotterFireItemTypeTooltipDict = GetPlacedObjectTooltipDictionary<SpotterFireItemType>();
                 break;
             case SwordTypeSO:
-                if (_grappleTypeTooltipDict != null) return;
+                if (_swordTypeTooltipDict != null) return;
                 _swordTypeTooltipDict = GetPlacedObjectTooltipDictionary<SwordType>();
                 break;
         }

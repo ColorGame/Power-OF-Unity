@@ -5,15 +5,15 @@ public class UnitFriendSO : UnitTypeSO
 {
     [Header("Поля для префабов ЮНИТА")]
 
-    [SerializeField] private Transform _unitAvatarPortfolioVisualPrefab;
-    [SerializeField] private UnitBigExoskeletonView _unitBigViewPrefab;
-    [SerializeField] private UnitMilitaryAndCyberSoldier _unitSoldierViewPrefab;
+    [SerializeField] private Transform _unitAvatarPortfolioViewPrefab;
+    [SerializeField] private UnitBigExoskeletonView _unitBigExoskeletonViewPrefab;
+    [SerializeField] private UnitMilitaryAndCyberSoldier _unitMilitaryAndCyberSoldierViewPrefab;
     [SerializeField] private UnitSpaceSolderView _unitSpaceSolderViewPrefab;
    
     [Header("Стоимость юнита при найме ")]
     [SerializeField] private uint _priceHiring;
 
-    public Transform GetUnitAvatarPortfolioVisualPrefab() { return _unitAvatarPortfolioVisualPrefab; }
+    public Transform GetUnitAvatarPortfolioViewPrefab() { return _unitAvatarPortfolioViewPrefab; }
 
     /// <summary>
     /// Вернуть визуал юнита в зависимости от типа БРОНИ которой он экипирован
@@ -33,14 +33,16 @@ public class UnitFriendSO : UnitTypeSO
 
             case BodyArmorType.BodyArmorMilitary:
             case BodyArmorType.BodyArmorMilitaryMod:
-                return _unitSoldierViewPrefab;
+            case BodyArmorType.BodyArmorCyber:
+            case BodyArmorType.BodyArmorCyberMod:
+                return _unitMilitaryAndCyberSoldierViewPrefab;
 
             case BodyArmorType.BodyArmorSpace:
             case BodyArmorType.BodyArmorSpaceMod:
                 return _unitSpaceSolderViewPrefab;              
 
             case BodyArmorType.BodyArmorBigExoskeleton:
-                return _unitBigViewPrefab;
+                return _unitBigExoskeletonViewPrefab;
         }
     }   
     public uint GetPriceHiring() {  return _priceHiring; }

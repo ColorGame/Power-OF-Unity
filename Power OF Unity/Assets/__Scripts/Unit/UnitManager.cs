@@ -113,11 +113,11 @@ public class UnitManager // Менеджер (администратор) Юнитов
     public void DismissSelectedUnit()
     {
         // Переберем экипировку юнита
-        foreach (PlacedObjectGridParameters placedObjectGridParameters in _selectedUnit.GetUnitEquipment().GetPlacedObjectList())
+        foreach (PlacedObjectGridParameters placedObjectGridParameters in _selectedUnit.GetUnitEquipment().GetEquipmentList())
         {
             _warehouseManager.PlusCountPlacedObject(placedObjectGridParameters.placedObjectTypeSO);
         }
-        _selectedUnit.GetUnitEquipment().ClearPlacedObjectList();
+        _selectedUnit.GetUnitEquipment().ClearEquipmentList();
         RemoveUnitFriendList(_selectedUnit);
         AddHireUnitList(_selectedUnit);
     }

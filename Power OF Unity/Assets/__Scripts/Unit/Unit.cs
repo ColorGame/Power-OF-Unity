@@ -14,8 +14,16 @@ public class Unit
     /// </summary>
     public enum Location
     {
-        Barrack,
-        Mission,
+        Barrack=0,
+        Mission=1,
+    }
+    /// <summary>
+    /// Состояние юнита
+    /// </summary>
+    public enum UnitState
+    {
+        UnitSetupMenu = 0,
+        UnitStartLevel = 1,
     }
 
     public Unit(UnitTypeSO unitTypeSO, SoundManager soundManager, HashAnimationName hashAnimationName)
@@ -43,8 +51,6 @@ public class Unit
         _location = Location.Barrack; // по умолчанию все юниты появляются в КАЗАРМЕ
         _completedMissionsCount = 0;
         _killedEnemiesCount = 0;
-
-        
     }
 
 
@@ -55,6 +61,7 @@ public class Unit
     private bool _isEnemy;
     private GridPositionXZ _gridPosition;
     private Location _location;
+    private UnitState _unitState;
 
     readonly UnitTypeSO _unitTypeSO;
     readonly HealthSystem _healthSystem;
@@ -121,6 +128,10 @@ public class Unit
         _levelGrid.GetGridPosition(GetTransformPosition());
         _levelGrid.RemoveUnitAtGridPosition(_gridPosition, this);
         _actionPointsSystem.SetupOnDestroyAndQuit();
+
+
+        _unitAnimator.SetupOnDestroyAndQuit();
+        _unitEquipsViewFarm.SetupOnDestroyAndQuit();
 
         _healthSystem.OnDead -= HealthSystem_OnDead;
     }
@@ -211,5 +222,8 @@ public class Unit
     public Transform GetHeadTransform() { return _headTransform; }
     public void SetLocation(Location location) { _location = location; }
     public Location GetLocation() { return _location; }
+    public void SetUnitState(UnitState unitState) { _unitState = unitState; }
+    public UnitState GetUnitState() { return _unitState; }
+    public UnitAnimator GetUnitAnimator() { return _unitAnimator; }
 }
 

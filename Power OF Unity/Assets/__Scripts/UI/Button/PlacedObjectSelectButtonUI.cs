@@ -8,23 +8,24 @@ using UnityEngine.UI;
 public class PlacedObjectSelectButtonUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _countText;
+    [SerializeField] private Button _button;
 
-    private Button _button;
+    [Header("Мин высота кнопки")]
+    [SerializeField] private int _minHeightButton = 300;
+    
+    private int _boundHieght = 50; // высота рамки
+
     private TooltipUI _tooltipUI;
     private PickUpDropPlacedObject _pickUpDrop;
-    private WarehouseManager _warehouseManager;       
+    private WarehouseManager _warehouseManager;
     private PlacedObjectTypeSO _placedObjectTypeSO;
 
-    private void Awake()
-    {
-        _button = GetComponent<Button>();
-    }
 
     public void Init(TooltipUI tooltipUI, PickUpDropPlacedObject pickUpDrop, WarehouseManager warehouseManager, PlacedObjectTypeSO placedObjectTypeSO)
     {
         _tooltipUI = tooltipUI;
         _pickUpDrop = pickUpDrop;
-        _warehouseManager = warehouseManager;       
+        _warehouseManager = warehouseManager;
         _placedObjectTypeSO = placedObjectTypeSO;
         Setup();
     }
@@ -32,6 +33,14 @@ public class PlacedObjectSelectButtonUI : MonoBehaviour
     private void Setup()
     {
         _countText.text = _warehouseManager.GetCountPlacedObject(_placedObjectTypeSO).ToString();
+        _countText.transform.SetAsLastSibling(); // поместим в конце локального списка что бы отображаться поверх всех
+
+        float heightImage = _placedObjectTypeSO.GetHeightImage2D(); // Получим высоту вложенного изображения 
+        RectTransform rectTransformButton = GetComponent<RectTransform>();
+        if (heightImage > _minHeightButton) // Если размер изображения больше то изменим высоту кнопки        
+            rectTransformButton.sizeDelta = new Vector2(rectTransformButton.sizeDelta.x, heightImage + _boundHieght);
+        else
+            rectTransformButton.sizeDelta = new Vector2(rectTransformButton.sizeDelta.x, _minHeightButton);
 
         _warehouseManager.OnChangCountPlacedObject += ResourcesManager_OnChangCountPlacedObject;
 
@@ -84,7 +93,7 @@ public class PlacedObjectSelectButtonUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        if(_warehouseManager!=null)
-        _warehouseManager.OnChangCountPlacedObject -= ResourcesManager_OnChangCountPlacedObject;
+        if (_warehouseManager != null)
+            _warehouseManager.OnChangCountPlacedObject -= ResourcesManager_OnChangCountPlacedObject;
     }
 }

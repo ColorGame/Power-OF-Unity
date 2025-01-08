@@ -66,7 +66,7 @@ PrefabInstance:
     - target: {fileID: 6619333253739986675, guid: 97c5d4866894d5240a463086a798069b,
         type: 3}
       propertyPath: m_Name
-      value: Shield_2A_RetractableVisual3D
+      value: Shield_2A_Retractable_3DVisual
       objectReference: {fileID: 0}
     - target: {fileID: 7198648372516049049, guid: 97c5d4866894d5240a463086a798069b,
         type: 3}
@@ -145,6 +145,14 @@ PrefabInstance:
       value: SM_Wep_Shield_04
       objectReference: {fileID: 0}
     - target: {fileID: 4371839646467684, guid: d4d6d25f5a280cd4eaae8a402acb6a39, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4371839646467684, guid: d4d6d25f5a280cd4eaae8a402acb6a39, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 4371839646467684, guid: d4d6d25f5a280cd4eaae8a402acb6a39, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
       objectReference: {fileID: 0}
@@ -194,7 +202,9 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5341c6960dffc584baae13e35de0acd7, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 64590668272107264, guid: d4d6d25f5a280cd4eaae8a402acb6a39, type: 3}
+    - {fileID: 64582442976563084, guid: d4d6d25f5a280cd4eaae8a402acb6a39, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -132,7 +132,7 @@ public class TooltipUI : MonoBehaviour
     /// </remarks>
     public void ShowShortTooltipFollowMouse(string shortTooltipsText, TooltipTimer tooltipTimer = null)
     {
-        _canvas.enabled = true;
+        Show();
         _tooltipTimer = tooltipTimer;
         _contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize; // размер подсказки по горизонтали подстроиться под размер текста      
 
@@ -153,7 +153,7 @@ public class TooltipUI : MonoBehaviour
     /// </remarks>
     public void ShowAnchoredPlacedObjectTooltip(PlacedObjectTooltip placedObjectTooltip, RectTransform slotRectTransform, Camera cameraSlotRender = null)
     {
-        _canvas.enabled = true;
+        Show();
         _contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained; // Отключим автоматическое выставление ширины    
         _tooltipRectTransform.sizeDelta = new Vector2(_widthTooltip, 0); // Установим ширину подсказки (высота - будет выставляться автоматически) 
 
@@ -184,7 +184,7 @@ public class TooltipUI : MonoBehaviour
     /// </remarks>
     public void ShowAnchoredShortTooltip(string shortTooltipsText, RectTransform slotRectTransform, Camera cameraSlotRender = null)
     {
-        _canvas.enabled = true;
+        Show();
         _contentSizeFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained; // Отключим автоматическое выставление ширины     
         _tooltipRectTransform.sizeDelta = new Vector2(_widthTooltip, 0); // Установим ширину подсказки (высота - будет выставляться автоматически)
 
@@ -290,8 +290,19 @@ public class TooltipUI : MonoBehaviour
     public void Hide() // Скрытие подсказки
     {
         _canvas.enabled = false;
+        _gameInput.OnClickAction -= GameInput_OnClickAction;
     }
 
+    public void Show() // Показать подсказки
+    {
+        _canvas.enabled = true;
+        _gameInput.OnClickAction += GameInput_OnClickAction;
+    }
+
+    private void GameInput_OnClickAction(object sender, EventArgs e)
+    {
+        Hide();
+    }
 
     public class TooltipTimer // РАСШИРИМ КЛАСС
     {

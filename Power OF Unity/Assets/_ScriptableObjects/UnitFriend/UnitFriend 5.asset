@@ -12,19 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a092e7e8713312499935896ee0bddbe, type: 3}
   m_Name: UnitFriend 5
   m_EditorClassIdentifier: 
-  _unitID: 2dfda4ff-bdb3-4d49-b332-24651899374b
-  _name: "\u041A\u0438\u0440\u0433\u0438\u0437"
-  _basicHealth: 25
-  _basicActionPoints: 100
-  _basicPower: 26
-  _basicAccuracy: 27
+  _name: "\u042E\u043B\u044F"
+  _basicHealth: 10
+  _basicActionPoints: 22
+  _basicPower: 48
+  _basicAccuracy: 0
   _basicMoveDistance: 5
-  _unitCorePrefab: {fileID: 2627047634066788303, guid: 602eca0fe7b206a45828fc1718ba728a,
+  _unitCorePrefab: {fileID: 7190681445944954987, guid: 773c0e24e4f8c55459490dc095013475,
     type: 3}
-  _unitAvatarPortfolioVisualPrefab: {fileID: 0}
-  _unitBaseVisualPrefab: {fileID: 0}
-  _unitEasyVisualPrefab: {fileID: 0}
-  _unitMediumVisualPrefab: {fileID: 0}
-  _unitHardVisualPrefab: {fileID: 0}
-  _basicAmorType: 0
+  _unitAvatarPortfolioViewPrefab: {fileID: 1792939444595312324, guid: a0650f10ebb6b6941be3d90b99c361a5,
+    type: 3}
+  _unitBigExoskeletonViewPrefab: {fileID: 3923874948451551551, guid: 10f283addc168d6458dd572e4d0216a7,
+    type: 3}
+  _unitMilitaryAndCyberSoldierViewPrefab: {fileID: 658712726458101261, guid: 718d0e5939f484e4aa91e94d672c4956,
+    type: 3}
+  _unitSpaceSolderViewPrefab: {fileID: 8092722186127267102, guid: 152bc5df93e7f97479e29f887bdec0f7,
+    type: 3}
   _priceHiring: 0

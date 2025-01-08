@@ -1,34 +1,166 @@
-using System;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
+using UnityEngine.XR;
+using static UnitEquipment;
 /// <summary>
 /// Анимация юнита (без MonoBehaviour)
 /// </summary>
-public class UnitAnimator 
-{ 
+public class UnitAnimator
+{
     public UnitAnimator(Unit unit, HashAnimationName hashAnimationName)
     {
         _unit = unit;
         _hashAnimationName = hashAnimationName;
         _unitEquipsViewFarm = unit.GetUnitEquipsViewFarm();
+        _unitEquipment = unit.GetUnitEquipment();
         Setup();
     }
 
     readonly Unit _unit;
     readonly HashAnimationName _hashAnimationName;
     readonly UnitEquipsViewFarm _unitEquipsViewFarm;
+    readonly UnitEquipment _unitEquipment;
 
     private Animator _animator;
+    private bool _skipCurrentChangeWeaponEvent = false; // Пропустить текущее событие смены оружия (При Очистке слота для другого размещаемого объекта, в этом же кадре будет помещен другой объект его и будем настраивать)
 
     private void Setup()
     {
         _unitEquipsViewFarm.OnChangeUnitView += UnitEquipsViewFarm_OnChangeUnitView;
+        _unitEquipment.OnChangeMainWeapon += UnitEquipment_OnChangeWeapon;
+        _unitEquipment.OnChangeOtherWeapon += UnitEquipment_OnChangeWeapon;
+    }
+
+    public void SetupOnDestroyAndQuit()
+    {
+        _unitEquipsViewFarm.OnChangeUnitView -= UnitEquipsViewFarm_OnChangeUnitView;
+        _unitEquipment.OnChangeMainWeapon -= UnitEquipment_OnChangeWeapon;
+        _unitEquipment.OnChangeOtherWeapon -= UnitEquipment_OnChangeWeapon;
     }
 
     private void UnitEquipsViewFarm_OnChangeUnitView(object sender, UnitView newUnitView)
     {
         _animator = newUnitView.GetAnimator();
+
+        SetAnimationAndRig();
+
     }
 
+    private void SetAnimationAndRig()
+    {
+        RigBuilder rigBuilder = _unitEquipsViewFarm.GetCurrentUnitView().GetRigBuilder();
+        if (rigBuilder != null)
+            rigBuilder.enabled = false;
+
+        Transform attachMainShootingWeapon = _unitEquipsViewFarm.GetAttachMainShootingWeapon();
+        if (attachMainShootingWeapon != null && attachMainShootingWeapon.TryGetComponent(out TargetForAnimationRigging targetForAnimationRigging))
+        {
+            TwoBoneIKConstraint twoBoneIKConstraint = _unitEquipsViewFarm.GetCurrentUnitView().GetRigBuilder().GetComponentInChildren<TwoBoneIKConstraint>();
+            twoBoneIKConstraint.data.target = targetForAnimationRigging.GetTargetForHandIdleAnimation();
+            rigBuilder.enabled = true;
+        }
+
+
+        switch (_unit.GetUnitState())
+        {
+            case Unit.UnitState.UnitSetupMenu:
+                SetIdleAnimation();
+                break;
+            case Unit.UnitState.UnitStartLevel:
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Установить анимацию покоя
+    /// </summary>
+    private void SetIdleAnimation()
+    {
+        MainOtherWeapon mainOtherWeapon = _unit.GetUnitEquipment().GetMainOtherWeapon();
+
+        if (mainOtherWeapon.mainWeapon == null)
+        {
+            SetIdleAnimationForOtherWeapon(mainOtherWeapon.otherWeapon, _hashAnimationName.Idle_Unarmed, _hashAnimationName.Pistol_Idle_GunDown_TwoHanded, _hashAnimationName.Sword_Idle_OneHanded);
+            return;
+        }
+
+        switch (mainOtherWeapon.mainWeapon)
+        {
+            case GrappleTypeSO grappleTypeSO:
+                if (grappleTypeSO.GetIsOneHand())
+                    StartAnimation(_hashAnimationName.Pistol_Idle_GunDown_TwoHanded);
+                else
+                    StartAnimation(_hashAnimationName.Rifle_Idle_GunDown_TwoHanded);
+                break;
+
+            case ShootingWeaponTypeSO shootingWeaponTypeSO:
+                if (shootingWeaponTypeSO.GetIsOneHand())
+                    StartAnimation(_hashAnimationName.Pistol_Idle_GunDown_TwoHanded);
+                else
+                    StartAnimation(_hashAnimationName.Rifle_Idle_GunDown_TwoHanded);
+                break;
+
+            case SwordTypeSO swordTypeSO:
+                if (swordTypeSO.GetIsOneHand())
+                    StartAnimation(_hashAnimationName.Sword_Idle_OneHanded);
+                else
+                    StartAnimation(_hashAnimationName.Sword_Idle_TwoHanded);
+                break;
+
+            case ShieldItemTypeSO: // при снарежинии щитом, будем показывать дополнительное оружие
+                SetIdleAnimationForOtherWeapon(mainOtherWeapon.otherWeapon, _hashAnimationName.Shield_Idle, _hashAnimationName.Shield_Pistol_Idle, _hashAnimationName.Shield_Sword_Idle);
+                break;
+        }
+    }
+    /// <summary>
+    /// Установить анимацию покоя для ДОПОЛНИТЕЛЬНОГО ОРУЖИЯ.<br/>
+    /// Не делаю проверку "IsOneHand()" т.к. в слот доп оружия можно установить только оружие для одной руки
+    /// </summary>
+    private void SetIdleAnimationForOtherWeapon(PlacedObjectTypeWithActionSO otherWeapon, int freeHandAnimation, int pistolHandAnimation, int swordlHandAnimation)
+    {
+        if (otherWeapon == null)
+        {
+            StartAnimation(freeHandAnimation);
+            return;// выходим и игнорируем код ниже   
+        }
+
+        switch (otherWeapon)
+        {
+            case GrappleTypeSO grappleTypeSO:
+            case ShootingWeaponTypeSO shootingWeaponTypeSO:
+                StartAnimation(pistolHandAnimation);
+                break;
+
+            case SwordTypeSO swordTypeSO:
+                StartAnimation(swordlHandAnimation);
+                break;
+        }
+    }
+
+
+    private void StartAnimation(int nameHash)
+    {
+        if (_animator.GetCurrentAnimatorStateInfo(0).shortNameHash != nameHash) // Если сейчас проигрывается другая анимация то
+
+
+
+            _animator.StopPlayback();
+        _animator.Play(nameHash, 0);
+
+    }
+
+    private void UnitEquipment_OnChangeWeapon(object sender, MainOtherWeapon mainOtherWeapon)
+    {
+        if (_skipCurrentChangeWeaponEvent) // Если надо пропустить событие то
+        {
+            _skipCurrentChangeWeaponEvent = false;//пропускаем событие и переключим флаг
+            return; // выходим и игнорируем код ниже
+        }
+
+        SetAnimationAndRig();// выполним его
+    }
+
+    public void SetSkipCurrentChangeWeaponEvent(bool skipCurrentEvent) { _skipCurrentChangeWeaponEvent = skipCurrentEvent; }
     /// <summary>
     /// В зависимости от типа оружия переопределим анимации юнита
     /// </summary>

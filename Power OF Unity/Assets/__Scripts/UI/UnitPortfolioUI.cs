@@ -131,7 +131,7 @@ public class UnitPortfolioUI : MonoBehaviour, IToggleActivity
         {
             Destroy(attachTransform.gameObject);
         }
-        Transform avatarTransform = Instantiate(_selectedUnit.GetUnitTypeSO<UnitFriendSO>().GetUnitAvatarPortfolioVisualPrefab(), _avatarContainer);
+        Transform avatarTransform = Instantiate(_selectedUnit.GetUnitTypeSO<UnitFriendSO>().GetUnitAvatarPortfolioViewPrefab(), _avatarContainer);
         avatarTransform.localScale /= _canvas.scaleFactor; //Установим масштаб аватара - Разделим текущий масштаб на масштаб родительского канваса
     }
     /// <summary>

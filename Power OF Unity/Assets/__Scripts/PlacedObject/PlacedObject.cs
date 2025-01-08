@@ -162,11 +162,11 @@ public class PlacedObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     /// <summary>
     /// Получить Слот где можно разместить наш объект
     /// </summary>
-    public HashSet<EquipmentSlot> GetCanPlacedOnGridList() { return _canPlacedOnSlotList; }
+    public HashSet<EquipmentSlot> GetCanPlacedOnSlotList() { return _canPlacedOnSlotList; }
 
     public PlacedObjectGridParameters GetPlacedObjectGridParameters()
     {
-        return new PlacedObjectGridParameters(_gridSystemXY.GetGridSlot(), _gridPositioAnchor, _placedObjectTypeSO);
+        return new PlacedObjectGridParameters(_gridSystemXY.GetGridSlot(), _gridPositioAnchor, _placedObjectTypeSO,this);
     }
 
 

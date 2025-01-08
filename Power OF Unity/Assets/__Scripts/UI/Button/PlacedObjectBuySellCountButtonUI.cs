@@ -32,6 +32,11 @@ public class PlacedObjectBuySellCountButtonUI : MonoBehaviour
     [SerializeField] private Button _plusSellCountButton;
     [SerializeField] private Image _sellTabSelectedImage;
 
+    [Header("ћин высота кнопки")]
+    [SerializeField] private int _minHeightButton = 300;
+    [Header("јниматор иконок")]
+    [SerializeField] private Animator _animator;
+
 
     //uint>=0
     private uint _inStockCount; //количество на складе
@@ -50,21 +55,14 @@ public class PlacedObjectBuySellCountButtonUI : MonoBehaviour
     private int _sellTabFirstOpen;
     private bool _firstStart = true;
 
-    private Animator _animator;
+    
     private MarketUI _marketUI;
     private WarehouseManager _warehouseManager;
     private HashAnimationName _hashAnimationName;
     private PlacedObjectTypeSO _placedObjectTypeSO;
     private TooltipUI _tooltipUI;
 
-    private void Awake()
-    {
-        if (TryGetComponent(out Animator animator))
-        {
-            _animator = animator;
-        }
-    }
-
+   
     public void Init(MarketUI marketUI, WarehouseManager warehouseManager, PlacedObjectTypeSO placedObjectTypeSO, HashAnimationName hashAnimationName, TooltipUI tooltipUI)
     {
         _marketUI = marketUI;
@@ -76,14 +74,24 @@ public class PlacedObjectBuySellCountButtonUI : MonoBehaviour
     }
 
     private void Setup()
-    {
+    {       
+        float heightImage = _placedObjectTypeSO.GetHeightImage2D(); // ѕолучим высоту вложенного изображени€ 
+        RectTransform rectTransformButton = GetComponent<RectTransform>();
+        if (heightImage > _minHeightButton) // ≈сли размер изображени€ больше то изменим высоту кнопки        
+            rectTransformButton.sizeDelta = new Vector2(rectTransformButton.sizeDelta.x, heightImage);
+        else
+            rectTransformButton.sizeDelta = new Vector2(rectTransformButton.sizeDelta.x, _minHeightButton);
+
         _inStockCount = _warehouseManager.GetCountPlacedObject(_placedObjectTypeSO);
         _buyPrice = _placedObjectTypeSO.GetPriceBuy();
         _sellPrice = _placedObjectTypeSO.GetPriceSell();
 
+        _inStockCountText.transform.SetAsLastSibling(); // поместим в конце локального списка что бы отображатьс€ поверх всех      
+
+
         // C: $1,234,567.89 // N: 1,234,567.89
         _buyPriceText.text = $"{_buyPrice.ToString("N0")} $";
-        _sellPriceText.text =$"{_sellPrice.ToString("N0")} $";
+        _sellPriceText.text = $"{_sellPrice.ToString("N0")} $";
 
         _warehouseManager.OnChangCountPlacedObject += ResourcesManager_OnChangCountPlacedObject;
 
@@ -189,7 +197,7 @@ public class PlacedObjectBuySellCountButtonUI : MonoBehaviour
         _buySum = _buyCount * _buyPrice;
 
         _buyCountText.text = _buyCount.ToString();
-        _buySumText.text =$"{(_buySum).ToString("N0")} $" ;
+        _buySumText.text = $"{(_buySum).ToString("N0")} $";
 
         _marketUI.SetColorText(_buyCount, redText: _buySumText, greenText: _buyCountText);
         _buyTabSelectedImage.enabled = _buyCount == 0 ? false : true;
@@ -201,7 +209,7 @@ public class PlacedObjectBuySellCountButtonUI : MonoBehaviour
         _sellSum = _sellCount * _sellPrice;
 
         _sellCountText.text = _sellCount.ToString();
-        _sellSumText.text =$"{_sellSum.ToString("N0")} $" ;
+        _sellSumText.text = $"{_sellSum.ToString("N0")} $";
 
         _marketUI.SetColorText(_sellCount, redText: _sellCountText, greenText: _sellSumText);
         _sellTabSelectedImage.enabled = _sellCount == 0 ? false : true;
@@ -235,7 +243,7 @@ public class PlacedObjectBuySellCountButtonUI : MonoBehaviour
                 else
                 {
                     StartAnimation(_buyTabOpen);
-                }               
+                }
                 break;
 
             case MarketState.Sell:
@@ -247,7 +255,7 @@ public class PlacedObjectBuySellCountButtonUI : MonoBehaviour
                 else
                 {
                     StartAnimation(_sellTabOpen);
-                }               
+                }
                 break;
         }
         ClearByuSellText();

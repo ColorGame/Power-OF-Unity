@@ -8,7 +8,7 @@ public class TargetForAnimationRigging : MonoBehaviour
 
     private void Awake()
     {
-        if (_targetForHandIdleAnimation)
+        if (_targetForHandIdleAnimation== null)
             _targetForHandIdleAnimation =  transform.Find("TargetForHandIdleAnimation");
     }
     public Transform GetTargetForHandIdleAnimation() {  return _targetForHandIdleAnimation; }

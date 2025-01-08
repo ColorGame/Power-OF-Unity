@@ -10,16 +10,29 @@ using UnityEngine;
 public class ResourcesBasicListSO : ScriptableObject
 {
     [Header("Стартовое количество МОНЕТ")]
-    [SerializeField] private uint _coin;
+    [SerializeField] private uint _coin =100000;
     [Header("Список предметов с ДЕЙСТВИЕМ(Action)")]
-    [SerializeField] private List <PlacedObjectTypeAndCount> _placedObjectWithActionList; 
+    [SerializeField] private List <PlacedObjectTypeAndCount> _placedObjectWithActionList= new(); 
     [Header("Список предметов БРОНИ(Armor)")]
-    [SerializeField] private List<PlacedObjectTypeAndCount> _placedObjectTypeArmorList; 
+    [SerializeField] private List<PlacedObjectTypeAndCount> _placedObjectTypeArmorList = new();
+    [Header("Количество каждого предмета")]
+    [SerializeField] private uint _count = 3;
 
     private Dictionary<PlacedObjectTypeSO, uint> _allPlacedObjectCountDictionary = null;
 
+    [ContextMenu("АВТОЗАПОЛНЕНИЕ")]
+    private void DownloadSheets() // Синхронизация данных
+    {
+        foreach(PlacedObjectTypeSO placedObjectType in PlacedObjectGeneralListForAutoCompletionSO.Instance.ArmorSOArray)
+        {
+            _placedObjectTypeArmorList.Add(new PlacedObjectTypeAndCount(placedObjectType, _count));
+        }
+        foreach (PlacedObjectTypeSO placedObjectType in PlacedObjectGeneralListForAutoCompletionSO.Instance.ActionSOArray)
+        {
+            _placedObjectWithActionList.Add(new PlacedObjectTypeAndCount(placedObjectType, _count));
+        }
+    }    
 
-   
     public uint GetCoin() {  return _coin; }
 
     public Dictionary<PlacedObjectTypeSO, uint> GetAllPlacedObjectCountDictionary()

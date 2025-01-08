@@ -2,7 +2,8 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// Поднятие Бросание и Размещение объектов(в сетке). Через этот класс идет взаимодействие с EquipmentGrid.
+/// Поднятие Бросание и Размещение объектов(в сетке). Через этот класс идет взаимодействие с EquipmentGrid.<br/>
+/// Когда объект схвачен он переходит в промежуточное состояние между РЕСУРСАМИ и ЭЕИПИРОВКОЙ юнита
 /// </summary>
 /// <remarks>
 /// Во время размещения, в PlacedObject передается сетка размещения и позиция якоря предмета на сетки.<br/>
@@ -12,6 +13,8 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
 {
     public event EventHandler OnGrabbedObjectGridExits; // Захваченый объект покинул сетку   
     public event EventHandler<PlacedObjectGridParameters> OnGrabbedObjectGridPositionChanged; // позиция захваченного объекта на сетке изменилась 
+
+    public event EventHandler<PlacedObject> OnRemovePlacedObjectAtEquipmentSystem; // Объект удален из систему Интвенторя   
 
     private LayerMask _equipmentLayerMask; // Для экипировки настроить слой как Equipment // Настроим на объекте где есть коллайдер 
     private Canvas _canvasPickUpDrop;
@@ -35,18 +38,18 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
     private GameInput _gameInput;
     private TooltipUI _tooltipUI;
     private EquipmentGrid _equipmentGrid;
-    private WarehouseManager _warehouseManager;
+    private UnitEquipmentSystem _unitEquipmentSystem;
     private UnitManager _unitManager;
     private Unit _selectedUnit;
 
-    public void Init(GameInput gameInput, TooltipUI tooltipUI, EquipmentGrid equipmentGrid, WarehouseManager warehouseManager, UnitManager unitManager)
+    public void Init(GameInput gameInput, TooltipUI tooltipUI, EquipmentGrid equipmentGrid, UnitEquipmentSystem unitEquipmentSystem, UnitManager unitManager)
     {
         _gameInput = gameInput;
         _tooltipUI = tooltipUI;
         _equipmentGrid = equipmentGrid;
-        _warehouseManager = warehouseManager;
+        _unitEquipmentSystem = unitEquipmentSystem;
         _unitManager = unitManager;
-       
+
 
 
         Setup();
@@ -72,23 +75,25 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
         }
 
         _equipmentLayerMask = LayerMask.GetMask("Equipment");
-        _selectedUnit = _unitManager.GetSelectedUnit();      
-    }   
+        _selectedUnit = _unitManager.GetSelectedUnit();
+    }
 
     public void SetActive(bool active)
     {
         _canvasPickUpDrop.enabled = active;
         if (active)
         {
-            if(_isActive == false)// Если до этого было отключено то
+            if (_isActive == false)// Если до этого было отключено то
             {
                 _gameInput.OnClickAction += GameInput_OnClickAction;
+                _gameInput.OnClickRemoveAction += GameInput_OnClickRemoveAction;
                 _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
             }
         }
         else
         {
             _gameInput.OnClickAction -= GameInput_OnClickAction;
+            _gameInput.OnClickRemoveAction -= GameInput_OnClickRemoveAction;
             _unitManager.OnSelectedUnitChanged -= UnitManager_OnSelectedUnitChanged;
         }
         _isActive = active;
@@ -113,14 +118,11 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
         Vector2Int mouseGridPosition;
         Vector3 mousePosition;
 
-        if (_canvasRenderMode != RenderMode.WorldSpace)// Если канвас НЕ в мировом пространстве то
-        {
+        if (_canvasRenderMode != RenderMode.WorldSpace)// Если канвас НЕ в мировом пространстве то        
             mousePosition = _gameInput.GetMouseScreenPoint();
-        }
         else
-        {
             mousePosition = GetMousePositionOnPlane();
-        }
+
 
         // Взять и положить объект можно только в сетке, проверим это           
         if (_equipmentGrid.TryGetGridSystemGridPosition(mousePosition, out gridSystemXY, out mouseGridPosition)) // Если над сеткой то 
@@ -136,9 +138,57 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
         }
         else //Если НЕ над сеткой (ДОП ПРОВЕРКА) if(не над кнопками созданмя предметов)  
         {
-            
+
             if (_placedObject != null) // Если Есть захваченый объект 
             {
+                DropAddPlacedObjectInResources();
+            }
+        }
+    }
+
+    private void GameInput_OnClickRemoveAction(object sender, EventArgs e)
+    {
+        if (_selectedUnit == null) // Если нет выбранного юнита то и некому настраивать экипировка
+        {
+            _tooltipUI.ShowShortTooltipFollowMouse("ВЫБЕРИ ЮНИТА", new TooltipUI.TooltipTimer { timer = 0.5f }); // Покажем подсказку и зададим новый таймер отображения подсказки
+            return; // Выходим игнор. код ниже
+        }
+
+        // Установим дефолтное состояние полей
+        GridSystemXY<GridObjectEquipmentXY> gridSystemXY;
+        Vector2Int mouseGridPosition;
+        Vector3 mousePosition;
+
+        if (_canvasRenderMode != RenderMode.WorldSpace)// Если канвас НЕ в мировом пространстве то        
+            mousePosition = _gameInput.GetMouseScreenPoint();
+        else
+            mousePosition = GetMousePositionOnPlane();
+
+        // Обработаю ситуации над СЕТКОЙ и ВНЕ-СЕТКИ          
+        if (_equipmentGrid.TryGetGridSystemGridPosition(mousePosition, out gridSystemXY, out mouseGridPosition)) // Если над сеткой то 
+        {
+            if (_placedObject == null) // Не имея при себе никакого предмета
+            {
+                // Есди под курсором есть предмет то удалить из сетки и вернуть в РЕСУРСЫ
+                if (_placedObjectMouseEnter != null)
+                {                   
+                    _unitEquipmentSystem.RemoveFromGridAndUnitEquipmentWithCheck(_placedObjectMouseEnter, returnInResourcesAndStartPosition:true);
+                    // Звук поднятия            
+                }
+
+            }
+            else // Если Есть захваченый объект 
+            {
+                // Сбросим и вернем в РЕСУРСЫ 
+                DropAddPlacedObjectInResources();
+                OnGrabbedObjectGridExits?.Invoke(this, EventArgs.Empty); // Что бы обновить подсвечиваемое предпологаемое место сброса
+            }
+        }
+        else //Если НЕ над сеткой  (ДУБЛИРУЕТ поведение лев клавиши мыши)
+        {
+            if (_placedObject != null) // Если Есть захваченый объект 
+            {
+                // Сбросим и вернем в РЕСУРСЫ предмет который держим
                 DropAddPlacedObjectInResources();
             }
         }
@@ -251,8 +301,8 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
                 _placedObject = raycastHit.transform.GetComponentInParent<PlacedObject>();
                 if (_placedObject != null) // Если у родителя объекта в который попали есть PlacedObject то можно его схватить (на кнопке висит просто визуал и там нет род объекта)
                 {
-                    _placedObject.Grab(); // Схватим его
-                    _equipmentGrid.RemovePlacedObjectAtGrid(_placedObject);// Удалим из текущей сеточной позиции  
+                    _placedObject.Grab(); // Схватим его                                     
+                    _unitEquipmentSystem.RemoveFromGridAndUnitEquipmentWithCheck(_placedObject);
                     // Звук поднятия                    
                 }
             }
@@ -263,11 +313,22 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
             {
                 _placedObject = _placedObjectMouseEnter;
                 _placedObject.Grab(); // Схватим его
-                _offset = _placedObject.GetOffsetCenterFromAnchor() * _canvasPickUpDrop.scaleFactor;
-                _equipmentGrid.RemovePlacedObjectAtGrid(_placedObject);// Удалим из текущей сеточной позиции               
+                _offset = _placedObject.GetOffsetCenterFromAnchor() * _canvasPickUpDrop.scaleFactor;                         
+                _unitEquipmentSystem.RemoveFromGridAndUnitEquipmentWithCheck(_placedObject);
                 // Звук поднятия            
             }
         }
+    }
+
+
+    /// <summary>
+    /// Cбросить и вернуть размещенный объект в разделе ресурсы
+    /// </summary>
+    private void DropAddPlacedObjectInResources()
+    {
+        _placedObject.Drop();
+        _unitEquipmentSystem.ReturnPlacedObjectInResourcesAndStartPosition(_placedObject);
+        ResetPlacedObject();
     }
 
 
@@ -277,41 +338,35 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
     private bool TryDrop(GridSystemXY<GridObjectEquipmentXY> gridSystemXY, Vector2Int gridPositionMouse, PlacedObject placedObject)
     {
         // Попробуем сбросить и разместить на сетке       
-        EquipmentSlot gridName = gridSystemXY.GetGridSlot(); // Получим имя сетки
+        EquipmentSlot slotName = gridSystemXY.GetGridSlot(); // Получим имя слота
 
-        if (!placedObject.GetCanPlacedOnGridList().Contains(gridName)) //Если нашей сетки НЕТ в списке сеток где можно разместить наш объект то
+        if (!placedObject.GetCanPlacedOnSlotList().Contains(slotName)) //Если нашего слота НЕТ в списке где можно разместить наш объект то
         {
             _tooltipUI.ShowShortTooltipFollowMouse("попробуй другой слот", new TooltipUI.TooltipTimer { timer = 2f });
             // Звук неудачи
             return false;
         }
 
-        bool drop = false;
-        switch (gridName)
+        // Проверим на совместимость с другими предметами экипировки
+        if (!_unitEquipmentSystem.CompatibleWithOtherEquipment(placedObject))
         {
-            // для сетки Основного и Доп. оружия установим newMouseGridPosition (0,0)
+            _tooltipUI.ShowShortTooltipFollowMouse("несовместимая экипировка", new TooltipUI.TooltipTimer { timer = 0.8f });
+            // Звук неудачи
+            return false;
+        }
+
+        // для слота который может принять только один предмет установим gridPositionMouse = (0,0)
+        switch (slotName)
+        {
             case EquipmentSlot.MainWeaponSlot:
             case EquipmentSlot.OtherWeaponsSlot:
             case EquipmentSlot.BodyArmorSlot:
-                gridPositionMouse = new Vector2Int(0, 0);
-                break;
-
             case EquipmentSlot.HeadArmorSlot:
-                // Если это шлем то проверим на совместимость с броней для тела(эту проверку можно не делать т.к. сверху я проверяю где можно разместить этот объект)
-                if (placedObject.GetPlacedObjectTypeSO() is HeadArmorTypeSO armorHeadTypeSO)
-                {
-                    if (!_selectedUnit.GetUnitEquipment().IsHeadArmorCompatibleWithBodyArmor(armorHeadTypeSO))
-                    {
-                        _tooltipUI.ShowShortTooltipFollowMouse("несовместимая броня", new TooltipUI.TooltipTimer { timer = 0.8f });
-                        // Звук неудачи
-                        return false;
-                    }
-                }
                 gridPositionMouse = new Vector2Int(0, 0);
+                _unitEquipmentSystem.CleanSlotFromAnotherPlacedObject(slotName);
                 break;
         }
-        drop = TryAddPlacedObjectAtGridPosition(gridPositionMouse, placedObject, gridSystemXY);
-        return drop;
+        return TryAddPlacedObjectAtGridPosition(gridPositionMouse, placedObject, gridSystemXY);
     }
     /// <summary>
     /// Попробую Добавить Размещаемый объект в Позицию Сетки
@@ -321,13 +376,14 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
         bool drop = false;
         if (_equipmentGrid.TryAddPlacedObjectAtGridPosition(gridPositionMouse, placedObject, gridSystemXY))
         {
+            _unitEquipmentSystem.AddPlacedObjectAtUnitEquipment(_placedObject);
             ResetPlacedObject(); // Обнулим взятый размещяемый объект
             // Звук удачного размещения           
             drop = true;
         }
         else
         {
-            _tooltipUI.ShowShortTooltipFollowMouse("не удалось разместить", new TooltipUI.TooltipTimer { timer = 2f }); // Покажем подсказку и зададим новый таймер отображения подсказки
+            _tooltipUI.ShowShortTooltipFollowMouse("не удалось разместить", new TooltipUI.TooltipTimer { timer = 0.8f }); // Покажем подсказку и зададим новый таймер отображения подсказки
             // Звук неудачи
             drop = false;
         }
@@ -349,7 +405,7 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
 
         if (_placedObject != null) // Если Есть захваченый объект 
         {
-            //Сбросим захваченный объект
+            //Сбросим захваченный объект. Оставил на всякий случай (ЭТОТ КОД НЕДОСТИЖИМЫ т.к. сначала обрабатывается метод GameInput_OnClickAction где и происходит сбрасывание предмета)
             DropAddPlacedObjectInResources();
         }
         else
@@ -370,16 +426,7 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
         _planeForCanvasInWorldSpace.Raycast(ray, out float planeDistance); // Пересечем луч и плоскость и получим расстояние вдоль луча, где он пересекает плоскость.
         return ray.GetPoint(planeDistance); // получим точку на луче где она пересекла плоскость
     }
-    /// <summary>
-    /// Cбросить и вернуть размещенный объект в разделе ресурсы
-    /// </summary>
-    private void DropAddPlacedObjectInResources()
-    {        
-        _placedObject.Drop();
-        _warehouseManager.PlusCountPlacedObject(_placedObject.GetPlacedObjectTypeSO());
-        _placedObject.SetFlagMoveStartPosition(true);
-        ResetPlacedObject();
-    }
+
 
     /// <summary>
     /// Обнулим взятый размещяемый объект

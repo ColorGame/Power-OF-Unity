@@ -36,7 +36,7 @@
                     "name": "Click",
                     "type": "Button",
                     "id": "21862bc0-65c2-440e-9c4e-9ae740949bc5",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -45,7 +45,16 @@
                     "name": "MenuAlternate",
                     "type": "Button",
                     "id": "01ffe88c-4147-4c03-8b7e-b4db3dcd34d2",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ClickRemove",
+                    "type": "Button",
+                    "id": "65269633-cf0f-4e1c-b012-4adcc272bc82",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -252,6 +261,17 @@
                 },
                 {
                     "name": "",
+                    "id": "53fcc101-766e-4a9c-8244-a07261393277",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "ce0ac417-a012-44db-b8e4-a2c9f5a04095",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
@@ -280,6 +300,61 @@
                     "processors": "Clamp(min=-1,max=1)",
                     "groups": "",
                     "action": "Scroll_CameraZoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis Gamepad",
+                    "id": "2094c2f1-8e62-4549-acb3-56b100008132",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Scroll_CameraZoom",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "positive",
+                    "id": "63856f3d-e5b8-4e5c-9e11-e22fb918ef6d",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Scroll_CameraZoom",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "negative",
+                    "id": "17a039d1-d37c-4cc5-abf3-b2b62d27fb2d",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Scroll_CameraZoom",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "defc2460-3636-4f63-a04c-2220432977f9",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ClickRemove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "366fbabf-c6f9-4941-bc63-276f2f9cf6ea",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ClickRemove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

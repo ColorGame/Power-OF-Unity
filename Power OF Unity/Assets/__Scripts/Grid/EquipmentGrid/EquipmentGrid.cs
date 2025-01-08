@@ -21,11 +21,12 @@ public class EquipmentGrid : MonoBehaviour
     [SerializeField] private EquipmentGridParameters[] _itemGridParametersArray; // Массив параметров сеток предметов
     [SerializeField] private EquipmentGridParameters[] _armorGridParametersArray; // Массив параметров сеток брони
 
-    public event EventHandler<PlacedObject> OnAddPlacedObjectAtEquipmentGrid; // Объект добавлен в сетку Интвенторя
-    public event EventHandler<PlacedObject> OnRemovePlacedObjectAtEquipmentGrid; // Объект удален из сетки Интвенторя   
+    public event EventHandler<PlacedObject> OnAddInEquipmentGrid; // Объект добавлен в сетку Интвенторя
+    public event EventHandler<PlacedObject> OnRemoveFromEquipmentGridAndHung; // Объект удален из сетки Интвенторя и повис над ней 
+    public event EventHandler<PlacedObject> OnRemoveFromEquipmentGridAndMoveStartPosition; // Объект удален из сетки Интвенторя и ДВИЖЕтся в стартовую позиция
 
     private TooltipUI _tooltipUI;
-     private List<GridSystemXY<GridObjectEquipmentXY>> _itemGridSystemXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectEquipmentXY    
+    private List<GridSystemXY<GridObjectEquipmentXY>> _itemGridSystemXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectEquipmentXY    
     private List<GridSystemXY<GridObjectEquipmentXY>> _armorGridSystemXYList; //Список сеточнах систем .В дженерик предаем тип GridObjectEquipmentXY    
 
     // активные списки с которыми работает скрипт 
@@ -76,7 +77,7 @@ public class EquipmentGrid : MonoBehaviour
                 break;
 
             case GridState.ArmorGrid:
-                _gridSystemActiveList = _armorGridSystemXYList; 
+                _gridSystemActiveList = _armorGridSystemXYList;
                 break;
         }
     }
@@ -160,14 +161,14 @@ public class EquipmentGrid : MonoBehaviour
 
             _placedObjectActiveList.Add(placedObject);
 
-            OnAddPlacedObjectAtEquipmentGrid?.Invoke(this, placedObject); // Запустим событие 
+            OnAddInEquipmentGrid?.Invoke(this, placedObject); // Запустим событие 
         }
         return canPlace;
     }
     /// <summary>
     /// Удаление Размещаемый объект из сетки (предпологается что он уже размещен в сетке)
     /// </summary>
-    public void RemovePlacedObjectAtGrid(PlacedObject placedObject)
+    public void RemovePlacedObjectAtGrid(PlacedObject placedObject, bool moveStartPosition = false)
     {
         List<Vector2Int> gridPositionList = placedObject.GetOccupiesGridPositionList(); // Получим список сеточных позиций которые занимает объект
         GridSystemXY<GridObjectEquipmentXY> gridSystemXY = placedObject.GetGridSystemXY(); // Получим сетку на которой он размещен 
@@ -178,7 +179,11 @@ public class EquipmentGrid : MonoBehaviour
         }
         _placedObjectActiveList.Remove(placedObject);
 
-        OnRemovePlacedObjectAtEquipmentGrid?.Invoke(this, placedObject); // Запустим событие
+
+        if (moveStartPosition)
+            OnRemoveFromEquipmentGridAndMoveStartPosition?.Invoke(this, placedObject); // Запустим событие
+        else
+            OnRemoveFromEquipmentGridAndHung?.Invoke(this, placedObject); // Запустим событие
     }
 
     /// <summary>

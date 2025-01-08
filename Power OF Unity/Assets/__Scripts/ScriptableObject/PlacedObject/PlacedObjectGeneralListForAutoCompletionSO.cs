@@ -25,10 +25,6 @@ public class PlacedObjectGeneralListForAutoCompletionSO : ScriptableObject
     [Header("HeadArmor")]
     public GameObject[] HeadArmor2DArray;
 
-    [Header("CombatDrone")]
-    public GameObject[] CombatDrone2DArray;
-    [Space]
-    public GameObject[] CombatDronePrefab3DArray;
 
     [Header("Grapple")]
     public GameObject[] Grapple2DArray;
@@ -50,6 +46,11 @@ public class PlacedObjectGeneralListForAutoCompletionSO : ScriptableObject
     [Space]
     public GameObject[] ShieldItemPrefab3DArray;
 
+    [Header("CombatDrone")]
+    public GameObject[] CombatDrone2DArray;
+    [Space]
+    public GameObject[] CombatDronePrefab3DArray;
+
     [Header("Shooting")]
     public GameObject[] Shooting2DArray;
     [Space]
@@ -64,5 +65,11 @@ public class PlacedObjectGeneralListForAutoCompletionSO : ScriptableObject
     public GameObject[] Sword2DArray;
     [Space]
     public GameObject[] SwordPrefab3DArray;
+
+    [Header("Список всех SO файлов БРОНИ(Armor)")]
+    public PlacedObjectTypeSO[] ArmorSOArray;
+
+    [Header("Список всех SO файлов ДЕЙСТВИЕМ(Action)")]
+    public PlacedObjectTypeSO[] ActionSOArray;
 }
 

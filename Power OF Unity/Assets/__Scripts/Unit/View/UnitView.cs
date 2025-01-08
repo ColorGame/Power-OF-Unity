@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 /// <summary>
 /// Визуал ЮНИТА. Абстрактный класс
 /// </summary>
@@ -10,7 +11,9 @@ public abstract class UnitView : MonoBehaviour
     [SerializeField] private Transform _attachPointSwordRight;
     [SerializeField] private Transform _attachPointGunRight;
     [SerializeField] private Transform _attachPointGrenade;
+    [Header("Настроика анимации")]
     [SerializeField] private Animator _animator;
+    [SerializeField] private RigBuilder _rigBuilder;
 
     [Header("Броня для головы")]
     [SerializeField] protected MeshRenderer[] _headArmorMilitaryMeshArray;       // Стандартый военный шлем
@@ -28,14 +31,14 @@ public abstract class UnitView : MonoBehaviour
     /// <summary>
     /// Список Вьюшек головы
     /// </summary>
-    protected List<MeshRenderer[]> _headViewList;  
+    protected List<MeshRenderer[]> _headViewList;
 
     protected MeshRenderer[] _hairMeshArray;                  // Волосы
     protected MeshRenderer[] _beardMeshArray;                 // Борода
 
 
     protected void InitMeshRender()
-    {     
+    {
         _hairMeshArray = _hair.GetComponentsInChildren<MeshRenderer>();
         _beardMeshArray = _beard.GetComponentsInChildren<MeshRenderer>();
 
@@ -152,15 +155,15 @@ public abstract class UnitView : MonoBehaviour
 
     public void CleanAttachPointShield()
     {
-        ClearTransform(_attachPointShieldLeft);       
+        ClearTransform(_attachPointShieldLeft);
     }
     public void CleanAttachPointSword()
     {
-        ClearTransform(_attachPointSwordRight);       
+        ClearTransform(_attachPointSwordRight);
     }
     public void CleanAttachPointGun()
     {
-        ClearTransform(_attachPointGunRight);       
+        ClearTransform(_attachPointGunRight);
     }
     public void CleanAttachPointGrenade()
     {
@@ -174,7 +177,7 @@ public abstract class UnitView : MonoBehaviour
             Destroy(childTransform.gameObject);
         }
     }
-       
+
 
     /// <summary>
     /// Натроить переданныи HashSet список<br/> 
@@ -208,7 +211,7 @@ public abstract class UnitView : MonoBehaviour
     {
         foreach (SkinnedMeshRenderer skinMesh in enumerable)
         {
-            skinMesh.enabled = showHashList.Contains(skinMesh);          
+            skinMesh.enabled = showHashList.Contains(skinMesh);
         }
     }
 
@@ -219,7 +222,7 @@ public abstract class UnitView : MonoBehaviour
     {
         foreach (MeshRenderer[] viewHead in enumerable)
         {
-            ShowMeshEnumerable(viewHead);            
+            ShowMeshEnumerable(viewHead);
         }
     }
     /// <summary>
@@ -255,8 +258,10 @@ public abstract class UnitView : MonoBehaviour
     }
 
     public virtual Animator GetAnimator() { return _animator; }
-    public Transform GetAttachPointShield() {return _attachPointShieldLeft; }
-    public Transform GetAttachPointSword() {return _attachPointSwordRight; }
-    public Transform GetAttachPointGun() {return _attachPointGunRight; }
-    public Transform GetAttachPointGrenade() {return _attachPointGrenade; }
+    public Transform GetAttachPointShield() { return _attachPointShieldLeft; }
+    public Transform GetAttachPointSword() { return _attachPointSwordRight; }
+    public Transform GetAttachPointGun() { return _attachPointGunRight; }
+    public Transform GetAttachPointGrenade() { return _attachPointGrenade; }
+
+    public RigBuilder GetRigBuilder() { return _rigBuilder; }
 }

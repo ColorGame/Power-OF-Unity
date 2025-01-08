@@ -13,15 +13,31 @@ public class UnitEquipment
         //Здесь можно загрузить стандартную загрузку экипировки и экипировку врагов   
     }
 
-    public event EventHandler<PlacedObjectTypeWithActionSO> OnChangeMainWeapon; // Изменено Основное оружие
-    public event EventHandler<PlacedObjectTypeWithActionSO> OnChangeOtherWeapon; // Изменено Дополнительное оружие
+    public event EventHandler<MainOtherWeapon> OnChangeMainWeapon; // Изменено Основное оружие
+    public event EventHandler<MainOtherWeapon> OnChangeOtherWeapon; // Изменено Дополнительное оружие
     public event EventHandler<HeadArmorTypeSO> OnChangeHeadArmor; // Изменена броня головы
     public event EventHandler<BodyArmorTypeSO> OnChangeBodyArmor; // Изменена броня тела
 
-    private List<PlacedObjectGridParameters> _placedObjectList = new List<PlacedObjectGridParameters>(); // Список "Размещенных Объектов в Сетке Инвенторя"
+    /// <summary>
+    /// Основное и дополнительное оружие
+    /// </summary>   
+    public struct MainOtherWeapon
+    {
+        public PlacedObjectTypeWithActionSO mainWeapon;
+        public PlacedObjectTypeWithActionSO otherWeapon;
+        public MainOtherWeapon(PlacedObjectTypeWithActionSO mainWeapon, PlacedObjectTypeWithActionSO otherWeapon)
+        {
+            this.mainWeapon = mainWeapon;
+            this.otherWeapon = otherWeapon;
+        }
+    }
+    /// <summary>
+    /// Список экипировки юнита
+    /// </summary>
+    private List<PlacedObjectGridParameters> _equipmentList = new List<PlacedObjectGridParameters>();
 
     private PlacedObjectTypeWithActionSO _placedObjectMainWeaponSlot;
-    private PlacedObjectTypeWithActionSO _placedObjectOtherWeaponSlot; 
+    private PlacedObjectTypeWithActionSO _placedObjectOtherWeaponSlot;
     private List<PlacedObjectTypeWithActionSO> _placedObjecеBagSlotList = new List<PlacedObjectTypeWithActionSO>();
     private List<GrenadeTypeSO> _grenadeInBagList = new List<GrenadeTypeSO>(); // Список гранат в багаже
 
@@ -29,12 +45,12 @@ public class UnitEquipment
     private BodyArmorTypeSO _bodyArmor;
 
     /// <summary>
-    /// Добавить полученный объект в Список "Размещенных Объектов в Сетке Инвенторя".
+    /// Добавить полученный объект в Список экипировки юнита.
     /// </summary>  
-    public void AddPlacedObjectList(PlacedObject placedObject)
+    public void AddPlacedObjectAtEquipmentList(PlacedObject placedObject)
     {
         PlacedObjectGridParameters placedObjectGridParameters = placedObject.GetPlacedObjectGridParameters();
-        _placedObjectList.Add(placedObjectGridParameters);
+        _equipmentList.Add(placedObjectGridParameters);
 
         PlacedObjectTypeSO placedObjectTypeSO = placedObject.GetPlacedObjectTypeSO();
 
@@ -42,11 +58,19 @@ public class UnitEquipment
         {
             case EquipmentSlot.MainWeaponSlot:
                 _placedObjectMainWeaponSlot = (PlacedObjectTypeWithActionSO)placedObjectTypeSO;
-                OnChangeMainWeapon?.Invoke(this, _placedObjectMainWeaponSlot);
+                OnChangeMainWeapon?.Invoke(this, new MainOtherWeapon
+                {
+                    mainWeapon = _placedObjectMainWeaponSlot,
+                    otherWeapon = _placedObjectOtherWeaponSlot
+                });
                 break;
             case EquipmentSlot.OtherWeaponsSlot:
                 _placedObjectOtherWeaponSlot = (PlacedObjectTypeWithActionSO)placedObjectTypeSO;
-                OnChangeOtherWeapon?.Invoke(this, _placedObjectOtherWeaponSlot);
+                OnChangeOtherWeapon?.Invoke(this, new MainOtherWeapon
+                {
+                    mainWeapon = _placedObjectMainWeaponSlot,
+                    otherWeapon = _placedObjectOtherWeaponSlot
+                });
                 break;
             case EquipmentSlot.BagSlot:
                 _placedObjecеBagSlotList.Add((PlacedObjectTypeWithActionSO)placedObjectTypeSO);
@@ -67,12 +91,12 @@ public class UnitEquipment
 
     }
     /// <summary>
-    /// Удалить полученный объект из Списка "Размещенных Объектов в Сетке Инвенторя".
+    /// Удалить полученный объект из Списка Экипировки юнита.
     /// </summary>  
-    public void RemovePlacedObjectList(PlacedObject placedObject)
+    public void RemovePlacedObjectAtEquipmentList(PlacedObject placedObject)
     {
         PlacedObjectGridParameters placedObjectGridParameters = placedObject.GetPlacedObjectGridParameters();
-        _placedObjectList.Remove(placedObjectGridParameters);
+        _equipmentList.Remove(placedObjectGridParameters);
 
         PlacedObjectTypeSO placedObjectTypeSO = placedObject.GetPlacedObjectTypeSO();
 
@@ -80,11 +104,19 @@ public class UnitEquipment
         {
             case EquipmentSlot.MainWeaponSlot:
                 _placedObjectMainWeaponSlot = null;
-                OnChangeMainWeapon?.Invoke(this, _placedObjectMainWeaponSlot);
+                OnChangeMainWeapon?.Invoke(this, new MainOtherWeapon
+                {
+                    mainWeapon = _placedObjectMainWeaponSlot,
+                    otherWeapon = _placedObjectOtherWeaponSlot
+                });
                 break;
             case EquipmentSlot.OtherWeaponsSlot:
                 _placedObjectOtherWeaponSlot = null;
-                OnChangeOtherWeapon?.Invoke(this, _placedObjectOtherWeaponSlot);
+                OnChangeOtherWeapon?.Invoke(this, new MainOtherWeapon
+                {
+                    mainWeapon = _placedObjectMainWeaponSlot,
+                    otherWeapon = _placedObjectOtherWeaponSlot
+                });
                 break;
             case EquipmentSlot.BagSlot:
                 _placedObjecеBagSlotList.Remove((PlacedObjectTypeWithActionSO)placedObjectTypeSO);
@@ -104,13 +136,17 @@ public class UnitEquipment
         }
     }
     /// <summary>
-    /// Очистить список размещенных объектов
+    /// Очистить список экипировки
     /// </summary>
-    public void ClearPlacedObjectList()
+    public void ClearEquipmentList()
     {
-        _placedObjectList.Clear();
+        _equipmentList.Clear();
         _placedObjectMainWeaponSlot = null;
-        OnChangeMainWeapon?.Invoke(this, _placedObjectMainWeaponSlot);
+        OnChangeMainWeapon?.Invoke(this, new MainOtherWeapon
+        {
+            mainWeapon = _placedObjectMainWeaponSlot,
+            otherWeapon = _placedObjectOtherWeaponSlot
+        });
         _headArmor = null;
         OnChangeHeadArmor?.Invoke(this, _headArmor);
         _bodyArmor = null;
@@ -129,14 +165,36 @@ public class UnitEquipment
         else { return false; }
     }
 
+    /// <summary>
+    /// Получить размещенный объект из слотов, где может разместиться только один предмет
+    /// </summary>
+    public PlacedObject GetPlacidObjectFromSinglSlot(EquipmentSlot equipmentSlot)
+    {
+        switch (equipmentSlot)
+        {
+            case EquipmentSlot.MainWeaponSlot:
+            case EquipmentSlot.OtherWeaponsSlot:
+            case EquipmentSlot.BodyArmorSlot:
+            case EquipmentSlot.HeadArmorSlot:
+                foreach (PlacedObjectGridParameters parameters in _equipmentList)
+                {
+                    if (parameters.slot == equipmentSlot)
+                        return parameters.placedObject;
+                }
+                break;
+        }
+        return null;
+    }
+
 
     public PlacedObjectTypeWithActionSO GetPlacedObjectOtherWeaponSlot() { return _placedObjectOtherWeaponSlot; }
     public PlacedObjectTypeWithActionSO GetPlacedObjectMainWeaponSlot() { return _placedObjectMainWeaponSlot; }
+    public MainOtherWeapon GetMainOtherWeapon() { return new MainOtherWeapon(mainWeapon: _placedObjectMainWeaponSlot, otherWeapon: _placedObjectOtherWeaponSlot); }
     public List<PlacedObjectTypeWithActionSO> GetPlacedObjectBagSlotList() { return _placedObjecеBagSlotList; }
     public List<GrenadeTypeSO> GetGrenadeTypeSOList() { return _grenadeInBagList; }
     public HeadArmorTypeSO GetHeadArmor() { return _headArmor; }
     public BodyArmorTypeSO GetBodyArmor() { return _bodyArmor; }
-    public List<PlacedObjectGridParameters> GetPlacedObjectList() { return _placedObjectList; }
+    public List<PlacedObjectGridParameters> GetEquipmentList() { return _equipmentList; }
 
 
 }

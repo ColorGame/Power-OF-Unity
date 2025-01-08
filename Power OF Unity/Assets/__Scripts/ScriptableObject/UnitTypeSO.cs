@@ -11,21 +11,21 @@ using UnityEngine;
 /// На практике вы, скорее всего, будете использовать подкласс, такой как "UnitFriendSO"  "UnitEnemySO".
 /// </remarks>
 
-public abstract class UnitTypeSO : ScriptableObject, ISerializationCallbackReceiver//ISerializationCallbackReceiver Интерфейс для получения обратных вызовов при сериализации и десериализации.Будем использовать для создания ID при сериализации
+public abstract class UnitTypeSO : ScriptableObject//, ISerializationCallbackReceiver//ISerializationCallbackReceiver Интерфейс для получения обратных вызовов при сериализации и десериализации.Будем использовать для создания ID при сериализации
                                                                                    //Сериализацией называется процесс записи состояния объекта (с возможной последующей передачей) в поток. Десериализация это процесс обратный сериализации – из данных,
                                                                                    //которые находятся в потоке, мы можем восстановить состояние объекта и использовать этот объект в другом месте.
 {
-    [Header("Авт.сген. UUID для сохр/загр.\nОчистите это поле, если вы хотите сген-ть новое.")]
-    [SerializeField] private string _unitID = null;
+   /* [Header("Авт.сген. UUID для сохр/загр.\nОчистите это поле, если вы хотите сген-ть новое.")]
+    [SerializeField] private string _unitID = null;*/
     [SerializeField] private string _name;   // Имя Юнита
     [Range(0,100)]
     [SerializeField] private int _basicHealth; // Здоровье
     [Range(0, 100)]
-    [SerializeField] private int _basicActionPoints; // Очки действия
+    [SerializeField] private int _basicActionPoints ; // Очки действия
     [Range(0, 100)]
-    [SerializeField] private int _basicPower; // Сила поднятия
+    [SerializeField] private int _basicPower ; // Сила поднятия
     [Range(0, 100)]
-    [SerializeField] private int _basicAccuracy; // Точность
+    [SerializeField] private int _basicAccuracy ; // Точность
     [Header("Дистанция движения.\nИзмеряется в узлах сетки, включает узел с самими Юнитом")]
     [SerializeField] private int _basicMoveDistance = Constant.MOVE_DISTSNCE_MAX;
     [Header("Префаб ядра юнита со скриптами")]
@@ -38,8 +38,17 @@ public abstract class UnitTypeSO : ScriptableObject, ISerializationCallbackRecei
     public int GetBasicAccuracy() {  return _basicAccuracy; }
     public int GetBasicMoveDistance() { return _basicMoveDistance; }
     public Transform GetUnitCorePrefab() { return _unitCorePrefab; }
-        
-    
+
+    [ContextMenu("Рандомные значения")]
+    private void SetRandomValue()
+    {
+        _basicHealth = UnityEngine.Random.Range(0, 100);
+        _basicActionPoints = UnityEngine.Random.Range(0, 100);
+        _basicPower = UnityEngine.Random.Range(0, 100);
+        _basicAccuracy = UnityEngine.Random.Range(0, 100);
+
+    }
+
 
     /* /// <summary>
      /// Получите экземпляр SO из его UUID.
@@ -50,19 +59,19 @@ public abstract class UnitTypeSO : ScriptableObject, ISerializationCallbackRecei
      }*/
 
 
-   
 
-    void ISerializationCallbackReceiver.OnBeforeSerialize()
-    {
-        // Сгенерируйте и сохраните новый UUID, если он пуст или там просто пустые пробелы.
-        if (string.IsNullOrWhiteSpace(_unitID))
-        {
-            _unitID = Guid.NewGuid().ToString();
-        }
-    }
 
-    void ISerializationCallbackReceiver.OnAfterDeserialize()
-    {
-        // Требуется ISerializationCallbackReceiver, но нам не нужно ничего с этим делать.
-    }
+    /*  void ISerializationCallbackReceiver.OnBeforeSerialize()
+      {
+          // Сгенерируйте и сохраните новый UUID, если он пуст или там просто пустые пробелы.
+          if (string.IsNullOrWhiteSpace(_unitID))
+          {
+              _unitID = Guid.NewGuid().ToString();
+          }
+      }
+
+      void ISerializationCallbackReceiver.OnAfterDeserialize()
+      {
+          // Требуется ISerializationCallbackReceiver, но нам не нужно ничего с этим делать.
+      }*/
 }
