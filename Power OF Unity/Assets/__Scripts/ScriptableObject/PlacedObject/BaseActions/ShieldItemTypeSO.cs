@@ -40,6 +40,8 @@ public class ShieldItemTypeSO : PlacedObjectTypeWithActionSO//(нельзя по
         Search3DPrefab(name,
            PlacedObjectGeneralListForAutoCompletionSO.Instance.ShieldItemPrefab3DArray);
 
+        _canPlacedOnSlotArray = new EquipmentSlot[] { EquipmentSlot.MainWeaponSlot};
+
         base.AutoCompletion();
     }
 }

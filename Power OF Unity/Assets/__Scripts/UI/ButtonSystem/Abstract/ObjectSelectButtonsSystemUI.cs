@@ -5,22 +5,25 @@ using UnityEngine.UI;
 /// </summary>
 public abstract class ObjectSelectButtonsSystemUI : MonoBehaviour, IToggleActivity
 {
-    protected Transform[] _containerArray; // массив контейнеров
-    protected Transform _activeContainer;
+    protected Transform[] _containerButtonArray; // массив контейнеров
+    protected RectTransform _activeContainer;
     protected Image[] _buttonSelectedImageArray; // массив изображений для выделения нужной кнопки      
     protected ScrollRect _scrollRect; //Компонент прокрутки кнопок
     protected Canvas _canvas;
-    protected TooltipUI _tooltipUI;  
+    protected TooltipUI _tooltipUI;
+    protected bool _isActive = true;
+    protected bool _firstStart = true;
+
 
     protected virtual void Awake()
     {
         _scrollRect = GetComponent<ScrollRect>();
-        _canvas = GetComponentInParent<Canvas>(true);       
+        _canvas = GetComponentInParent<Canvas>(true);
     }
 
-    protected void Setup()
+    protected virtual void Setup()
     {
-        ClearAllContainer();
+        // ClearAllContainer();
         SetDelegateContainerSelectionButton();
     }
 
@@ -40,20 +43,32 @@ public abstract class ObjectSelectButtonsSystemUI : MonoBehaviour, IToggleActivi
     }
 
     /// <summary>
-    ///  Показать и обновить контейнер (в аргумент передаем нужный контейнер кнопок)
+    ///  Показать (в аргумент передаем нужный контейнер кнопок)<br/>
+    ///  При ПЕРВОМ запуске происходит обновление всех контейнеров (создание)
     /// </summary>
-    protected void ShowAndUpdateContainer(Transform selectContainer) 
+    protected void ShowContainer(RectTransform buttonContainer)
     {
-        ClearActiveButtonContainer(); // очистим предыдущий активный контейнер       
-
-        foreach (Transform container in _containerArray) // Переберем массив контейнеров
+        if (_firstStart)
         {
-            if (container == selectContainer) // Если это переданный нам контейнер
+            _firstStart = false;
+            UpdateAllContainer(); // При первом запуске обновим все контейнеры
+            Show(buttonContainer);
+        }
+        else
+        {
+            Show(buttonContainer);
+        }
+    }
+
+    private void Show(RectTransform buttonContainer)
+    {
+        foreach (Transform container in _containerButtonArray) // Переберем массив контейнеров
+        {
+            if (container == buttonContainer) // Если это переданный нам контейнер
             {
-                _activeContainer = selectContainer; // назначим новый активный контейнер
-                selectContainer.gameObject.SetActive(true); // Включим его
-                CreateSelectButtonsSystemInActiveContainer();
-                _scrollRect.content = (RectTransform)selectContainer; // Установим этот контейнер как контент для прокрутки
+                _activeContainer = buttonContainer; // назначим новый активный контейнер
+                buttonContainer.gameObject.SetActive(true); // Включим его
+                _scrollRect.content = buttonContainer; // Установим этот контейнер как контент для прокрутки
                 _scrollRect.verticalScrollbar.value = 1; // переместим прокрутку панели в верх.
             }
             else // В противном случае
@@ -62,27 +77,84 @@ public abstract class ObjectSelectButtonsSystemUI : MonoBehaviour, IToggleActivi
             }
         }
     }
+    /// <summary>
+    /// Обновим все контейнеры<br/>
+    /// Удалим и создадим заново
+    /// </summary>
+    protected void UpdateAllContainer()
+    {
+        ClearAllContainer();
+        CreateSelectButtonsSystemInAllContainer();
+    }
+
+    protected void UpdateContainer(RectTransform buttonContainer)
+    {
+        ClearButtonContainer(buttonContainer);
+        CreateSelectButtonsSystemInContainer(buttonContainer);
+    }
 
     /// <summary>
-    /// Очистим активный контейнер c кнопками
+    ///  Скрыть ВСЕ контейнеры c кнопками
     /// </summary>
-    protected virtual void ClearActiveButtonContainer()
+    protected void HideAllContainerArray()
     {
-        if (_activeContainer != null)
+        foreach (Transform container in _containerButtonArray)
         {
-            foreach (Transform selectPlacedButton in _activeContainer)
+            container.gameObject.SetActive(false);
+        }
+    }
+
+    /* /// <summary>
+     ///  Показать и обновить контейнер (в аргумент передаем нужный контейнер кнопок)
+     /// </summary>
+     protected void ShowAndUpdateContainer(RectTransform buttonContainer)
+     {
+         ClearActiveButtonContainer(); // очистим предыдущий активный контейнер       
+
+         foreach (Transform container in _containerButtonArray) // Переберем массив контейнеров
+         {
+             if (container == buttonContainer) // Если это переданный нам контейнер
+             {
+                 _activeContainer = buttonContainer; // назначим новый активный контейнер
+                 buttonContainer.gameObject.SetActive(true); // Включим его
+                 CreateSelectButtonsSystemInActiveContainer();
+                 _scrollRect.content = buttonContainer; // Установим этот контейнер как контент для прокрутки
+                 _scrollRect.verticalScrollbar.value = 1; // переместим прокрутку панели в верх.
+             }
+             else // В противном случае
+             {
+                 container.gameObject.SetActive(false); // Выключим
+             }
+         }
+     }*/
+
+    /*    /// <summary>
+        /// Очистим активный контейнер c кнопками
+        /// </summary>
+        protected virtual void ClearActiveButtonContainer()
+        {
+            if (_activeContainer != null)
             {
-                Destroy(selectPlacedButton.gameObject); // Удалим игровой объект прикрипленный к Transform
+               // ClearButtonContainer(_activeContainer);
+                _activeContainer = null;
             }
-            _activeContainer = null;
+        }*/
+    /// <summary>
+    /// Очистить переданный контейнер с кнопками
+    /// </summary>
+    private void ClearButtonContainer(RectTransform buttonContainer)
+    {
+        foreach (Transform buttonTransform in buttonContainer)
+        {
+            Destroy(buttonTransform.gameObject); // Удалим игровой объект прикрипленный к Transform
         }
     }
     /// <summary>
     /// Очистить все контейнеры
     /// </summary>
-    protected void ClearAllContainer()
+    private  void ClearAllContainer()
     {
-        foreach (Transform container in _containerArray)
+        foreach (Transform container in _containerButtonArray)
         {
             foreach (Transform selectPlacedButton in container)
             {
@@ -91,10 +163,19 @@ public abstract class ObjectSelectButtonsSystemUI : MonoBehaviour, IToggleActivi
         }
     }
 
-    /// <summary>
+    /*/// <summary>
     ///  Создать систему кнопок выбора(объектов) в активном контейнере
     /// </summary>
-    protected abstract void CreateSelectButtonsSystemInActiveContainer();
+    protected abstract void CreateSelectButtonsSystemInActiveContainer();*/
+
+    /// <summary>
+    ///  Создать систему кнопок выбора(объектов) в переданном контейнере контейнере
+    /// </summary>
+    protected abstract void CreateSelectButtonsSystemInContainer(RectTransform buttonContainer);
+    /// <summary>
+    ///  Создать систему кнопок выбора(объектов) во всех контейнерах
+    /// </summary>
+    protected abstract void CreateSelectButtonsSystemInAllContainer();
 }
 
 

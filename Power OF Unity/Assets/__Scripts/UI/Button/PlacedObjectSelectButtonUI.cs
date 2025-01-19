@@ -12,7 +12,7 @@ public class PlacedObjectSelectButtonUI : MonoBehaviour
 
     [Header("Мин высота кнопки")]
     [SerializeField] private int _minHeightButton = 300;
-    
+
     private int _boundHieght = 50; // высота рамки
 
     private TooltipUI _tooltipUI;
@@ -32,7 +32,7 @@ public class PlacedObjectSelectButtonUI : MonoBehaviour
 
     private void Setup()
     {
-        _countText.text = _warehouseManager.GetCountPlacedObject(_placedObjectTypeSO).ToString();
+        UpdateCountText();
         _countText.transform.SetAsLastSibling(); // поместим в конце локального списка что бы отображаться поверх всех
 
         float heightImage = _placedObjectTypeSO.GetHeightImage2D(); // Получим высоту вложенного изображения 
@@ -42,18 +42,40 @@ public class PlacedObjectSelectButtonUI : MonoBehaviour
         else
             rectTransformButton.sizeDelta = new Vector2(rectTransformButton.sizeDelta.x, _minHeightButton);
 
-        _warehouseManager.OnChangCountPlacedObject += ResourcesManager_OnChangCountPlacedObject;
+        // _warehouseManager.OnChangCountPlacedObject += WarehouseManager_OnChangCountPlacedObject;
 
         SetDelegateButton();
         SetTooltipButton();
     }
+
+    public void SetActive(bool active)
+    {
+        if (_warehouseManager == null)
+            return;
+
+        if (active)
+        {
+            _warehouseManager.OnChangCountPlacedObject += WarehouseManager_OnChangCountPlacedObject;
+            UpdateCountText();
+        }
+        else
+        {
+            _warehouseManager.OnChangCountPlacedObject -= WarehouseManager_OnChangCountPlacedObject;
+        }
+    }
+
     /// <summary>
     /// При изменении количества размещенных объектов
     /// </summary>
-    private void ResourcesManager_OnChangCountPlacedObject(object sender, PlacedObjectTypeAndCount placedObjectTypeAndCount)
+    private void WarehouseManager_OnChangCountPlacedObject(object sender, PlacedObjectTypeAndCount placedObjectTypeAndCount)
     {
         if (_placedObjectTypeSO == placedObjectTypeAndCount.placedObjectTypeSO) // Если это наш тип то обновим текст
             _countText.text = placedObjectTypeAndCount.count.ToString();
+    }
+
+    private void UpdateCountText()
+    {
+        _countText.text = _warehouseManager.GetCountPlacedObject(_placedObjectTypeSO).ToString();
     }
 
     /// <summary>
@@ -91,9 +113,11 @@ public class PlacedObjectSelectButtonUI : MonoBehaviour
         };
     }
 
+    // public PlacedObjectTypeSO GetPlacedObjectTypeSO() {return _placedObjectTypeSO;}
+
     private void OnDestroy()
     {
         if (_warehouseManager != null)
-            _warehouseManager.OnChangCountPlacedObject -= ResourcesManager_OnChangCountPlacedObject;
+            _warehouseManager.OnChangCountPlacedObject -= WarehouseManager_OnChangCountPlacedObject;
     }
 }

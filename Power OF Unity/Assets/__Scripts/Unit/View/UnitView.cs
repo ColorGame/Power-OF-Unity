@@ -22,7 +22,7 @@ public abstract class UnitView : MonoBehaviour
     [SerializeField] protected MeshRenderer[] _headArmorCyberXOMeshArray;        // Кибер шлем XO
     [SerializeField] protected MeshRenderer[] _headArmorCyberZenicaMeshArray;    // Кибер шлем Зеница
     [SerializeField] protected MeshRenderer[] _headArmorCyberNoFaceMeshArray;    // Кибер шлем закрывающий все лицо
-    [SerializeField] protected MeshRenderer[] _headArmorCyberModNoFaceMeshArray; // Кибер шлем улучшенный закрывающий все лицо
+    [SerializeField] protected MeshRenderer[] _headArmorCyberNoFaceModMeshArray; // Кибер шлем улучшенный закрывающий все лицо
     // Чтобы не настраивать волосы и бороду для каждого юнита, закинем в общем префабе контейнеры в которых храняться нужные вьюхи
     [Header("Контейнеры для волос и бороды")]
     [SerializeField] protected Transform _hair;
@@ -35,6 +35,16 @@ public abstract class UnitView : MonoBehaviour
 
     protected MeshRenderer[] _hairMeshArray;                  // Волосы
     protected MeshRenderer[] _beardMeshArray;                 // Борода
+
+    //Двумерный массивы мешей которые будем показывать (если надо показать только один MeshRenderer[] то массив оставим не инициализированным)
+    protected MeshRenderer[][] _withoutHeadArmorMeshArrayEnumerable;
+    protected MeshRenderer[][] _militaryHeadArmorMeshArrayEnumerable;
+    protected MeshRenderer[][] _junkerHeadArmorMeshArrayEnumerable;
+    protected MeshRenderer[][] _cyberXOHeadArmorMeshArrayEnumerable;
+    protected MeshRenderer[][] _spaceNoFaceHeadArmorMeshArrayEnumerable;
+    protected MeshRenderer[][] _cyberZenicaHeadArmorMeshArrayEnumerable;
+    protected MeshRenderer[][] _cyberNoFaceHeadArmorMeshArrayEnumerable;
+    protected MeshRenderer[][] _cyberNoFaceModHeadArmorMeshArrayEnumerable;
 
 
     protected void InitMeshRender()
@@ -50,10 +60,38 @@ public abstract class UnitView : MonoBehaviour
             _headArmorCyberXOMeshArray,
             _headArmorCyberZenicaMeshArray,
             _headArmorCyberNoFaceMeshArray,
-            _headArmorCyberModNoFaceMeshArray,
+            _headArmorCyberNoFaceModMeshArray,
             _hairMeshArray,
             _beardMeshArray,
         };
+
+        //Запоним хэшированные массивы
+        _withoutHeadArmorMeshArrayEnumerable = new MeshRenderer[][]
+        {
+            _hairMeshArray,
+            _beardMeshArray
+        };
+        _militaryHeadArmorMeshArrayEnumerable = new MeshRenderer[][]
+        {
+            _headArmorMilitaryMeshArray,
+            _beardMeshArray
+        };
+        _junkerHeadArmorMeshArrayEnumerable = new MeshRenderer[][]
+        {
+             _headArmorJunkerMeshArray,
+             _beardMeshArray
+        };
+        _cyberXOHeadArmorMeshArrayEnumerable = new MeshRenderer[][]
+        {
+            _headArmorCyberXOMeshArray,
+            _beardMeshArray
+        };
+        _cyberZenicaHeadArmorMeshArrayEnumerable = new MeshRenderer[][]
+        {
+            _headArmorCyberZenicaMeshArray,
+            _beardMeshArray
+        };
+
     }
 
     /// <summary>
@@ -63,67 +101,32 @@ public abstract class UnitView : MonoBehaviour
     {
         if (headArmorTypeSO == null)
         {
-            SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
-            {
-                _hairMeshArray,
-                _beardMeshArray,
-            });
+            SetMeshArrayInHeadViewList(_withoutHeadArmorMeshArrayEnumerable);
             return; // выходим и игнорируем код ниже
         }
 
         switch (headArmorTypeSO.GetHeadArmorType())
         {
-            case HeadArmorType.HeadArmorMilitary:
-                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
-                {
-                    _headArmorMilitaryMeshArray,
-                    _beardMeshArray,
-                });
+            case HeadArmorType.HeadArmor_1A_Military:
+                SetMeshArrayInHeadViewList(_militaryHeadArmorMeshArrayEnumerable);
                 break;
-
-            case HeadArmorType.HeadArmorJunker:
-                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
-                {
-                    _headArmorJunkerMeshArray,
-                    _beardMeshArray,
-                });
+            case HeadArmorType.HeadArmor_1B_Junker:
+                SetMeshArrayInHeadViewList(_junkerHeadArmorMeshArrayEnumerable);
                 break;
-
-            case HeadArmorType.HeadArmorSpaceNoFace:
-                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
-                {
-                    _headArmorSpaceNoFaceMeshArray,
-                });
+            case HeadArmorType.HeadArmor_2A_CyberXO:
+                SetMeshArrayInHeadViewList(_cyberXOHeadArmorMeshArrayEnumerable);
                 break;
-
-            case HeadArmorType.HeadArmorCyberXO:
-                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
-                {
-                    _headArmorCyberXOMeshArray,
-                    _beardMeshArray,
-                });
+            case HeadArmorType.HeadArmor_2B_SpaceNoFace:
+                SetMeshArrayInHeadViewList(_headArmorSpaceNoFaceMeshArray);
                 break;
-
-            case HeadArmorType.HeadArmorCyberZenica:
-                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
-                {
-                    _headArmorCyberZenicaMeshArray,
-                    _beardMeshArray,
-                });
+            case HeadArmorType.HeadArmor_3A_1_CyberZenica:
+                SetMeshArrayInHeadViewList(_cyberZenicaHeadArmorMeshArrayEnumerable);
                 break;
-
-            case HeadArmorType.HeadArmorCyberNoFace:
-                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
-                {
-                    _headArmorCyberNoFaceMeshArray,
-                });
+            case HeadArmorType.HeadArmor_3A_2_CyberNoFace:
+                SetMeshArrayInHeadViewList(_headArmorCyberNoFaceMeshArray);
                 break;
-
-            case HeadArmorType.HeadArmorCyberModNoFace:
-                SetMeshArrayInHeadViewList(new HashSet<MeshRenderer[]>
-                {
-                    _headArmorCyberModNoFaceMeshArray,
-                });
+            case HeadArmorType.HeadArmor_3B_CyberNoFaceMod:
+                SetMeshArrayInHeadViewList(_headArmorCyberNoFaceModMeshArray);
                 break;
         }
     }
@@ -180,80 +183,133 @@ public abstract class UnitView : MonoBehaviour
 
 
     /// <summary>
-    /// Натроить переданныи HashSet список<br/> 
-    /// Переберет "_headViewList" и скроет все, кроме переданного HashSet списка
+    /// Переберет "_headViewList" и скроет все, кроме кроме полученного "showMeshArrayEnumerable"
     /// </summary>
-    protected void SetMeshArrayInHeadViewList(HashSet<MeshRenderer[]> showHashList)
+    protected void SetMeshArrayInHeadViewList(IEnumerable<MeshRenderer[]> showMeshArrayEnumerable)
     {
-        SetMeshArrayInEnumerable(showHashList, _headViewList);
+        SetMeshArrayInEnumerable(showMeshArrayEnumerable, _headViewList);
+    }
+    /// <summary>
+    /// Переберет "_headViewList" и скроет все, кроме кроме полученного "showMeshArray"
+    /// </summary>
+    protected void SetMeshArrayInHeadViewList(MeshRenderer[] showMeshArray)
+    {
+        SetMeshArrayInEnumerable(showMeshArray, _headViewList);
     }
 
     /// <summary>
-    /// Настроить переданный HashSet список<br/> 
-    /// Переберет переданное перечисление "MeshRenderer[]" и скроет все, кроме переданного HashSet списка
+    /// Переберет переданное перечисление "setMeshArrayEnumerable", которые надо настроить,<br/> и скроем все, кроме полученного "showMeshArrayEnumerable"
     /// </summary>
-    protected void SetMeshArrayInEnumerable(HashSet<MeshRenderer[]> showHashList, IEnumerable<MeshRenderer[]> enumerable)
+    protected void SetMeshArrayInEnumerable(IEnumerable<MeshRenderer[]> showMeshArrayEnumerable, IEnumerable<MeshRenderer[]> setMeshArrayEnumerable)
     {
-        foreach (MeshRenderer[] viewHead in enumerable)
+        foreach (MeshRenderer[] setMeshArray in setMeshArrayEnumerable)
         {
-            bool contains = showHashList.Contains(viewHead);
-            foreach (MeshRenderer view in viewHead)
+            bool contains = false; // предположим что объекта нет в искомом списке / Если найдем его в искомом списке то перезапишем флаг  
+            foreach (MeshRenderer[] showMeshArray in showMeshArrayEnumerable)
             {
-                view.enabled = contains;
+                if (setMeshArray == showMeshArray)
+                {
+                    contains = true;
+                    break; // Если есть совпадение выходим из цикла
+                }
+            }
+
+            foreach (MeshRenderer mesh in setMeshArray)
+            {
+                if (mesh != null)
+                    mesh.enabled = contains;
             }
         }
     }
     /// <summary>
-    /// Настроить переданный HashSet список<br/> 
-    /// Переберет переданное перечисление "SkinnedMeshRenderer" и скроет все, кроме переданного HashSet списка
+    /// Переберет переданное перечисление "setMeshArrayEnumerable", которые надо настроить,<br/> и скроем все, кроме полученного "showMeshArray"
     /// </summary>
-    protected void SetSkinMeshInEnumerable(HashSet<SkinnedMeshRenderer> showHashList, IEnumerable<SkinnedMeshRenderer> enumerable)
+    protected void SetMeshArrayInEnumerable(MeshRenderer[] showMeshArray, IEnumerable<MeshRenderer[]> setMeshArrayEnumerable)
     {
-        foreach (SkinnedMeshRenderer skinMesh in enumerable)
+        foreach (MeshRenderer[] setMeshArray in setMeshArrayEnumerable)
         {
-            skinMesh.enabled = showHashList.Contains(skinMesh);
+            bool contains = (setMeshArray == showMeshArray);
+            foreach (MeshRenderer setMesh in setMeshArray)
+            {
+                if (setMesh != null)
+                    setMesh.enabled = contains;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Переберет переданное перечисление "setSkinEnumerable", которые надо настроить,<br/> и скроем все, кроме полученного "showSkinEnumerable"
+    /// </summary>
+    protected void SetSkinMeshInEnumerable(IEnumerable<SkinnedMeshRenderer> showSkinEnumerable, IEnumerable<SkinnedMeshRenderer> setSkinEnumerable)
+    {
+        foreach (SkinnedMeshRenderer setSkin in setSkinEnumerable)
+        {
+            bool contains = false; // предположим что объекта нет в искомом списке / Если найдем его в искомом списке то перезапишем флаг  
+            foreach (SkinnedMeshRenderer showSkin in showSkinEnumerable)
+            {
+                if (setSkin == showSkin)
+                {
+                    contains = true;
+                    break;// Если есть совпадение выходим из цикла
+                }
+            }
+            if (setSkin != null)
+                setSkin.enabled = (contains);
+        }
+    }
+    /// <summary>
+    /// Переберет переданное перечисление "setSkinEnumerable", которые надо настроить,<br/> и скроем все, кроме полученного "showSkin"
+    /// </summary>
+    protected void SetSkinMeshInEnumerable(SkinnedMeshRenderer showSkin, IEnumerable<SkinnedMeshRenderer> setSkinList)
+    {
+        foreach (SkinnedMeshRenderer setSkin in setSkinList)
+        {
+            if (setSkin != null)
+                setSkin.enabled = (setSkin == showSkin);
         }
     }
 
     /// <summary>
     /// Показать все массивы MeshRenderer в переданном перечисление
     /// </summary>    
-    protected void ShowMeshArrayInEnumerable(IEnumerable<MeshRenderer[]> enumerable)
+    protected void ShowMeshArrayInEnumerable(IEnumerable<MeshRenderer[]> meshArrayEnumerable)
     {
-        foreach (MeshRenderer[] viewHead in enumerable)
+        foreach (MeshRenderer[] setMeshArray in meshArrayEnumerable)
         {
-            ShowMeshEnumerable(viewHead);
+            ShowMeshEnumerable(setMeshArray);
         }
     }
     /// <summary>
     /// Скрыть все массивы MeshRenderer в переданном перечисление
     /// </summary>    
-    protected void HideMeshArrayInEnumerable(IEnumerable<MeshRenderer[]> enumerable)
+    protected void HideMeshArrayInEnumerable(IEnumerable<MeshRenderer[]> meshArrayEnumerable)
     {
-        foreach (MeshRenderer[] viewHead in enumerable)
+        foreach (MeshRenderer[] setMeshArray in meshArrayEnumerable)
         {
-            HideMeshEnumerable(viewHead);
+            HideMeshEnumerable(setMeshArray);
         }
     }
 
     /// <summary>
     /// Показать все MeshRenderer в переданном перечисление
     /// </summary>    
-    protected void ShowMeshEnumerable(IEnumerable<MeshRenderer> enumerable)
+    protected void ShowMeshEnumerable(IEnumerable<MeshRenderer> setMeshEnumerable)
     {
-        foreach (MeshRenderer view in enumerable)
+        foreach (MeshRenderer setMesh in setMeshEnumerable)
         {
-            view.enabled = true;
+            if (setMesh != null)
+                setMesh.enabled = true;
         }
     }
     /// <summary>
-    /// Показать все MeshRenderer в переданном перечисление
+    /// Скрыть все MeshRenderer в переданном перечисление
     /// </summary>    
-    protected void HideMeshEnumerable(IEnumerable<MeshRenderer> enumerable)
+    protected void HideMeshEnumerable(IEnumerable<MeshRenderer> setMeshEnumerable)
     {
-        foreach (MeshRenderer view in enumerable)
+        foreach (MeshRenderer setMesh in setMeshEnumerable)
         {
-            view.enabled = false;
+            if (setMesh != null)
+                setMesh.enabled = false;
         }
     }
 

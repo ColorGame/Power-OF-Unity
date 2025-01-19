@@ -18,7 +18,7 @@ public class GameplayEntryPoint : MonoBehaviour, IEntryPoint
     private GameEndUI _gameEndUI;
 
 
-    public void Inject(DIContainer container)
+    public async  void Inject(DIContainer container)
     {
         GetComponent();
         Register();

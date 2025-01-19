@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Кнопка - выбора  Юнита, для настройки экипировки
 /// </summary>
-public class UnitSelectAtEquipmentButtonUI : MonoBehaviour
+public class UnitSelectAtEquipmentButtonUI : MonoBehaviour, IToggleActivity
 {
     [SerializeField] private Image _selectedImage; // Изображение выделенной кнопки 
     [SerializeField] private TextMeshProUGUI _numberUnitText; // Номер в списке
@@ -29,11 +29,22 @@ public class UnitSelectAtEquipmentButtonUI : MonoBehaviour
         {
             _unitManager.SetSelectedUnit(unit);
         });
-
-        _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
+       
 
         Unit selectedUnit = _unitManager.GetSelectedUnit(); // Выделенный Югит
         UpdateSelectedVisual(selectedUnit);
+    }
+
+    public void SetActive(bool active)
+    {
+        if (active)
+        {
+            _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
+        }
+        else
+        {
+            _unitManager.OnSelectedUnitChanged -= UnitManager_OnSelectedUnitChanged;
+        }
     }
 
     private void UnitManager_OnSelectedUnitChanged(object sender, Unit selectedUnit)

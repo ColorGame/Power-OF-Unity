@@ -3405,6 +3405,7 @@ GameObject:
   - component: {fileID: 8544975063722675194}
   - component: {fileID: 6849912688192120333}
   - component: {fileID: 289430083583191647}
+  - component: {fileID: 3178393805080063413}
   m_Layer: 5
   m_Name: ViewUIMask
   m_TagString: Untagged
@@ -3455,7 +3456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3479,12 +3480,26 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2146993286919046684}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
+--- !u!114 &3178393805080063413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2146993286919046684}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding: {x: 0, y: 0, z: 0, w: 0}
+  m_Softness: {x: 0, y: 0}
 --- !u!1 &2229549836233359697
 GameObject:
   m_ObjectHideFlags: 0
@@ -5041,17 +5056,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _weaponSelectContainer: {fileID: 2868168532730680804}
   _itemSelectContainer: {fileID: 6371072789709716889}
-  _armorHeadSelectContainer: {fileID: 813236226015605418}
-  _armorBodySelectContainer: {fileID: 2811251533140959404}
+  _headArmorSelectContainer: {fileID: 813236226015605418}
+  _bodyArmorSelectContainer: {fileID: 2811251533140959404}
   _otherSelectContainer: {fileID: 6309177139188693873}
   _weaponButton: {fileID: 6861970440560722840}
   _weaponButtonSelectedImage: {fileID: 7078978199953423283}
   _itemButton: {fileID: 9098425208737859802}
   _itemButtonSelectedImage: {fileID: 6765384044117154236}
-  _armorHeadButton: {fileID: 1114614778049413462}
-  _armorHeadButtonSelectedImage: {fileID: 86866774453958439}
-  _armorBodyButton: {fileID: 4297795848054149356}
-  _armorBodyButtonSelectedImage: {fileID: 3795637152636527088}
+  _headArmorButton: {fileID: 1114614778049413462}
+  _headArmorButtonSelectedImage: {fileID: 86866774453958439}
+  _bodyArmorButton: {fileID: 4297795848054149356}
+  _bodyArmorButtonSelectedImage: {fileID: 3795637152636527088}
   _otherButton: {fileID: 6495797060435867133}
   _otherButtonSelectedImage: {fileID: 4452832123937432202}
   _buyButton: {fileID: 3883997940656838963}
@@ -6494,7 +6509,7 @@ GameObject:
   - component: {fileID: 105776390935350771}
   - component: {fileID: 4259246150240079075}
   m_Layer: 5
-  m_Name: ArmorHeadSelectContainer
+  m_Name: HeadArmorSelectContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7736,7 +7751,7 @@ GameObject:
   - component: {fileID: 4297795848054149356}
   - component: {fileID: 7627113881025255958}
   m_Layer: 5
-  m_Name: ArmorBodyButton
+  m_Name: BodyArmorButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9457,7 +9472,7 @@ GameObject:
   - component: {fileID: 1386014550364274814}
   - component: {fileID: 8784565782973000645}
   m_Layer: 5
-  m_Name: ArmorBodySelectContainer
+  m_Name: BodyArmorSelectContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9954,7 +9969,7 @@ GameObject:
   - component: {fileID: 1114614778049413462}
   - component: {fileID: 2557607097788559014}
   m_Layer: 5
-  m_Name: ArmorHeadButton
+  m_Name: HeadArmorButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

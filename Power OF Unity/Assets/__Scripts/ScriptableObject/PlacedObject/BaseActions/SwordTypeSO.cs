@@ -44,6 +44,16 @@ public class SwordTypeSO : PlacedObjectTypeWithActionSO
         Search3DPrefab(name,
            PlacedObjectGeneralListForAutoCompletionSO.Instance.SwordPrefab3DArray);
 
+        if (name.Contains("One"))
+            _isOneHand = true;
+        else
+            _isOneHand = false;
+
+        if (_isOneHand)
+            _canPlacedOnSlotArray = new EquipmentSlot[] { EquipmentSlot.MainWeaponSlot, EquipmentSlot.OtherWeaponsSlot, EquipmentSlot.BagSlot };
+        else
+            _canPlacedOnSlotArray = new EquipmentSlot[] { EquipmentSlot.MainWeaponSlot, EquipmentSlot.BagSlot };
+
         base.AutoCompletion();
     }
 }

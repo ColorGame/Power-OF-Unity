@@ -38,6 +38,8 @@ public class HealItemTypeSO : PlacedObjectTypeWithActionSO
         Search3DPrefab(name,
            PlacedObjectGeneralListForAutoCompletionSO.Instance.HealItemPrefab3DArray);
 
+        _canPlacedOnSlotArray = new EquipmentSlot[] {EquipmentSlot.OtherWeaponsSlot, EquipmentSlot.BagSlot };
+
         base.AutoCompletion();
     }
 }

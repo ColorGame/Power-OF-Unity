@@ -31,10 +31,15 @@ public class ResourcesBasicListSO : ScriptableObject
         {
             _placedObjectWithActionList.Add(new PlacedObjectTypeAndCount(placedObjectType, _count));
         }
+
+
     }    
 
     public uint GetCoin() {  return _coin; }
-
+    /// <summary>
+    /// Получить словарь всех доступных PlacedObjectTypeSO и их количество<br/>
+    /// Словарь НЕ ОТСОРТИРОВАН !!!
+    /// </summary>
     public Dictionary<PlacedObjectTypeSO, uint> GetAllPlacedObjectCountDictionary()
     {
         if (_allPlacedObjectCountDictionary == null)
@@ -47,17 +52,21 @@ public class ResourcesBasicListSO : ScriptableObject
     private Dictionary<PlacedObjectTypeSO, uint> CompleteDictionary()
     {
         Dictionary<PlacedObjectTypeSO, uint> allPlacedObjectCountDictionary = new Dictionary<PlacedObjectTypeSO, uint>();
+       // _placedObjectWithActionList.Sort((component1, component2) => component1.placedObjectTypeSO.name.CompareTo(component2.placedObjectTypeSO.name)); // Отсортируем по имени
 
         foreach (PlacedObjectTypeAndCount placedObjectTypeAndCount in _placedObjectWithActionList)
         {
-            if(!allPlacedObjectCountDictionary.ContainsKey(placedObjectTypeAndCount.placedObjectTypeSO)) //Если этого типа нет в ключах словоря до добавим
+            // Исключим повторение
+            if(!allPlacedObjectCountDictionary.ContainsKey(placedObjectTypeAndCount.placedObjectTypeSO)) //Если этого типа нет в ключах словоря то добавим
             {
                 allPlacedObjectCountDictionary[placedObjectTypeAndCount.placedObjectTypeSO] = placedObjectTypeAndCount.count;
             }
         }
+
+       // _placedObjectTypeArmorList.Sort((component1, component2) => component1.placedObjectTypeSO.name.CompareTo(component2.placedObjectTypeSO.name));
         foreach (PlacedObjectTypeAndCount placedObjectTypeAndCount in _placedObjectTypeArmorList)
         {
-            if (!allPlacedObjectCountDictionary.ContainsKey(placedObjectTypeAndCount.placedObjectTypeSO)) //Если этого типа нет в ключах словоря до добавим
+            if (!allPlacedObjectCountDictionary.ContainsKey(placedObjectTypeAndCount.placedObjectTypeSO)) //Если этого типа нет в ключах словоря то добавим
             {
                 allPlacedObjectCountDictionary[placedObjectTypeAndCount.placedObjectTypeSO] = placedObjectTypeAndCount.count;
             }

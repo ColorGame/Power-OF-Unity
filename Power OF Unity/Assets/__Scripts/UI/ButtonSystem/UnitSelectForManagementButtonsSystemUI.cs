@@ -14,8 +14,8 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
     [SerializeField] private Button _hireUnitButtonBar;  // Кнопка для включения панели НАЙМА ЮНИТОВ
     [SerializeField] private Image _selectedImageHireUnitButton; // Изображение выделенной кнопки 
     [Header("Контейнеры для переключения")]
-    [SerializeField] private Transform _myUnitsContainer; // Контейнер МОИХ ЮНИТОВ
-    [SerializeField] private Transform _hireUnitsContainer; // Контейнер ЮНИТОВ ДЛЯ НАЙМА
+    [SerializeField] private RectTransform _myUnitsContainer; // Контейнер МОИХ ЮНИТОВ
+    [SerializeField] private RectTransform _hireUnitsContainer; // Контейнер ЮНИТОВ ДЛЯ НАЙМА
     [Header("Текс ОГЛАВЛЕНИЯ вкладки для переключения")]
     [SerializeField] private TextMeshProUGUI _myUnitsText; // Текст заголовка
     [SerializeField] private TextMeshProUGUI _hireUnitsText; // Текст заголовка
@@ -39,17 +39,25 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
     private Image[] _headerImageArray;
     private Transform[] _transformBarArray;
 
+    private Image[] _barrackMissionArray;
+    private Transform[] _hireButtonDebitedArray;
 
+    private List<UnitSelectAtManagementButtonUI> _activeUnitButtonList = new();
+    private List<UnitSelectAtManagementButtonUI> _myUnitButtonList = new();
+    private List<UnitSelectAtManagementButtonUI> _hireUnitButtonList = new();
 
     protected override void Awake()
     {
         base.Awake();
 
-        _containerArray = new Transform[] { _myUnitsContainer, _hireUnitsContainer };
+        _containerButtonArray = new Transform[] { _myUnitsContainer, _hireUnitsContainer };
         _buttonSelectedImageArray = new Image[] { _selectedImageMyUnitsButton, _selectedImageHireUnitButton };
         _headerTextArray = new TextMeshProUGUI[] { _myUnitsText, _hireUnitsText };
         _headerImageArray = new Image[] { _missionImage, _barrackImage, _priceImage };
         _transformBarArray = new Transform[] { _dismissButtonBar, _hireButtonBar, _debitedBar };
+
+        _barrackMissionArray = new Image[] { _barrackImage, _missionImage };
+        _hireButtonDebitedArray = new Transform[] { _hireButtonBar, _debitedBar };
     }
 
     protected override void SetDelegateContainerSelectionButton()
@@ -64,24 +72,17 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
             ShowMuUnitsTab();
         });
 
-        _hireButton.onClick.AddListener(() =>
-        {
-            HireUnit();
-        });
+        _hireButton.onClick.AddListener(() => { HireUnit(); });
 
-        _dismissButton.onClick.AddListener(() =>
-        {
-            DismissUnit();
-        });
-
+        _dismissButton.onClick.AddListener(() => { DismissUnit(); });
 
         SetTooltip(_healthImage, "здоровье");
         SetTooltip(_actionPointsImage, "едениц времени");
         SetTooltip(_powerImage, "сила");
         SetTooltip(_accuracyImage, "точность");
         SetTooltip(_barrackImage.GetComponent<MouseEnterExitEventsUI>(), "отправить на базу");
-        SetTooltip(_missionImage.GetComponent<MouseEnterExitEventsUI>(), "отправить на задание");   
-        SetTooltip(_priceImage.GetComponent<MouseEnterExitEventsUI>(), "стоимость найма");   
+        SetTooltip(_missionImage.GetComponent<MouseEnterExitEventsUI>(), "отправить на задание");
+        SetTooltip(_priceImage.GetComponent<MouseEnterExitEventsUI>(), "стоимость найма");
     }
 
     private void SetTooltip(MouseEnterExitEventsUI mouseEnterExitEventsUI, string text)
@@ -98,15 +99,21 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
 
     public override void SetActive(bool active)
     {
+        if (_isActive == active) //Если предыдущее состояние тоже то выходим
+            return;
+
+        _isActive = active;
+
         _canvas.enabled = active;
         if (active)
         {
             ShowMuUnitsTab();
         }
         else
-        {          
-            ClearActiveButtonContainer();
-
+        {
+            HideAllContainerArray(); //при выходе из меню менеджмента выключим все окна
+            _unitManager.OnSelectedUnitChanged -= UnitManager_OnSelectedUnitChanged;
+            //ClearActiveButtonContainer();
         }
     }
 
@@ -121,12 +128,15 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
             _tooltipUI.ShowShortTooltipFollowMouse("ВЫБЕРИ ЮНИТА", new TooltipUI.TooltipTimer { timer = 0.5f }); // Покажем подсказку и зададим новый таймер отображения подсказки
             return; // Выходим игнор. код ниже
         }
-       if(!_unitManager.TryHireSelectedUnit())
+        if (!_unitManager.TryHireSelectedUnit())
         {
             _tooltipUI.ShowShortTooltipFollowMouse("Недостаточно СРЕДСТВ", new TooltipUI.TooltipTimer { timer = 0.8f }); // Покажем подсказку и зададим новый таймер отображения подсказки
             return; // Выходим игнор. код ниже
         }
-        ShowAndUpdateContainer(_hireUnitsContainer);
+
+        SetActiveUnitButtonList(false);// Деактивируем активный контейнер с кнопками 
+        UpdateAllContainer();
+        SetActiveUnitButtonList(true);
         _unitManager.ClearSelectedUnit(); // Очистим выделенного юнита чтобы сбросить 3D модель и ПОРТФОЛИО
     }
     /// <summary>
@@ -140,35 +150,55 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
             return; // Выходим игнор. код ниже
         }
         _unitManager.DismissSelectedUnit();
-        ShowAndUpdateContainer(_myUnitsContainer);
+        SetActiveUnitButtonList(false);// Деактивируем активный контейнер с кнопками 
+        UpdateAllContainer();
+        SetActiveUnitButtonList(true);
         _unitManager.ClearSelectedUnit(); // Очистим выделенного юнита чтобы сбросить 3D модель и ПОРТФОЛИО
     }
 
 
     private void ShowMuUnitsTab()
     {
-        ShowAndUpdateContainer(_myUnitsContainer);
+        SetActiveUnitButtonList(false);// Деактивируем прошлый активный контейнер с кнопками (если он был)
+        _activeUnitButtonList = _myUnitButtonList;//Назначим новый активный контейнер с кнопками
+        ShowContainer(_myUnitsContainer);
+        SetActiveUnitButtonList(true);
+
         ShowSelectedButton(_selectedImageMyUnitsButton);
         ShowSelectedHeaderText(_myUnitsText);
-        ShowHeaderImageList(new HashSet<Image> { _barrackImage, _missionImage });
-        ShowTransformBarList(new HashSet<Transform> { _dismissButtonBar });                      
-       
+        ShowHeaderImage(_barrackMissionArray);
+        ShowTransformBar(_dismissButtonBar);
+
         _unitManager.OnSelectedUnitChanged -= UnitManager_OnSelectedUnitChanged;
         _unitManager.ClearSelectedUnit();// Очистим выделенного юнита чтобы сбросить 3D модель и ПОРТФОЛИО
     }
 
     private void ShowHireUnitsTab()
     {
-        ShowAndUpdateContainer(_hireUnitsContainer);
+        SetActiveUnitButtonList(false);// Деактивируем прошлый активный контейнер с кнопками (если он был)
+        _activeUnitButtonList = _hireUnitButtonList;//Назначим новый активный контейнер с кнопками
+        ShowContainer(_hireUnitsContainer);
+        SetActiveUnitButtonList(true);
+
         ShowSelectedButton(_selectedImageHireUnitButton);
         ShowSelectedHeaderText(_hireUnitsText);
-        ShowHeaderImageList(new HashSet<Image> { _priceImage });
-        ShowTransformBarList(new HashSet<Transform> { _hireButtonBar,_debitedBar });
+        ShowHeaderImage(_priceImage);
+        ShowTransformBar(_hireButtonDebitedArray);
 
         _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
         _unitManager.ClearSelectedUnit(); // Очистим выделенного юнита чтобы сбросить 3D модель и ПОРТФОЛИО
-    } 
-       
+    }
+
+    /// <summary>
+    /// Настроим активный контейнер с кнопками
+    /// </summary>
+    private void SetActiveUnitButtonList(bool active)
+    {
+        foreach (UnitSelectAtManagementButtonUI button in _activeUnitButtonList)
+        {
+            button.SetActive(active);
+        }
+    }
 
     private void UnitManager_OnSelectedUnitChanged(object sender, Unit selectedUnit)
     {
@@ -187,46 +217,100 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
         }
     }
 
-    protected override void CreateSelectButtonsSystemInActiveContainer()
-    {
-        if (_activeContainer == _myUnitsContainer)
-            CreateUnitSelectButtonsSystem(_unitManager.GetUnitFriendList(), _myUnitsContainer);//Общий список  моих юнитов 
+    /*  protected override void CreateSelectButtonsSystemInActiveContainer()
+      {
+          if (_activeContainer == _myUnitsContainer)
+              GetCreatedUnitSelectButtonsList(_unitManager.GetUnitFriendList(), _myUnitsContainer);//Общий список  моих юнитов 
 
-        if (_activeContainer == _hireUnitsContainer)
-            CreateUnitSelectButtonsSystem(_unitManager.GetHireUnitList(), _hireUnitsContainer);// список  юнитов для найма    
+          if (_activeContainer == _hireUnitsContainer)
+              GetCreatedUnitSelectButtonsList(_unitManager.GetHireUnitList(), _hireUnitsContainer);// список  юнитов для найма    
+      }*/
+
+    protected override void CreateSelectButtonsSystemInContainer(RectTransform buttonContainer)
+    {
+        if (buttonContainer == _myUnitsContainer)
+            _myUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetUnitFriendList(), _myUnitsContainer);//Общий список  моих юнитов 
+
+        if (buttonContainer == _hireUnitsContainer)
+            _hireUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetHireUnitList(), _hireUnitsContainer);// список  юнитов для найма    
     }
-
-    /// <summary>
-    /// Создать кнопки выбора юнитов, из переданного списка в переданном контейнере
-    /// </summary>
-    private void CreateUnitSelectButtonsSystem(List<Unit> unitList, Transform containerTransform)
+    protected override void CreateSelectButtonsSystemInAllContainer()
     {
+        _myUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetUnitFriendList(), _myUnitsContainer);//Общий список  моих юнитов        
+        _hireUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetHireUnitList(), _hireUnitsContainer);// список  юнитов для найма    
+    }
+    /// <summary>
+    /// Получить список созданых кнопок выбора юнитов, из переданного списка<br/>
+    /// </summary>
+    private List<UnitSelectAtManagementButtonUI> GetCreatedUnitSelectButtonsList(List<Unit> unitList, Transform containerTransform)
+    {
+        List<UnitSelectAtManagementButtonUI> unitButtonList = new();
         for (int index = 0; index < unitList.Count; index++)
         {
             UnitSelectAtManagementButtonUI unitSelectAtManagementButton = Instantiate(GameAssetsSO.Instance.unitSelectAtManagementButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
-            unitSelectAtManagementButton.Init(unitList[index], _unitManager, index + 1);            
+            unitSelectAtManagementButton.Init(unitList[index], _unitManager, index + 1);
+            unitButtonList.Add(unitSelectAtManagementButton);
         }
+        return unitButtonList;
     }
 
     /// <summary>
     /// Показать переданный список изображенией заголовка
     /// </summary>
-    private void ShowHeaderImageList(HashSet<Image> headerImageList) 
+    private void ShowHeaderImage(IEnumerable<Image> headerImageEnumerable)
     {
-        foreach (Image headerImage in _headerImageArray) // Переберем массив 
+        foreach (Image setHeaderImage in _headerImageArray) // Переберем массив 
         {
-            headerImage.enabled = (headerImageList.Contains(headerImage));// Если изображение есть в переданном списке то включим его
+            bool contains = false; // предположим что объекта нет в искомом списке / Если найдем его в искомом списке то перезапишем флаг  
+            foreach (Image headerImage in headerImageEnumerable)
+            {
+                if (headerImage == setHeaderImage)
+                {
+                    contains = true;
+                    break;// Если есть совпадение выходим из цикла
+                }
+            }
+            setHeaderImage.enabled = contains;// Если изображение есть в переданном списке то включим его
         }
     }
-    
+    /// <summary>
+    /// Показать переданное изображенией заголовка
+    /// </summary>
+    private void ShowHeaderImage(Image headerImage)
+    {
+        foreach (Image setHeaderImage in _headerImageArray) // Переберем массив 
+        {
+            setHeaderImage.enabled = (setHeaderImage == headerImage);// Если это переданное изображение списке то включим его
+        }
+    }
+
     /// <summary>
     /// Показать переданный список трансформов
     /// </summary>
-    private void ShowTransformBarList(HashSet<Transform> transformBar)
+    private void ShowTransformBar(IEnumerable<Transform> transformBarEnumerable)
     {
-        foreach (Transform transform in _transformBarArray)
+        foreach (Transform setTransform in _transformBarArray)
         {
-            transform.gameObject.SetActive(transformBar.Contains(transform));// Если transform есть в переданном списке то включим его
+            bool contains = false; // предположим что объекта нет в искомом списке / Если найдем его в искомом списке то перезапишем флаг  
+            foreach (Transform transform in transformBarEnumerable)
+            {
+                if (transform == setTransform)
+                {
+                    contains = true;
+                    break;// Если есть совпадение выходим из цикла
+                }
+            }
+            setTransform.gameObject.SetActive(contains);// Если setTransform есть в переданном списке то включим его
+        }
+    }
+    /// <summary>
+    /// Показать переданный трансформ
+    /// </summary>
+    private void ShowTransformBar(Transform transformBar)
+    {
+        foreach (Transform setTransform in _transformBarArray)
+        {
+            setTransform.gameObject.SetActive(setTransform == transformBar);// Если это переданный трансформ то включим его
         }
     }
 

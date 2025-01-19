@@ -33,7 +33,7 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
     /// Запущено событие (Захваченый объект покинул сетку), чтобы не запускать событие каждый кадр сделал переключатель
     /// </summary>
     private bool _startEventOnGrabbedObjectGridExits = false;
-    private bool _isActive;
+    private bool _isActive = true;
 
     private GameInput _gameInput;
     private TooltipUI _tooltipUI;
@@ -80,15 +80,17 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
 
     public void SetActive(bool active)
     {
+        if (_isActive == active) //Если предыдущее состояние тоже то выходим
+            return;
+
+        _isActive = active;
+
         _canvasPickUpDrop.enabled = active;
         if (active)
         {
-            if (_isActive == false)// Если до этого было отключено то
-            {
-                _gameInput.OnClickAction += GameInput_OnClickAction;
-                _gameInput.OnClickRemoveAction += GameInput_OnClickRemoveAction;
-                _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
-            }
+            _gameInput.OnClickAction += GameInput_OnClickAction;
+            _gameInput.OnClickRemoveAction += GameInput_OnClickRemoveAction;
+            _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
         }
         else
         {
@@ -96,7 +98,7 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
             _gameInput.OnClickRemoveAction -= GameInput_OnClickRemoveAction;
             _unitManager.OnSelectedUnitChanged -= UnitManager_OnSelectedUnitChanged;
         }
-        _isActive = active;
+
     }
 
     private void UnitManager_OnSelectedUnitChanged(object sender, Unit newSelectedUnit)
@@ -171,8 +173,8 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
             {
                 // Есди под курсором есть предмет то удалить из сетки и вернуть в РЕСУРСЫ
                 if (_placedObjectMouseEnter != null)
-                {                   
-                    _unitEquipmentSystem.RemoveFromGridAndUnitEquipmentWithCheck(_placedObjectMouseEnter, returnInResourcesAndStartPosition:true);
+                {
+                    _unitEquipmentSystem.RemoveFromGridAndUnitEquipmentWithCheck(_placedObjectMouseEnter, returnInResourcesAndStartPosition: true);
                     // Звук поднятия            
                 }
 
@@ -313,7 +315,7 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
             {
                 _placedObject = _placedObjectMouseEnter;
                 _placedObject.Grab(); // Схватим его
-                _offset = _placedObject.GetOffsetCenterFromAnchor() * _canvasPickUpDrop.scaleFactor;                         
+                _offset = _placedObject.GetOffsetCenterFromAnchor() * _canvasPickUpDrop.scaleFactor;
                 _unitEquipmentSystem.RemoveFromGridAndUnitEquipmentWithCheck(_placedObject);
                 // Звук поднятия            
             }
@@ -340,7 +342,7 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
         // Попробуем сбросить и разместить на сетке       
         EquipmentSlot slotName = gridSystemXY.GetGridSlot(); // Получим имя слота
 
-        if (!placedObject.GetCanPlacedOnSlotList().Contains(slotName)) //Если нашего слота НЕТ в списке где можно разместить наш объект то
+        if (!placedObject.CanPlaceOnSlot(slotName)) //Если нашего слота НЕТ в списке где можно разместить наш объект то
         {
             _tooltipUI.ShowShortTooltipFollowMouse("попробуй другой слот", new TooltipUI.TooltipTimer { timer = 2f });
             // Звук неудачи

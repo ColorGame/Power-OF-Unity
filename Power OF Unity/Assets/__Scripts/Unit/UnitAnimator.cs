@@ -126,13 +126,18 @@ public class UnitAnimator
 
         switch (otherWeapon)
         {
-            case GrappleTypeSO grappleTypeSO:
+            case GrappleTypeSO:
             case ShootingWeaponTypeSO shootingWeaponTypeSO:
                 StartAnimation(pistolHandAnimation);
                 break;
 
-            case SwordTypeSO swordTypeSO:
+            case SwordTypeSO:
                 StartAnimation(swordlHandAnimation);
+                break;
+
+            case SpotterFireItemTypeSO://Для бинокля и аптечки нет анимаци
+            case HealItemTypeSO:
+                StartAnimation(freeHandAnimation);
                 break;
         }
     }

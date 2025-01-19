@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 /// <summary>
@@ -6,68 +7,122 @@ using UnityEngine.UI;
 public class ArmorSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
 {
     [Header("Контейнеры для переключения")]
-    [SerializeField] private Transform _armorHeadSelectContainer; // Контейнер для выбора шлема 
-    [SerializeField] private Transform _armorBodySelectContainer; // Контейнер для выбора бронежилета   
+    [SerializeField] private RectTransform _headArmorSelectContainer; // Контейнер для выбора шлема 
+    [SerializeField] private RectTransform _bodyArmorSelectContainer; // Контейнер для выбора бронежилета   
     [Header("Кнопки переключения")]
-    [SerializeField] private Button _armorHeadButton;  // Кнопка для включения панели оружия
-    [SerializeField] private Image _armorHeadButtonSelectedImage; // Изображение выделенной кнопки оружия
-    [SerializeField] private Button _armorBodyButton;  // Кнопка для включения панели предмета
-    [SerializeField] private Image _armorBodyButtonSelectedImage; // Изображение выделенной кнопки предмета
+    [SerializeField] private Button _headArmorButton;  // Кнопка для включения панели оружия
+    [SerializeField] private Image _headArmorButtonSelectedImage; // Изображение выделенной кнопки оружия
+    [SerializeField] private Button _bodyArmorButton;  // Кнопка для включения панели предмета
+    [SerializeField] private Image _bodyArmorButtonSelectedImage; // Изображение выделенной кнопки предмета
 
 
+    private List<PlacedObjectSelectButtonUI> _headArmorPlacedObjectButtonList = new();
+    private List<PlacedObjectSelectButtonUI> _bodyArmorPlacedObjectButtonList = new();
 
     protected override void Awake()
     {
         base.Awake();
 
-        _containerArray = new Transform[] { _armorHeadSelectContainer, _armorBodySelectContainer };
-        _buttonSelectedImageArray = new Image[] { _armorHeadButtonSelectedImage, _armorBodyButtonSelectedImage };
+        _containerButtonArray = new Transform[] { _headArmorSelectContainer, _bodyArmorSelectContainer };
+        _buttonSelectedImageArray = new Image[] { _headArmorButtonSelectedImage, _bodyArmorButtonSelectedImage };
     }
 
     protected override void SetDelegateContainerSelectionButton()
     {
-        _armorHeadButton.onClick.AddListener(() => //Добавим событие при нажатии на нашу кнопку// AddListener() в аргумент должен получить делегат- ссылку на функцию. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
+        _headArmorButton.onClick.AddListener(() => //Добавим событие при нажатии на нашу кнопку// AddListener() в аргумент должен получить делегат- ссылку на функцию. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
         {
-            ShowAndUpdateContainer(_armorHeadSelectContainer);
-            ShowSelectedButton(_armorHeadButtonSelectedImage);
-        }); // _armorHeadButton.onClick.AddListener(delegate { ShowAndUpdateContainer(_unitOnMissionContainer); }); // Еще вариант объявления
+            SetAndShowContainer(_headArmorSelectContainer, _headArmorButtonSelectedImage, _headArmorPlacedObjectButtonList);
+        }); // _headArmorButton.onClick.AddListener(delegate { ShowAndUpdateContainer(_unitOnMissionContainer); }); // Еще вариант объявления
 
-        _armorBodyButton.onClick.AddListener(() =>
+        _bodyArmorButton.onClick.AddListener(() =>
         {
-            ShowAndUpdateContainer(_armorBodySelectContainer);
-            ShowSelectedButton(_armorBodyButtonSelectedImage);
+            SetAndShowContainer(_bodyArmorSelectContainer, _bodyArmorButtonSelectedImage, _bodyArmorPlacedObjectButtonList);
         });
     }
 
     public override void SetActive(bool active)
     {
+        if (_isActive == active) //Если предыдущее состояние тоже то выходим
+            return;
+
+        _isActive = active;
+
         _canvas.enabled = active;
         if (active)
         {
-            ShowAndUpdateContainer(_armorHeadSelectContainer);
-            ShowSelectedButton(_armorHeadButtonSelectedImage);
+            SetAndShowContainer(_bodyArmorSelectContainer, _bodyArmorButtonSelectedImage, _bodyArmorPlacedObjectButtonList);
         }
         else
         {
-            ClearActiveButtonContainer();
+            HideAllContainerArray();
+            //ClearActiveButtonContainer();
         }
     }
 
-    protected override void CreateSelectButtonsSystemInActiveContainer()
+    /*    protected override void CreateSelectButtonsSystemInActiveContainer()
+        {
+            // Переберем список 
+            foreach (PlacedObjectTypeSO placedObjectTypeSO in _warehouseManager.GetAllPlacedObjectTypeSOList())
+            {
+                switch (placedObjectTypeSO)
+                {
+                    case HeadArmorTypeSO:
+                        if (_activeContainer == _headArmorSelectContainer)
+                            CreatePlacedObjectSelectButton(placedObjectTypeSO, _headArmorSelectContainer);
+                        break;
+
+                    case BodyArmorTypeSO:
+                        if (_activeContainer == _bodyArmorSelectContainer)
+                            CreatePlacedObjectSelectButton(placedObjectTypeSO, _bodyArmorSelectContainer);
+                        break;
+                }
+            }
+        }*/
+
+    protected override void CreateSelectButtonsSystemInContainer(RectTransform buttonContainer)
     {
-        // Переберем список 
+
+        if (buttonContainer == _headArmorSelectContainer)
+        {
+            _headArmorPlacedObjectButtonList.Clear();
+            foreach (PlacedObjectTypeSO placedObjectTypeSO in _warehouseManager.GetAllPlacedObjectTypeSOList())
+            {
+                switch (placedObjectTypeSO)
+                {
+                    case HeadArmorTypeSO:
+                        _headArmorPlacedObjectButtonList.Add(CreatePlacedObjectSelectButton(placedObjectTypeSO, _headArmorSelectContainer));
+                        break;
+                }
+            }
+        }
+        if (buttonContainer == _bodyArmorSelectContainer)
+        {
+            _bodyArmorPlacedObjectButtonList.Clear();
+            foreach (PlacedObjectTypeSO placedObjectTypeSO in _warehouseManager.GetAllPlacedObjectTypeSOList())
+            {
+                switch (placedObjectTypeSO)
+                {
+                    case BodyArmorTypeSO:
+                        _bodyArmorPlacedObjectButtonList.Add(CreatePlacedObjectSelectButton(placedObjectTypeSO, _bodyArmorSelectContainer));
+                        break;
+                }
+            }
+        }
+    }
+
+    protected override void CreateSelectButtonsSystemInAllContainer()
+    {
+        _headArmorPlacedObjectButtonList.Clear();
+        _bodyArmorPlacedObjectButtonList.Clear();
         foreach (PlacedObjectTypeSO placedObjectTypeSO in _warehouseManager.GetAllPlacedObjectTypeSOList())
         {
             switch (placedObjectTypeSO)
             {
-                case HeadArmorTypeSO:               
-                    if (_activeContainer == _armorHeadSelectContainer)
-                        CreatePlacedObjectSelectButton(placedObjectTypeSO, _armorHeadSelectContainer);
+                case HeadArmorTypeSO:
+                    _headArmorPlacedObjectButtonList.Add(CreatePlacedObjectSelectButton(placedObjectTypeSO, _headArmorSelectContainer));
                     break;
-               
                 case BodyArmorTypeSO:
-                    if (_activeContainer == _armorBodySelectContainer)
-                        CreatePlacedObjectSelectButton(placedObjectTypeSO, _armorBodySelectContainer);
+                    _bodyArmorPlacedObjectButtonList.Add(CreatePlacedObjectSelectButton(placedObjectTypeSO, _bodyArmorSelectContainer));
                     break;
             }
         }
@@ -76,11 +131,12 @@ public class ArmorSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
     /// <summary>
     /// Создать кнопку выбора размещенного объекта и поместить в контейнер
     /// </summary>
-    private void CreatePlacedObjectSelectButton(PlacedObjectTypeSO placedObjectTypeSO, Transform containerTransform)
+    private PlacedObjectSelectButtonUI CreatePlacedObjectSelectButton(PlacedObjectTypeSO placedObjectTypeSO, Transform containerTransform)
     {
         PlacedObjectSelectButtonUI placedObjectSelectButton = Instantiate(GameAssetsSO.Instance.placedObjectSelectButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
         Transform visualButton = Instantiate(placedObjectTypeSO.GetVisual2D(), placedObjectSelectButton.transform); // Создадим Визуал кнопки в зависимости от типа размещаемого объекта и сделаем дочерним к кнопке               
 
         placedObjectSelectButton.Init(_tooltipUI, _pickUpDrop, _warehouseManager, placedObjectTypeSO);
+        return placedObjectSelectButton;
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using static EquipmentGrid;
 /// <summary>
 /// Система экипировки юнитов(звено между сеткой и экипировкой юнита). Отвечает за настройку и загрузку экипировки ВЫБРАННОГО юнита.<br/>
 /// Отвечает за ЛОГИКУ экипировки(размещение на сетке) оружия или брони.
@@ -20,7 +21,7 @@ public class UnitEquipmentSystem : IToggleActivity
     private ArmorGridVisual _armorGridVisual;
 
     private Unit _selectedUnit;
-    private bool _isActive;
+    private bool _isActive=true;
 
 
     public void Init(PickUpDropPlacedObject pickUpDropPlacedObject, UnitManager unitManager, EquipmentGrid equipmentGrid, WarehouseManager warehouseManager, ItemGridVisual itemGridVisual, ArmorGridVisual armorGridVisual, ItemSelectButtonsSystemUI itemSelectButtonsSystemUI)
@@ -34,22 +35,26 @@ public class UnitEquipmentSystem : IToggleActivity
         _itemSelectButtonsSystemUI = itemSelectButtonsSystemUI;
     }
 
-    public void SetActiveEquipmentGrid(EquipmentGrid.GridState activeGridList)
+    public void SetActiveEquipmentGrid(GridState gridState)
     {
         ClearEquipmentGrid();//Перед переключением, очистим пред. сетку
-        _equipmentGrid.SetActiveGrid(activeGridList);
+        _equipmentGrid.SetActiveGrid(gridState);
+        SetItemArmorGrid(gridState);
+        UpdateEquipmentGrid();
     }
 
     public void SetActive(bool active)
     {
-        _itemGridVisual.SetActive(active);
-        _armorGridVisual.SetActive(active);
+        if (_isActive == active) //Если предыдущее состояние тоже то выходим
+            return;
+
+        _isActive = active;
+
+        SetItemArmorGrid(_equipmentGrid.GetStateGrid(), active);
+       
         if (active)
         {
-            if (_isActive == false) // Если до этого было отключено то
-            {
-                _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
-            }
+            _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
             _selectedUnit = _unitManager.GetSelectedUnit();
             UpdateEquipmentGrid();
         }
@@ -58,7 +63,30 @@ public class UnitEquipmentSystem : IToggleActivity
             _unitManager.OnSelectedUnitChanged -= UnitManager_OnSelectedUnitChanged;
             ClearEquipmentGrid();
         }
-        _isActive = active;
+    }
+
+    private void SetItemArmorGrid(GridState gridState, bool active = true)
+    {
+        if (active)
+        {
+            switch (gridState)
+            {
+                case GridState.ItemGrid:
+                    _itemGridVisual.Enable();
+                    _armorGridVisual.Disable();
+                    break;
+
+                case GridState.ArmorGrid:
+                    _armorGridVisual.Enable();
+                    _itemGridVisual.Disable();
+                    break;
+            }
+        }
+        else
+        {
+            _itemGridVisual.Disable();
+            _armorGridVisual.Disable();
+        }
     }
 
     private void UnitManager_OnSelectedUnitChanged(object sender, Unit newSelectedUnit)
@@ -167,7 +195,7 @@ public class UnitEquipmentSystem : IToggleActivity
         {
             _selectedUnit.GetUnitAnimator().SetSkipCurrentChangeWeaponEvent(true);
             _selectedUnit.GetUnitEquipsViewFarm().SetSkipCurrentChangeWeaponEvent(true);
-          //OnClearingSlotFromAnotherPlacedObject?.Invoke(this,EventArgs.Empty); // Сначала запустим событие чтобы класс UnitAnimator и UnitEquipsViewFarm смогли настроиться
+            //OnClearingSlotFromAnotherPlacedObject?.Invoke(this,EventArgs.Empty); // Сначала запустим событие чтобы класс UnitAnimator и UnitEquipsViewFarm смогли настроиться
             RemoveFromGridAndUnitEquipmentWithCheck(placedObject, returnInResourcesAndStartPosition: true);
         }
     }
@@ -182,9 +210,7 @@ public class UnitEquipmentSystem : IToggleActivity
         {
             case HeadArmorTypeSO headArmorTypeSO: // Если это шлем то проверим на совместимость с броней для тела
                 if (!_selectedUnit.GetUnitEquipment().IsHeadArmorCompatibleWithBodyArmor(headArmorTypeSO))
-                {
                     return false;
-                }
                 break;
         }
         return true;

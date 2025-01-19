@@ -37,6 +37,10 @@ public class CombatDroneTypeSO : PlacedObjectTypeWithActionSO
         Search3DPrefab(name,
            PlacedObjectGeneralListForAutoCompletionSO.Instance.CombatDronePrefab3DArray);
 
+        _canPlacedOnSlotArray = new EquipmentSlot[] { EquipmentSlot.BagSlot };
+
         base.AutoCompletion();
     }
+
+    public CombatDroneType GetCombatDroneType() {return _combatDroneType;}
 }

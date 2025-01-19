@@ -53,9 +53,8 @@ public class PlacedObjectBuySellCountButtonUI : MonoBehaviour
     private int _buyTabFirstOpen;
     private int _sellTabOpen;
     private int _sellTabFirstOpen;
-    private bool _firstStart = true;
+    private bool _firstStart = true;    
 
-    
     private MarketUI _marketUI;
     private WarehouseManager _warehouseManager;
     private HashAnimationName _hashAnimationName;
@@ -93,7 +92,7 @@ public class PlacedObjectBuySellCountButtonUI : MonoBehaviour
         _buyPriceText.text = $"{_buyPrice.ToString("N0")} $";
         _sellPriceText.text = $"{_sellPrice.ToString("N0")} $";
 
-        _warehouseManager.OnChangCountPlacedObject += ResourcesManager_OnChangCountPlacedObject;
+       // _warehouseManager.OnChangCountPlacedObject += WarehouseManager_OnChangCountPlacedObject;
 
         SetDelegateButton();
         SetTooltipButton();
@@ -102,6 +101,21 @@ public class PlacedObjectBuySellCountButtonUI : MonoBehaviour
         UpdateInStockCountText();
     }
 
+    public void SetActive(bool active)
+    {
+        if (active)
+        {
+            _warehouseManager.OnChangCountPlacedObject += ResourcesManager_OnChangCountPlacedObject;
+
+            _inStockCount = _warehouseManager.GetCountPlacedObject(_placedObjectTypeSO);
+            UpdateInStockCountText();
+        }
+        else
+        {
+            _warehouseManager.OnChangCountPlacedObject -= ResourcesManager_OnChangCountPlacedObject;
+        }
+    }
+   
     /// <summary>
     /// При изменении количества размещенных объектов
     /// </summary>
@@ -197,7 +211,7 @@ public class PlacedObjectBuySellCountButtonUI : MonoBehaviour
         _buySum = _buyCount * _buyPrice;
 
         _buyCountText.text = _buyCount.ToString();
-        _buySumText.text = $"{(_buySum).ToString("N0")} $";
+        _buySumText.text = $"{_buySum.ToString("N0")} $";
 
         _marketUI.SetColorText(_buyCount, redText: _buySumText, greenText: _buyCountText);
         _buyTabSelectedImage.enabled = _buyCount == 0 ? false : true;
@@ -262,8 +276,8 @@ public class PlacedObjectBuySellCountButtonUI : MonoBehaviour
     }
 
     private void StartAnimation(int hashNameAnimation)
-    {
-        _animator.CrossFade(hashNameAnimation, 0);
+    {       
+        _animator.CrossFade(hashNameAnimation, 0);         
     }
 
     private void OnDestroy()

@@ -8,11 +8,11 @@ public class ShootingWeaponTypeSO : PlacedObjectTypeWithActionSO //Стреляющее ор
     [Header("Тип размещаемого объекта")]
     [SerializeField] ShootingWeaponType _shootingWeaponType;
     [Header("Это оружие для одной руки (для отображения с ЩИТОМ)")]
-    [SerializeField] private bool _isOneHand= false;
+    [SerializeField] private bool _isOneHand = false;
     [Header("Количество выстрелов за одно действие")]
     [SerializeField] private int numberShotInOneAction = 3;
     [Header("Задержка между выстрелами")]
-    [SerializeField] private float delayShot= 0.2f;
+    [SerializeField] private float delayShot = 0.2f;
     [Header("Дистанция выстрела в клетках")]
     [SerializeField] private int maxShootDistance = 7;
     [Header("Величина урона")]
@@ -35,11 +35,11 @@ public class ShootingWeaponTypeSO : PlacedObjectTypeWithActionSO //Стреляющее ор
     }
 
     public int GetNumberShotInOneAction() { return numberShotInOneAction; }
-    public float GetDelayShot() {  return delayShot; }
+    public float GetDelayShot() { return delayShot; }
     public int GetMaxShootDistance() { return maxShootDistance; }
-    public float GetShootDamage() {  return shootDamage; }
-    public float GetPercentageShootDistanceIncrease() {  return percentageShootDistanceIncrease; }
-    public float GetPercentageShootDamageIncrease() {  return percentageShootDamageIncrease; }
+    public float GetShootDamage() { return shootDamage; }
+    public float GetPercentageShootDistanceIncrease() { return percentageShootDistanceIncrease; }
+    public float GetPercentageShootDamageIncrease() { return percentageShootDamageIncrease; }
     /// <summary>
     /// Это оружие для одной руки (для отображения с ЩИТОМ)
     /// </summary>
@@ -61,6 +61,16 @@ public class ShootingWeaponTypeSO : PlacedObjectTypeWithActionSO //Стреляющее ор
 
         Search3DPrefab(name,
            PlacedObjectGeneralListForAutoCompletionSO.Instance.ShootingPrefab3DArray);
+
+        if (name.Contains("Pistol") || name.Contains("Revolver"))
+            _isOneHand = true;
+        else
+            _isOneHand = false;
+
+        if (_isOneHand)
+            _canPlacedOnSlotArray = new EquipmentSlot[] { EquipmentSlot.MainWeaponSlot, EquipmentSlot.OtherWeaponsSlot, EquipmentSlot.BagSlot };
+        else
+            _canPlacedOnSlotArray = new EquipmentSlot[] { EquipmentSlot.MainWeaponSlot, EquipmentSlot.BagSlot };
 
         base.AutoCompletion();
     }

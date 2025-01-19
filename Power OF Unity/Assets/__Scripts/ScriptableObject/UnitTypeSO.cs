@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -12,30 +13,30 @@ using UnityEngine;
 /// </remarks>
 
 public abstract class UnitTypeSO : ScriptableObject//, ISerializationCallbackReceiver//ISerializationCallbackReceiver Интерфейс для получения обратных вызовов при сериализации и десериализации.Будем использовать для создания ID при сериализации
-                                                                                   //Сериализацией называется процесс записи состояния объекта (с возможной последующей передачей) в поток. Десериализация это процесс обратный сериализации – из данных,
-                                                                                   //которые находятся в потоке, мы можем восстановить состояние объекта и использовать этот объект в другом месте.
+                                                   //Сериализацией называется процесс записи состояния объекта (с возможной последующей передачей) в поток. Десериализация это процесс обратный сериализации – из данных,
+                                                   //которые находятся в потоке, мы можем восстановить состояние объекта и использовать этот объект в другом месте.
 {
-   /* [Header("Авт.сген. UUID для сохр/загр.\nОчистите это поле, если вы хотите сген-ть новое.")]
-    [SerializeField] private string _unitID = null;*/
+    /* [Header("Авт.сген. UUID для сохр/загр.\nОчистите это поле, если вы хотите сген-ть новое.")]
+     [SerializeField] private string _unitID = null;*/
     [SerializeField] private string _name;   // Имя Юнита
-    [Range(0,100)]
+    [Range(0, 100)]
     [SerializeField] private int _basicHealth; // Здоровье
     [Range(0, 100)]
-    [SerializeField] private int _basicActionPoints ; // Очки действия
+    [SerializeField] private int _basicActionPoints; // Очки действия
     [Range(0, 100)]
-    [SerializeField] private int _basicPower ; // Сила поднятия
+    [SerializeField] private int _basicPower; // Сила поднятия
     [Range(0, 100)]
-    [SerializeField] private int _basicAccuracy ; // Точность
+    [SerializeField] private int _basicAccuracy; // Точность
     [Header("Дистанция движения.\nИзмеряется в узлах сетки, включает узел с самими Юнитом")]
     [SerializeField] private int _basicMoveDistance = Constant.MOVE_DISTSNCE_MAX;
     [Header("Префаб ядра юнита со скриптами")]
-    [SerializeField] private Transform _unitCorePrefab;  
+    [SerializeField] protected Transform _unitCorePrefab;
 
     public string GetName() { return _name; }
     public int GetBasicHealth() { return _basicHealth; }
     public int GetBasicActionPoints() { return _basicActionPoints; }
-    public int GetBasicPower() {  return _basicPower; }
-    public int GetBasicAccuracy() {  return _basicAccuracy; }
+    public int GetBasicPower() { return _basicPower; }
+    public int GetBasicAccuracy() { return _basicAccuracy; }
     public int GetBasicMoveDistance() { return _basicMoveDistance; }
     public Transform GetUnitCorePrefab() { return _unitCorePrefab; }
 
@@ -48,7 +49,13 @@ public abstract class UnitTypeSO : ScriptableObject//, ISerializationCallbackRec
         _basicAccuracy = UnityEngine.Random.Range(0, 100);
 
     }
+   
+    protected virtual void AutoCompletion()
+    {
+        SetRandomValue();
+    }
 
+   
 
     /* /// <summary>
      /// Получите экземпляр SO из его UUID.

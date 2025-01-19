@@ -1,5 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
-// УДАЛИТЬ в билде (нужно только для автозаполнения инспектора)
+using UnityEngine.UI;
+/// <summary>
+/// Общий список всех компонентов PlacedObject, для автоматического заполнения инспектора.<br/>
+/// ВРЕМЕННЫЙ КЛАСС (Удалить и открепить в билде) 
+/// </summary>
 [CreateAssetMenu(fileName = "PlacedObjectGeneralListForAutoCompletionSO", menuName = "ScriptableObjects/Date/PlacedObjectGeneralListForAutoCompletionSO")]
 public class PlacedObjectGeneralListForAutoCompletionSO : ScriptableObject
 {
@@ -25,6 +30,10 @@ public class PlacedObjectGeneralListForAutoCompletionSO : ScriptableObject
     [Header("HeadArmor")]
     public GameObject[] HeadArmor2DArray;
 
+    [Header("CombatDrone")]
+    public GameObject[] CombatDrone2DArray;
+    [Space]
+    public GameObject[] CombatDronePrefab3DArray;
 
     [Header("Grapple")]
     public GameObject[] Grapple2DArray;
@@ -46,11 +55,6 @@ public class PlacedObjectGeneralListForAutoCompletionSO : ScriptableObject
     [Space]
     public GameObject[] ShieldItemPrefab3DArray;
 
-    [Header("CombatDrone")]
-    public GameObject[] CombatDrone2DArray;
-    [Space]
-    public GameObject[] CombatDronePrefab3DArray;
-
     [Header("Shooting")]
     public GameObject[] Shooting2DArray;
     [Space]
@@ -71,5 +75,21 @@ public class PlacedObjectGeneralListForAutoCompletionSO : ScriptableObject
 
     [Header("Список всех SO файлов ДЕЙСТВИЕМ(Action)")]
     public PlacedObjectTypeSO[] ActionSOArray;
+
+    [Header("Список всех СПРАЙТОВ для PlacedObject")]
+    public Sprite[] Sprite2D;
+
+    [Header("Масси всех префабов ЮНИТОВ")]
+    public GameObject[] UnitPrefabArray;
+
+
+    [Header("Ядро UnitCoreFriend")]
+    public Transform UnitCoreFriend;
+    
+    [Header("Ядро UnitCoreEnemy")]
+    public Transform UnitCoreEnemy;
+
+
+    
 }
 

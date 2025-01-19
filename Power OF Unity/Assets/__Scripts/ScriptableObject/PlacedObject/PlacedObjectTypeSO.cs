@@ -29,14 +29,14 @@ public abstract class PlacedObjectTypeSO : ScriptableObject//, ISerializationCal
     [Header("Сколько занимает клеток в высоту У")]
     [Range(1, 5)][SerializeField] private int _heightY;
     [Header("Список слотов экипировки на которые можно разместить наш объект")]
-    [SerializeField] private List<EquipmentSlot> _canPlacedOnSlotList;
+    [SerializeField] protected EquipmentSlot[] _canPlacedOnSlotArray;
     [Header("Вес размещаемого объекта в килограммах")]
     [Range(0, 50)][SerializeField] private int _weight;
     [Header("Цена ПОКУПКИ и ПРОДАЖИ на рынке")]
     [SerializeField] private uint _priceBuy;
     [SerializeField] private uint _priceSell;
 
-    private HashSet<EquipmentSlot> _canPlacedOnSlotHashList;
+
 
     // КЭШИРОВАННОЕ СОСТАЯНИЕ
     static Dictionary<string, PlacedObjectTypeWithActionSO> placedObjectLookupCache; //кэшированный словарь поиска предмта типа PlacedObjectTypeWithActionSO// Статический словарь (Ключ-ID номер предмета, Значение)
@@ -82,16 +82,9 @@ public abstract class PlacedObjectTypeSO : ScriptableObject//, ISerializationCal
     public Vector2Int GetWidthXHeightYInCells() { return new Vector2Int(_widthX, _heightY); }
 
     /// <summary>
-    /// Список слотов на которые можно разместить наш объект
+    /// Массив слотов на которые можно разместить наш объект
     /// </summary>
-    public HashSet<EquipmentSlot> GetCanPlacedOnSlotList()
-    {
-        if (_canPlacedOnSlotHashList == null)
-        {
-            _canPlacedOnSlotHashList = new HashSet<EquipmentSlot>(_canPlacedOnSlotList);
-        }
-        return _canPlacedOnSlotHashList;
-    }
+    public EquipmentSlot[] GetCanPlacedOnSlotArray() { return _canPlacedOnSlotArray; }
 
     /// <summary>
     /// Получить цену покупки
@@ -130,8 +123,7 @@ public abstract class PlacedObjectTypeSO : ScriptableObject//, ISerializationCal
         if (int.TryParse(height.ToString(), out result))
             _heightY = result;
 
-        _heightImage2D = _visual2D.GetComponentInChildren<Image>().rectTransform.sizeDelta.y; // Получим высоту вложенного изображения 
-
+        _heightImage2D = _visual2D.GetComponentInChildren<Image>().rectTransform.sizeDelta.y; // Получим высоту вложенного изображения                        
     }
 
     protected void Search2DPrefabAndVisual(string nameFail, GameObject[] gameObjectArray)
@@ -168,6 +160,14 @@ public abstract class PlacedObjectTypeSO : ScriptableObject//, ISerializationCal
             if (nameFail.Equals(visualName, StringComparison.OrdinalIgnoreCase)) // Сравним имя SO с полученым без учета регистра
             {
                 _visual2D = go.transform;
+            }
+        }
+
+        foreach (Sprite sprite in PlacedObjectGeneralListForAutoCompletionSO.Instance.Sprite2D)
+        {
+            if (nameFail.Equals(sprite.name, StringComparison.OrdinalIgnoreCase))
+            {
+                _visual2D.GetComponentInChildren<Image>().sprite = sprite;
             }
         }
 

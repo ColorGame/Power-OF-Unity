@@ -72,7 +72,8 @@ public class ScenesService
     /// </summary>
     public void FindEntryPointInSceneAndInject(Scene scene)
     {
-        IEntryPoint entryPoint = GetRoot<IEntryPoint>(scene);
+        IEntryPoint entryPoint = GetComponentFromRoot<IEntryPoint>(scene);
+       // IEntryPoint entryPoint = GameObject.FindGameObjectWithTag("EntryPoint").GetComponent<IEntryPoint>();
         var childContainer = new DIContainer(_rootContainer); // Создадим дочерний контейнер и передадим корневой.
         entryPoint.Inject(childContainer);// Передадим созданный контейнер в точку входа преданной нам сцены       
     }
@@ -85,7 +86,7 @@ public class ScenesService
     /// </remarks>
     public bool TryFindStartSceneAndActivate(Scene scene)
     {
-        IStartScene startScene = GetRoot<IStartScene>(scene);
+        IStartScene startScene = GetComponentFromRoot<IStartScene>(scene);
         if (startScene != null)
         {
             startScene.StartScene();
@@ -96,8 +97,10 @@ public class ScenesService
             return false;
         }
     }
-
-    public static T GetRoot<T>(Scene scene)
+    /// <summary>
+    /// Получить компонент типа Т из в корневых игровых объектах сцены .
+    /// </summary>
+    public static T GetComponentFromRoot<T>(Scene scene)
     {
         var rootObjects = scene.GetRootGameObjects();
 

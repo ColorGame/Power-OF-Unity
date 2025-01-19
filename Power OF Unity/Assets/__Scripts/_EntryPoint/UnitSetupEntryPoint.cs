@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class UnitSetupEntryPoint : MonoBehaviour, IEntryPoint
+public class UnitSetupEntryPoint : MonoBehaviour, IEntryPoint, IStartScene
 {
     private UnitEquipmentSystem _unitEquipmentSystem;
     private PickUpDropPlacedObject _pickUpDropPlacedObject;
@@ -99,5 +99,10 @@ public class UnitSetupEntryPoint : MonoBehaviour, IEntryPoint
     {
         _unitEquipmentSystem.OnDestroy();
         _unitEquipmentSystem = null;
+    }
+
+    public void StartScene()
+    {
+        _itemSelectButtonsSystemUI.StartAnimation();
     }
 }

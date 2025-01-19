@@ -43,6 +43,8 @@ public class GrappleTypeSO : PlacedObjectTypeWithActionSO
         Search3DPrefab(name,
            PlacedObjectGeneralListForAutoCompletionSO.Instance.GrapplePrefab3DArray);
 
+        _canPlacedOnSlotArray = new EquipmentSlot[] { EquipmentSlot.MainWeaponSlot,EquipmentSlot.OtherWeaponsSlot, EquipmentSlot.BagSlot };
+
         base.AutoCompletion();
     }
 }

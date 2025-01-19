@@ -93,6 +93,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2725709452150410222, guid: 602eca0fe7b206a45828fc1718ba728a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2806774676002508337, guid: 602eca0fe7b206a45828fc1718ba728a,
         type: 3}
       propertyPath: m_IsActive
@@ -405,6 +410,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6890897265274845408, guid: 602eca0fe7b206a45828fc1718ba728a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7002267150020722681, guid: 602eca0fe7b206a45828fc1718ba728a,
         type: 3}
       propertyPath: m_Effectors.Array.data[1].m_Transform
@@ -691,7 +701,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6882380794456568142}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 987af314180e70e4aa4053d55e9b4f5c, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ae7e84054178f348a5affc1d31264aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _attachPointShieldLeft: {fileID: 6435986065896297192}
@@ -715,7 +725,7 @@ MonoBehaviour:
   - {fileID: 1812730405911535469}
   _headArmorCyberNoFaceMeshArray:
   - {fileID: 3890290563727799502}
-  _headArmorCyberModNoFaceMeshArray:
+  _headArmorCyberNoFaceModMeshArray:
   - {fileID: 7537835860105761365}
   _hair: {fileID: 6095512856836788904}
   _beard: {fileID: 3072366147634945200}

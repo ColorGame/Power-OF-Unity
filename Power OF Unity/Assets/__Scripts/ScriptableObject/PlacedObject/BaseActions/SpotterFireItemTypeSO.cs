@@ -39,6 +39,8 @@ public class SpotterFireItemTypeSO : PlacedObjectTypeWithActionSO
         Search3DPrefab(name,
            PlacedObjectGeneralListForAutoCompletionSO.Instance.SpotterFireItemPrefab3DArray);
 
+        _canPlacedOnSlotArray = new EquipmentSlot[] { EquipmentSlot.OtherWeaponsSlot, EquipmentSlot.BagSlot };
+
         base.AutoCompletion();
     }
 

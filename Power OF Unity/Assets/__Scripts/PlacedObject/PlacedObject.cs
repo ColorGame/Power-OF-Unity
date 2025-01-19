@@ -15,23 +15,23 @@ public class PlacedObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public static PlacedObject CreateInGrid(PlacedObjectGridParameters placedObjectParameters, PickUpDropPlacedObject pickUpDropPlacedObject, GridSystemXY<GridObjectEquipmentXY> gridSystemXY) // (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру)
     {
         PlacedObjectTypeSO placedObjectTypeSO = placedObjectParameters.placedObjectTypeSO;
-        Vector2Int gridPositionAnchor = placedObjectParameters.gridPositioAnchor;     
+        Vector2Int gridPositionAnchor = placedObjectParameters.gridPositioAnchor;
         Canvas canvas = pickUpDropPlacedObject.GetCanvas();
 
         Vector3 worldPosition = new Vector3();
         switch (placedObjectParameters.slot)
-        {          
+        {
             case EquipmentSlot.BagSlot:
-                 worldPosition = gridSystemXY.GetWorldPositionLowerLeftСornerCell(gridPositionAnchor);
-                break;    
-                
+                worldPosition = gridSystemXY.GetWorldPositionLowerLeftСornerCell(gridPositionAnchor);
+                break;
+
             case EquipmentSlot.MainWeaponSlot:
             case EquipmentSlot.OtherWeaponsSlot:
             case EquipmentSlot.HeadArmorSlot:
             case EquipmentSlot.BodyArmorSlot:
-                
-                Vector3 offset = placedObjectTypeSO.GetOffsetVisualСenterFromAnchor()* canvas.scaleFactor;
-                worldPosition = gridSystemXY.GetWorldPositionGridCenter()- offset;
+
+                Vector3 offset = placedObjectTypeSO.GetOffsetVisualСenterFromAnchor() * canvas.scaleFactor;
+                worldPosition = gridSystemXY.GetWorldPositionGridCenter() - offset;
                 break;
         }
 
@@ -47,8 +47,8 @@ public class PlacedObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     /// </summary>
     /// <remarks> Якорь(нижний левый край) созданного объекта будет = worldPosition</remarks>
     public static PlacedObject CreateInWorld(Vector3 worldPosition, PlacedObjectTypeSO placedObjectTypeSO, Transform parent, PickUpDropPlacedObject pickUpDropPlacedObject)
-    {       
-        Transform placedObjectTransform = Instantiate(placedObjectTypeSO.GetPrefab2D(), worldPosition , Quaternion.Euler(parent.rotation.eulerAngles.x, 0, 0), parent); //canvasContainer.rotation.eulerAngles.x- что бы был повернут как родитель
+    {
+        Transform placedObjectTransform = Instantiate(placedObjectTypeSO.GetPrefab2D(), worldPosition, Quaternion.Euler(parent.rotation.eulerAngles.x, 0, 0), parent); //canvasContainer.rotation.eulerAngles.x- что бы был повернут как родитель
         PlacedObject placedObject = placedObjectTransform.GetComponent<PlacedObject>();
         placedObject._placedObjectTypeSO = placedObjectTypeSO;
         placedObject._offsetOffsetCenterFromAnchor = placedObjectTypeSO.GetOffsetVisualСenterFromAnchor();
@@ -70,11 +70,11 @@ public class PlacedObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private bool _grabbed; // Схвачен   
     private bool _moveStartPosition = false; // Переместить в начальную позицию        
     private Vector3 _offsetOffsetCenterFromAnchor;
-    private HashSet<EquipmentSlot> _canPlacedOnSlotList;// Слоты экипировки где можно разместить наш объект   
+    private EquipmentSlot[] _canPlacedOnSlotArray;// Слоты экипировки где можно разместить наш объект   
 
     protected virtual void Setup()
     {
-        _canPlacedOnSlotList = _placedObjectTypeSO.GetCanPlacedOnSlotList();
+        _canPlacedOnSlotArray = _placedObjectTypeSO.GetCanPlacedOnSlotArray();
         _scaleOriginal = transform.localScale; // Сохраним оригинальный масштаб       
     }
 
@@ -150,23 +150,35 @@ public class PlacedObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public List<Vector2Int> GetTryOccupiesGridPositionList(Vector2Int gridPosition) { return _placedObjectTypeSO.GetGridPositionList(gridPosition); }
 
     public PlacedObjectTypeSO GetPlacedObjectTypeSO() { return _placedObjectTypeSO; }
-   /// <summary>
-   /// Установить позицию, куда будет перемещяться предметь, при удалении.
-   /// </summary>
+    /// <summary>
+    /// Установить позицию, куда будет перемещяться предметь, при удалении.
+    /// </summary>
     public void SetDropPositionWhenDeleted(Vector3 position) { _dropPositionWhenDeleted = position; }
     /// <summary>
     /// Установить флаг, что надо перемещаться в стартовую позицию
     /// </summary>    
     public void SetFlagMoveStartPosition(bool moveStartPosition) { _moveStartPosition = moveStartPosition; }
-        
+
     /// <summary>
-    /// Получить Слот где можно разместить наш объект
+    /// Могу разместить в этом слоте
     /// </summary>
-    public HashSet<EquipmentSlot> GetCanPlacedOnSlotList() { return _canPlacedOnSlotList; }
+    public bool CanPlaceOnSlot(EquipmentSlot testSlot)
+    {
+        bool canPlace = false;
+        foreach (EquipmentSlot slot in _canPlacedOnSlotArray)
+        {
+            if (slot == testSlot)
+            {
+                canPlace = true;
+                break;
+            }
+        }
+        return canPlace;
+    }
 
     public PlacedObjectGridParameters GetPlacedObjectGridParameters()
     {
-        return new PlacedObjectGridParameters(_gridSystemXY.GetGridSlot(), _gridPositioAnchor, _placedObjectTypeSO,this);
+        return new PlacedObjectGridParameters(_gridSystemXY.GetGridSlot(), _gridPositioAnchor, _placedObjectTypeSO, this);
     }
 
 

@@ -41,7 +41,7 @@ public class ArmorGridVisual : MonoBehaviour
         _canvasArmorGrid = _equipmentGrid.GetCanvasArmorGrid();
     }
 
-    public void SetActive(bool active)
+   /* public void SetActive(bool active)
     {
         if (active)
         {
@@ -59,9 +59,9 @@ public class ArmorGridVisual : MonoBehaviour
         {
             Disable();
         }
-    }
+    }*/
 
-    private void Enable()
+    public void Enable()
     {
         _canvasArmorGrid.enabled = true;
 
@@ -75,7 +75,7 @@ public class ArmorGridVisual : MonoBehaviour
         _unitEquipmentSystem.OnEquipmentGridsCleared += UnitEquipmentSystem_OnEquipmentGridsCleared;       
     }
 
-    private void Disable()
+    public void Disable()
     {
         _canvasArmorGrid.enabled = false;
 

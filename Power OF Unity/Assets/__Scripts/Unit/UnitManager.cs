@@ -12,7 +12,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
     public event EventHandler<Unit> OnSelectedUnitChanged; // Изменен выбранный юнит
     public event EventHandler OnAnyUnitDeadAndRemoveList; // Событие Любой Юнит Умер И Удален из Списка
     public event EventHandler OnAnyEnemyUnitSpawnedAndAddList; // Событие Любой вражеский юнит ражден и добавлен в Списка      
-                                                               //  public event EventHandler OnUnitChangedLocation; // Событие Юнит Изменил Локацию   
+    public event EventHandler OnAddRemoveUnitFromLocation; // Событие Добавление удаление юнита из локации
 
     private List<Unit> _unitFriendList = new List<Unit>();// ОБЩИЙ список  моих юнитов
     private List<Unit> _unitFriendOnMissionList = new List<Unit>();// список моих юнитов на МИССИИ
@@ -169,7 +169,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
     {
         RemoveUnitFromCurrentLocation(unit);
         unit.SetLocation(newLocation);
-        AddUnitToLocation(unit, newLocation);
+        AddUnitToLocation(unit, newLocation);       
     }
 
     /// <summary>
@@ -186,6 +186,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
                 _unitFriendOnMissionList.Remove(unit);
                 break;
         }
+        OnAddRemoveUnitFromLocation?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -202,6 +203,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
                 AddUnitFriendOnMissionList(unit);
                 break;
         }
+        OnAddRemoveUnitFromLocation?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>

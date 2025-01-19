@@ -157,12 +157,17 @@ public class UnitEquipment
     /// Шлем совместим с броней для тела?
     /// </summary>
     public bool IsHeadArmorCompatibleWithBodyArmor(HeadArmorTypeSO headArmorTypeSO)
-    {
+    {       
         if (_bodyArmor != null)
         {
-            return headArmorTypeSO.GetCompatibleArmorList().Contains(_bodyArmor.GetBodyArmorType());
+            BodyArmorType bodyArmorType = _bodyArmor.GetBodyArmorType();
+            foreach (BodyArmorType testBodyArmorType in headArmorTypeSO.GetCompatibleArmorList())
+            {
+                if (testBodyArmorType == bodyArmorType)
+                    return true;
+            }
         }
-        else { return false; }
+        return false; 
     }
 
     /// <summary>

@@ -32,7 +32,9 @@ public class BodyArmorTypeSO  : PlacedObjectTypeArmorSO
             name,            
             PlacedObjectGeneralListForAutoCompletionSO.Instance.BodyArmor2DArray);
 
-        base.AutoCompletion();       
+        _canPlacedOnSlotArray = new EquipmentSlot[] { EquipmentSlot.BodyArmorSlot };
+        base.AutoCompletion();
+
     }
 
     

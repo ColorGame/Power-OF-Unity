@@ -9,7 +9,9 @@ public class LoadingScreenProvider: LocalAssetLoader
     {
         _loadingScreen = await Load<LoadingScreen>(AssetsConstants.LoadingScreen);
     }
-
+    /// <summary>
+    /// Не уничтожайте целевой объект при загрузке новой сцены.
+    /// </summary>
     public void DontDestroyOnLoad()
     {
         Object.DontDestroyOnLoad(_loadingScreen.gameObject);

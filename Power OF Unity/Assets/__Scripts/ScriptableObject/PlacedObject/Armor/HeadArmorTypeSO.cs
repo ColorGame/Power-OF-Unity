@@ -9,21 +9,13 @@ public class HeadArmorTypeSO : PlacedObjectTypeArmorSO
     [SerializeField] HeadArmorType _headArmorType;
 
     [Header("Список совместимой !!BODY ARMOR")]
-    [SerializeField] private List<BodyArmorType> _compatibleBodyArmorList;
+    [SerializeField] private BodyArmorType[] _compatibleBodyArmorArray;
 
-    private HashSet<BodyArmorType> _compatibleArmorHashList;
 
     /// <summary>
     /// Получить - Список совместимой брони
     /// </summary>
-    public HashSet<BodyArmorType> GetCompatibleArmorList()
-    {
-        if (_compatibleArmorHashList == null)
-        {
-            _compatibleArmorHashList = new HashSet<BodyArmorType>(_compatibleBodyArmorList);
-        }
-        return _compatibleArmorHashList;
-    }
+    public BodyArmorType[] GetCompatibleArmorList() { return _compatibleBodyArmorArray; }
 
     /// <summary>
     /// Получить всплывающую подсказку для данного размещенного объекта 
@@ -47,6 +39,9 @@ public class HeadArmorTypeSO : PlacedObjectTypeArmorSO
         Search2DPrefabAndVisual(
            name,
            PlacedObjectGeneralListForAutoCompletionSO.Instance.HeadArmor2DArray);
+
+        _canPlacedOnSlotArray = new EquipmentSlot[] { EquipmentSlot.HeadArmorSlot };
+
         base.AutoCompletion();
     }
 }

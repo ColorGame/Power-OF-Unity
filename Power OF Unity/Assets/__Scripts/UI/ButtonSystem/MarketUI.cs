@@ -20,20 +20,20 @@ public enum MarketState
 public class MarketUI : ObjectSelectButtonsSystemUI
 {
     [Header("Контейнеры для переключения")]
-    [SerializeField] private Transform _weaponSelectContainer; // Контейнер для выбора оружия 
-    [SerializeField] private Transform _itemSelectContainer; // Контейнер для выбора предмета   
-    [SerializeField] private Transform _armorHeadSelectContainer; // Контейнер для выбора шлема 
-    [SerializeField] private Transform _armorBodySelectContainer; // Контейнер для выбора бронежилета   
-    [SerializeField] private Transform _otherSelectContainer; // Контейнер для выбора прочих предметов   
+    [SerializeField] private RectTransform _weaponSelectContainer; // Контейнер для выбора оружия 
+    [SerializeField] private RectTransform _itemSelectContainer; // Контейнер для выбора предмета   
+    [SerializeField] private RectTransform _headArmorSelectContainer; // Контейнер для выбора шлема 
+    [SerializeField] private RectTransform _bodyArmorSelectContainer; // Контейнер для выбора бронежилета   
+    [SerializeField] private RectTransform _otherSelectContainer; // Контейнер для выбора прочих предметов   
     [Header("Кнопки переключения контейнеров")]
     [SerializeField] private Button _weaponButton;
     [SerializeField] private Image _weaponButtonSelectedImage;
     [SerializeField] private Button _itemButton;
     [SerializeField] private Image _itemButtonSelectedImage;
-    [SerializeField] private Button _armorHeadButton;
-    [SerializeField] private Image _armorHeadButtonSelectedImage;
-    [SerializeField] private Button _armorBodyButton;
-    [SerializeField] private Image _armorBodyButtonSelectedImage;
+    [SerializeField] private Button _headArmorButton;
+    [SerializeField] private Image _headArmorButtonSelectedImage;
+    [SerializeField] private Button _bodyArmorButton;
+    [SerializeField] private Image _bodyArmorButtonSelectedImage;
     [SerializeField] private Button _otherButton;
     [SerializeField] private Image _otherButtonSelectedImage;
     [Header("Кнопки переключения режима ПОКУПКИ/ПРОДАЖИ")]
@@ -53,7 +53,13 @@ public class MarketUI : ObjectSelectButtonsSystemUI
 
     private Dictionary<PlacedObjectTypeSO, uint> _buyObjectCountDictionary = new(); // Словарь - Количество объектов на покупку
     private Dictionary<PlacedObjectTypeSO, uint> _sellObjectCountDictionary = new();// Словарь - Количество объектов на продажу
-    private List<PlacedObjectBuySellCountButtonUI> _activeBuySellCountButtonList = new(); // Список активных кнопок для ПОКУПКИ/ПРОДАЖИ
+
+    private List<PlacedObjectBuySellCountButtonUI> _activeBuySellCountButtonList = new();// Список активных кнопок для ПОКУПКИ/ПРОДАЖИ
+    private List<PlacedObjectBuySellCountButtonUI> _weaponBuySellCountButtonList = new();
+    private List<PlacedObjectBuySellCountButtonUI> _itemBuySellCountButtonList = new();
+    private List<PlacedObjectBuySellCountButtonUI> _bodyArmorBuySellCountButtonList = new();
+    private List<PlacedObjectBuySellCountButtonUI> _headArmorBuySellCountButtonList = new();
+
     private MarketState _marketState; // Хэшированое состояние маркета
     /// <summary>
     /// Сумма всех покупок (спишется со счета)
@@ -74,21 +80,21 @@ public class MarketUI : ObjectSelectButtonsSystemUI
         ClearAndUpdateSumText();
         _marketState = MarketState.Buy;
 
-        _containerArray = new Transform[]
+        _containerButtonArray = new Transform[]
         {
             _weaponSelectContainer,
             _itemSelectContainer,
-            _armorHeadSelectContainer,
-            _armorBodySelectContainer,
+            _headArmorSelectContainer,
+            _bodyArmorSelectContainer,
             _otherSelectContainer,
         };
         _buttonSelectedImageArray = new Image[]
         {
             _weaponButtonSelectedImage,
             _itemButtonSelectedImage,
-            _armorHeadButtonSelectedImage,
-            _armorBodyButtonSelectedImage,
-            _otherButtonSelectedImage,           
+            _headArmorButtonSelectedImage,
+            _bodyArmorButtonSelectedImage,
+            _otherButtonSelectedImage,
         };
     }
 
@@ -104,21 +110,21 @@ public class MarketUI : ObjectSelectButtonsSystemUI
     {
         _weaponButton.onClick.AddListener(() =>
         {
-            SetAndShowContainer(_weaponSelectContainer, _weaponButtonSelectedImage);            
+            SetAndShowContainer(_weaponSelectContainer, _weaponButtonSelectedImage, _weaponBuySellCountButtonList);
         });
 
         _itemButton.onClick.AddListener(() =>
         {
-            SetAndShowContainer(_itemSelectContainer, _itemButtonSelectedImage);           
+            SetAndShowContainer(_itemSelectContainer, _itemButtonSelectedImage, _itemBuySellCountButtonList);
         });
-        _armorHeadButton.onClick.AddListener(() =>
+        _headArmorButton.onClick.AddListener(() =>
         {
-            SetAndShowContainer(_armorHeadSelectContainer, _armorHeadButtonSelectedImage);           
+            SetAndShowContainer(_headArmorSelectContainer, _headArmorButtonSelectedImage, _headArmorBuySellCountButtonList);
         });
 
-        _armorBodyButton.onClick.AddListener(() =>
+        _bodyArmorButton.onClick.AddListener(() =>
         {
-            SetAndShowContainer(_armorBodySelectContainer, _armorBodyButtonSelectedImage);            
+            SetAndShowContainer(_bodyArmorSelectContainer, _bodyArmorButtonSelectedImage, _bodyArmorBuySellCountButtonList);
         });
 
         // Кнопки переключения состояния BUY\SELL
@@ -137,26 +143,56 @@ public class MarketUI : ObjectSelectButtonsSystemUI
         });
     }
 
-    
+
 
     public override void SetActive(bool active)
     {
+        if (_isActive == active) //Если предыдущее состояние тоже то выходим
+            return;
+
+        _isActive = active;
+
         _canvas.enabled = active;
         if (active)
-        {
-            SetAndShowContainer(_weaponSelectContainer, _weaponButtonSelectedImage);
+        {          
+            SetAndShowContainer(_weaponSelectContainer, _weaponButtonSelectedImage, _weaponBuySellCountButtonList);
         }
         else
         {
-            ClearActiveButtonContainer();           
+            SetActiveButtonList(false);
+            HideAllContainerArray();
+           // ClearAndUpdateSumText();
+            //ClearActiveButtonContainer();           
         }
     }
 
-    private void SetAndShowContainer(Transform selectContainer, Image typeButtonSelectedImage)
+
+
+    private void SetAndShowContainer(RectTransform selectContainer, Image buttonSelectedImage, List<PlacedObjectBuySellCountButtonUI> buySellButtonList)
     {
-        ShowAndUpdateContainer(selectContainer);
-        ShowSelectedButton(typeButtonSelectedImage);
+        SetActiveButtonList(false);// Деактивируем прошлый активный контейнер с кнопками (если он был)   
+        _activeBuySellCountButtonList = buySellButtonList; //Назначим новый активный контейнер с кнопками
+        ShowContainer(selectContainer);
+        SetActiveButtonList(true); // Активируем новый активный контейнер       
+
+        ShowSelectedButton(buttonSelectedImage);
+        ClearAndUpdateSumText();
+
+        ClearBuySellCountInDictionary(_buyObjectCountDictionary);
+        ClearBuySellCountInDictionary(_sellObjectCountDictionary);
+
         StartAnimationBuySellCountButton(_marketState);
+    }
+    /// <summary>
+    /// Настроим активный контейнер с кнопками
+    /// </summary>
+    protected void SetActiveButtonList(bool active)
+    {
+        if (_activeBuySellCountButtonList != null)
+            foreach (PlacedObjectBuySellCountButtonUI button in _activeBuySellCountButtonList)
+            {
+                button.SetActive(active);
+            }
     }
 
     /// <summary>
@@ -236,7 +272,7 @@ public class MarketUI : ObjectSelectButtonsSystemUI
     private void Buy()
     {
         _warehouseManager.TryBuy(_sumAllBuy, _buyObjectCountDictionary);
-    
+
         ClearBuySellCountInDictionary(_buyObjectCountDictionary);
         ClearAndUpdateSumText();
         ClearByuSellTextInButtonList();
@@ -244,16 +280,122 @@ public class MarketUI : ObjectSelectButtonsSystemUI
 
     private void Sell()
     {
-        _warehouseManager.Sell(_sumAllSell, _sellObjectCountDictionary);        
+        _warehouseManager.Sell(_sumAllSell, _sellObjectCountDictionary);
 
         ClearBuySellCountInDictionary(_sellObjectCountDictionary);
         ClearAndUpdateSumText();
         ClearByuSellTextInButtonList();
     }
 
-    protected override void CreateSelectButtonsSystemInActiveContainer()
-    {   
-        // Переберем список 
+    /*  protected override void CreateSelectButtonsSystemInActiveContainer()
+      {   
+          // Переберем список 
+          foreach (PlacedObjectTypeSO placedObjectTypeSO in _warehouseManager.GetAllPlacedObjectTypeSOList())
+          {
+              switch (placedObjectTypeSO)
+              {
+                  case GrappleTypeSO:
+                  case ShootingWeaponTypeSO:
+                  case SwordTypeSO:
+                      if (_activeContainer == _weaponSelectContainer)
+                          CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _weaponSelectContainer);
+                      break;
+
+                  case GrenadeTypeSO:
+                  case HealItemTypeSO:
+                  case ShieldItemTypeSO:
+                  case SpotterFireItemTypeSO:
+                  case CombatDroneTypeSO:
+                      if (_activeContainer == _itemSelectContainer)
+                          CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _itemSelectContainer);
+                      break;
+
+                  case HeadArmorTypeSO:
+                      if (_activeContainer == _headArmorSelectContainer)
+                          CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _headArmorSelectContainer);
+                      break;
+
+                  case BodyArmorTypeSO:
+                      if (_activeContainer == _bodyArmorSelectContainer)
+                          CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _bodyArmorSelectContainer);
+                      break;
+              }
+          }
+      }*/
+
+    protected override void CreateSelectButtonsSystemInContainer(RectTransform buttonContainer)
+    {
+        if (buttonContainer == _weaponSelectContainer)
+        {
+            _weaponBuySellCountButtonList.Clear();
+            foreach (PlacedObjectTypeSO placedObjectTypeSO in _warehouseManager.GetAllPlacedObjectTypeSOList())
+            {
+                switch (placedObjectTypeSO)
+                {
+                    case GrappleTypeSO:
+                    case ShootingWeaponTypeSO:
+                    case SwordTypeSO:
+                        _weaponBuySellCountButtonList.Add(CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _weaponSelectContainer));
+                        break;
+                }
+            }
+        }
+
+        if (buttonContainer == _itemSelectContainer)
+        {
+            _itemBuySellCountButtonList.Clear();
+            foreach (PlacedObjectTypeSO placedObjectTypeSO in _warehouseManager.GetAllPlacedObjectTypeSOList())
+            {
+                switch (placedObjectTypeSO)
+                {
+                    case GrenadeTypeSO:
+                    case HealItemTypeSO:
+                    case ShieldItemTypeSO:
+                    case SpotterFireItemTypeSO:
+                    case CombatDroneTypeSO:
+                        _itemBuySellCountButtonList.Add(CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _itemSelectContainer));
+                        break;
+                }
+            }
+        }
+
+        if (buttonContainer == _headArmorSelectContainer)
+        {
+            _headArmorBuySellCountButtonList.Clear();
+            foreach (PlacedObjectTypeSO placedObjectTypeSO in _warehouseManager.GetAllPlacedObjectTypeSOList())
+            {
+                switch (placedObjectTypeSO)
+                {
+                    case HeadArmorTypeSO:
+                        _headArmorBuySellCountButtonList.Add(CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _headArmorSelectContainer));
+                        break;
+                }
+            }
+        }
+
+        if (buttonContainer == _bodyArmorSelectContainer)
+        {
+            _bodyArmorBuySellCountButtonList.Clear();
+            foreach (PlacedObjectTypeSO placedObjectTypeSO in _warehouseManager.GetAllPlacedObjectTypeSOList())
+            {
+                switch (placedObjectTypeSO)
+                {
+                    case BodyArmorTypeSO:
+                        _bodyArmorBuySellCountButtonList.Add(CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _bodyArmorSelectContainer));
+                        break;
+                }
+            }
+        }
+    }
+    protected override void CreateSelectButtonsSystemInAllContainer()
+    {
+        _buyObjectCountDictionary.Clear();
+        _sellObjectCountDictionary.Clear();
+
+        _weaponBuySellCountButtonList.Clear();
+        _itemBuySellCountButtonList.Clear();
+        _headArmorBuySellCountButtonList.Clear();
+        _bodyArmorBuySellCountButtonList.Clear();
         foreach (PlacedObjectTypeSO placedObjectTypeSO in _warehouseManager.GetAllPlacedObjectTypeSOList())
         {
             switch (placedObjectTypeSO)
@@ -261,36 +403,30 @@ public class MarketUI : ObjectSelectButtonsSystemUI
                 case GrappleTypeSO:
                 case ShootingWeaponTypeSO:
                 case SwordTypeSO:
-                    if (_activeContainer == _weaponSelectContainer)
-                        CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _weaponSelectContainer);
+                    _weaponBuySellCountButtonList.Add(CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _weaponSelectContainer));
                     break;
-
                 case GrenadeTypeSO:
                 case HealItemTypeSO:
                 case ShieldItemTypeSO:
                 case SpotterFireItemTypeSO:
                 case CombatDroneTypeSO:
-                    if (_activeContainer == _itemSelectContainer)
-                        CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _itemSelectContainer);
+                    _itemBuySellCountButtonList.Add(CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _itemSelectContainer));
                     break;
-
                 case HeadArmorTypeSO:
-                    if (_activeContainer == _armorHeadSelectContainer)
-                        CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _armorHeadSelectContainer);
+                    _headArmorBuySellCountButtonList.Add(CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _headArmorSelectContainer));
                     break;
-
                 case BodyArmorTypeSO:
-                    if (_activeContainer == _armorBodySelectContainer)
-                        CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _armorBodySelectContainer);
+                    _bodyArmorBuySellCountButtonList.Add(CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _bodyArmorSelectContainer));
                     break;
             }
         }
     }
 
+
     /// <summary>
     /// Создать Кнопки изменения количества покупки и продажи объекта типа PlacedObject
     /// </summary>
-    private void CreatePlacedObjectBuySellCountButton(PlacedObjectTypeSO placedObjectTypeSO, Transform containerTransform)
+    private PlacedObjectBuySellCountButtonUI CreatePlacedObjectBuySellCountButton(PlacedObjectTypeSO placedObjectTypeSO, Transform containerTransform)
     {
         PlacedObjectBuySellCountButtonUI buySellCountButton = Instantiate(GameAssetsSO.Instance.placedObjectBuySellCountButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
         Transform visualButton = Instantiate(placedObjectTypeSO.GetVisual2D(), buySellCountButton.transform); // Создадим Визуал кнопки в зависимости от типа размещаемого объекта и сделаем дочерним к кнопке               
@@ -299,21 +435,21 @@ public class MarketUI : ObjectSelectButtonsSystemUI
 
         _buyObjectCountDictionary[placedObjectTypeSO] = 0;
         _sellObjectCountDictionary[placedObjectTypeSO] = 0;
-        _activeBuySellCountButtonList.Add(buySellCountButton);
+        return buySellCountButton;
     }
 
-    protected override void ClearActiveButtonContainer()
-    {
-        base.ClearActiveButtonContainer();
-        ClearActiveCollection();
-    }
-    private void ClearActiveCollection()
-    {
-        _buyObjectCountDictionary.Clear();
-        _sellObjectCountDictionary.Clear();
-        _activeBuySellCountButtonList.Clear();
-        ClearAndUpdateSumText();
-    }
+    /* protected override void ClearActiveButtonContainer()
+     {
+         base.ClearActiveButtonContainer();
+         ClearActiveCollection();
+     }*/
+    /*  private void ClearActiveCollection()
+      {        
+          ClearAndUpdateSumText();
+      }*/
+    /// <summary>
+    /// Очистим и обновим текст суммы главного меню магазина
+    /// </summary>
     private void ClearAndUpdateSumText()
     {
         _sumAllBuy = 0;
@@ -353,7 +489,7 @@ public class MarketUI : ObjectSelectButtonsSystemUI
             case MarketState.Buy:
                 // Очистим неактивное окно
                 ClearBuySellCountInDictionary(_sellObjectCountDictionary);
-                ClearAndUpdateSumText();                
+                ClearAndUpdateSumText();
                 StartAnimationBuySellCountButton(MarketState.Buy);
 
                 _buyButtonSelectedImage.enabled = true;
@@ -372,10 +508,10 @@ public class MarketUI : ObjectSelectButtonsSystemUI
                 break;
         }
     }
-    
+
 
     /// <summary>
-    /// Запуск анимации для кнопок, выбора количества объектов для покупки\продажи.
+    /// В активном контейнере запустим анимацию для кнопок "выбора количества объектов для покупки\продажи" .
     /// </summary>
     private void StartAnimationBuySellCountButton(MarketState marketState)
     {
@@ -385,7 +521,7 @@ public class MarketUI : ObjectSelectButtonsSystemUI
         }
     }
     /// <summary>
-    /// Очистить текст в списке _activeBuySellCountButtonList
+    /// Очистить текст в списке _weaponBuySellCountButtonList
     /// </summary>
     private void ClearByuSellTextInButtonList()
     {
@@ -421,8 +557,8 @@ public class MarketUI : ObjectSelectButtonsSystemUI
         {
             _tooltipUI.ShowShortTooltipFollowMouse("Недостаточно СРЕДСТВ", new TooltipUI.TooltipTimer { timer = 0.8f }); // Покажем подсказку и зададим новый таймер отображения подсказки
             return false;
-        }      
-       
+        }
+
     }
 
     /// <summary>

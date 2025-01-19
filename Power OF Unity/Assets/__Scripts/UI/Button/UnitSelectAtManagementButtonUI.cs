@@ -4,7 +4,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Кнопка - выбора  Юнита, в окне менеджмента юнитов
 /// </summary>
-public class UnitSelectAtManagementButtonUI : MonoBehaviour
+public class UnitSelectAtManagementButtonUI : MonoBehaviour 
 {
     [SerializeField] private Button _unitSelectButton;  // Кнопка для выбора  Юнита
     [SerializeField] private Image _selectedImage; // Изображение выделенной кнопки 
@@ -60,9 +60,7 @@ public class UnitSelectAtManagementButtonUI : MonoBehaviour
         {
             Destroy(_statusContainer.gameObject);
             _priceText.text = $"{unit.GetUnitTypeSO<UnitFriendSO>().GetPriceHiring().ToString("N0")} $";
-        }
-
-        _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;                     
+        }             
     }
 
     private void SetToggleButton()
@@ -77,6 +75,19 @@ public class UnitSelectAtManagementButtonUI : MonoBehaviour
             ChangeLocation(Unit.Location.Mission);
         });
     }
+
+    public void SetActive(bool active)
+    {
+        if (active)
+        {
+            _unitManager.OnSelectedUnitChanged += UnitManager_OnSelectedUnitChanged;
+        }
+        else
+        {
+            _unitManager.OnSelectedUnitChanged -= UnitManager_OnSelectedUnitChanged;
+        }
+    }
+
     /// <summary>
     /// Изменить локацию. 
     /// </summary>

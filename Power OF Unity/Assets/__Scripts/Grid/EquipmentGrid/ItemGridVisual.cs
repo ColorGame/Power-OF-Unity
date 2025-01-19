@@ -93,7 +93,7 @@ public class ItemGridVisual : MonoBehaviour
         }
     }
 
-    public void SetActive(bool active)
+  /*  public void SetActive(bool active)
     {
         if (active)
         {
@@ -111,9 +111,9 @@ public class ItemGridVisual : MonoBehaviour
         {
             Disable();
         }
-    }
+    }*/
 
-    private void Enable()
+    public void Enable()
     {
         _canvasItemGrid.enabled = true;
 
@@ -127,7 +127,7 @@ public class ItemGridVisual : MonoBehaviour
         _unitEquipmentSystem.OnEquipmentGridsCleared += UnitEquipmentSystem_OnEquipmentGridsCleared;       
     }
 
-    private void Disable()
+    public void Disable()
     {
         _canvasItemGrid.enabled = false;
 

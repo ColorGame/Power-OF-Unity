@@ -38,6 +38,8 @@ public class GrenadeTypeSO : PlacedObjectTypeWithActionSO
         Search3DPrefab(name,
            PlacedObjectGeneralListForAutoCompletionSO.Instance.GrenadePrefab3DArray);
 
+        _canPlacedOnSlotArray = new EquipmentSlot[] {EquipmentSlot.BagSlot };
+
         base.AutoCompletion();
     }
 }

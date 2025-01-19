@@ -38,6 +38,13 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
     private Image[] _buttonSelectedImageArray; // массив изображений для веделения нужной кнопки
     private IToggleActivity[] _toggleTabArray; // Массив вкладок которые будем переключать
 
+    private IToggleActivity[] _showManagerTabList;
+    private IToggleActivity[] _showItemTabList;
+    private IToggleActivity[] _showArmorTabList;
+    private IToggleActivity[] _showShopTabList;
+    private IToggleActivity[] _showMissionTabList;
+
+
     private GameInput _gameInput;
     private GameMenuUIProvider _gameMenuUIProvider;
     private WarehouseManager _warehouseManager;
@@ -98,7 +105,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
         _missionButton.onClick.AddListener(() => { ShowMissionTab(); });
 
         _toggleTabArray = new IToggleActivity[]
-       {
+        {
             _pickUpDropPlacedObject,
             _unitPortfolioUI,
             _unitSelectAtEquipmentButtonsSystemUI,
@@ -107,7 +114,35 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
             _armorSelectButtonsSystemUI,
             _marketUI,
             _unitManagerTabUI
-       };
+        };
+
+        _showManagerTabList = new IToggleActivity[]
+        {
+           _unitPortfolioUI,
+            _unitManagerTabUI,
+        };
+        _showItemTabList = new IToggleActivity[]
+        {
+            _pickUpDropPlacedObject,
+            _unitPortfolioUI,
+            _unitSelectAtEquipmentButtonsSystemUI,
+            _unitEquipmentSystem,
+            _itemSelectButtonsSystemUI,
+        };
+        _showArmorTabList = new IToggleActivity[]
+        {
+            _pickUpDropPlacedObject,
+            _unitPortfolioUI,
+            _unitSelectAtEquipmentButtonsSystemUI,
+            _unitEquipmentSystem,
+            _armorSelectButtonsSystemUI,
+        };
+        _showShopTabList = new IToggleActivity[]
+        {
+            _marketUI
+        };
+        _showMissionTabList = new IToggleActivity[] { };
+
 
         _coinCountText.text = $"{_warehouseManager.GetCountCoin().ToString("N0")}";
         _warehouseManager.OnChangCoinCount += WarehouseManager_OnChangCoinCount;
@@ -115,7 +150,7 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
         SubscribeAlternativeToggleVisible();
         DisableAllToggleTabInArray();
         ShowItemTab();
-    }       
+    }
 
     private void WarehouseManager_OnChangCoinCount(object sender, uint count)
     {
@@ -142,86 +177,64 @@ public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
         UnsubscribeAlternativeToggleVisible();
         _gameMenuUIProvider.LoadAndToggleVisible(SubscribeAlternativeToggleVisible).Forget();
     }
-   
+
     private void ShowManagerTab()
     {
         ShowSelectedButton(_selectedUnitManagerButtonImage);
-        ShowTabs(new HashSet<IToggleActivity>
-        {
-            _unitPortfolioUI,
-            _unitManagerTabUI
-        });
+        ShowTabs(_showManagerTabList);
     }
-
     private void ShowItemTab()
     {
         ShowSelectedButton(_selectedItemButtonImage);
         _unitEquipmentSystem.SetActiveEquipmentGrid(EquipmentGrid.GridState.ItemGrid);
-        ShowTabs(new HashSet<IToggleActivity>
-        {
-            _pickUpDropPlacedObject,
-            _unitPortfolioUI,
-            _unitSelectAtEquipmentButtonsSystemUI,
-            _unitEquipmentSystem,
-            _itemSelectButtonsSystemUI,
-        });
-
+        ShowTabs(_showItemTabList);
     }
     private void ShowArmorTab()
     {
         ShowSelectedButton(_selectedArmorButtonImage);
         _unitEquipmentSystem.SetActiveEquipmentGrid(EquipmentGrid.GridState.ArmorGrid);
-        ShowTabs(new HashSet<IToggleActivity>
-        {
-            _pickUpDropPlacedObject,
-            _unitPortfolioUI,
-            _unitSelectAtEquipmentButtonsSystemUI,
-            _unitEquipmentSystem,
-            _armorSelectButtonsSystemUI,
-        });
-
+        ShowTabs(_showArmorTabList);
     }
     private void ShowShopTab()
     {
         ShowSelectedButton(_selectedShopButtonImage);
-        ShowTabs(new HashSet<IToggleActivity> { _marketUI });
-
+        ShowTabs(_showShopTabList);
     }
     private void ShowMissionTab()
     {
         ShowSelectedButton(_selectedMissionButtonImage);
-
-        ShowTabs(new HashSet<IToggleActivity> { });
+        ShowTabs(_showMissionTabList);
     }
     /// <summary>
     /// Отключить все Переключатели Вкладок В Массиве
     /// </summary>
     private void DisableAllToggleTabInArray()
     {
-        foreach (IToggleActivity tab in _toggleTabArray) 
+        foreach (IToggleActivity tab in _toggleTabArray)
         {
             tab.SetActive(false);
-        } 
+        }
     }
 
 
     /// <summary>
     /// Показать переданные вкладки
     /// </summary>
-    /// <remarks>
-    private void ShowTabs(HashSet<IToggleActivity> showArray)
+    private void ShowTabs(IEnumerable<IToggleActivity> showTabArray)
     {
         foreach (IToggleActivity tab in _toggleTabArray)
         {
-            if (showArray.Contains(tab))
+            bool contains = false; // предположим что объекта нет в искомом списке / Если найдем его в искомом списке то перезапишем флаг     
+            foreach (IToggleActivity showTad in showTabArray)
             {
-                tab.SetActive(true);               
+                if (tab == showTad)
+                {
+                    contains = true;
+                    break;
+                }
             }
-            else
-            {
-                tab.SetActive(false);
-            }
-        }     
+            tab.SetActive(contains);
+        }
     }
 
     private void ShowSelectedButton(Image typeButtonSelectedImage) // Показать визуализацию выбора кнопки

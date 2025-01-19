@@ -58,7 +58,7 @@ public class Bootstrapper
         scenesService.FindEntryPointInSceneAndInject(activeScene);
 
         //Выгружаю экран загрузки
-        await UniTask.Delay(TimeSpan.FromSeconds(3f));
+        await UniTask.Delay(TimeSpan.FromSeconds(2f));
         loadingScreenProvider.Unload();        
 
         scenesService.TryFindStartSceneAndActivate(activeScene);

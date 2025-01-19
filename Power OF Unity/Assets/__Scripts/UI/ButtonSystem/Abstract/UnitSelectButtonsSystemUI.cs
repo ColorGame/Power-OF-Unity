@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
 
 /// <summary>
 /// Система кнопок - выбора ОБЪЕКТА типа UNIT
@@ -21,7 +23,6 @@ public abstract class UnitSelectButtonsSystemUI : ObjectSelectButtonsSystemUI
         {
             headerText.enabled = (headerText == selectHeaderText);// Если это переданное нам изображение то включим его
         }
-    }
-
+    }  
 
 }

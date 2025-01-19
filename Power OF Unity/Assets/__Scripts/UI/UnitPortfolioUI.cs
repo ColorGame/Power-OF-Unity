@@ -38,6 +38,8 @@ public class UnitPortfolioUI : MonoBehaviour, IToggleActivity
     private float _updateTimer;
     private float _updateTimerMax = 3f;
 
+    private bool _isActive;
+
     public void Init(UnitManager unitManager)
     {
         _unitManager = unitManager;
@@ -62,6 +64,11 @@ public class UnitPortfolioUI : MonoBehaviour, IToggleActivity
 
     public void SetActive(bool active)
     {
+        if (_isActive == active) //Если предыдущее состояние тоже то выходим
+            return;
+
+        _isActive = active;
+
         _canvas.enabled = active;
     }
    
