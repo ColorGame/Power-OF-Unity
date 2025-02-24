@@ -38,12 +38,14 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
         _turnSystem = turnSystem;
         _levelGrid = levelGrid;
         _mouseOnGameGrid = mouseOnGameGrid;
+
+        Setup();
     }
 
-    private void Start()
+    private void Setup()
     {
         _unitLayerMask = LayerMask.GetMask("Units");
-        _selectedUnit = _unitManager.GetUnitFriendList()[0];
+        _selectedUnit = _unitManager.GetUnitOnMissionList()[0];
         SetSelectedUnit(_selectedUnit, _selectedUnit.GetAction<MoveAction>()); // Присвоить(Установить) выбранного юнита, Установить Выбранное Действие,   // При старте в _targetUnit передается юнит по умолчанию 
 
 
@@ -65,7 +67,7 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
     {
         if (_turnSystem.IsPlayerTurn()) // Если ход Игрока то
         {
-            List<Unit> myUnitList = _unitManager.GetUnitFriendList(); // Вернем список моих юнитов
+            List<Unit> myUnitList = _unitManager.GetUnitList(); // Вернем список моих юнитов
             if (myUnitList.Count > 0) // Если есть живые то передаем выделению первому по списку юниту
             {
                 SetSelectedUnit(myUnitList[0], myUnitList[0].GetAction<MoveAction>());
@@ -77,7 +79,7 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
     {
         if (_selectedUnit.GetHealthSystem().IsDead()) // Если выделенный юнит отъехал то ...
         {
-            List<Unit> friendlyUnitList = _unitManager.GetUnitFriendList(); // Вернем список дружественных юнитов
+            List<Unit> friendlyUnitList = _unitManager.GetUnitList(); // Вернем список дружественных юнитов
             if (friendlyUnitList.Count > 0) // Если есть живые то передаем выделению первому по списку юниту
             {
                 SetSelectedUnit(friendlyUnitList[0], friendlyUnitList[0].GetAction<MoveAction>());
@@ -168,15 +170,16 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
         Ray ray = Camera.main.ScreenPointToRay(_gameInput.GetMouseScreenPoint()); // Луч от камеры в точку где находиться курсор мыши
         if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, _unitLayerMask)) // Вернет true если во что-то попадет. Т.к. указана маска взаимодействия то реагировать будет только на юнитов
         {   // Проверим есть ли на объекте в который мы попали компонент  <Unit>
-            if (raycastHit.transform.TryGetComponent<Unit>(out Unit unit)) // ПРЕИМУЩЕСТВО TryGetComponent перед CreateInstanceClass в том что НЕ НАДО делать нулевую проверку. TryGetComponent - возвращает true, если компонент < > найден. Возвращает компонент указанного типа, если он существует.
+            if (raycastHit.transform.TryGetComponent(out UnitCoreView unitCore)) // ПРЕИМУЩЕСТВО TryGetComponent перед CreateInstanceClass в том что НЕ НАДО делать нулевую проверку. TryGetComponent - возвращает true, если компонент < > найден. Возвращает компонент указанного типа, если он существует.
             {
+                Unit unit = unitCore.GetUnit();
                 if (unit == _selectedUnit) // Данная проверка позволяет нажимать на выбранного юнита для выполнения _selectedAction (нажимать сквозь выбранного юнита на сеточную позиция спрятанную за ним) Если эти строки убрать то вместо выполнения _selectedAction мы просто опять выберим юнита.
                 {
                     // ЭТОТ ЮНИТ УЖЕ ВЫБРАН
                     return false;
                 }
 
-                if (unit.IsEnemy()) // Если луч попал в врага 
+                if (unit.GetType() != _selectedUnit.GetType()) // Если луч попал во врага (их типы не совподают)
                 {
                     // ЭТО ВРАГ ЕГО ВЫБИРАТЬ НЕ НАДО
                     return false;
@@ -201,7 +204,7 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
     public void SetSelectedAction(BaseAction baseAction) //Установить Выбранное Действие, И запускаем событие  
     {
         _selectedAction = baseAction;
-
+       
         OnSelectedActionChanged?.Invoke(this, EventArgs.Empty); // "?"- проверяем что !=0. Invoke вызвать (this-ссылка на объект который запускает событие "отправитель" а класс ActionButtonSystemUI  LevelGridVisual будет его прослушивать "обрабатывать")
     }
     public BaseAction GetSelectedAction() { return _selectedAction; }// Вернуть выбранное действие

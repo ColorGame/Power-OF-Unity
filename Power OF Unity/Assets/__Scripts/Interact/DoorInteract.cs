@@ -1,4 +1,4 @@
-using Pathfinding;
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,7 +25,7 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
     private float _timer; // Таймер который не будет позволять непрерывно взаимодействовать с дверью
     private Transform[] _transformChildrenDoorArray;  //Массив Дочерних объектов двери (это сама дверь[0] левая[1] b правая[2] дверь)
     private Animator _animator; //Аниматор на двери
-    private SingleNodeBlocker _singleNodeBlocker; // Блокирующий узел на самой двери
+   // private SingleNodeBlocker _singleNodeBlocker; // Блокирующий узел на самой двери
 
     private Action _onInteractionComplete; // Делегат Взаимодействие Завершено// Объявляю делегат в пространстве имен - using System;
                                            //Сохраним наш делегат как обыкновенную переменную (в ней будет храниться функия которую мы передадим).
@@ -46,7 +46,7 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
     {
         _animator = GetComponent<Animator>();
         _transformChildrenDoorArray = GetComponentsInChildren<Transform>();
-        _singleNodeBlocker = GetComponent<SingleNodeBlocker>();
+      //  _singleNodeBlocker = GetComponent<SingleNodeBlocker>();
     }
 
 
@@ -125,8 +125,8 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
         foreach (GridPositionXZ gridPosition in _doorGridPositionList) // Переберем список сеточных позиции которые занимает Дверь
         {
             // PathfindingMonkey.Instance.SetIsWalkableGridPosition(_gridPositioAnchor, true); // Установим что Можно ходить по этой сеточной позиции
-            GraphNode graphNode = _levelGrid.GetGridNode(gridPosition); // Получим проверяемый узел
-            BlockManager.Instance.InternalUnblock(graphNode, _singleNodeBlocker); // Разблокируем узлы
+          //  GraphNode graphNode = _levelGrid.GetGridNode(gridPosition); // Получим проверяемый узел
+          //  BlockManager.Instance.InternalUnblock(graphNode, _singleNodeBlocker); // Разблокируем узлы
         }
         _soundManager.PlayOneShot(SoundName.DoorOpen);
 
@@ -136,7 +136,7 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
 
     private void CloseDoor() // Закрыть дверь
     {
-        var selectorList = new List<SingleNodeBlocker>() { _singleNodeBlocker };   // Список препядсвтий которые будем игнорировать. Закинем туда саму дверь
+       /* var selectorList = new List<SingleNodeBlocker>() { _singleNodeBlocker };   // Список препядсвтий которые будем игнорировать. Закинем туда саму дверь
 
         // Проверим проем дверей вдруг там ЮНИТ
         foreach (GridPositionXZ gridPosition in _doorGridPositionList) // Переберем список сеточных позиции которые занимает Дверь
@@ -154,7 +154,7 @@ public class DoorInteract : MonoBehaviour, IInteractable //Дверь-Взаимодействия 
             //  PathfindingMonkey.Instance.SetIsWalkableGridPosition(_gridPositioAnchor, false); // Установим что Нельзя ходить по этой сеточной позиции
             GraphNode graphNode = _levelGrid.GetGridNode(gridPosition); // Получим проверяемый узел
             BlockManager.Instance.InternalBlock(graphNode, _singleNodeBlocker); // Заблокируем узел
-        }
+        }*/
 
         _isOpen = false;
         _animator.CrossFade(_hashAnimationName.DoorClose, 0.2f);

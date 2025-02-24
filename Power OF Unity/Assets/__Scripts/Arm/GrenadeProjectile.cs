@@ -59,17 +59,19 @@ public class GrenadeProjectile : MonoBehaviour // Гранатный снаряд
 
     public void Init(GridPositionXZ targetGridPosition, TypeGrenade typeGrenade, Action onGrenadeBehaviorComplete, int grenadeDamage, SoundManager soundManager, TurnSystem turnSystem, LevelGrid levelGrid) // Настройка гранаты. В аргумент передаем целевую позицию, тип гранаты и также  В аргумент будем передовать делегат типа Action (onGrenadeBehaviorComplete - На Гранате Действие ЗАвершено)
     {
+        _soundManager = soundManager;
+        _turnSystem = turnSystem;
+        _levelGrid = levelGrid;
+
         _grenadeDamage = grenadeDamage;
         _typeGrenade = typeGrenade;
         _onGrenadeBehaviorComplete = onGrenadeBehaviorComplete; // Сохраним полученый делегат
         _targetPosition = _levelGrid.GetWorldPosition(targetGridPosition); // Получим целевую позицию из переданной нам позиции сетки        
-        _floorHeight = LevelGrid.FLOOR_HEIGHT; // Установим высоту этажа
+        _floorHeight = _levelGrid.GetFloorHeght(); // Установим высоту этажа
         _damageRadiusInWorldPosition = GetDamageRadiusInWorldPosition();
 
         _startPosition = transform.position; // Зафиксируем начальное положение гранаты для первой точки кривой Бизье        
-        _soundManager = soundManager;
-        _turnSystem = turnSystem;
-        _levelGrid = levelGrid;
+        
 
         //БЕЗЬЕ// расчет траектории гранаты по кривой БЕзье
         _totalDistance = Vector3.Distance(transform.position, _targetPosition);  //Вычислим дистанцию между гранатой и целью 
@@ -80,13 +82,13 @@ public class GrenadeProjectile : MonoBehaviour // Гранатный снаряд
         /*//АНИМ.КРИВАЯ.У// расчет траектории гранаты по анимационной кривой - хорошо работает когда один этаж
         _floor = targetGridPosition._floor; // Установим на какой этаж будем кидать               
 
-        _positionXZ = transform.position; // Сохраним текущую позиции по оси Х при этом обнулим У состовляющию
+        _positionXZ = transform.gridPosition; // Сохраним текущую позиции по оси Х при этом обнулим У состовляющию
         _positionXZ.y = 0;
 
-        _totalDistance = Vector3.Distance(transform.position, _targetRotation);  //Вычислим дистанцию между гранатой и целью (чтобы не вычеслять каждый кадр в update)
+        _totalDistance = Vector3.Distance(transform.gridPosition, _targetRotation);  //Вычислим дистанцию между гранатой и целью (чтобы не вычеслять каждый кадр в update)
         _currentDistance = _totalDistance; // Текцщие расстояние в начале равно всему расстоянию
 
-        _moveDirection = (_targetRotation - transform.position).normalized; //Вычислим вектор Направление движения гранаты (чтобы не вычеслять каждый кадр в update т.к. оно не меняется)
+        _moveDirection = (_targetRotation - transform.gridPosition).normalized; //Вычислим вектор Направление движения гранаты (чтобы не вычеслять каждый кадр в update т.к. оно не меняется)
         //АНИМ.КРИВАЯ.У//*/
     }
 
@@ -127,7 +129,7 @@ public class GrenadeProjectile : MonoBehaviour // Гранатный снаряд
         /* //АНИМ.КРИВАЯ.У//
          float moveStep = _moveSpeed * Time.deltaTime; // Шаг перемещения за кадр
 
-         transform.position += _moveDirection * moveStep; // Переместим снаряд по оси Х на один шаг
+         transform.gridPosition += _moveDirection * moveStep; // Переместим снаряд по оси Х на один шаг
 
          _currentDistance -= moveStep; // Текущее растояние до цели. От изначальной дистанции каждый кадр будем отнимать пройденый шаг
 
@@ -137,7 +139,7 @@ public class GrenadeProjectile : MonoBehaviour // Гранатный снаряд
          float positionY = _arcYAnimationCurve.Evaluate(currentDistanceNormalized) * maxHeight; // Получим позицию У из анимационной кривой  и умножим на макс высоту полета
 
 
-         transform.position = new Vector3(transform.position.x, positionY, transform.position.y); //Переместим гранату с учетом анимационной кривой
+         transform.gridPosition = new Vector3(transform.gridPosition.x, positionY, transform.gridPosition.y); //Переместим гранату с учетом анимационной кривой
 
          float reachedTargetDistance = 0.2f; // достигнутое целевое расстояние
          if (_currentDistance < reachedTargetDistance) // Если граната достаточно близко то ШАРАХНЕМ ЕЮ

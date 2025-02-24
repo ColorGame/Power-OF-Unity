@@ -64,7 +64,7 @@ public class UnitWorldUI : MonoBehaviour, ISetupForSpawn
 
                 Unit selectedUnit = _unitActionSystem.GetSelectedUnit();
 
-                if (_unit.IsEnemy() != selectedUnit.IsEnemy())
+                if (_unit.GetType() != selectedUnit.GetType())
                 {
                     // Этот ЮНИТ и Активный в разных групах
 

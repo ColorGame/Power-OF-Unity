@@ -17,7 +17,7 @@ public class GridSystemXY<TGridObject>
     protected float _cellSizeWithScaleFactor;// Размер ячейки с учетом масштаба канваса
     protected Transform _anchorGridTransform; // Якорь сетки
     protected TGridObject[,] _gridObjectArray; // Двумерный массив объектов сетки
-    protected Vector3 _offsetСenterCell;// Сделаем смещение что бы центр ячейки не совподал  с (0.0) transform.position родителя 
+    protected Vector3 _offsetСenterCell;// Сделаем смещение что бы центр ячейки не совподал  с (0.0) transform.gridPosition родителя 
     protected EquipmentSlot _slot;
 
     public GridSystemXY(float canvasScaleFactor, EquipmentGridParameters gridParameters, Func<GridSystemXY<TGridObject>, Vector2Int, TGridObject> createGridObject)  // Конструктор // Func - это встроенный ДЕЛЕГАТ (третий параметр в аргументе это тип<TGridObject> который возвращает наш делегат и назавем его createGridObject)
@@ -71,7 +71,7 @@ public class GridSystemXY<TGridObject>
     public virtual Vector3 GetWorldPositionCenterСornerCell(Vector2Int gridPosition) 
     {
         return new Vector3(gridPosition.x, gridPosition.y, 0) * _cellSizeWithScaleFactor + _anchorGridTransform.position + _offsetСenterCell;   // Получим координаты нашей ячеки с учетом ее масштаба, добавим смещение самой сетки _anchorGridTransform и смещения нулевой ячейки
-                                                                                                                    // мы хотим что бы центр ячейки был смещен относительного нашего _anchorGridTransform  и левый угол сетки совподал с ***Grid.transform.position                                                                                                              
+                                                                                                                    // мы хотим что бы центр ячейки был смещен относительного нашего _anchorGridTransform  и левый угол сетки совподал с ***Grid.transform.gridPosition                                                                                                              
     }
     /// <summary>
     /// Получим мировые координаты нижнего левого угола ячейки

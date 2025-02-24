@@ -132,7 +132,7 @@ public class SpotterFireAction : BaseAction // Действие Корректировщик огня НАСЛ
 
                 Unit targetUnit = _unit.GetLevelGrid().GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции 
                                                                                                 // GetUnitAtGridPosition может вернуть null но в коде выше мы исключаем нулевые позиции, так что проверка не нужна
-                if (targetUnit.IsEnemy() != _unit.IsEnemy()) // Если тестируемый юнит враг а наш юнит нет (игнорируем чужаков)
+                if (targetUnit.GetType() != _unit.GetType()) // Если тестируемый юнит враг а наш юнит нет (игнорируем чужаков)
                 {
                     // Оба подразделения в Разных "командах"
                     continue;

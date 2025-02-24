@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Верхняя панель меню в сцене нстройки юнита
+/// Верхняя панель меню в сцене настройки юнита
 /// </summary>
 public class UpperMenuBarOnUnitSetupUI : MonoBehaviour
 {

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Кнопка - выбора дружественного юнита на игровом уровне.
 /// </summary>
-public class UnitFriendSelectAtLevelButtonUI : MonoBehaviour
+public class UnitSelectAtLevelButtonUI : MonoBehaviour
 {
 
     [SerializeField] private TextMeshProUGUI _nameUnitText; // Имя юнита
@@ -134,7 +134,10 @@ public class UnitFriendSelectAtLevelButtonUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        _unit.GetHealthSystem().OnDamageAndHealing -= Unit_OnDamageAndHealing;
-        _unit.GetActionPointsSystem().OnActionPointsChanged -= Unit_OnActionPointsChanged;
+        if (_unit != null)
+        {
+            _unit.GetHealthSystem().OnDamageAndHealing -= Unit_OnDamageAndHealing;
+            _unit.GetActionPointsSystem().OnActionPointsChanged -= Unit_OnActionPointsChanged;
+        }
     }
 }

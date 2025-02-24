@@ -12,6 +12,9 @@ public class OptionsSubMenuUIProvider : LocalAssetLoader
         _hashAnimationName = hashAnimationName;
 
     }
+
+    public event EventHandler<bool> OnEdgeScrollingChangeProvaider;
+
     private GameInput _gameInput;
     private SoundManager _soundManager;
     private MusicManager _musicManager;
@@ -36,10 +39,17 @@ public class OptionsSubMenuUIProvider : LocalAssetLoader
 
             if (ñloseDelegate != null)
                 _optionsSubMenuUI.SetCloseDelegate(ñloseDelegate);
-            _optionsSubMenuUI.SetUnloadDelegate(SetUnload);
 
+            _optionsSubMenuUI.SetUnloadDelegate(SetUnload);
             _optionsSubMenuUI.ToggleVisible();
+
+            _optionsSubMenuUI.OnEdgeScrollingChange += OptionsSubMenuUI_OnEdgeScrollingChange; ;
         }       
+    }
+
+    private void OptionsSubMenuUI_OnEdgeScrollingChange(object sender, bool e)
+    {
+        OnEdgeScrollingChangeProvaider?.Invoke(this, e);    
     }
 
     private void SetUnload()

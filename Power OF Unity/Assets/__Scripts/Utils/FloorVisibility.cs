@@ -8,7 +8,7 @@ using UnityEngine;
 /// <remarks>
 /// Если изменить материал который поддерживает альфа канал то можно изменять прозрачность объектов
 /// </remarks>
-public class FloorVisibility : MonoBehaviour  
+public class FloorVisibility : MonoBehaviour
 {
     [Header("Динамическое изминение этажа. \nДля ЮНИТА поставить галочку")]
     [SerializeField] private bool _dynamicFloorPosition = false; // Динамическая позиция этажа (для объектов которые могут перемещаться и менять этаж нахождения)
@@ -24,15 +24,24 @@ public class FloorVisibility : MonoBehaviour
     private bool _cameraZoomActionStarted = false; // Началось действие увеличения камеры
     private float _cameraHeight;
 
+    private static bool _isInit = false;
+
+    private void Awake()
+    {
+        _rendererArray = GetComponents<Renderer>();
+    }
+
     public static void Init(LevelGrid levelGrid, CameraFollow cameraFollow)
     {
         _levelGrid = levelGrid;
         _cameraFollow = cameraFollow;
+
+        _isInit = true;
     }
 
     private void Start()
     {
-        SetupOnStart();
+      //  SetupOnStart();
     }
 
     private void SetupOnStart()
@@ -57,10 +66,11 @@ public class FloorVisibility : MonoBehaviour
 
     private void Update()
     {
+        if (!_isInit) return;
         if (!_cameraZoomActionStarted) return; // Если камера не начала Zoom то выходим из апдейта (отключение объектов происходит при изминенеии ZOOM)
 
         float floorHeightOffset = 3f; // смещение высоты этажа // Для удобства отображения камеры
-        bool showObject = _cameraHeight > LevelGrid.FLOOR_HEIGHT * _floor + floorHeightOffset; // Показываемый объект при условии ( если Высота камеры больше Высоты этажа * на номер этажа + смещение)
+        bool showObject = _cameraHeight > _levelGrid.GetFloorHeght() * _floor + floorHeightOffset; // Показываемый объект при условии ( если Высота камеры больше Высоты этажа * на номер этажа + смещение)
 
         if (showObject || _floor == 0) // Если можно показать объект или этаж нулевой (что бы если высота камера окажеться меньше cameraHeight, униты на нулевом этаже не отключались)
         {

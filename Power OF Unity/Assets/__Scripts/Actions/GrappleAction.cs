@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.UI.CanvasScaler;
 
-
-public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут выполнить толька два соседних юнита одновременно
-{  
+/// <summary>
+/// Крюк захват.<br/>
+/// Действие могут выполнить толька два соседних юнита одновременно
+/// </summary>
+public class GrappleAction : BaseAction
+{
 
     public static event EventHandler OnAnyUnitStunComboAction; // Любой Юнит Оглушен в Комбо Действии
 
@@ -27,7 +31,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
     private Unit _unitEnemy;  // Юнит ВРАГ    
     private GridPositionXZ _targetPointEnemyGridPosition; // Точка перемещения врага
     private Transform _instantiateFXPrefab; // Созданный префаб частичек
-    
+
     private RopeRanderer _ropeRandererUnit;
     private RopeRanderer _ropeRandererPartner;
 
@@ -36,17 +40,17 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
     private int _maxComboEnemyDistance = 5; //Максимальная дистанция Комбо Для поиска Врага//НУЖНО НАСТРОИТЬ//
     private float zOffset = 0; // 
 
-    
+
 
     public override void SetupForSpawn(Unit unit)
     {
-       base.SetupForSpawn(unit);
+        base.SetupForSpawn(unit);
 
         _state = State.ComboSearchPartner; // Установим состояние по умолчанию т.к. используем в методе GetValidActionGridPositionList
-        _ropeRandererUnit = _unit.GetUnitRope().GetRopeRanderer();
+                                           //  _ropeRandererUnit = _unit.GetUnitRope().GetRopeRanderer();
     }
 
-   
+
 
     private void Update()
     {
@@ -97,7 +101,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
         {
             case State.ComboSearchPartner:
 
-                _instantiateFXPrefab = Instantiate(GameAssetsSO.Instance.comboPartnerFXPrefab, _unit.GetTransformPosition()+ Vector3.up * 1.7f, Quaternion.identity); // Создадим частички взаимодействия
+                _instantiateFXPrefab = Instantiate(GameAssetsSO.Instance.comboPartnerFXPrefab, _unit.GetTransformPosition() + Vector3.up * 1.7f, Quaternion.identity); // Создадим частички взаимодействия
                 _instantiateFXPrefab.LookAt(_unitPartner.GetTransformPosition() + Vector3.up * 1.7f); // И разверну в сторону партнера
 
                 _state = State.ComboSearchEnemy;
@@ -113,7 +117,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
             case State.ComboStart:
                 _state = State.ComboAfter;
                 _unitPartner.GetAction<GrappleAction>().SetState(_state);// У юнита партнера тоже изменим состоянеи, что бы он смог выйти из комбо цикла               
-                
+
                 float ComboAfterStateTime = 0.5f;
                 _stateTimer = ComboAfterStateTime;
                 break;
@@ -137,7 +141,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
         Vector3 unitEnemyDirection = (_unitEnemy.GetTransformPosition() - _unit.GetTransformPosition()).normalized; // Направление к целивому юниту, еденичный вектор
 
         // развернем партнера и самого юнита
-        _unitPartner.SetTransformForward( Vector3.Slerp(_unitPartner.GetTransform().forward, partnerEnemyDirection, Time.deltaTime * rotateSpeed)); // поворт юнита.
+        _unitPartner.SetTransformForward(Vector3.Slerp(_unitPartner.GetTransform().forward, partnerEnemyDirection, Time.deltaTime * rotateSpeed)); // поворт юнита.
         transform.forward = Vector3.Slerp(transform.forward, unitEnemyDirection, Time.deltaTime * rotateSpeed); // поворт юнита.
 
         // Когда развернусь 
@@ -177,7 +181,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
         Vector3 moveEnemyDirection = (targetPointEnemyWorldPosition - _unitEnemy.GetTransformPosition()).normalized; // Направление движения, еденичный вектор
 
         float moveEnemySpead = 6f; //НУЖНО НАСТРОИТЬ//
-        _unitEnemy.SetTransformPosition( _unitEnemy.GetTransformPosition() + moveEnemyDirection * moveEnemySpead * Time.deltaTime);
+        _unitEnemy.SetTransformPosition(_unitEnemy.GetTransformPosition() + moveEnemyDirection * moveEnemySpead * Time.deltaTime);
 
         // Развернем партнера и юнита в сторону врага
         _unitPartner.GetTransform().LookAt(_unitEnemy.GetTransform());
@@ -198,7 +202,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
             NextState(); //Следующие состояние
             _unitEnemy.UpdateGridPosition(); // Обновим сеточную позицию у врага которого перетащили
         }
-    }    
+    }
 
     public override string GetActionName() // Присвоить базовое действие //целиком переопределим базовую функцию
     {
@@ -252,7 +256,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
 
                         // Если ищем Партнера то ИСКЛЮЧИМ ВРАГОВ
                         targetUnit = _unit.GetLevelGrid().GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции  // GetUnitAtGridPosition может вернуть null но в коде выше мы исключаем нулевые позиции, так что проверка не нужна                        
-                        if (targetUnit.IsEnemy() != _unit.IsEnemy()) // Если тестируемый не в моей команде (игнорируем его)
+                        if (targetUnit.GetType() != _unit.GetType()) // Если тестируемый не в моей команде (игнорируем его)
                         {
                             continue;
                         }
@@ -289,7 +293,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
 
                         // Если ищем врага то ИСКЛЮЧИМ ДРУЖЕСТВЕННЫХ ЮНИТОВ
                         targetUnit = _unit.GetLevelGrid().GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции // GetUnitAtGridPosition может вернуть null но в коде выше мы исключаем нулевые позиции, так что проверка не нужна
-                        if (targetUnit.IsEnemy() == _unit.IsEnemy()) // Если тестируемый в одной команде (игнорируем его)
+                        if (targetUnit.GetType() == _unit.GetType()) // Если тестируемый в одной команде (игнорируем его)
                         {
                             continue;
                         }
@@ -360,8 +364,10 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
         SetupTakeActionFromState(gridPosition);
         ActionStart(onActionComplete); // Вызовим базовую функцию СТАРТ ДЕЙСТВИЯ разрешает доступ к UPDATE// Вызываем этот метод в конце после всех настроек т.к. в этом методе есть EVENT и он должен запускаться после всех настроек
     }
-
-    private void SetupTakeActionFromState(GridPositionXZ gridPosition) //Настроить Выполнение действий в зависимости от состояния
+    /// <summary>
+    /// Настроить Выполнение действий в зависимости от состояния
+    /// </summary>
+    private void SetupTakeActionFromState(GridPositionXZ gridPosition)
     {
         switch (_state)
         {
@@ -437,7 +443,7 @@ public class GrappleAction : BaseAction // Комбо (Grapple Gun) // Действие могут
         return _state = state;
     }
 
- 
+
 
 
 

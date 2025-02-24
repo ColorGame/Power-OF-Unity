@@ -11,12 +11,12 @@ public class PathfindingGridDebugObject : GridDebugObject   // Поиск Пути Сеточн
     [SerializeField] private TextMeshPro _fCostText;
     [SerializeField] private SpriteRenderer _isWalkableSpriteRenderer; // Квадрат отоброжающий проходимость ячейки
 
-    private PathNode _pathNode;
+    private PathNodeMonkey _pathNode;
 
     public override void SetGridObject(object gridObject)
     {
         base.SetGridObject(gridObject);
-        _pathNode = (PathNode)gridObject; // Установим переданный нам объект как Сеточный объект типа PathNode
+        _pathNode = (PathNodeMonkey)gridObject; // Установим переданный нам объект как Сеточный объект типа PathNodeMonkey
     }
 
     protected override void Update()

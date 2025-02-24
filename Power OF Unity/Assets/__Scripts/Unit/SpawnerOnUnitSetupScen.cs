@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.UI.CanvasScaler;
 
 public class SpawnerOnUnitSetupScen : MonoBehaviour
 {
@@ -37,7 +38,8 @@ public class SpawnerOnUnitSetupScen : MonoBehaviour
 
         if (_selectedUnit != null)
         {
-            _selectedUnit.GetUnitEquipsViewFarm().InstantiateOnlyUnitView(transform);            
+            _selectedUnit.GetUnitEquipsViewFarm().CreateOnlyView(transform);
+            _selectedUnit.SetUnitState(Unit.UnitState.UnitSetupMenu);
         }
     }
 

@@ -195,7 +195,7 @@ public class UnitEquipmentSystem : IToggleActivity
         {
             _selectedUnit.GetUnitAnimator().SetSkipCurrentChangeWeaponEvent(true);
             _selectedUnit.GetUnitEquipsViewFarm().SetSkipCurrentChangeWeaponEvent(true);
-            //OnClearingSlotFromAnotherPlacedObject?.Invoke(this,EventArgs.Empty); // Сначала запустим событие чтобы класс UnitAnimator и UnitEquipsViewFarm смогли настроиться
+            //OnClearingSlotFromAnotherPlacedObject?.Invoke(this,EventArgs.Empty); // Сначала запустим событие чтобы класс UnitAnimator и UnitEquipViewFarm смогли настроиться
             RemoveFromGridAndUnitEquipmentWithCheck(placedObject, returnInResourcesAndStartPosition: true);
         }
     }

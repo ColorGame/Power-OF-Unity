@@ -38,7 +38,7 @@ public class UnitSelectAtManagementButtonUI : MonoBehaviour
         _unit = unit;
 
 
-        _nameUnitText.text = unit.GetUnitTypeSO<UnitTypeSO>().GetName(); // Зададим имя с ЗАГЛАВНОЙ БУКВЫ
+        _nameUnitText.text = unit.GetUnitTypeSO().GetName(); // Зададим имя с ЗАГЛАВНОЙ БУКВЫ
         _numberUnitText.text = index.ToString();
         _healthNumberText.text = unit.GetHealthSystem().GetHealthFull().ToString();
         _actionPointsNumberText.text = unit.GetActionPointsSystem().GetActionPointsCountFull().ToString();
@@ -50,7 +50,7 @@ public class UnitSelectAtManagementButtonUI : MonoBehaviour
             _unitManager.SetSelectedUnit(unit);
         });
 
-        if (_unitManager.GetUnitFriendList().Contains(unit)) // Если это юнит в списке моих юнитов
+        if (_unitManager.GetUnitList().Contains(unit)) // Если это юнит в списке моих юнитов
         {
             Destroy(_priceContainer.gameObject);
             SetToggleButton();
@@ -113,7 +113,7 @@ public class UnitSelectAtManagementButtonUI : MonoBehaviour
         _missionButtonIcon.enabled = (isMissionLocation);
     }
 
-    private void UnitManager_OnSelectedUnitChanged(object sender, Unit newSelectedUnit)
+    private void UnitManager_OnSelectedUnitChanged(object sender,Unit newSelectedUnit)
     {
         UpdateSelectedVisual(newSelectedUnit);
     }

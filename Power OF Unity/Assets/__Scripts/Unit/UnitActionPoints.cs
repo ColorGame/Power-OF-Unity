@@ -85,14 +85,14 @@ public class UnitActionPoints
 
         OnActionPointsChanged?.Invoke(this, EventArgs.Empty); // запускаем событие ПОСЛЕ обнавления очков действий.(для // РЕШЕНИЕ // 2 //в ActionButtonSystemUI)
     }
-    
+
     /// <summary>
     /// Ход изменен Сбросим очки действий до полного
     /// </summary>
-    public void TurnSystem_OnTurnChanged(object sender, EventArgs empty) 
+    public void TurnSystem_OnTurnChanged(object sender, EventArgs empty)
     {
-        if ((_unit.IsEnemy() && !_turnSystem.IsPlayerTurn()) || // Если это враг И его очередь (НЕ очередь игрока) ИЛИ это НЕ враг(игрок) и очередь игрока то...
-            (!_unit.IsEnemy() && _turnSystem.IsPlayerTurn()))
+        if ((_unit.GetIsEnemy() && !_turnSystem.IsPlayerTurn()) || // Если это враг И его очередь (НЕ очередь игрока) ИЛИ это НЕ враг(игрок) и очередь игрока то...
+            (!_unit.GetIsEnemy() && _turnSystem.IsPlayerTurn()))
         {
             _actionPoints = _actionPointsFull;
 
@@ -122,7 +122,7 @@ public class UnitActionPoints
     /// <summary>
     /// Оглушить на stunPercent(процент оглушения)
     /// </summary>
-    public void Stun(float stunPercent) 
+    public void Stun(float stunPercent)
     {
         SetStunned(true);
         _penaltyStunPercent = stunPercent; // Установим Процента Оглушения

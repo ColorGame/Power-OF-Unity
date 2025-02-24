@@ -22,8 +22,7 @@ public abstract class ObjectSelectButtonsSystemUI : MonoBehaviour, IToggleActivi
     }
 
     protected virtual void Setup()
-    {
-        // ClearAllContainer();
+    {        
         SetDelegateContainerSelectionButton();
     }
 
@@ -104,41 +103,7 @@ public abstract class ObjectSelectButtonsSystemUI : MonoBehaviour, IToggleActivi
         }
     }
 
-    /* /// <summary>
-     ///  Показать и обновить контейнер (в аргумент передаем нужный контейнер кнопок)
-     /// </summary>
-     protected void ShowAndUpdateContainer(RectTransform buttonContainer)
-     {
-         ClearActiveButtonContainer(); // очистим предыдущий активный контейнер       
-
-         foreach (Transform container in _containerButtonArray) // Переберем массив контейнеров
-         {
-             if (container == buttonContainer) // Если это переданный нам контейнер
-             {
-                 _activeContainer = buttonContainer; // назначим новый активный контейнер
-                 buttonContainer.gameObject.SetActive(true); // Включим его
-                 CreateSelectButtonsSystemInActiveContainer();
-                 _scrollRect.content = buttonContainer; // Установим этот контейнер как контент для прокрутки
-                 _scrollRect.verticalScrollbar.value = 1; // переместим прокрутку панели в верх.
-             }
-             else // В противном случае
-             {
-                 container.gameObject.SetActive(false); // Выключим
-             }
-         }
-     }*/
-
-    /*    /// <summary>
-        /// Очистим активный контейнер c кнопками
-        /// </summary>
-        protected virtual void ClearActiveButtonContainer()
-        {
-            if (_activeContainer != null)
-            {
-               // ClearButtonContainer(_activeContainer);
-                _activeContainer = null;
-            }
-        }*/
+ 
     /// <summary>
     /// Очистить переданный контейнер с кнопками
     /// </summary>
@@ -161,12 +126,7 @@ public abstract class ObjectSelectButtonsSystemUI : MonoBehaviour, IToggleActivi
                 Destroy(selectPlacedButton.gameObject);
             }
         }
-    }
-
-    /*/// <summary>
-    ///  Создать систему кнопок выбора(объектов) в активном контейнере
-    /// </summary>
-    protected abstract void CreateSelectButtonsSystemInActiveContainer();*/
+    }   
 
     /// <summary>
     ///  Создать систему кнопок выбора(объектов) в переданном контейнере контейнере
@@ -176,6 +136,7 @@ public abstract class ObjectSelectButtonsSystemUI : MonoBehaviour, IToggleActivi
     ///  Создать систему кнопок выбора(объектов) во всех контейнерах
     /// </summary>
     protected abstract void CreateSelectButtonsSystemInAllContainer();
+    
 }
 
 

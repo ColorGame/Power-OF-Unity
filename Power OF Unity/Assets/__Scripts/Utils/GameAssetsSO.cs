@@ -30,7 +30,7 @@ public class GameAssetsSO : ScriptableObject //»гровые јктивы
     public PlacedObjectSelectButtonUI placedObjectSelectButton; //  нопка выбора объекта  типа PlacedObject
     public PlacedObjectBuySellCountButtonUI placedObjectBuySellCountButton; // нопки изменени€ количества покупки и продажи объекта типа PlacedObject
     public UnitEnemySelectAtLevelButtonUI unitEnemySelectAtLevelButton; //  нопка - выбора вражеского юнита на игровом уровне.
-    public UnitFriendSelectAtLevelButtonUI unitFriendSelectAtLevelButton; //  нопка - выбора дружественного юнита на игровом уровне.
+    public UnitSelectAtLevelButtonUI unitFriendSelectAtLevelButton; //  нопка - выбора дружественного юнита на игровом уровне.
     public UnitSelectAtEquipmentButtonUI unitSelectAtEquipmentButton; //  нопка - выбора  ёнита, дл€ настройки экипировки
     public UnitSelectAtManagementButtonUI unitSelectAtManagementButton; //  нопка - выбора  ёнита, в окне менеджмента юнитов
 

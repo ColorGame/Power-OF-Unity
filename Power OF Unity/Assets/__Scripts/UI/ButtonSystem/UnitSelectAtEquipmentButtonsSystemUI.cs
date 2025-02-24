@@ -70,8 +70,7 @@ public class UnitSelectAtEquipmentButtonsSystemUI : UnitSelectButtonsSystemUI
         else
         {
             _unitManager.ClearSelectedUnit(); // Очистим выделенного юнита чтобы сбросить 3D модель и ПОРТФОЛИО
-            HideAllContainerArray();
-            //ClearActiveButtonContainer();
+            HideAllContainerArray();           
         }
     }
 
@@ -146,28 +145,18 @@ public class UnitSelectAtEquipmentButtonsSystemUI : UnitSelectButtonsSystemUI
         }
     }
 
-
-    /*    protected override void CreateSelectButtonsSystemInActiveContainer()
-        {
-            if (_activeContainer == _unitsOnBarrackContainer)
-                GetCreatedUnitSelectButtonsList(_unitManager.GetUnitFriendOnBarrackList(),_unitsOnBarrackContainer);
-
-            if (_activeContainer == _unitsOnMissionContainer)
-                GetCreatedUnitSelectButtonsList(_unitManager.GetUnitFriendOnMissionList(), _unitsOnMissionContainer);
-        }*/
-
     protected override void CreateSelectButtonsSystemInContainer(RectTransform buttonContainer)
     {
         if (buttonContainer == _unitsOnBarrackContainer)
-            _onBarrackUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetUnitFriendOnBarrackList(), _unitsOnBarrackContainer);
+            _onBarrackUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetUnitOnBarrackList(), _unitsOnBarrackContainer);
         if (buttonContainer == _unitsOnMissionContainer)
-            _onMissionUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetUnitFriendOnMissionList(), _unitsOnMissionContainer);
+            _onMissionUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetUnitOnMissionList(), _unitsOnMissionContainer);
     }
 
     protected override void CreateSelectButtonsSystemInAllContainer()
     {
-        _onBarrackUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetUnitFriendOnBarrackList(), _unitsOnBarrackContainer);
-        _onMissionUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetUnitFriendOnMissionList(), _unitsOnMissionContainer);
+        _onBarrackUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetUnitOnBarrackList(), _unitsOnBarrackContainer);
+        _onMissionUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetUnitOnMissionList(), _unitsOnMissionContainer);
     }
 
     /// <summary>

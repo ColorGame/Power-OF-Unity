@@ -4,7 +4,7 @@ using UnityEngine;
 /// Визуал юнита "Большой экзоскилет". 
 /// </summary>
 /// <remarks>сотояние брони - 1.BodyArmor_4A_BigExoskeleton </remarks>
-public class UnitBigExoskeletonView : UnitView
+public class UnitBigExoskeletonView : UnitWithChangeHeadArmorView
 {
     [Header("Доп. контйнеры для BigExoskeleton\nв которых будем переключатьвидимость MeshRenderer")]
     [SerializeField] private MeshRenderer[] _headArmorBigCoverClearMeshArray;

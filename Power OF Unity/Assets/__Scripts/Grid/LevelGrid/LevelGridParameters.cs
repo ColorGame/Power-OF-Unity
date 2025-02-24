@@ -7,13 +7,15 @@ public struct LevelGridParameters  // Создадим структуру мож
     public int width;       //Ширина
     public int height;      //Высота    
     public float cellSize;  // Размер ячейки
-    public Transform anchorGridTransform; //Якорь трансформа сетки
+    public int floorAmount;// Количество Этажей
+    public float floorHeight;// Высота этажа в уровне - это высота стенок  
 
-    public LevelGridParameters(int width, int height, float cellSize, Transform anchorGridTransform)
+    public LevelGridParameters(int width, int height, float cellSize, int floorAmount, float floorHeight)
     {        
         this.width = width;
         this.height = height;
         this.cellSize = cellSize;
-        this.anchorGridTransform = anchorGridTransform;
+        this.floorAmount = floorAmount;
+        this.floorHeight = floorHeight;
     }
 }

@@ -1,29 +1,27 @@
 using System;
 using UnityEngine;
 
-public class UnitSelectedVisual : MonoBehaviour // Визуализация выбора юнита
+public class UnitSelectedVisual : MonoBehaviour, ISetupForSpawn // Визуализация выбора юнита
 {
-    [SerializeField] private Unit _unit; // Юнит к которому прикриплен данный визуа.
-
+    private Unit _unit; // Юнит к которому прикриплен данный визуа.
     private MeshRenderer _meshRenderer; // Будем включать и выкл. MeshRenderer что бы скрыть или показать наш визуальный объект
-
     private UnitActionSystem _unitActionSystem;
 
     private void Awake() //Для избежания ошибок Awake() Лучше использовать только для инициализации и настроийки объектов
     {
         _meshRenderer = GetComponent<MeshRenderer>();
-        _unitActionSystem = _unit.GetUnitActionSystem();
     }
-
-    private void Start() // А в методе StartScene() использовать для взаимодествия и получения внешних ссылок
+    public void SetupForSpawn(Unit unit)
     {
+        _unit = unit;
+        _unitActionSystem = _unit.GetUnitActionSystem();
+
         _unitActionSystem.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged; // подписываемся на Event из UnitActionSystem (становимся слушателями). Обозначает что мы выполняем функцию UnitActionSystem_OnSelectedUnitChanged()
                                                                                            // Будет выполняться каждый раз когда мы меняем выбранного юнита.
         Unit selectedUnit = _unitActionSystem.GetSelectedUnit();
         UpdateVisual(selectedUnit); // Что бы при старте визуал был включен только у выбранного игрока
     }
-
-    // метод лучше назвать также как и Event
+    
     private void UnitActionSystem_OnSelectedUnitChanged(object sender, Unit selectedUnit) //sender - отправитель // Подписка должна иметь туже сигнатуру что и функция отправителя OnSelectedUnitChanged
     {
         UpdateVisual(selectedUnit);

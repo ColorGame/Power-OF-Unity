@@ -21,7 +21,7 @@ public class UnitSelectAtEquipmentButtonUI : MonoBehaviour, IToggleActivity
         _unitManager = unitManager;
         _unit = unit;
 
-        _nameUnitText.text = unit.GetUnitTypeSO<UnitTypeSO>().GetName(); // Зададим имя с ЗАГЛАВНОЙ БУКВЫ
+        _nameUnitText.text = unit.GetUnitTypeSO().GetName(); // Зададим имя с ЗАГЛАВНОЙ БУКВЫ
         _numberUnitText.text = index.ToString();
 
         _unitSelectAtEquipmentButton = GetComponent<Button>();
@@ -29,7 +29,7 @@ public class UnitSelectAtEquipmentButtonUI : MonoBehaviour, IToggleActivity
         {
             _unitManager.SetSelectedUnit(unit);
         });
-       
+
 
         Unit selectedUnit = _unitManager.GetSelectedUnit(); // Выделенный Югит
         UpdateSelectedVisual(selectedUnit);

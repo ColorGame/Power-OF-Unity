@@ -70,7 +70,7 @@ public class ShootAction : BaseAction
 
         _hitPercent = 1f; //Установим Процент попадания МАКСИМАЛЬНЫМ 100%
         _cellSize = _unit.GetLevelGrid().GetCellSize();
-        _targetAnimationAim.position = _shootPointTransform.position; // при старте Цель для анимации прицеливания  будет точка прицеливания на самом юните, что бы не было лишних поворотов направлений
+       // _targetAnimationAim.position = _shootPointTransform.position; // при старте Цель для анимации прицеливания  будет точка прицеливания на самом юните, что бы не было лишних поворотов направлений
     }
 
     public override void SetPlacedObjectTypeWithActionSO(PlacedObjectTypeWithActionSO placedObjectTypeWithActionSO)
@@ -344,7 +344,7 @@ public class ShootAction : BaseAction
 
                     Unit targetUnit = _unit.GetLevelGrid().GetUnitAtGridPosition(testGridPosition);   // Получим юнита из нашей тестируемой сеточной позиции 
                                                                                                       // GetUnitAtGridPosition может вернуть null но в коде выше мы исключаем нулевые позиции, так что проверка не нужна
-                    if (targetUnit.IsEnemy() == _unit.IsEnemy()) // Если тестируемый юнит враг и наш юнит тоже враг то (если они оба в одной команде то будем игнорировать этих юнитов)
+                    if (targetUnit.GetType() == _unit.GetType()) // Если тестируемый юнит враг и наш юнит тоже враг то (если они оба в одной команде то будем игнорировать этих юнитов)
                     {
                         // Оба подразделения в одной "команде"
                         continue;
@@ -357,7 +357,7 @@ public class ShootAction : BaseAction
 
                     float reserveHeight = 0.15f; // Резерв по высоте чуть выше точки выстрела ()
                     if (Physics.Raycast(
-                            //_shootPointTransform.position + Vector3.up * reserveHeight,
+                            //_shootPointTransform.gridPosition + Vector3.up * reserveHeight,
                             unitWorldPosition + Vector3.up * (shootPoint.y + reserveHeight), 
                             shototDirection,
                             Vector3.Distance(unitWorldPosition, targetUnit.GetWorldPosition()),

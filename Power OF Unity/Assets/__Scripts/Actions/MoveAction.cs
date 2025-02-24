@@ -1,10 +1,9 @@
-#define PATHFINDING
-
-using Pathfinding;
+/*#define PATHFINDING
+using PathfindingGridDate;
+using static PathfindingGridDate.BlockManager;*/
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static Pathfinding.BlockManager;
 
 // Обратите внимание на эту строку, если она опущена, скрипт не будет знать, что класс 'Path' существует, и он выдаст ошибки компилятора
 // Эта строка всегда должна присутствовать в верхней части скриптов, использующих поиск пути
@@ -34,8 +33,8 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
     private float _differentFloorsTeleportTimerMax = .5f; // Максимальный таймер телепортации на разные этажи (это время воспроизведения анимации прыжка или падения)
     private List<GridPositionXZ> _validGridPositionList = new List<GridPositionXZ>(); // Список Допустимых Сеточных Позиция для Действий
 
-    
-    
+
+
 
 #if PATHFINDING
     private BlockManager.TraversalProvider _traversalProvider; // Поставщик(провайдер) обхода
@@ -131,7 +130,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
                 _unit.GetSoundManager().Stop();
 
                 OnStopMoving?.Invoke(this, EventArgs.Empty); //Запустим событие Прекратил движение
-                _singleNodeBlocker.BlockAtCurrentPosition(); // Заблокирую узел на новом месте и разблокирую предыдущий
+               // _singleNodeBlocker.BlockAtCurrentPosition(); // Заблокирую узел на новом месте и разблокирую предыдущий
                 ActionComplete(); // Вызовим базовую функцию ДЕЙСТВИЕ ЗАВЕРШЕНО                
             }
             else
@@ -166,12 +165,12 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
         // Запланируйте путь для расчета
         _seeker.StartPath(_path);   // вычислим
 #else
-        List<GridPosition> pathGridPositionList = PathfindingMonkey.Instance.FindPath(_unit.GetGridPosition(), gridPosition, out int pathLength); // Получим список Пути позиций сетки от текущего сеточного положения Юнита до целевого (out int pathLength добавили что бы соответствовала сигнатуре)
+        List<GridPositionXZ> pathGridPositionList = PathfindingMonkey.Instance.FindPath(_unit.GetGridPosition(), gridPosition, out int pathLength); // Получим список Пути позиций сетки от текущего сеточного положения Юнита до целевого (out int pathLength добавили что бы соответствовала сигнатуре)
 
-       // Надо преобразовать полученный список GridPosition в МИРОВЫЕ КООРДИНАТЫ Vector3
-       _positionList = new List<Vector3>(); // Иниацилизируем список Позиции
+        // Надо преобразовать полученный список GridPosition в МИРОВЫЕ КООРДИНАТЫ Vector3
+        _positionList = new List<Vector3>(); // Иниацилизируем список Позиции
 
-        foreach (GridPosition pathGridPosition in pathGridPositionList) // переберем компоненты списка pathGridPositionList, преобразуем их в мировые координаты и добавим в _positionList
+        foreach (GridPositionXZ pathGridPosition in pathGridPositionList) // переберем компоненты списка pathGridPositionList, преобразуем их в мировые координаты и добавим в _positionList
         {
             _positionList.Add(_unit.GetLevelGrid().GetWorldPosition(pathGridPosition)); // преобразуем pathGridPosition в мировую и добавим в _positionList
         }
@@ -219,14 +218,14 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
     {
         if (selectedUnit == _unit) // Если выбран этот юнит
         {
-          GeneratePossibleMoves(_unit); // Сгенерируем возможные ходы с помощью (A* Pathfinding Project4.2.18) для нашего юнита
+         // GeneratePossibleMoves(_unit); // Сгенерируем возможные ходы с помощью (A* Pathfinding Project4.2.18) для нашего юнита
         }
     }
     private void UnitActionSystem_OnBusyChanged(object sender, EventArgs e)
     {
         if (_unit.GetUnitActionSystem().GetSelectedUnit() == _unit) // Если выбран этот юнит
         {
-            GeneratePossibleMoves(_unit); // Сгенерируем возможные ходы с помощью (A* Pathfinding Project4.2.18) для нашего юнита
+          //  GeneratePossibleMoves(_unit); // Сгенерируем возможные ходы с помощью (A* Pathfinding Project4.2.18) для нашего юнита
         }
     }
 
@@ -235,7 +234,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
         return _validGridPositionList;
     }
 
-    public void GeneratePossibleMoves(Unit unit) // Сгенерируем возможные ходы с помощью (A* Pathfinding Project4.2.18) для нашего юнита
+   public void GeneratePossibleMoves(Unit unit) // Сгенерируем возможные ходы с помощью (A* Pathfinding Project4.2.18) для нашего юнита
     {
         _constantPath = ConstantPath.Construct(transform.position, _moveDistance * 1000 * Mathf.RoundToInt(_unit.GetLevelGrid().GetCellSize()));
         _constantPath.traversalProvider = _traversalProvider; // Установим объекты для обхода
@@ -243,7 +242,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
         _seeker.StartPath(_constantPath);
 
         // Получим прямоугольник узлов вокруг Юнита
-        /*GraphNode unitNode = AstarPath.active.GetNearest(unit.transform.position).node; // Получим узел Юнита
+        GraphNode unitNode = AstarPath.active.GetNearest(unit.GetTransformPosition()).node; // Получим узел Юнита
         List<GraphNode> graphNodes = PathUtilities.BFS(unitNode, _moveDistance);
 
              _validGridPositionList.Clear(); // Очистим сисок путей
@@ -259,25 +258,25 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
             _validGridPositionList.Add(nodeGridPosition); // Добавляем в список те позиции которые прошли все тесты
 
             OnAnyUnitPathComplete?.Invoke(this, _unit); // Запустим событие
-        }*/
+        }
     }
 
 
 #else
-    public override List<GridPosition> GetValidActionGridPositionList() //Получить Список Допустимых Сеточных Позиция для Действий // переопределим базовую функцию
+    public override List<GridPositionXZ> GetValidActionGridPositionList() //Получить Список Допустимых Сеточных Позиция для Действий // переопределим базовую функцию
     {
         _validGridPositionList.Clear(); // Очистим сисок путей
 
-        GridPosition unitGridPosition = _unit.GetGridPosition(); // Получим позицию в сетке
-        for (int x = -maxMoveDistance; x <= maxMoveDistance; x++) // Юнит это центр нашей позиции с координатами unitGridPosition, поэтому переберем допустимые значения в условном радиусе maxMoveDistance
+        GridPositionXZ unitGridPosition = _unit.GetGridPosition(); // Получим позицию в сетке
+        for (int x = -_moveDistance; x <= _moveDistance; x++) // Юнит это центр нашей позиции с координатами unitGridPosition, поэтому переберем допустимые значения в условном радиусе maxMoveDistance
         {
-            for (int z = -maxMoveDistance; z <= maxMoveDistance; z++)
+            for (int z = -_moveDistance; z <= _moveDistance; z++)
             {
-                for (int floor = -maxMoveDistance; floor <= maxMoveDistance; floor++)
+                for (int floor = -_moveDistance; floor <= _moveDistance; floor++)
                 {
 
-                    GridPosition offsetGridPosition = new GridPosition(x, z, floor); // Смещенная сеточная позиция. Где началом координат(0,0, floor-этаж) является сам юнит 
-                    GridPosition testGridPosition = unitGridPosition + offsetGridPosition; // Тестируемая Сеточная позиция
+                    GridPositionXZ offsetGridPosition = new GridPositionXZ(x, z, floor); // Смещенная сеточная позиция. Где началом координат(0,0, floor-этаж) является сам юнит 
+                    GridPositionXZ testGridPosition = unitGridPosition + offsetGridPosition; // Тестируемая Сеточная позиция
 
                     if (!_unit.GetLevelGrid().IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
                     {
@@ -307,7 +306,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
                     }
 
                      int pathfindingDistanceMultiplier = 10; // множитель расстояния определения пути (в классе PathfindingMonkey задаем стоимость смещения по клетке и она равна прямо 10 по диогонали 14, поэтому умножем наш множитель на количество клеток)
-                    if (PathfindingMonkey.Instance.GetPathLength(unitGridPosition, testGridPosition) > maxMoveDistance * pathfindingDistanceMultiplier) //Исключим сеточные позиции - Если растояние до тестируемой клетки больше расстояния которое Юнит может преодолеть за один ход
+                    if (PathfindingMonkey.Instance.GetPathLength(unitGridPosition, testGridPosition) > _moveDistance * pathfindingDistanceMultiplier) //Исключим сеточные позиции - Если растояние до тестируемой клетки больше расстояния которое Юнит может преодолеть за один ход
                     {
                         // Длина пути слишком велика
                         continue;

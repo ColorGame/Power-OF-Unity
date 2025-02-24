@@ -1,4 +1,3 @@
-using Pathfinding;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,7 +24,7 @@ public class BarrelInteract : MonoBehaviour, IInteractable // Бочка Взаимодейств
                                            //СВОЙСТВО Делегата. Может вызывать закрытую функцию из другого класса
     private bool _isActive;
     private float _timer;// Таймер что бы взаимодействие было не мгновенным и кномки экшена были отключены некоторое время
-    private SingleNodeBlocker _singleNodeBlocker; // блокировщик пути
+  //  private SingleNodeBlocker _singleNodeBlocker; // блокировщик пути
     private Collider _collider;
 
     public static void Init(SoundManager soundManager, LevelGrid levelGrid)
@@ -37,7 +36,7 @@ public class BarrelInteract : MonoBehaviour, IInteractable // Бочка Взаимодейств
     private void Awake()
     {
         _collider = GetComponent<Collider>();
-        _singleNodeBlocker = GetComponent<SingleNodeBlocker>();
+       // _singleNodeBlocker = GetComponent<SingleNodeBlocker>();
     }
 
 
@@ -45,7 +44,7 @@ public class BarrelInteract : MonoBehaviour, IInteractable // Бочка Взаимодейств
     {       
         _gridPosition = _levelGrid.GetGridPosition(transform.position); // Получим сеточную позицию бочки
         _levelGrid.SetInteractableAtGridPosition(_gridPosition, this); // Установить полученный Интерфейс Взаимодействия в этой сеточной позиции
-        _singleNodeBlocker.BlockAtCurrentPosition();// Заблокирую узел
+       // _singleNodeBlocker.BlockAtCurrentPosition();// Заблокирую узел
 
         // PathfindingMonkey.Instance.SetIsWalkableGridPosition(_gridPositioAnchor, false); // Установить что Можно или Нельзя (в зависимости от isWalkable)  ходить по переданной в аргумент Сеточной Позиции
     }
@@ -84,8 +83,8 @@ public class BarrelInteract : MonoBehaviour, IInteractable // Бочка Взаимодейств
 
         _levelGrid.ClearInteractableAtGridPosition(_gridPosition); // Удалить Интерфейс Взаимодействия в этой сеточной позиции
 
-        GraphNode graphNode = AstarPath.active.GetNearest(transform.position).node; // Получим проверяемый узел
-        BlockManager.Instance.InternalUnblock(graphNode, _singleNodeBlocker); // Разблокируем узел
+      //  GraphNode graphNode = AstarPath.active.GetNearest(transform.gridPosition).node; // Получим проверяемый узел
+      //  BlockManager.Instance.InternalUnblock(graphNode, _singleNodeBlocker); // Разблокируем узел
         //PathfindingMonkey.Instance.SetIsWalkableGridPosition(_gridPositioAnchor, true); // Установить что Можно ходить по этой ячейки
         
 

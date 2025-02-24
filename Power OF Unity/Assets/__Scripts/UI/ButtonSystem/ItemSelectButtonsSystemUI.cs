@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -111,9 +112,6 @@ public class ItemSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
         {
             SetActiveButtonList(false);
             HideAllContainerArray();
-            /*
-                        _weaponPlacedObjectButtonTransformDict.Clear();
-                        ClearActiveButtonContainer();*/
         }
     }
 
@@ -131,31 +129,7 @@ public class ItemSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
         }
     }
 
-    /* protected override void CreateSelectButtonsSystemInActiveContainer()
-     {
-         // Переберем список 
-         foreach (PlacedObjectTypeSO placedObjectTypeSO in _warehouseManager.GetAllPlacedObjectTypeSOList())
-         {
-             switch (placedObjectTypeSO)
-             {
-                 case GrappleTypeSO:
-                 case ShootingWeaponTypeSO:
-                 case SwordTypeSO:
-                     if (_activeContainer == _weaponSelectContainer)
-                         CreatePlacedObjectSelectButton(placedObjectTypeSO, _weaponSelectContainer);
-                     break;
-
-                 case GrenadeTypeSO:
-                 case HealItemTypeSO:
-                 case ShieldItemTypeSO:
-                 case SpotterFireItemTypeSO:
-                 case CombatDroneTypeSO:
-                     if (_activeContainer == _itemSelectContainer)
-                         CreatePlacedObjectSelectButton(placedObjectTypeSO, _itemSelectContainer);
-                     break;
-             }
-         }
-     }*/   
+   
 
     protected override void CreateSelectButtonsSystemInContainer(RectTransform buttonContainer)
     {
@@ -199,7 +173,7 @@ public class ItemSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
         }
     }
 
-    protected override void CreateSelectButtonsSystemInAllContainer()
+    protected override  void CreateSelectButtonsSystemInAllContainer()
     {
         _weaponPlacedObjectButtonList.Clear();
         _itemPlacedObjectButtonList.Clear();
@@ -212,7 +186,7 @@ public class ItemSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
                 case GrappleTypeSO:
                 case ShootingWeaponTypeSO:
                 case SwordTypeSO:
-                    PlacedObjectSelectButtonUI placedObjectSelectButton = CreatePlacedObjectSelectButton(placedObjectTypeSO, _weaponSelectContainer);
+                    PlacedObjectSelectButtonUI placedObjectSelectButton =  CreatePlacedObjectSelectButton(placedObjectTypeSO, _weaponSelectContainer);
                     _weaponPlacedObjectButtonList.Add(placedObjectSelectButton);
                     _weaponPlacedObjectButtonTransformDict[placedObjectTypeSO] = placedObjectSelectButton.GetComponent<RectTransform>();
                     break;
@@ -221,20 +195,28 @@ public class ItemSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
                 case ShieldItemTypeSO:
                 case SpotterFireItemTypeSO:
                 case CombatDroneTypeSO:
-                    placedObjectSelectButton = CreatePlacedObjectSelectButton(placedObjectTypeSO, _itemSelectContainer);
+                    placedObjectSelectButton =  CreatePlacedObjectSelectButton(placedObjectTypeSO, _itemSelectContainer);
                     _itemPlacedObjectButtonList.Add(placedObjectSelectButton);
                     _itemPlacedObjectButtonTransformDict[placedObjectTypeSO] = placedObjectSelectButton.GetComponent<RectTransform>();
                     break;
             }
         }
-    }
+    }    
 
     /// <summary>
     /// Создать кнопку выбора размещенного объекта и поместить в контейнер
     /// </summary>
     private PlacedObjectSelectButtonUI CreatePlacedObjectSelectButton(PlacedObjectTypeSO placedObjectTypeSO, Transform containerTransform)
     {
-        PlacedObjectSelectButtonUI placedObjectSelectButton = Instantiate(GameAssetsSO.Instance.placedObjectSelectButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
+       /* AsyncInstantiateOperation<PlacedObjectSelectButtonUI> buttonInstantiateOperation = InstantiateAsync(GameAssetsSO.Instance.placedObjectSelectButton, containerTransform);
+        await buttonInstantiateOperation;
+        PlacedObjectSelectButtonUI placedObjectSelectButton = buttonInstantiateOperation.Result[0];
+
+        AsyncInstantiateOperation<Transform> visual2DInstantiateOperation = InstantiateAsync(placedObjectTypeSO.GetVisual2D(), placedObjectSelectButton.transform);
+        await visual2DInstantiateOperation;
+        Transform visualButton = visual2DInstantiateOperation.Result[0];*/
+
+         PlacedObjectSelectButtonUI placedObjectSelectButton =  Instantiate(GameAssetsSO.Instance.placedObjectSelectButton, containerTransform); // Создадим кнопку и сделаем дочерним к контенеру
         Transform visualButton = Instantiate(placedObjectTypeSO.GetVisual2D(), placedObjectSelectButton.transform); // Создадим Визуал кнопки в зависимости от типа размещаемого объекта и сделаем дочерним к кнопке 
 
         if (_canvas.renderMode == RenderMode.WorldSpace)

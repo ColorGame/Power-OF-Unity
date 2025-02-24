@@ -91,9 +91,7 @@ public class PlacedObjectBuySellCountButtonUI : MonoBehaviour
         // C: $1,234,567.89 // N: 1,234,567.89
         _buyPriceText.text = $"{_buyPrice.ToString("N0")} $";
         _sellPriceText.text = $"{_sellPrice.ToString("N0")} $";
-
-       // _warehouseManager.OnChangCountPlacedObject += WarehouseManager_OnChangCountPlacedObject;
-
+               
         SetDelegateButton();
         SetTooltipButton();
         SetAnimationOpenClose();

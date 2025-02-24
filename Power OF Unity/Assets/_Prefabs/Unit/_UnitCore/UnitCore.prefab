@@ -421,6 +421,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3013477999232598443}
   - component: {fileID: 2144567748358240566}
+  - component: {fileID: 5037594765210373008}
   - component: {fileID: 9166489426704551316}
   - component: {fileID: 591424564500887994}
   - component: {fileID: 1038163711715851208}
@@ -428,8 +429,6 @@ GameObject:
   - component: {fileID: -4672128768459207291}
   - component: {fileID: 4233964869486218640}
   - component: {fileID: 1481299886574317604}
-  - component: {fileID: -3717358109818683237}
-  - component: {fileID: 1529445506410105176}
   m_Layer: 7
   m_Name: UnitCore
   m_TagString: Untagged
@@ -476,6 +475,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.6, y: 1.9167328, z: 0.6}
   m_Center: {x: 0, y: 0.83073664, z: 0}
+--- !u!114 &5037594765210373008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3013477999232598442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd0e2c42b6b8e924e8d5f26645b05494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &9166489426704551316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -517,7 +528,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _obstaclesDoorMousePlaneCoverLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2880
 --- !u!114 &2245190387780501782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -557,7 +568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17ce0015e9672b7429ac86a62d6f8ef3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dynamicFloorPosition: 0
+  _dynamicFloorPosition: 1
   _ignoreRendererList: []
 --- !u!114 &1481299886574317604
 MonoBehaviour:
@@ -572,47 +583,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueIdentifier: 
---- !u!114 &-3717358109818683237
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3013477999232598442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 373b52eb9bf8c40f785bb6947a1aee66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1
-  drawGizmos: 0
-  detailedGizmos: 0
-  startEndModifier:
-    addPoints: 0
-    exactStartPoint: 3
-    exactEndPoint: 3
-    useRaycasting: 0
-    mask:
-      serializedVersion: 2
-      m_Bits: 4294967295
-    useGraphRaycasting: 0
-  traversableTags: -1
-  tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  graphMask:
-    value: -1
---- !u!114 &1529445506410105176
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3013477999232598442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b45e20632f1604fc6bb73e0e79cd7368, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1
 --- !u!1 &3961583270200168616
 GameObject:
   m_ObjectHideFlags: 0

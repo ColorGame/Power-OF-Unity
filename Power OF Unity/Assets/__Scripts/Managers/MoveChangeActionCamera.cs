@@ -13,7 +13,7 @@ public class MoveChangeActionCamera : MonoBehaviour // перемещение и переключени
     {
         BaseAction.OnAnyActionStart += BaseAction_OnAnyActionStart; // Подпишемся на событие будет выполняться при старте любого действия
         BaseAction.OnAnyActionCompleted += BaseAction_OnAnyActionCompleted; //Подпишемся на событие будет выполняться при завершении любого действия
-        LevelScripting.Instance.OnInteractSphereAndDoor += Instance_OnInteractSphereAndDoor; // Подпишемся на событие будет выполняться когда Сфера и Дверь Взаимодействуют 
+       // LevelScripting.Instance.OnInteractSphereAndDoor += Instance_OnInteractSphereAndDoor; // Подпишемся на событие будет выполняться когда Сфера и Дверь Взаимодействуют 
 
         _normalCameraCullingMask = Camera.main.cullingMask; // Сохраним нормальные параметры маски рендеринга камеры
 
@@ -116,13 +116,7 @@ public class MoveChangeActionCamera : MonoBehaviour // перемещение и переключени
         switch (sender)
         {
             case ShootAction shootAction:
-                HideActionCamera();
-                break;
-
             case SwordAction swordAction:
-                HideActionCamera();
-                break;
-
             case InteractAction interactAction:
                 HideActionCamera();
                 break;

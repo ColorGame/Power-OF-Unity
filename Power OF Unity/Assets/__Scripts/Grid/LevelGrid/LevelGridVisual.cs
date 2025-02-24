@@ -1,7 +1,6 @@
 //#define HEX_GRID_SYSTEM //ШЕСТИГРАННАЯ СЕТОЧНАЯ СИСТЕМА //  В C# определен ряд директив препроцессора, оказывающих влияние на интерпреpublic enumтацию исходного кода программы компилятором. 
 //Эти директивы определяют порядок интерпретации текста программы перед ее трансляцией в объектный код в том исходном файле, где они появляются. 
 
-using Pathfinding;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -54,9 +53,11 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
         _unitActionSystem = unitActionSystem;
         _levelGrid = levelGrid;
         _mouseOnGameGrid = mouseOnGameGrid;
+
+        Setup();
     }
 
-    private void Start()
+    private void Setup()
     {
         _gridSystemVisualSingleArray = new LevelGridVisualSingle[ // создаем массив определенного размером _widthX на _heightY  и FloorAmount
             _levelGrid.GetWidth(),
@@ -220,13 +221,13 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
                     continue; // continue заставляет программу переходить к следующей итерации цикла 'for' игнорируя код ниже
                 }
 
-                LevelGridNode levelGridNode = _levelGrid.GetGridNode(testGridPosition);
+              /*  LevelGridNode levelGridNode = _levelGrid.GetGridNode(testGridPosition);
 
                 //если в этой позиции нет узла пути значит эта GridPositionXZ висит в воздухе  
                 if (levelGridNode == null)
                 {
                     continue; // Пропустим эту позицию
-                }
+                }*/
 
 
                 /*//Исключим сеточные позиции которые висят в воздухе

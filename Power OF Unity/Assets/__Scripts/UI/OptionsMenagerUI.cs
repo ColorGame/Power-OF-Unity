@@ -14,10 +14,12 @@ public class OptionsMenagerUI : MonoBehaviour
     {
         _unitManager = unitManager;
         _unitActionSystem = unitActionSystem;
+
+        Setup();
     }
 
 
-    private void Start()
+    private void Setup()
     {
         _unitManager.OnAnyUnitDeadAndRemoveList += UnitManager_OnAnyUnitDeadAndRemoveList;
         _unitActionSystem.OnGameOver += UnitActionSystem_OnGameOver;

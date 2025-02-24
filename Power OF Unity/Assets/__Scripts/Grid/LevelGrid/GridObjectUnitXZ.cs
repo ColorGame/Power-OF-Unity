@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class GridObjectUnitXZ // Объект сетки (В будущем будет содержать список всех юнитов которые находятся в позиции сетки) 
-                        // Стандартный класс C#// Будем использовать конструктор для создания нашей сетки поэтому он не наследует MonoBehaviour/
-                        // GridObjectUnitXZ создается в каждой ячейки сетки. Является оболочкой для хранения Юнитов
+/// <summary>
+/// Объект сетки - создается в каждой ячейки сетки. Является оболочкой для хранения Юнитов
+/// </summary>
+public struct GridObjectUnitXZ 
 {
     private GridSystemXZ<GridObjectUnitXZ> _gridSystem; // Сеточная система .В дженерик предаем тип GridObjectUnitXZ// Частная сеточная система которая создала этот объект (это расширение например для сетки 2-го этажа)
     private GridPositionXZ _gridPosition; // Положение объекта в сетке
@@ -16,6 +16,7 @@ public class GridObjectUnitXZ // Объект сетки (В будущем будет содержать список 
         _gridSystem = gridSystem;
         _gridPosition = gridPosition;
         _unitList = new List<Unit>();
+        _interactable = default;
     }
 
     public override string ToString() // Переопределим ToString(). Чтобы она возвращала позицию в сетке и юнита в этой ячейке (позже можно расширить диапазон возвращаемых данных)

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Children:
   - {fileID: 3}
-  - {fileID: 5}
-  - {fileID: 12}
+  - {fileID: 6}
+  - {fileID: 14}
   m_Position:
     serializedVersion: 2
     x: 0
@@ -25,7 +25,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 100}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 66
+  controlID: 36
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -36,23 +36,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 12015, guid: 0000000000000000e000000000000000, type: 0}
+  m_Script: {fileID: 11500000, guid: 9f41b71a697effc43a0cfcd9c68025af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MinSize: {x: 50, y: 50}
+  m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
-    m_Text: Game
-    m_Image: {fileID: 4621777727084837110, guid: 0000000000000000d000000000000000,
-      type: 0}
+    m_Text: Archetypes
+    m_Image: {fileID: 2800000, guid: 84ea9d5414135e7428961d0e3609c7e7, type: 3}
     m_Tooltip: 
-    m_TextWithWhitespace: "Game\u200B"
+    m_TextWithWhitespace: "Archetypes\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1073
-    y: 78
-    width: 846
-    height: 379
+    x: 802.5
+    y: 532
+    width: 713
+    height: 454
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -64,70 +63,7 @@ MonoBehaviour:
     m_SaveData: []
     m_ContainerData: []
     m_OverlaysVisible: 1
-  m_SerializedViewNames: []
-  m_SerializedViewValues: []
-  m_PlayModeViewName: GameView
-  m_ShowGizmos: 0
-  m_TargetDisplay: 0
-  m_ClearColor: {r: 0, g: 0, b: 0, a: 0}
-  m_TargetSize: {x: 3840, y: 2160}
-  m_TextureFilterMode: 0
-  m_TextureHideFlags: 61
-  m_RenderIMGUI: 1
-  m_EnterPlayModeBehavior: 0
-  m_UseMipMap: 0
-  m_VSyncEnabled: 0
-  m_Gizmos: 0
-  m_Stats: 0
-  m_SelectedSizes: 06000000000000000000000000000000000000000000000000000000000000000000000000000000
-  m_ZoomArea:
-    m_HRangeLocked: 0
-    m_VRangeLocked: 0
-    hZoomLockedByDefault: 0
-    vZoomLockedByDefault: 0
-    m_HBaseRangeMin: -960
-    m_HBaseRangeMax: 960
-    m_VBaseRangeMin: -540
-    m_VBaseRangeMax: 540
-    m_HAllowExceedBaseRangeMin: 1
-    m_HAllowExceedBaseRangeMax: 1
-    m_VAllowExceedBaseRangeMin: 1
-    m_VAllowExceedBaseRangeMax: 1
-    m_ScaleWithWindow: 0
-    m_HSlider: 0
-    m_VSlider: 0
-    m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 1
-    m_EnableSliderZoomHorizontal: 0
-    m_EnableSliderZoomVertical: 0
-    m_UniformScale: 1
-    m_UpDirection: 1
-    m_DrawArea:
-      serializedVersion: 2
-      x: 0
-      y: 21
-      width: 846
-      height: 358
-    m_Scale: {x: 0.3314815, y: 0.3314815}
-    m_Translation: {x: 423, y: 179}
-    m_MarginLeft: 0
-    m_MarginRight: 0
-    m_MarginTop: 0
-    m_MarginBottom: 0
-    m_LastShownAreaInsideMargins:
-      serializedVersion: 2
-      x: -1276.0894
-      y: -540
-      width: 2552.1787
-      height: 1080
-    m_MinimalGUI: 1
-  m_defaultScale: 0.3314815
-  m_LastWindowPixelSize: {x: 1692, y: 758}
-  m_ClearInEditMode: 1
-  m_NoCameraWarning: 1
-  m_LowResolutionForAspectRatios: 00000000000000000000
-  m_XRRenderMode: 0
-  m_RenderTexture: {fileID: 0}
+  m_EditorWindowInstanceKey: 
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -138,21 +74,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: SceneHierarchyWindow
+  m_Name: HierarchyWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 420.5
+    width: 271.5
     height: 934
   m_MinSize: {x: 201, y: 226}
   m_MaxSize: {x: 4001, y: 4026}
-  m_ActualView: {fileID: 4}
+  m_ActualView: {fileID: 5}
   m_Panes:
   - {fileID: 4}
-  m_Selected: 0
+  - {fileID: 5}
+  m_Selected: 1
   m_LastSelected: 0
 --- !u!114 &4
 MonoBehaviour:
@@ -176,9 +113,9 @@ MonoBehaviour:
     m_TextWithWhitespace: "Hierarchy\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 0
-    y: 24
-    width: 419.5
+    x: -1920
+    y: 78
+    width: 270.5
     height: 908
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -194,9 +131,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 86b70000
+      m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 16fbffff
+      m_ExpandedIDs: 3600ffffb600ffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -230,29 +167,67 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70ebb861d56146959cda8fcaf772f612, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_TitleContent:
+    m_Text: Entities Hierarchy
+    m_Image: {fileID: 2800000, guid: 6bb0993b66f1e4f4d907a96c0ff2dee0, type: 3}
+    m_Tooltip: 
+    m_TextWithWhitespace: "Entities Hierarchy\u200B"
+  m_Pos:
+    serializedVersion: 2
+    x: 0
+    y: 78
+    width: 270.5
+    height: 908
+  m_SerializedDataModeController:
+    m_DataMode: 2
+    m_PreferredDataMode: 2
+    m_SupportedDataModes: 010000000200000003000000
+    isAutomatic: 1
+  m_ViewDataDictionary: {fileID: 0}
+  m_OverlayCanvas:
+    m_LastAppliedPresetName: Default
+    m_SaveData: []
+    m_ContainerData: []
+    m_OverlaysVisible: 1
+  m_EditorWindowInstanceKey: 8b572aaa879548b994dc4538b091e865
+--- !u!114 &6
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: InspectorWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 420.5
+    x: 271.5
     y: 0
-    width: 652.5
+    width: 531
     height: 934
   m_MinSize: {x: 277, y: 76}
   m_MaxSize: {x: 4002, y: 4026}
-  m_ActualView: {fileID: 6}
+  m_ActualView: {fileID: 8}
   m_Panes:
-  - {fileID: 6}
   - {fileID: 7}
   - {fileID: 8}
   - {fileID: 9}
   - {fileID: 10}
   - {fileID: 11}
-  m_Selected: 0
+  - {fileID: 12}
+  - {fileID: 13}
+  m_Selected: 1
   m_LastSelected: 1
---- !u!114 &6
+--- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -274,15 +249,15 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 421.5
-    y: 24
-    width: 650.5
+    x: 271.5
+    y: 78
+    width: 502
     height: 908
   m_SerializedDataModeController:
-    m_DataMode: 0
+    m_DataMode: 1
     m_PreferredDataMode: 0
     m_SupportedDataModes: 
-    isAutomatic: 1
+    isAutomatic: 0
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -292,7 +267,57 @@ MonoBehaviour:
   m_ObjectsLockedBeforeSerialization: []
   m_InstanceIDsLockedBeforeSerialization: 
   m_PreviewResizer:
-    m_CachedPref: 176.5
+    m_CachedPref: 151
+    m_ControlHash: 1412526313
+    m_PrefName: Preview_InspectorPreview
+  m_LastInspectedObjectInstanceID: -131902
+  m_LastVerticalScrollValue: 0
+  m_GlobalObjectId: 
+  m_InspectorMode: 0
+  m_LockTracker:
+    m_IsLocked: 0
+  m_PreviewWindow: {fileID: 0}
+--- !u!114 &8
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 12019, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_TitleContent:
+    m_Text: Inspector
+    m_Image: {fileID: -440750813802333266, guid: 0000000000000000d000000000000000,
+      type: 0}
+    m_Tooltip: 
+    m_TextWithWhitespace: "Inspector\u200B"
+  m_Pos:
+    serializedVersion: 2
+    x: 271.5
+    y: 78
+    width: 529
+    height: 908
+  m_SerializedDataModeController:
+    m_DataMode: 3
+    m_PreferredDataMode: 0
+    m_SupportedDataModes: 
+    isAutomatic: 0
+  m_ViewDataDictionary: {fileID: 0}
+  m_OverlayCanvas:
+    m_LastAppliedPresetName: Default
+    m_SaveData: []
+    m_ContainerData: []
+    m_OverlaysVisible: 1
+  m_ObjectsLockedBeforeSerialization: []
+  m_InstanceIDsLockedBeforeSerialization: 
+  m_PreviewResizer:
+    m_CachedPref: 151
     m_ControlHash: 1412526313
     m_PrefName: Preview_InspectorPreview
   m_LastInspectedObjectInstanceID: -1
@@ -302,7 +327,7 @@ MonoBehaviour:
   m_LockTracker:
     m_IsLocked: 0
   m_PreviewWindow: {fileID: 0}
---- !u!114 &7
+--- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -323,9 +348,9 @@ MonoBehaviour:
     m_TextWithWhitespace: "Recorder\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 420.5
+    x: -1536.5
     y: 78
-    width: 650.5
+    width: 607.5
     height: 908
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -338,7 +363,7 @@ MonoBehaviour:
     m_SaveData: []
     m_ContainerData: []
     m_OverlaysVisible: 1
---- !u!114 &8
+--- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -359,9 +384,9 @@ MonoBehaviour:
     m_TextWithWhitespace: "Pose Editor\u200B"
   m_Pos:
     serializedVersion: 2
-    x: -1549.5
+    x: -1536.5
     y: 78
-    width: 451.5
+    width: 607.5
     height: 908
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -374,7 +399,7 @@ MonoBehaviour:
     m_SaveData: []
     m_ContainerData: []
     m_OverlaysVisible: 1
---- !u!114 &9
+--- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -411,7 +436,7 @@ MonoBehaviour:
     m_SaveData: []
     m_ContainerData: []
     m_OverlaysVisible: 1
---- !u!114 &10
+--- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -433,9 +458,9 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project Settings\u200B"
   m_Pos:
     serializedVersion: 2
-    x: -1503.5
+    x: -1648.5
     y: 78
-    width: 738.5
+    width: 719.5
     height: 908
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -449,15 +474,15 @@ MonoBehaviour:
     m_ContainerData: []
     m_OverlaysVisible: 1
   m_PosLeft: {x: 0, y: 0}
-  m_PosRight: {x: 0, y: 0}
+  m_PosRight: {x: 0, y: 455.11}
   m_Scope: 1
-  m_SplitterFlex: 0.27820268
+  m_SplitterFlex: 0.37527594
   m_SearchText: 
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: d7dddea2
-    m_LastClickedID: -1562452521
-    m_ExpandedIDs: 0478ab9753336be2000000007f0eae07e594f01ac53aba5a
+    m_SelectedIDs: a73eced7
+    m_LastClickedID: -674349401
+    m_ExpandedIDs: 0478ab9753336be2000000007f0eae07e594f01a07f2324dc53aba5a
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -476,7 +501,7 @@ MonoBehaviour:
       m_TrimLeadingAndTrailingWhitespace: 0
       m_ClientGUIView: {fileID: 0}
     m_SearchString: 
---- !u!114 &11
+--- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -498,9 +523,9 @@ MonoBehaviour:
     m_TextWithWhitespace: "Preferences\u200B"
   m_Pos:
     serializedVersion: 2
-    x: -1633.5
+    x: -1648.5
     y: 78
-    width: 649
+    width: 719.5
     height: 908
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -516,12 +541,12 @@ MonoBehaviour:
   m_PosLeft: {x: 0, y: 0}
   m_PosRight: {x: 0, y: 0}
   m_Scope: 0
-  m_SplitterFlex: 0.27820268
-  m_SearchText: External Tools
+  m_SplitterFlex: 0.37527594
+  m_SearchText: 
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 71137e95
-    m_LastClickedID: -1786899599
+    m_SelectedIDs: e0decc15
+    m_LastClickedID: 365747936
     m_ExpandedIDs: 2956c29689577ec10000000001fecd114886f92e70101d5e
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -540,8 +565,8 @@ MonoBehaviour:
       m_IsRenamingFilename: 0
       m_TrimLeadingAndTrailingWhitespace: 0
       m_ClientGUIView: {fileID: 0}
-    m_SearchString: External Tools
---- !u!114 &12
+    m_SearchString: 
+--- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -554,20 +579,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Children:
-  - {fileID: 13}
-  - {fileID: 17}
+  - {fileID: 15}
+  - {fileID: 21}
   m_Position:
     serializedVersion: 2
-    x: 1073
+    x: 802.5
     y: 0
-    width: 847
+    width: 1117.5
     height: 934
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 67
+  controlID: 37
   draggingID: 0
---- !u!114 &13
+--- !u!114 &15
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -577,26 +602,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: GameView
+  m_Name: SceneView
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 847
-    height: 405
+    width: 1117.5
+    height: 454
   m_MinSize: {x: 51, y: 76}
   m_MaxSize: {x: 4001, y: 4026}
-  m_ActualView: {fileID: 2}
+  m_ActualView: {fileID: 18}
   m_Panes:
-  - {fileID: 14}
-  - {fileID: 15}
   - {fileID: 16}
-  - {fileID: 2}
-  m_Selected: 3
-  m_LastSelected: 2
---- !u!114 &14
+  - {fileID: 17}
+  - {fileID: 18}
+  - {fileID: 19}
+  - {fileID: 20}
+  m_Selected: 2
+  m_LastSelected: 3
+--- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -618,10 +644,10 @@ MonoBehaviour:
     m_TextWithWhitespace: "Animator\u200B"
   m_Pos:
     serializedVersion: 2
-    x: -927.5
+    x: -1047
     y: 78
-    width: 926.5
-    height: 363
+    width: 1046
+    height: 438.5
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -700,14 +726,14 @@ MonoBehaviour:
     - {fileID: 1105761511227741646, guid: ed3338b7592257a4b8f2fb078575aa30, type: 2}
     - {fileID: 1105761511227741646, guid: b0d31aab1e0a9034085af679a4005f6a, type: 2}
     m_ValueSerializationHelper:
-    - e00: 1.2928302
+    - e00: 0.23891927
       e01: 0
       e02: 0
-      e03: 1276.2151
+      e03: 558.2591
       e10: 0
-      e11: 1.2928302
+      e11: 0.23891927
       e12: 0
-      e13: 1469.7473
+      e13: 361.28577
       e20: 0
       e21: 0
       e22: 1
@@ -748,14 +774,14 @@ MonoBehaviour:
       e31: 0
       e32: 0
       e33: 1
-    - e00: 0.47990683
+    - e00: 0.56558824
       e01: 0
       e02: 0
-      e03: -19.050629
+      e03: -98.117676
       e10: 0
-      e11: 0.47990683
+      e11: 0.56558824
       e12: 0
-      e13: 205.93314
+      e13: 168.64264
       e20: 0
       e21: 0
       e22: 1
@@ -1725,10 +1751,10 @@ MonoBehaviour:
       e32: 0
       e33: 1
   m_PreviewAnimator: {fileID: 0}
-  m_AnimatorController: {fileID: 9100000, guid: 18e2a402dffd3df4799822974f8446f3,
+  m_AnimatorController: {fileID: 9100000, guid: 30f0cb5988148be43b6862d7a3b4f430,
     type: 2}
   m_BreadCrumbs:
-  - m_Target: {fileID: -3661121759043742184, guid: 18e2a402dffd3df4799822974f8446f3,
+  - m_Target: {fileID: 1357923953719395756, guid: 30f0cb5988148be43b6862d7a3b4f430,
       type: 2}
     m_ScrollPosition: {x: 0, y: 0}
   stateMachineGraph: {fileID: 0}
@@ -1742,7 +1768,7 @@ MonoBehaviour:
   m_CurrentEditor: 1
   m_LayerEditor:
     m_SelectedLayerIndex: 0
---- !u!114 &15
+--- !u!114 &17
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1763,10 +1789,10 @@ MonoBehaviour:
     m_TextWithWhitespace: "Mulligan Renamer\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1073
+    x: -1047
     y: 78
-    width: 846
-    height: 379
+    width: 1046
+    height: 438.5
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1778,7 +1804,7 @@ MonoBehaviour:
     m_SaveData: []
     m_ContainerData: []
     m_OverlaysVisible: 1
---- !u!114 &16
+--- !u!114 &18
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1790,7 +1816,7 @@ MonoBehaviour:
   m_Script: {fileID: 12013, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MinSize: {x: 100, y: 100}
+  m_MinSize: {x: 50, y: 50}
   m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
     m_Text: Scene
@@ -1800,10 +1826,10 @@ MonoBehaviour:
     m_TextWithWhitespace: "Scene\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1
-    y: 24
-    width: 846
-    height: 379
+    x: 802.5
+    y: 78
+    width: 1116.5
+    height: 428
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1832,10 +1858,10 @@ MonoBehaviour:
       displayed: 1
       id: unity-grid-and-snap-toolbar
       index: 1
-      contents: '{"m_Layout":1,"m_Collapsed":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":-307.5,"y":-240.5},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":3,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
+      contents: '{"m_Layout":1,"m_Collapsed":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":-141.0,"y":-143.5},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":3,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
       floating: 0
       collapsed: 0
-      snapOffset: {x: -307.5, y: -240.5}
+      snapOffset: {x: -141, y: -143.5}
       snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 3
       layout: 1
@@ -1870,16 +1896,16 @@ MonoBehaviour:
       size: {x: 0, y: 0}
       sizeOverridden: 0
     - dockPosition: 0
-      containerId: Floating
+      containerId: overlay-container--left
       displayed: 1
       id: unity-transform-toolbar
-      index: 1
-      contents: '{"m_Layout":2,"m_Collapsed":false,"m_Floating":true,"m_FloatingSnapOffset":{"x":24.0,"y":-240.5},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":2,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
-      floating: 1
+      index: 0
+      contents: '{"m_Layout":2,"m_Collapsed":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":-217.0,"y":-222.5},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":3,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
+      floating: 0
       collapsed: 0
-      snapOffset: {x: 24, y: -240.5}
+      snapOffset: {x: -217, y: -222.5}
       snapOffsetDelta: {x: 0, y: 0}
-      snapCorner: 2
+      snapCorner: 3
       layout: 2
       size: {x: 0, y: 0}
       sizeOverridden: 0
@@ -1902,12 +1928,12 @@ MonoBehaviour:
       displayed: 1
       id: Orientation
       index: 0
-      contents: '{"m_Layout":4,"m_Collapsed":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":-111.0,"y":42.0},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":1,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
+      contents: '{"m_Layout":4,"m_Collapsed":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":-111.0,"y":-209.5},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":3,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
       floating: 0
       collapsed: 0
-      snapOffset: {x: -111, y: 42}
+      snapOffset: {x: -111, y: -209.5}
       snapOffsetDelta: {x: 0, y: 0}
-      snapCorner: 1
+      snapCorner: 3
       layout: 4
       size: {x: 0, y: 0}
       sizeOverridden: 0
@@ -2042,11 +2068,11 @@ MonoBehaviour:
       displayed: 0
       id: Scene View/Scene Visibility
       index: 5
-      contents: '{"m_Layout":4,"m_Collapsed":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":24.0,"y":25.0},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":0,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
+      contents: '{"m_Layout":4,"m_Collapsed":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":0.0,"y":0.0},"m_SnapOffsetDelta":{"x":24.0,"y":0.0},"m_FloatingSnapCorner":0,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
       floating: 0
       collapsed: 0
-      snapOffset: {x: 24, y: 25}
-      snapOffsetDelta: {x: 0, y: 0}
+      snapOffset: {x: 0, y: 0}
+      snapOffsetDelta: {x: 24, y: 0}
       snapCorner: 0
       layout: 4
       size: {x: 0, y: 0}
@@ -2182,12 +2208,12 @@ MonoBehaviour:
       displayed: 1
       id: unity-scene-view-camera-mode-toolbar
       index: 2
-      contents: '{"m_Layout":1,"m_Collapsed":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":24.0,"y":-73.0},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":2,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
+      contents: '{"m_Layout":1,"m_Collapsed":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":24.0,"y":74.0},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":0,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
       floating: 0
       collapsed: 0
-      snapOffset: {x: 24, y: -73}
+      snapOffset: {x: 24, y: 74}
       snapOffsetDelta: {x: 0, y: 0}
-      snapCorner: 2
+      snapCorner: 0
       layout: 1
       size: {x: 0, y: 0}
       sizeOverridden: 0
@@ -2238,10 +2264,10 @@ MonoBehaviour:
       displayed: 1
       id: Overlays/OverlayMenu
       index: 1
-      contents: '{"m_Layout":1,"m_Collapsed":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":-290.5,"y":-122.0},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":3,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
+      contents: '{"m_Layout":1,"m_Collapsed":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":-290.5,"y":-160.5},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":3,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
       floating: 0
       collapsed: 0
-      snapOffset: {x: -290.5, y: -122}
+      snapOffset: {x: -290.5, y: -160.5}
       snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 3
       layout: 1
@@ -2289,17 +2315,17 @@ MonoBehaviour:
       layout: 4
       size: {x: 0, y: 0}
       sizeOverridden: 0
-    - dockPosition: 1
-      containerId: overlay-container--right
+    - dockPosition: 0
+      containerId: Floating
       displayed: 1
-      id: UnityEditor.ProBuilder.MenuActionSettingsOverlay
-      index: 15
-      contents: '{"m_Layout":4,"m_Collapsed":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":24.0,"y":25.0},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":0,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
-      floating: 0
+      id: AINavigationOverlay
+      index: 1
+      contents: '{"m_Layout":4,"m_Collapsed":false,"m_Floating":true,"m_FloatingSnapOffset":{"x":-207.00100708007813,"y":-242.00100708007813},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":3,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
+      floating: 1
       collapsed: 0
-      snapOffset: {x: 24, y: 25}
+      snapOffset: {x: -207.001, y: -242.001}
       snapOffsetDelta: {x: 0, y: 0}
-      snapCorner: 0
+      snapCorner: 3
       layout: 4
       size: {x: 0, y: 0}
       sizeOverridden: 0
@@ -2319,20 +2345,20 @@ MonoBehaviour:
     - containerId: Floating
       scrollOffset: 0
     m_OverlaysVisible: 1
-  m_WindowGUID: 7311e17c9accb6f45a930d2d062b9813
-  m_Gizmos: 1
+  m_WindowGUID: 1917e9b1c9ff07c4c981ca1122d54b82
+  m_Gizmos: 0
   m_OverrideSceneCullingMask: 6917529027641081856
-  m_SceneIsLit: 0
+  m_SceneIsLit: 1
   m_SceneLighting: 1
-  m_2DMode: 1
+  m_2DMode: 0
   m_isRotationLocked: 0
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -0.41114336, y: 0.8933306, z: 0.038216252}
+    m_Target: {x: 14.012253, y: 5.4131074, z: 1.5680779}
     speed: 2
-    m_Value: {x: -0.41114336, y: 0.8933306, z: 0.038216252}
+    m_Value: {x: 14.012253, y: 5.4131074, z: 1.5680779}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -2341,14 +2367,14 @@ MonoBehaviour:
   m_ValidateTrueMetals: 0
   m_DoValidateTrueMetals: 0
   m_SceneViewState:
-    m_AlwaysRefresh: 1
+    m_AlwaysRefresh: 0
     showFog: 1
     showSkybox: 1
     showFlares: 1
     showImageEffects: 1
     showParticleSystems: 1
     showVisualEffectGraphs: 1
-    m_FxEnabled: 0
+    m_FxEnabled: 1
   m_Grid:
     xGrid:
       m_Fade:
@@ -2357,16 +2383,8 @@ MonoBehaviour:
         m_Value: 0
       m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.4}
       m_Pivot: {x: 0, y: 0, z: 0}
-      m_Size: {x: 0.01, y: 0.01}
+      m_Size: {x: 0, y: 0}
     yGrid:
-      m_Fade:
-        m_Target: 0
-        speed: 2
-        m_Value: 0
-      m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.4}
-      m_Pivot: {x: 0, y: 0, z: 0}
-      m_Size: {x: 0.01, y: 0.01}
-    zGrid:
       m_Fade:
         m_Target: 1
         speed: 2
@@ -2374,24 +2392,32 @@ MonoBehaviour:
       m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.4}
       m_Pivot: {x: 0, y: 0, z: 0}
       m_Size: {x: 0.01, y: 0.01}
+    zGrid:
+      m_Fade:
+        m_Target: 0
+        speed: 2
+        m_Value: 0
+      m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 0.4}
+      m_Pivot: {x: 0, y: 0, z: 0}
+      m_Size: {x: 0, y: 0}
     m_ShowGrid: 1
     m_GridAxis: 1
-    m_gridOpacity: 0.494
+    m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0, y: 0, z: 0, w: 1}
+    m_Target: {x: -0.38138974, y: -0.090742834, z: 0.03765155, w: -0.91916984}
     speed: 2
-    m_Value: {x: 0, y: 0, z: 0, w: 1}
+    m_Value: {x: -0.38139296, y: -0.090743594, z: 0.037651867, w: -0.9191776}
   m_Size:
-    m_Target: 1.0919796
+    m_Target: 11.248327
     speed: 2
-    m_Value: 1.0919796
+    m_Value: 11.248327
   m_Ortho:
-    m_Target: 1
+    m_Target: 0
     speed: 2
-    m_Value: 1
+    m_Value: 0
   m_CameraSettings:
-    m_Speed: 0.48759997
-    m_SpeedNormalized: 0.23999998
+    m_Speed: 1
+    m_SpeedNormalized: 0.5
     m_SpeedMin: 0.01
     m_SpeedMax: 2
     m_EasingEnabled: 1
@@ -2402,10 +2428,10 @@ MonoBehaviour:
     m_FarClip: 10000
     m_DynamicClip: 1
     m_OcclusionCulling: 0
-  m_LastSceneViewRotation: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
+  m_LastSceneViewRotation: {x: 0, y: 0, z: 0, w: 0}
   m_LastSceneViewOrtho: 0
   m_Viewpoint:
-    m_SceneView: {fileID: 16}
+    m_SceneView: {fileID: 18}
     m_CameraOverscanSettings:
       m_Opacity: 50
       m_Scale: 1
@@ -2413,9 +2439,833 @@ MonoBehaviour:
   m_ReplacementString: 
   m_SceneVisActive: 1
   m_LastLockedObject: {fileID: 0}
-  m_LastDebugDrawMode: 26
+  m_LastDebugDrawMode: 35
   m_ViewIsLockedToObject: 0
---- !u!114 &17
+--- !u!114 &19
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 12015, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MinSize: {x: 50, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_TitleContent:
+    m_Text: Game
+    m_Image: {fileID: 4621777727084837110, guid: 0000000000000000d000000000000000,
+      type: 0}
+    m_Tooltip: 
+    m_TextWithWhitespace: "Game\u200B"
+  m_Pos:
+    serializedVersion: 2
+    x: 775.5
+    y: 78
+    width: 1143.5
+    height: 428
+  m_SerializedDataModeController:
+    m_DataMode: 0
+    m_PreferredDataMode: 0
+    m_SupportedDataModes: 
+    isAutomatic: 1
+  m_ViewDataDictionary: {fileID: 0}
+  m_OverlayCanvas:
+    m_LastAppliedPresetName: Default
+    m_SaveData: []
+    m_ContainerData: []
+    m_OverlaysVisible: 1
+  m_SerializedViewNames: []
+  m_SerializedViewValues: []
+  m_PlayModeViewName: GameView
+  m_ShowGizmos: 0
+  m_TargetDisplay: 0
+  m_ClearColor: {r: 0, g: 0, b: 0, a: 0}
+  m_TargetSize: {x: 2287, y: 814}
+  m_TextureFilterMode: 0
+  m_TextureHideFlags: 61
+  m_RenderIMGUI: 1
+  m_EnterPlayModeBehavior: 0
+  m_UseMipMap: 0
+  m_VSyncEnabled: 0
+  m_Gizmos: 0
+  m_Stats: 0
+  m_SelectedSizes: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  m_ZoomArea:
+    m_HRangeLocked: 0
+    m_VRangeLocked: 0
+    hZoomLockedByDefault: 0
+    vZoomLockedByDefault: 0
+    m_HBaseRangeMin: -571.75
+    m_HBaseRangeMax: 571.75
+    m_VBaseRangeMin: -203.5
+    m_VBaseRangeMax: 203.5
+    m_HAllowExceedBaseRangeMin: 1
+    m_HAllowExceedBaseRangeMax: 1
+    m_VAllowExceedBaseRangeMin: 1
+    m_VAllowExceedBaseRangeMax: 1
+    m_ScaleWithWindow: 0
+    m_HSlider: 0
+    m_VSlider: 0
+    m_IgnoreScrollWheelUntilClicked: 0
+    m_EnableMouseInput: 0
+    m_EnableSliderZoomHorizontal: 0
+    m_EnableSliderZoomVertical: 0
+    m_UniformScale: 1
+    m_UpDirection: 1
+    m_DrawArea:
+      serializedVersion: 2
+      x: 0
+      y: 21
+      width: 1143.5
+      height: 407
+    m_Scale: {x: 1, y: 1}
+    m_Translation: {x: 571.75, y: 203.5}
+    m_MarginLeft: 0
+    m_MarginRight: 0
+    m_MarginTop: 0
+    m_MarginBottom: 0
+    m_LastShownAreaInsideMargins:
+      serializedVersion: 2
+      x: -571.75
+      y: -203.5
+      width: 1143.5
+      height: 407
+    m_MinimalGUI: 1
+  m_defaultScale: 1
+  m_LastWindowPixelSize: {x: 2287, y: 856}
+  m_ClearInEditMode: 1
+  m_NoCameraWarning: 1
+  m_LowResolutionForAspectRatios: 00000000000000000000
+  m_XRRenderMode: 0
+  m_RenderTexture: {fileID: 0}
+  m_showToolbar: 1
+--- !u!114 &20
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 924ffcbe75518854f97b48776d0f1939, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MinSize: {x: 50, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_TitleContent:
+    m_Text: Prototype_Global_URP
+    m_Image: {fileID: 2800000, guid: 7129268cf102b2f45809905bcb27ce8b, type: 3}
+    m_Tooltip: 
+    m_TextWithWhitespace: "Prototype_Global_URP\u200B"
+  m_Pos:
+    serializedVersion: 2
+    x: -1102.5
+    y: 78
+    width: 1101.5
+    height: 573.5
+  m_SerializedDataModeController:
+    m_DataMode: 0
+    m_PreferredDataMode: 0
+    m_SupportedDataModes: 
+    isAutomatic: 1
+  m_ViewDataDictionary: {fileID: 0}
+  m_OverlayCanvas:
+    m_LastAppliedPresetName: Default
+    m_SaveData: []
+    m_ContainerData: []
+    m_OverlaysVisible: 1
+  m_Selected: bf00925b2fbda49499ccc0de47e0d8ca
+  m_GraphObject: {fileID: 0}
+  m_LastSerializedFileContents: "{\r\n    \"m_SGVersion\": 3,\r\n    \"m_Type\":
+    \"UnityEditor.ShaderGraph.GraphData\",\r\n    \"m_ObjectId\": \"7b50c248f28f4b94958fe15bdbae566b\",\r\n   
+    \"m_Properties\": [\r\n        {\r\n            \"m_Id\": \"65284c3df8a5e28296ab2c661fb06f8e\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"2c2ed82158a8f681aefc758723130473\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"7c738a8e0e86dd83a18c685ebaa63482\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"0ea06de9ea69518b8855a1880fd3e73d\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"1334dc04d76f0e8cbea4935483dde4e9\"\r\n       
+    }\r\n    ],\r\n    \"m_Keywords\": [],\r\n    \"m_Dropdowns\": [],\r\n    \"m_CategoryData\":
+    [\r\n        {\r\n            \"m_Id\": \"3dec0bad2a1542d6a713dd617fa300cd\"\r\n       
+    }\r\n    ],\r\n    \"m_Nodes\": [\r\n        {\r\n            \"m_Id\": \"2d025d62a0fc2a86bd04d00182d56fda\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"04d2c40cdde0b28cba5c66ed31ff3867\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"c1699351edff078e9f052737bbebcedb\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"83942ec99371a18c87108a637cfeeda5\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"3ca898713668c983b29c8ff63f7d33c3\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"9cee7b649e427b80852bd7a3b2ed91cb\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"58be9a53fd903b8e990da8a3efb58f3f\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"6424e4ce95aee380ad1734678307ab82\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"6f3c3982ba971388b6946b532b8ff73b\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"9376a8acf520478f8a6e7e85468d3f43\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"1abf4836a43c488888879282711ebc6e\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"ec0efb3a256745d38f05fb7c97aa90ce\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"a7f57c9897bc40308d677b03f5499d49\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"eb9cdab8002a4fda911cc69ff7653b92\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"d49422db1ea849daa1841fe2a772802e\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"2269147210574e6bb11a497aee6cc7ca\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"99d4125c4e694abe9d95236c7f00d29d\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"03276ed8fbc34d938b3d717191b70fd3\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"029135edb0a14a32a443faf1ddf68cdf\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"ee5f6134cbce4910ac6c74be913cbfde\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"5033c57c55cb44499cac7b93ed4c51dc\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"ad165c40854c47eba1cbed59dbceb39d\"\r\n       
+    }\r\n    ],\r\n    \"m_GroupDatas\": [],\r\n    \"m_StickyNoteDatas\": [],\r\n   
+    \"m_Edges\": [\r\n        {\r\n            \"m_OutputSlot\": {\r\n               
+    \"m_Node\": {\r\n                    \"m_Id\": \"04d2c40cdde0b28cba5c66ed31ff3867\"\r\n               
+    },\r\n                \"m_SlotId\": 3\r\n            },\r\n            \"m_InputSlot\":
+    {\r\n                \"m_Node\": {\r\n                    \"m_Id\": \"58be9a53fd903b8e990da8a3efb58f3f\"\r\n               
+    },\r\n                \"m_SlotId\": 1\r\n            }\r\n        },\r\n       
+    {\r\n            \"m_OutputSlot\": {\r\n                \"m_Node\": {\r\n                   
+    \"m_Id\": \"2d025d62a0fc2a86bd04d00182d56fda\"\r\n                },\r\n               
+    \"m_SlotId\": 0\r\n            },\r\n            \"m_InputSlot\": {\r\n               
+    \"m_Node\": {\r\n                    \"m_Id\": \"c1699351edff078e9f052737bbebcedb\"\r\n               
+    },\r\n                \"m_SlotId\": 1\r\n            }\r\n        },\r\n       
+    {\r\n            \"m_OutputSlot\": {\r\n                \"m_Node\": {\r\n                   
+    \"m_Id\": \"3ca898713668c983b29c8ff63f7d33c3\"\r\n                },\r\n               
+    \"m_SlotId\": 0\r\n            },\r\n            \"m_InputSlot\": {\r\n               
+    \"m_Node\": {\r\n                    \"m_Id\": \"04d2c40cdde0b28cba5c66ed31ff3867\"\r\n               
+    },\r\n                \"m_SlotId\": 0\r\n            }\r\n        },\r\n       
+    {\r\n            \"m_OutputSlot\": {\r\n                \"m_Node\": {\r\n                   
+    \"m_Id\": \"58be9a53fd903b8e990da8a3efb58f3f\"\r\n                },\r\n               
+    \"m_SlotId\": 2\r\n            },\r\n            \"m_InputSlot\": {\r\n               
+    \"m_Node\": {\r\n                    \"m_Id\": \"eb9cdab8002a4fda911cc69ff7653b92\"\r\n               
+    },\r\n                \"m_SlotId\": 0\r\n            }\r\n        },\r\n       
+    {\r\n            \"m_OutputSlot\": {\r\n                \"m_Node\": {\r\n                   
+    \"m_Id\": \"6424e4ce95aee380ad1734678307ab82\"\r\n                },\r\n               
+    \"m_SlotId\": 0\r\n            },\r\n            \"m_InputSlot\": {\r\n               
+    \"m_Node\": {\r\n                    \"m_Id\": \"c1699351edff078e9f052737bbebcedb\"\r\n               
+    },\r\n                \"m_SlotId\": 6\r\n            }\r\n        },\r\n       
+    {\r\n            \"m_OutputSlot\": {\r\n                \"m_Node\": {\r\n                   
+    \"m_Id\": \"6f3c3982ba971388b6946b532b8ff73b\"\r\n                },\r\n               
+    \"m_SlotId\": 0\r\n            },\r\n            \"m_InputSlot\": {\r\n               
+    \"m_Node\": {\r\n                    \"m_Id\": \"c1699351edff078e9f052737bbebcedb\"\r\n               
+    },\r\n                \"m_SlotId\": 5\r\n            }\r\n        },\r\n       
+    {\r\n            \"m_OutputSlot\": {\r\n                \"m_Node\": {\r\n                   
+    \"m_Id\": \"83942ec99371a18c87108a637cfeeda5\"\r\n                },\r\n               
+    \"m_SlotId\": 0\r\n            },\r\n            \"m_InputSlot\": {\r\n               
+    \"m_Node\": {\r\n                    \"m_Id\": \"ad165c40854c47eba1cbed59dbceb39d\"\r\n               
+    },\r\n                \"m_SlotId\": 0\r\n            }\r\n        },\r\n       
+    {\r\n            \"m_OutputSlot\": {\r\n                \"m_Node\": {\r\n                   
+    \"m_Id\": \"9376a8acf520478f8a6e7e85468d3f43\"\r\n                },\r\n               
+    \"m_SlotId\": 0\r\n            },\r\n            \"m_InputSlot\": {\r\n               
+    \"m_Node\": {\r\n                    \"m_Id\": \"04d2c40cdde0b28cba5c66ed31ff3867\"\r\n               
+    },\r\n                \"m_SlotId\": 2\r\n            }\r\n        },\r\n       
+    {\r\n            \"m_OutputSlot\": {\r\n                \"m_Node\": {\r\n                   
+    \"m_Id\": \"9cee7b649e427b80852bd7a3b2ed91cb\"\r\n                },\r\n               
+    \"m_SlotId\": 0\r\n            },\r\n            \"m_InputSlot\": {\r\n               
+    \"m_Node\": {\r\n                    \"m_Id\": \"58be9a53fd903b8e990da8a3efb58f3f\"\r\n               
+    },\r\n                \"m_SlotId\": 0\r\n            }\r\n        },\r\n       
+    {\r\n            \"m_OutputSlot\": {\r\n                \"m_Node\": {\r\n                   
+    \"m_Id\": \"ad165c40854c47eba1cbed59dbceb39d\"\r\n                },\r\n               
+    \"m_SlotId\": 2\r\n            },\r\n            \"m_InputSlot\": {\r\n               
+    \"m_Node\": {\r\n                    \"m_Id\": \"c1699351edff078e9f052737bbebcedb\"\r\n               
+    },\r\n                \"m_SlotId\": 3\r\n            }\r\n        },\r\n       
+    {\r\n            \"m_OutputSlot\": {\r\n                \"m_Node\": {\r\n                   
+    \"m_Id\": \"c1699351edff078e9f052737bbebcedb\"\r\n                },\r\n               
+    \"m_SlotId\": 0\r\n            },\r\n            \"m_InputSlot\": {\r\n               
+    \"m_Node\": {\r\n                    \"m_Id\": \"04d2c40cdde0b28cba5c66ed31ff3867\"\r\n               
+    },\r\n                \"m_SlotId\": 1\r\n            }\r\n        }\r\n    ],\r\n   
+    \"m_VertexContext\": {\r\n        \"m_Position\": {\r\n            \"x\": 1070.0,\r\n           
+    \"y\": -154.0\r\n        },\r\n        \"m_Blocks\": [\r\n            {\r\n               
+    \"m_Id\": \"1abf4836a43c488888879282711ebc6e\"\r\n            },\r\n           
+    {\r\n                \"m_Id\": \"ec0efb3a256745d38f05fb7c97aa90ce\"\r\n           
+    },\r\n            {\r\n                \"m_Id\": \"a7f57c9897bc40308d677b03f5499d49\"\r\n           
+    }\r\n        ]\r\n    },\r\n    \"m_FragmentContext\": {\r\n        \"m_Position\":
+    {\r\n            \"x\": 1070.0,\r\n            \"y\": 46.0\r\n        },\r\n       
+    \"m_Blocks\": [\r\n            {\r\n                \"m_Id\": \"eb9cdab8002a4fda911cc69ff7653b92\"\r\n           
+    },\r\n            {\r\n                \"m_Id\": \"d49422db1ea849daa1841fe2a772802e\"\r\n           
+    },\r\n            {\r\n                \"m_Id\": \"2269147210574e6bb11a497aee6cc7ca\"\r\n           
+    },\r\n            {\r\n                \"m_Id\": \"99d4125c4e694abe9d95236c7f00d29d\"\r\n           
+    },\r\n            {\r\n                \"m_Id\": \"03276ed8fbc34d938b3d717191b70fd3\"\r\n           
+    },\r\n            {\r\n                \"m_Id\": \"029135edb0a14a32a443faf1ddf68cdf\"\r\n           
+    },\r\n            {\r\n                \"m_Id\": \"ee5f6134cbce4910ac6c74be913cbfde\"\r\n           
+    },\r\n            {\r\n                \"m_Id\": \"5033c57c55cb44499cac7b93ed4c51dc\"\r\n           
+    }\r\n        ]\r\n    },\r\n    \"m_PreviewData\": {\r\n        \"serializedMesh\":
+    {\r\n            \"m_SerializedMesh\": \"{\\\"mesh\\\":{\\\"instanceID\\\":0}}\",\r\n           
+    \"m_Guid\": \"\"\r\n        },\r\n        \"preventRotation\": false\r\n    },\r\n   
+    \"m_Path\": \"SyntyStudios\",\r\n    \"m_GraphPrecision\": 0,\r\n    \"m_PreviewMode\":
+    2,\r\n    \"m_OutputNode\": {\r\n        \"m_Id\": \"\"\r\n    },\r\n    \"m_ActiveTargets\":
+    [\r\n        {\r\n            \"m_Id\": \"3462cac44c2c4b76ae41f54f8f6bd9b3\"\r\n       
+    }\r\n    ]\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.DynamicVectorMaterialSlot\",\r\n   
+    \"m_ObjectId\": \"00642a90e32f4a4390b130e1c0482fcc\",\r\n    \"m_Id\": 0,\r\n   
+    \"m_DisplayName\": \"A\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\": false,\r\n   
+    \"m_ShaderOutputName\": \"A\",\r\n    \"m_StageCapability\": 3,\r\n    \"m_Value\":
+    {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0,\r\n       
+    \"w\": 0.0\r\n    },\r\n    \"m_DefaultValue\": {\r\n        \"x\": 0.0,\r\n       
+    \"y\": 0.0,\r\n        \"z\": 0.0,\r\n        \"w\": 0.0\r\n    }\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.BlockNode\",\r\n   
+    \"m_ObjectId\": \"029135edb0a14a32a443faf1ddf68cdf\",\r\n    \"m_Group\": {\r\n       
+    \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"SurfaceDescription.Alpha\",\r\n   
+    \"m_DrawState\": {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\":
+    {\r\n            \"serializedVersion\": \"2\",\r\n            \"x\": 0.0,\r\n           
+    \"y\": 0.0,\r\n            \"width\": 0.0,\r\n            \"height\": 0.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"1c5b9a1b2a91455eb51e3d89619ecb28\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    },\r\n    \"m_SerializedDescriptor\":
+    \"SurfaceDescription.Alpha\"\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n   
+    \"m_Type\": \"UnityEditor.ShaderGraph.BlockNode\",\r\n    \"m_ObjectId\": \"03276ed8fbc34d938b3d717191b70fd3\",\r\n   
+    \"m_Group\": {\r\n        \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"SurfaceDescription.Occlusion\",\r\n   
+    \"m_DrawState\": {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\":
+    {\r\n            \"serializedVersion\": \"2\",\r\n            \"x\": 0.0,\r\n           
+    \"y\": 0.0,\r\n            \"width\": 0.0,\r\n            \"height\": 0.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"b10628015c9a4ffdb15c6f8e3e25b6a1\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    },\r\n    \"m_SerializedDescriptor\":
+    \"SurfaceDescription.Occlusion\"\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n   
+    \"m_Type\": \"UnityEditor.ShaderGraph.ColorRGBMaterialSlot\",\r\n    \"m_ObjectId\":
+    \"0329a777a7c34b7b9d534a9cab5b936e\",\r\n    \"m_Id\": 0,\r\n    \"m_DisplayName\":
+    \"Emission\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\": false,\r\n    \"m_ShaderOutputName\":
+    \"Emission\",\r\n    \"m_StageCapability\": 2,\r\n    \"m_Value\": {\r\n       
+    \"x\": 0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0\r\n    },\r\n    \"m_DefaultValue\":
+    {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0\r\n   
+    },\r\n    \"m_Labels\": [],\r\n    \"m_ColorMode\": 1,\r\n    \"m_DefaultColor\":
+    {\r\n        \"r\": 0.0,\r\n        \"g\": 0.0,\r\n        \"b\": 0.0,\r\n       
+    \"a\": 1.0\r\n    }\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\":
+    \"UnityEditor.ShaderGraph.LerpNode\",\r\n    \"m_ObjectId\": \"04d2c40cdde0b28cba5c66ed31ff3867\",\r\n   
+    \"m_Group\": {\r\n        \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"Lerp\",\r\n   
+    \"m_DrawState\": {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\":
+    {\r\n            \"serializedVersion\": \"2\",\r\n            \"x\": 282.0,\r\n           
+    \"y\": -52.0,\r\n            \"width\": 208.0,\r\n            \"height\": 326.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"4a193cd1ca59de8cb4c6b275cb814dcf\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"1082a9540810eb809a600b0c3db0f8db\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"93f0fb6829659d8bb4ab4eb2a720b41a\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"7489722cb7eeb682b480d5588e207ef1\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [\r\n        \"mix\",\r\n        \"blend\",\r\n       
+    \"linear interpolate\"\r\n    ],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    }\r\n}\r\n\r\n{\r\n    \"m_SGVersion\":
+    1,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty\",\r\n   
+    \"m_ObjectId\": \"0ea06de9ea69518b8855a1880fd3e73d\",\r\n    \"m_Guid\": {\r\n       
+    \"m_GuidSerialized\": \"8a201ab0-b44a-4d57-9230-d69bf561c590\"\r\n    },\r\n   
+    \"m_Name\": \"GridScale\",\r\n    \"m_DefaultRefNameVersion\": 0,\r\n    \"m_RefNameGeneratedByDisplayName\":
+    \"\",\r\n    \"m_DefaultReferenceName\": \"Vector1_716C16CB\",\r\n    \"m_OverrideReferenceName\":
+    \"_GridScale\",\r\n    \"m_GeneratePropertyBlock\": true,\r\n    \"m_UseCustomSlotLabel\":
+    false,\r\n    \"m_CustomSlotLabel\": \"\",\r\n    \"m_DismissedVersion\": 0,\r\n   
+    \"m_Precision\": 0,\r\n    \"overrideHLSLDeclaration\": false,\r\n    \"hlslDeclarationOverride\":
+    0,\r\n    \"m_Hidden\": false,\r\n    \"m_Value\": 1.0,\r\n    \"m_FloatType\":
+    0,\r\n    \"m_RangeValues\": {\r\n        \"x\": 0.0,\r\n        \"y\": 1.0\r\n   
+    }\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.DynamicVectorMaterialSlot\",\r\n   
+    \"m_ObjectId\": \"1082a9540810eb809a600b0c3db0f8db\",\r\n    \"m_Id\": 1,\r\n   
+    \"m_DisplayName\": \"B\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\": false,\r\n   
+    \"m_ShaderOutputName\": \"B\",\r\n    \"m_StageCapability\": 3,\r\n    \"m_Value\":
+    {\r\n        \"x\": 1.0,\r\n        \"y\": 1.0,\r\n        \"z\": 1.0,\r\n       
+    \"w\": 1.0\r\n    },\r\n    \"m_DefaultValue\": {\r\n        \"x\": 0.0,\r\n       
+    \"y\": 0.0,\r\n        \"z\": 0.0,\r\n        \"w\": 0.0\r\n    }\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 1,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty\",\r\n   
+    \"m_ObjectId\": \"1334dc04d76f0e8cbea4935483dde4e9\",\r\n    \"m_Guid\": {\r\n       
+    \"m_GuidSerialized\": \"592e4d12-070e-4859-b254-0e365a362a49\"\r\n    },\r\n   
+    \"m_Name\": \"Falloff\",\r\n    \"m_DefaultRefNameVersion\": 0,\r\n    \"m_RefNameGeneratedByDisplayName\":
+    \"\",\r\n    \"m_DefaultReferenceName\": \"Vector1_DA63AF01\",\r\n    \"m_OverrideReferenceName\":
+    \"_Falloff\",\r\n    \"m_GeneratePropertyBlock\": true,\r\n    \"m_UseCustomSlotLabel\":
+    false,\r\n    \"m_CustomSlotLabel\": \"\",\r\n    \"m_DismissedVersion\": 0,\r\n   
+    \"m_Precision\": 0,\r\n    \"overrideHLSLDeclaration\": false,\r\n    \"hlslDeclarationOverride\":
+    0,\r\n    \"m_Hidden\": false,\r\n    \"m_Value\": 50.0,\r\n    \"m_FloatType\":
+    0,\r\n    \"m_RangeValues\": {\r\n        \"x\": 0.0,\r\n        \"y\": 1.0\r\n   
+    }\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.SamplerStateMaterialSlot\",\r\n   
+    \"m_ObjectId\": \"1406c0beeabc8882b395d56fbc54504e\",\r\n    \"m_Id\": 2,\r\n   
+    \"m_DisplayName\": \"Sampler\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\":
+    false,\r\n    \"m_ShaderOutputName\": \"Sampler\",\r\n    \"m_StageCapability\":
+    3,\r\n    \"m_BareResource\": false\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n   
+    \"m_Type\": \"UnityEditor.ShaderGraph.NormalMaterialSlot\",\r\n    \"m_ObjectId\":
+    \"17d6763429474013b62c7c3b8e48c295\",\r\n    \"m_Id\": 0,\r\n    \"m_DisplayName\":
+    \"Normal\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\": false,\r\n    \"m_ShaderOutputName\":
+    \"Normal\",\r\n    \"m_StageCapability\": 1,\r\n    \"m_Value\": {\r\n       
+    \"x\": 0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0\r\n    },\r\n    \"m_DefaultValue\":
+    {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0\r\n   
+    },\r\n    \"m_Labels\": [],\r\n    \"m_Space\": 0\r\n}\r\n\r\n{\r\n    \"m_SGVersion\":
+    0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Vector1MaterialSlot\",\r\n   
+    \"m_ObjectId\": \"1a4db6ba0248460a8ab971dccb4fcce6\",\r\n    \"m_Id\": 0,\r\n   
+    \"m_DisplayName\": \"Smoothness\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\":
+    false,\r\n    \"m_ShaderOutputName\": \"Smoothness\",\r\n    \"m_StageCapability\":
+    2,\r\n    \"m_Value\": 0.5,\r\n    \"m_DefaultValue\": 0.5,\r\n    \"m_Labels\":
+    []\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Vector1MaterialSlot\",\r\n   
+    \"m_ObjectId\": \"1aa7444bcbc6638ca3000b553a79cc36\",\r\n    \"m_Id\": 0,\r\n   
+    \"m_DisplayName\": \"OverlayAmount\",\r\n    \"m_SlotType\": 1,\r\n    \"m_Hidden\":
+    false,\r\n    \"m_ShaderOutputName\": \"Out\",\r\n    \"m_StageCapability\":
+    3,\r\n    \"m_Value\": 0.0,\r\n    \"m_DefaultValue\": 0.0,\r\n    \"m_Labels\":
+    [\r\n        \"X\"\r\n    ]\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\":
+    \"UnityEditor.ShaderGraph.BlockNode\",\r\n    \"m_ObjectId\": \"1abf4836a43c488888879282711ebc6e\",\r\n   
+    \"m_Group\": {\r\n        \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"VertexDescription.Position\",\r\n   
+    \"m_DrawState\": {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\":
+    {\r\n            \"serializedVersion\": \"2\",\r\n            \"x\": 0.0,\r\n           
+    \"y\": 0.0,\r\n            \"width\": 0.0,\r\n            \"height\": 0.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"a014792ccaa340fcad57bdb72fbade1e\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    },\r\n    \"m_SerializedDescriptor\":
+    \"VertexDescription.Position\"\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n   
+    \"m_Type\": \"UnityEditor.ShaderGraph.Vector1MaterialSlot\",\r\n    \"m_ObjectId\":
+    \"1c5b9a1b2a91455eb51e3d89619ecb28\",\r\n    \"m_Id\": 0,\r\n    \"m_DisplayName\":
+    \"Alpha\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\": false,\r\n    \"m_ShaderOutputName\":
+    \"Alpha\",\r\n    \"m_StageCapability\": 2,\r\n    \"m_Value\": 1.0,\r\n    \"m_DefaultValue\":
+    1.0,\r\n    \"m_Labels\": []\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n   
+    \"m_Type\": \"UnityEditor.ShaderGraph.PositionMaterialSlot\",\r\n    \"m_ObjectId\":
+    \"1cbed02ab8c98e8faf29b6b633885f62\",\r\n    \"m_Id\": 3,\r\n    \"m_DisplayName\":
+    \"Position\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\": false,\r\n    \"m_ShaderOutputName\":
+    \"Position\",\r\n    \"m_StageCapability\": 3,\r\n    \"m_Value\": {\r\n       
+    \"x\": 0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0\r\n    },\r\n    \"m_DefaultValue\":
+    {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0\r\n   
+    },\r\n    \"m_Labels\": [\r\n        \"X\",\r\n        \"Y\",\r\n        \"Z\"\r\n   
+    ],\r\n    \"m_Space\": 4\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\":
+    \"UnityEditor.ShaderGraph.BlockNode\",\r\n    \"m_ObjectId\": \"2269147210574e6bb11a497aee6cc7ca\",\r\n   
+    \"m_Group\": {\r\n        \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"SurfaceDescription.Emission\",\r\n   
+    \"m_DrawState\": {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\":
+    {\r\n            \"serializedVersion\": \"2\",\r\n            \"x\": 0.0,\r\n           
+    \"y\": 0.0,\r\n            \"width\": 0.0,\r\n            \"height\": 0.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"0329a777a7c34b7b9d534a9cab5b936e\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    },\r\n    \"m_SerializedDescriptor\":
+    \"SurfaceDescription.Emission\"\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n   
+    \"m_Type\": \"UnityEditor.ShaderGraph.TangentMaterialSlot\",\r\n    \"m_ObjectId\":
+    \"27ab6b67d0c04c8483fe392a43c0a929\",\r\n    \"m_Id\": 0,\r\n    \"m_DisplayName\":
+    \"Tangent\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\": false,\r\n    \"m_ShaderOutputName\":
+    \"Tangent\",\r\n    \"m_StageCapability\": 1,\r\n    \"m_Value\": {\r\n       
+    \"x\": 0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0\r\n    },\r\n    \"m_DefaultValue\":
+    {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0\r\n   
+    },\r\n    \"m_Labels\": [],\r\n    \"m_Space\": 0\r\n}\r\n\r\n{\r\n    \"m_SGVersion\":
+    2,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Internal.ColorShaderProperty\",\r\n   
+    \"m_ObjectId\": \"2c2ed82158a8f681aefc758723130473\",\r\n    \"m_Guid\": {\r\n       
+    \"m_GuidSerialized\": \"2b6e4503-63d7-4c1b-998c-9ddfae3e77a9\"\r\n    },\r\n   
+    \"m_Name\": \"BaseColor\",\r\n    \"m_DefaultRefNameVersion\": 0,\r\n    \"m_RefNameGeneratedByDisplayName\":
+    \"\",\r\n    \"m_DefaultReferenceName\": \"Color_1308AD31\",\r\n    \"m_OverrideReferenceName\":
+    \"_BaseColor\",\r\n    \"m_GeneratePropertyBlock\": true,\r\n    \"m_UseCustomSlotLabel\":
+    false,\r\n    \"m_CustomSlotLabel\": \"\",\r\n    \"m_DismissedVersion\": 0,\r\n   
+    \"m_Precision\": 0,\r\n    \"overrideHLSLDeclaration\": false,\r\n    \"hlslDeclarationOverride\":
+    0,\r\n    \"m_Hidden\": false,\r\n    \"m_Value\": {\r\n        \"r\": 1.0,\r\n       
+    \"g\": 0.7914925813674927,\r\n        \"b\": 0.0,\r\n        \"a\": 0.0\r\n   
+    },\r\n    \"isMainColor\": false,\r\n    \"m_ColorMode\": 0\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.PropertyNode\",\r\n   
+    \"m_ObjectId\": \"2d025d62a0fc2a86bd04d00182d56fda\",\r\n    \"m_Group\": {\r\n       
+    \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"Property\",\r\n    \"m_DrawState\":
+    {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\": {\r\n           
+    \"serializedVersion\": \"2\",\r\n            \"x\": -283.0,\r\n            \"y\":
+    -159.0,\r\n            \"width\": 91.0,\r\n            \"height\": 77.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"3192d0b35f184e85b850dd9fd1bc42e5\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    },\r\n    \"m_Property\": {\r\n       
+    \"m_Id\": \"65284c3df8a5e28296ab2c661fb06f8e\"\r\n    }\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.DynamicValueMaterialSlot\",\r\n   
+    \"m_ObjectId\": \"300dff5347562589a40184ab2372a271\",\r\n    \"m_Id\": 0,\r\n   
+    \"m_DisplayName\": \"A\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\": false,\r\n   
+    \"m_ShaderOutputName\": \"A\",\r\n    \"m_StageCapability\": 3,\r\n    \"m_Value\":
+    {\r\n        \"e00\": 0.0,\r\n        \"e01\": 0.0,\r\n        \"e02\": 0.0,\r\n       
+    \"e03\": 0.0,\r\n        \"e10\": 0.0,\r\n        \"e11\": 0.0,\r\n        \"e12\":
+    0.0,\r\n        \"e13\": 0.0,\r\n        \"e20\": 0.0,\r\n        \"e21\": 0.0,\r\n       
+    \"e22\": 0.0,\r\n        \"e23\": 0.0,\r\n        \"e30\": 0.0,\r\n        \"e31\":
+    0.0,\r\n        \"e32\": 0.0,\r\n        \"e33\": 0.0\r\n    },\r\n    \"m_DefaultValue\":
+    {\r\n        \"e00\": 1.0,\r\n        \"e01\": 0.0,\r\n        \"e02\": 0.0,\r\n       
+    \"e03\": 0.0,\r\n        \"e10\": 0.0,\r\n        \"e11\": 1.0,\r\n        \"e12\":
+    0.0,\r\n        \"e13\": 0.0,\r\n        \"e20\": 0.0,\r\n        \"e21\": 0.0,\r\n       
+    \"e22\": 1.0,\r\n        \"e23\": 0.0,\r\n        \"e30\": 0.0,\r\n        \"e31\":
+    0.0,\r\n        \"e32\": 0.0,\r\n        \"e33\": 1.0\r\n    }\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Texture2DMaterialSlot\",\r\n   
+    \"m_ObjectId\": \"3192d0b35f184e85b850dd9fd1bc42e5\",\r\n    \"m_Id\": 0,\r\n   
+    \"m_DisplayName\": \"Grid\",\r\n    \"m_SlotType\": 1,\r\n    \"m_Hidden\": false,\r\n   
+    \"m_ShaderOutputName\": \"Out\",\r\n    \"m_StageCapability\": 3,\r\n    \"m_BareResource\":
+    false\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 1,\r\n    \"m_Type\": \"UnityEditor.Rendering.Universal.ShaderGraph.UniversalTarget\",\r\n   
+    \"m_ObjectId\": \"3462cac44c2c4b76ae41f54f8f6bd9b3\",\r\n    \"m_Datas\": [],\r\n   
+    \"m_ActiveSubTarget\": {\r\n        \"m_Id\": \"c7b01b04221e4a94ab043041a797a3bb\"\r\n   
+    },\r\n    \"m_AllowMaterialOverride\": false,\r\n    \"m_SurfaceType\": 0,\r\n   
+    \"m_ZTestMode\": 4,\r\n    \"m_ZWriteControl\": 0,\r\n    \"m_AlphaMode\": 0,\r\n   
+    \"m_RenderFace\": 2,\r\n    \"m_AlphaClip\": true,\r\n    \"m_CastShadows\":
+    true,\r\n    \"m_ReceiveShadows\": true,\r\n    \"m_SupportsLODCrossFade\": false,\r\n   
+    \"m_CustomEditorGUI\": \"\",\r\n    \"m_SupportVFX\": false\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.DynamicValueMaterialSlot\",\r\n   
+    \"m_ObjectId\": \"3974917e7985428e9852be12e6ba3dd4\",\r\n    \"m_Id\": 1,\r\n   
+    \"m_DisplayName\": \"B\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\": false,\r\n   
+    \"m_ShaderOutputName\": \"B\",\r\n    \"m_StageCapability\": 3,\r\n    \"m_Value\":
+    {\r\n        \"e00\": 2.0,\r\n        \"e01\": 2.0,\r\n        \"e02\": 2.0,\r\n       
+    \"e03\": 2.0,\r\n        \"e10\": 2.0,\r\n        \"e11\": 2.0,\r\n        \"e12\":
+    2.0,\r\n        \"e13\": 2.0,\r\n        \"e20\": 2.0,\r\n        \"e21\": 2.0,\r\n       
+    \"e22\": 2.0,\r\n        \"e23\": 2.0,\r\n        \"e30\": 2.0,\r\n        \"e31\":
+    2.0,\r\n        \"e32\": 2.0,\r\n        \"e33\": 2.0\r\n    },\r\n    \"m_DefaultValue\":
+    {\r\n        \"e00\": 1.0,\r\n        \"e01\": 0.0,\r\n        \"e02\": 0.0,\r\n       
+    \"e03\": 0.0,\r\n        \"e10\": 0.0,\r\n        \"e11\": 1.0,\r\n        \"e12\":
+    0.0,\r\n        \"e13\": 0.0,\r\n        \"e20\": 0.0,\r\n        \"e21\": 0.0,\r\n       
+    \"e22\": 1.0,\r\n        \"e23\": 0.0,\r\n        \"e30\": 0.0,\r\n        \"e31\":
+    0.0,\r\n        \"e32\": 0.0,\r\n        \"e33\": 1.0\r\n    }\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.ColorNode\",\r\n   
+    \"m_ObjectId\": \"3ca898713668c983b29c8ff63f7d33c3\",\r\n    \"m_Group\": {\r\n       
+    \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"Color\",\r\n    \"m_DrawState\":
+    {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\": {\r\n           
+    \"serializedVersion\": \"2\",\r\n            \"x\": -78.0,\r\n            \"y\":
+    -224.0,\r\n            \"width\": 208.0,\r\n            \"height\": 124.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"8f8520aa78c9ca8f8fd61b8ec62711f6\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [\r\n        \"rgba\"\r\n    ],\r\n    \"m_Precision\":
+    0,\r\n    \"m_PreviewExpanded\": true,\r\n    \"m_DismissedVersion\": 0,\r\n   
+    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\": {\r\n        \"m_SerializableColors\":
+    []\r\n    },\r\n    \"m_Color\": {\r\n        \"color\": {\r\n            \"r\":
+    1.0,\r\n            \"g\": 1.0,\r\n            \"b\": 1.0,\r\n            \"a\":
+    0.0\r\n        },\r\n        \"mode\": 0\r\n    }\r\n}\r\n\r\n{\r\n    \"m_SGVersion\":
+    0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.CategoryData\",\r\n    \"m_ObjectId\":
+    \"3dec0bad2a1542d6a713dd617fa300cd\",\r\n    \"m_Name\": \"\",\r\n    \"m_ChildObjectList\":
+    [\r\n        {\r\n            \"m_Id\": \"65284c3df8a5e28296ab2c661fb06f8e\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"2c2ed82158a8f681aefc758723130473\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"7c738a8e0e86dd83a18c685ebaa63482\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"0ea06de9ea69518b8855a1880fd3e73d\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"1334dc04d76f0e8cbea4935483dde4e9\"\r\n       
+    }\r\n    ]\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.DynamicVectorMaterialSlot\",\r\n   
+    \"m_ObjectId\": \"4a193cd1ca59de8cb4c6b275cb814dcf\",\r\n    \"m_Id\": 0,\r\n   
+    \"m_DisplayName\": \"A\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\": false,\r\n   
+    \"m_ShaderOutputName\": \"A\",\r\n    \"m_StageCapability\": 3,\r\n    \"m_Value\":
+    {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0,\r\n       
+    \"w\": 0.0\r\n    },\r\n    \"m_DefaultValue\": {\r\n        \"x\": 0.0,\r\n       
+    \"y\": 0.0,\r\n        \"z\": 0.0,\r\n        \"w\": 0.0\r\n    }\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.ColorRGBMaterialSlot\",\r\n   
+    \"m_ObjectId\": \"4b6b89d76c5f46f08adcaad78901060b\",\r\n    \"m_Id\": 0,\r\n   
+    \"m_DisplayName\": \"Base Color\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\":
+    false,\r\n    \"m_ShaderOutputName\": \"BaseColor\",\r\n    \"m_StageCapability\":
+    2,\r\n    \"m_Value\": {\r\n        \"x\": 0.7353569269180298,\r\n        \"y\":
+    0.7353569269180298,\r\n        \"z\": 0.7353569269180298\r\n    },\r\n    \"m_DefaultValue\":
+    {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0\r\n   
+    },\r\n    \"m_Labels\": [],\r\n    \"m_ColorMode\": 0,\r\n    \"m_DefaultColor\":
+    {\r\n        \"r\": 0.5,\r\n        \"g\": 0.5,\r\n        \"b\": 0.5,\r\n       
+    \"a\": 1.0\r\n    }\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\":
+    \"UnityEditor.ShaderGraph.BlockNode\",\r\n    \"m_ObjectId\": \"5033c57c55cb44499cac7b93ed4c51dc\",\r\n   
+    \"m_Group\": {\r\n        \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"SurfaceDescription.Metallic\",\r\n   
+    \"m_DrawState\": {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\":
+    {\r\n            \"serializedVersion\": \"2\",\r\n            \"x\": 0.0,\r\n           
+    \"y\": 0.0,\r\n            \"width\": 0.0,\r\n            \"height\": 0.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"bfdc2b4267484f058ba67cfd0360524e\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    },\r\n    \"m_SerializedDescriptor\":
+    \"SurfaceDescription.Metallic\"\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n   
+    \"m_Type\": \"UnityEditor.ShaderGraph.Vector4MaterialSlot\",\r\n    \"m_ObjectId\":
+    \"5064aba768afeb80bb7dcefb0505bf0b\",\r\n    \"m_Id\": 0,\r\n    \"m_DisplayName\":
+    \"BaseColor\",\r\n    \"m_SlotType\": 1,\r\n    \"m_Hidden\": false,\r\n    \"m_ShaderOutputName\":
+    \"Out\",\r\n    \"m_StageCapability\": 3,\r\n    \"m_Value\": {\r\n        \"x\":
+    0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0,\r\n        \"w\": 0.0\r\n   
+    },\r\n    \"m_DefaultValue\": {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n       
+    \"z\": 0.0,\r\n        \"w\": 0.0\r\n    },\r\n    \"m_Labels\": []\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Vector1MaterialSlot\",\r\n   
+    \"m_ObjectId\": \"511d3b3558330d829191eae6b3a611e3\",\r\n    \"m_Id\": 0,\r\n   
+    \"m_DisplayName\": \"GridScale\",\r\n    \"m_SlotType\": 1,\r\n    \"m_Hidden\":
+    false,\r\n    \"m_ShaderOutputName\": \"Out\",\r\n    \"m_StageCapability\":
+    3,\r\n    \"m_Value\": 0.0,\r\n    \"m_DefaultValue\": 0.0,\r\n    \"m_Labels\":
+    [\r\n        \"X\"\r\n    ]\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\":
+    \"UnityEditor.ShaderGraph.MultiplyNode\",\r\n    \"m_ObjectId\": \"58be9a53fd903b8e990da8a3efb58f3f\",\r\n   
+    \"m_Group\": {\r\n        \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"Multiply\",\r\n   
+    \"m_DrawState\": {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\":
+    {\r\n            \"serializedVersion\": \"2\",\r\n            \"x\": 612.0,\r\n           
+    \"y\": -370.0,\r\n            \"width\": 208.0,\r\n            \"height\": 302.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"300dff5347562589a40184ab2372a271\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"3974917e7985428e9852be12e6ba3dd4\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"cae42d2bc6475b8a9325d9df322b1880\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [\r\n        \"multiplication\",\r\n       
+    \"times\",\r\n        \"x\"\r\n    ],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    }\r\n}\r\n\r\n{\r\n    \"m_SGVersion\":
+    0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Vector1MaterialSlot\",\r\n   
+    \"m_ObjectId\": \"5faf36d597391b8e95e2b0ced22c4e2e\",\r\n    \"m_Id\": 6,\r\n   
+    \"m_DisplayName\": \"Blend\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\":
+    false,\r\n    \"m_ShaderOutputName\": \"Blend\",\r\n    \"m_StageCapability\":
+    3,\r\n    \"m_Value\": 1.0,\r\n    \"m_DefaultValue\": 1.0,\r\n    \"m_Labels\":
+    [\r\n        \"X\"\r\n    ]\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\":
+    \"UnityEditor.ShaderGraph.PropertyNode\",\r\n    \"m_ObjectId\": \"6424e4ce95aee380ad1734678307ab82\",\r\n   
+    \"m_Group\": {\r\n        \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"Property\",\r\n   
+    \"m_DrawState\": {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\":
+    {\r\n            \"serializedVersion\": \"2\",\r\n            \"x\": -304.0,\r\n           
+    \"y\": 422.0,\r\n            \"width\": 91.0,\r\n            \"height\": 77.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"b2dcf195fbd3fc8f9cee3e822fbbff87\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    },\r\n    \"m_Property\": {\r\n       
+    \"m_Id\": \"1334dc04d76f0e8cbea4935483dde4e9\"\r\n    }\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Internal.Texture2DShaderProperty\",\r\n   
+    \"m_ObjectId\": \"65284c3df8a5e28296ab2c661fb06f8e\",\r\n    \"m_Guid\": {\r\n       
+    \"m_GuidSerialized\": \"392435b1-22fc-497e-a719-c5c74977ef79\"\r\n    },\r\n   
+    \"m_Name\": \"Grid\",\r\n    \"m_DefaultRefNameVersion\": 0,\r\n    \"m_RefNameGeneratedByDisplayName\":
+    \"\",\r\n    \"m_DefaultReferenceName\": \"Texture2D_96DA96FF\",\r\n    \"m_OverrideReferenceName\":
+    \"_Grid\",\r\n    \"m_GeneratePropertyBlock\": true,\r\n    \"m_UseCustomSlotLabel\":
+    false,\r\n    \"m_CustomSlotLabel\": \"\",\r\n    \"m_DismissedVersion\": 0,\r\n   
+    \"m_Precision\": 0,\r\n    \"overrideHLSLDeclaration\": false,\r\n    \"hlslDeclarationOverride\":
+    0,\r\n    \"m_Hidden\": false,\r\n    \"m_Value\": {\r\n        \"m_SerializedTexture\":
+    \"{\\\"texture\\\":{\\\"instanceID\\\":0}}\",\r\n        \"m_Guid\": \"\"\r\n   
+    },\r\n    \"isMainTexture\": false,\r\n    \"useTilingAndOffset\": false,\r\n   
+    \"m_Modifiable\": true,\r\n    \"m_DefaultType\": 0\r\n}\r\n\r\n{\r\n    \"m_SGVersion\":
+    0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.PropertyNode\",\r\n    \"m_ObjectId\":
+    \"6f3c3982ba971388b6946b532b8ff73b\",\r\n    \"m_Group\": {\r\n        \"m_Id\":
+    \"\"\r\n    },\r\n    \"m_Name\": \"Property\",\r\n    \"m_DrawState\": {\r\n       
+    \"m_Expanded\": true,\r\n        \"m_Position\": {\r\n            \"serializedVersion\":
+    \"2\",\r\n            \"x\": -309.0,\r\n            \"y\": 324.0,\r\n           
+    \"width\": 99.0,\r\n            \"height\": 77.0\r\n        }\r\n    },\r\n   
+    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"511d3b3558330d829191eae6b3a611e3\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    },\r\n    \"m_Property\": {\r\n       
+    \"m_Id\": \"0ea06de9ea69518b8855a1880fd3e73d\"\r\n    }\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Vector1MaterialSlot\",\r\n   
+    \"m_ObjectId\": \"71e89306bf4441c3a89bc8e203439c34\",\r\n    \"m_Id\": 0,\r\n   
+    \"m_DisplayName\": \"Alpha Clip Threshold\",\r\n    \"m_SlotType\": 0,\r\n   
+    \"m_Hidden\": false,\r\n    \"m_ShaderOutputName\": \"AlphaClipThreshold\",\r\n   
+    \"m_StageCapability\": 2,\r\n    \"m_Value\": 0.5,\r\n    \"m_DefaultValue\":
+    0.5,\r\n    \"m_Labels\": []\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n   
+    \"m_Type\": \"UnityEditor.ShaderGraph.DynamicVectorMaterialSlot\",\r\n    \"m_ObjectId\":
+    \"7489722cb7eeb682b480d5588e207ef1\",\r\n    \"m_Id\": 3,\r\n    \"m_DisplayName\":
+    \"Out\",\r\n    \"m_SlotType\": 1,\r\n    \"m_Hidden\": false,\r\n    \"m_ShaderOutputName\":
+    \"Out\",\r\n    \"m_StageCapability\": 3,\r\n    \"m_Value\": {\r\n        \"x\":
+    0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0,\r\n        \"w\": 0.0\r\n   
+    },\r\n    \"m_DefaultValue\": {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n       
+    \"z\": 0.0,\r\n        \"w\": 0.0\r\n    }\r\n}\r\n\r\n{\r\n    \"m_SGVersion\":
+    0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.DynamicVectorMaterialSlot\",\r\n   
+    \"m_ObjectId\": \"78819903c3034f1d93f75200ae0dd669\",\r\n    \"m_Id\": 2,\r\n   
+    \"m_DisplayName\": \"Out\",\r\n    \"m_SlotType\": 1,\r\n    \"m_Hidden\": false,\r\n   
+    \"m_ShaderOutputName\": \"Out\",\r\n    \"m_StageCapability\": 3,\r\n    \"m_Value\":
+    {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0,\r\n       
+    \"w\": 0.0\r\n    },\r\n    \"m_DefaultValue\": {\r\n        \"x\": 0.0,\r\n       
+    \"y\": 0.0,\r\n        \"z\": 0.0,\r\n        \"w\": 0.0\r\n    }\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 1,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Internal.Vector1ShaderProperty\",\r\n   
+    \"m_ObjectId\": \"7c738a8e0e86dd83a18c685ebaa63482\",\r\n    \"m_Guid\": {\r\n       
+    \"m_GuidSerialized\": \"307727d3-0945-4629-9b35-e7913516c6ef\"\r\n    },\r\n   
+    \"m_Name\": \"OverlayAmount\",\r\n    \"m_DefaultRefNameVersion\": 0,\r\n   
+    \"m_RefNameGeneratedByDisplayName\": \"\",\r\n    \"m_DefaultReferenceName\":
+    \"Vector1_9E97F8E9\",\r\n    \"m_OverrideReferenceName\": \"OverlayAmount\",\r\n   
+    \"m_GeneratePropertyBlock\": true,\r\n    \"m_UseCustomSlotLabel\": false,\r\n   
+    \"m_CustomSlotLabel\": \"\",\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_Precision\":
+    0,\r\n    \"overrideHLSLDeclaration\": false,\r\n    \"hlslDeclarationOverride\":
+    0,\r\n    \"m_Hidden\": false,\r\n    \"m_Value\": 0.5,\r\n    \"m_FloatType\":
+    1,\r\n    \"m_RangeValues\": {\r\n        \"x\": 0.0,\r\n        \"y\": 1.0\r\n   
+    }\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Texture2DInputMaterialSlot\",\r\n   
+    \"m_ObjectId\": \"8214c7b85c67f68190a08f734e280657\",\r\n    \"m_Id\": 1,\r\n   
+    \"m_DisplayName\": \"Texture\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\":
+    false,\r\n    \"m_ShaderOutputName\": \"Texture\",\r\n    \"m_StageCapability\":
+    3,\r\n    \"m_BareResource\": false,\r\n    \"m_Texture\": {\r\n        \"m_SerializedTexture\":
+    \"{\\\"texture\\\":{\\\"instanceID\\\":0}}\",\r\n        \"m_Guid\": \"\"\r\n   
+    },\r\n    \"m_DefaultType\": 0\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 1,\r\n   
+    \"m_Type\": \"UnityEditor.ShaderGraph.PositionNode\",\r\n    \"m_ObjectId\":
+    \"83942ec99371a18c87108a637cfeeda5\",\r\n    \"m_Group\": {\r\n        \"m_Id\":
+    \"\"\r\n    },\r\n    \"m_Name\": \"Position\",\r\n    \"m_DrawState\": {\r\n       
+    \"m_Expanded\": true,\r\n        \"m_Position\": {\r\n            \"serializedVersion\":
+    \"2\",\r\n            \"x\": -801.5000610351563,\r\n            \"y\": -225.00001525878907,\r\n           
+    \"width\": 208.0,\r\n            \"height\": 314.5\r\n        }\r\n    },\r\n   
+    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"d73bfd387672c288b5f3f4aaa7096f82\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [\r\n        \"location\"\r\n    ],\r\n    \"m_Precision\":
+    1,\r\n    \"m_PreviewExpanded\": true,\r\n    \"m_DismissedVersion\": 0,\r\n   
+    \"m_PreviewMode\": 2,\r\n    \"m_CustomColors\": {\r\n        \"m_SerializableColors\":
+    []\r\n    },\r\n    \"m_Space\": 4,\r\n    \"m_PositionSource\": 0\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Vector4MaterialSlot\",\r\n   
+    \"m_ObjectId\": \"8f8520aa78c9ca8f8fd61b8ec62711f6\",\r\n    \"m_Id\": 0,\r\n   
+    \"m_DisplayName\": \"Out\",\r\n    \"m_SlotType\": 1,\r\n    \"m_Hidden\": false,\r\n   
+    \"m_ShaderOutputName\": \"Out\",\r\n    \"m_StageCapability\": 3,\r\n    \"m_Value\":
+    {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0,\r\n       
+    \"w\": 0.0\r\n    },\r\n    \"m_DefaultValue\": {\r\n        \"x\": 0.0,\r\n       
+    \"y\": 0.0,\r\n        \"z\": 0.0,\r\n        \"w\": 0.0\r\n    },\r\n    \"m_Labels\":
+    []\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.PropertyNode\",\r\n   
+    \"m_ObjectId\": \"9376a8acf520478f8a6e7e85468d3f43\",\r\n    \"m_Group\": {\r\n       
+    \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"Property\",\r\n    \"m_DrawState\":
+    {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\": {\r\n           
+    \"serializedVersion\": \"2\",\r\n            \"x\": -27.0,\r\n            \"y\":
+    416.0,\r\n            \"width\": 127.0,\r\n            \"height\": 77.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"1aa7444bcbc6638ca3000b553a79cc36\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    },\r\n    \"m_Property\": {\r\n       
+    \"m_Id\": \"7c738a8e0e86dd83a18c685ebaa63482\"\r\n    }\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.DynamicVectorMaterialSlot\",\r\n   
+    \"m_ObjectId\": \"93f0fb6829659d8bb4ab4eb2a720b41a\",\r\n    \"m_Id\": 2,\r\n   
+    \"m_DisplayName\": \"T\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\": false,\r\n   
+    \"m_ShaderOutputName\": \"T\",\r\n    \"m_StageCapability\": 3,\r\n    \"m_Value\":
+    {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0,\r\n       
+    \"w\": 0.0\r\n    },\r\n    \"m_DefaultValue\": {\r\n        \"x\": 0.0,\r\n       
+    \"y\": 0.0,\r\n        \"z\": 0.0,\r\n        \"w\": 0.0\r\n    }\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Vector4MaterialSlot\",\r\n   
+    \"m_ObjectId\": \"97e1f5511490c18d8fcdf620103788c4\",\r\n    \"m_Id\": 0,\r\n   
+    \"m_DisplayName\": \"Out\",\r\n    \"m_SlotType\": 1,\r\n    \"m_Hidden\": false,\r\n   
+    \"m_ShaderOutputName\": \"Out\",\r\n    \"m_StageCapability\": 2,\r\n    \"m_Value\":
+    {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0,\r\n       
+    \"w\": 0.0\r\n    },\r\n    \"m_DefaultValue\": {\r\n        \"x\": 0.0,\r\n       
+    \"y\": 0.0,\r\n        \"z\": 0.0,\r\n        \"w\": 0.0\r\n    },\r\n    \"m_Labels\":
+    []\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.BlockNode\",\r\n   
+    \"m_ObjectId\": \"99d4125c4e694abe9d95236c7f00d29d\",\r\n    \"m_Group\": {\r\n       
+    \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"SurfaceDescription.Smoothness\",\r\n   
+    \"m_DrawState\": {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\":
+    {\r\n            \"serializedVersion\": \"2\",\r\n            \"x\": 0.0,\r\n           
+    \"y\": 0.0,\r\n            \"width\": 0.0,\r\n            \"height\": 0.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"1a4db6ba0248460a8ab971dccb4fcce6\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    },\r\n    \"m_SerializedDescriptor\":
+    \"SurfaceDescription.Smoothness\"\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n   
+    \"m_Type\": \"UnityEditor.ShaderGraph.PropertyNode\",\r\n    \"m_ObjectId\":
+    \"9cee7b649e427b80852bd7a3b2ed91cb\",\r\n    \"m_Group\": {\r\n        \"m_Id\":
+    \"\"\r\n    },\r\n    \"m_Name\": \"Property\",\r\n    \"m_DrawState\": {\r\n       
+    \"m_Expanded\": true,\r\n        \"m_Position\": {\r\n            \"serializedVersion\":
+    \"2\",\r\n            \"x\": 455.0,\r\n            \"y\": -370.0,\r\n           
+    \"width\": 101.0,\r\n            \"height\": 77.0\r\n        }\r\n    },\r\n   
+    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"5064aba768afeb80bb7dcefb0505bf0b\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    },\r\n    \"m_Property\": {\r\n       
+    \"m_Id\": \"2c2ed82158a8f681aefc758723130473\"\r\n    }\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.PositionMaterialSlot\",\r\n   
+    \"m_ObjectId\": \"a014792ccaa340fcad57bdb72fbade1e\",\r\n    \"m_Id\": 0,\r\n   
+    \"m_DisplayName\": \"Position\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\":
+    false,\r\n    \"m_ShaderOutputName\": \"Position\",\r\n    \"m_StageCapability\":
+    1,\r\n    \"m_Value\": {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n       
+    \"z\": 0.0\r\n    },\r\n    \"m_DefaultValue\": {\r\n        \"x\": 0.0,\r\n       
+    \"y\": 0.0,\r\n        \"z\": 0.0\r\n    },\r\n    \"m_Labels\": [],\r\n    \"m_Space\":
+    0\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.NormalMaterialSlot\",\r\n   
+    \"m_ObjectId\": \"a0527842467442bb8f43b1b0becf9fe3\",\r\n    \"m_Id\": 0,\r\n   
+    \"m_DisplayName\": \"Normal (Tangent Space)\",\r\n    \"m_SlotType\": 0,\r\n   
+    \"m_Hidden\": false,\r\n    \"m_ShaderOutputName\": \"NormalTS\",\r\n    \"m_StageCapability\":
+    2,\r\n    \"m_Value\": {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n       
+    \"z\": 0.0\r\n    },\r\n    \"m_DefaultValue\": {\r\n        \"x\": 0.0,\r\n       
+    \"y\": 0.0,\r\n        \"z\": 0.0\r\n    },\r\n    \"m_Labels\": [],\r\n    \"m_Space\":
+    3\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.DynamicVectorMaterialSlot\",\r\n   
+    \"m_ObjectId\": \"a54edaca86ce4c33b4f133c21b90269a\",\r\n    \"m_Id\": 1,\r\n   
+    \"m_DisplayName\": \"B\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\": false,\r\n   
+    \"m_ShaderOutputName\": \"B\",\r\n    \"m_StageCapability\": 3,\r\n    \"m_Value\":
+    {\r\n        \"x\": 1.0,\r\n        \"y\": 0.0,\r\n        \"z\": 1.0,\r\n       
+    \"w\": 0.0\r\n    },\r\n    \"m_DefaultValue\": {\r\n        \"x\": 0.0,\r\n       
+    \"y\": 0.0,\r\n        \"z\": 0.0,\r\n        \"w\": 0.0\r\n    }\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.BlockNode\",\r\n   
+    \"m_ObjectId\": \"a7f57c9897bc40308d677b03f5499d49\",\r\n    \"m_Group\": {\r\n       
+    \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"VertexDescription.Tangent\",\r\n   
+    \"m_DrawState\": {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\":
+    {\r\n            \"serializedVersion\": \"2\",\r\n            \"x\": 0.0,\r\n           
+    \"y\": 0.0,\r\n            \"width\": 0.0,\r\n            \"height\": 0.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"27ab6b67d0c04c8483fe392a43c0a929\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    },\r\n    \"m_SerializedDescriptor\":
+    \"VertexDescription.Tangent\"\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n   
+    \"m_Type\": \"UnityEditor.ShaderGraph.AddNode\",\r\n    \"m_ObjectId\": \"ad165c40854c47eba1cbed59dbceb39d\",\r\n   
+    \"m_Group\": {\r\n        \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"Add\",\r\n   
+    \"m_DrawState\": {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\":
+    {\r\n            \"serializedVersion\": \"2\",\r\n            \"x\": -412.9999084472656,\r\n           
+    \"y\": 21.999982833862306,\r\n            \"width\": 208.00001525878907,\r\n           
+    \"height\": 302.0000305175781\r\n        }\r\n    },\r\n    \"m_Slots\": [\r\n       
+    {\r\n            \"m_Id\": \"00642a90e32f4a4390b130e1c0482fcc\"\r\n        },\r\n       
+    {\r\n            \"m_Id\": \"a54edaca86ce4c33b4f133c21b90269a\"\r\n        },\r\n       
+    {\r\n            \"m_Id\": \"78819903c3034f1d93f75200ae0dd669\"\r\n        }\r\n   
+    ],\r\n    \"synonyms\": [\r\n        \"addition\",\r\n        \"sum\",\r\n       
+    \"plus\"\r\n    ],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\": true,\r\n   
+    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    }\r\n}\r\n\r\n{\r\n    \"m_SGVersion\":
+    0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Vector1MaterialSlot\",\r\n   
+    \"m_ObjectId\": \"b10628015c9a4ffdb15c6f8e3e25b6a1\",\r\n    \"m_Id\": 0,\r\n   
+    \"m_DisplayName\": \"Ambient Occlusion\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\":
+    false,\r\n    \"m_ShaderOutputName\": \"Occlusion\",\r\n    \"m_StageCapability\":
+    2,\r\n    \"m_Value\": 1.0,\r\n    \"m_DefaultValue\": 1.0,\r\n    \"m_Labels\":
+    []\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Vector1MaterialSlot\",\r\n   
+    \"m_ObjectId\": \"b2dcf195fbd3fc8f9cee3e822fbbff87\",\r\n    \"m_Id\": 0,\r\n   
+    \"m_DisplayName\": \"Falloff\",\r\n    \"m_SlotType\": 1,\r\n    \"m_Hidden\":
+    false,\r\n    \"m_ShaderOutputName\": \"Out\",\r\n    \"m_StageCapability\":
+    3,\r\n    \"m_Value\": 0.0,\r\n    \"m_DefaultValue\": 0.0,\r\n    \"m_Labels\":
+    [\r\n        \"X\"\r\n    ]\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\":
+    \"UnityEditor.ShaderGraph.Vector1MaterialSlot\",\r\n    \"m_ObjectId\": \"bfdc2b4267484f058ba67cfd0360524e\",\r\n   
+    \"m_Id\": 0,\r\n    \"m_DisplayName\": \"Metallic\",\r\n    \"m_SlotType\": 0,\r\n   
+    \"m_Hidden\": false,\r\n    \"m_ShaderOutputName\": \"Metallic\",\r\n    \"m_StageCapability\":
+    2,\r\n    \"m_Value\": 0.0,\r\n    \"m_DefaultValue\": 0.0,\r\n    \"m_Labels\":
+    []\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.TriplanarNode\",\r\n   
+    \"m_ObjectId\": \"c1699351edff078e9f052737bbebcedb\",\r\n    \"m_Group\": {\r\n       
+    \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"Triplanar\",\r\n    \"m_DrawState\":
+    {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\": {\r\n           
+    \"serializedVersion\": \"2\",\r\n            \"x\": -83.0,\r\n            \"y\":
+    -79.0,\r\n            \"width\": 208.0,\r\n            \"height\": 434.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"97e1f5511490c18d8fcdf620103788c4\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"8214c7b85c67f68190a08f734e280657\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"1406c0beeabc8882b395d56fbc54504e\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"1cbed02ab8c98e8faf29b6b633885f62\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"fc43d96e36f3d681b77c626e1d413d69\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"d25a69bb6610308da8f9fae31dea24ac\"\r\n       
+    },\r\n        {\r\n            \"m_Id\": \"5faf36d597391b8e95e2b0ced22c4e2e\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [\r\n        \"project\"\r\n    ],\r\n    \"m_Precision\":
+    0,\r\n    \"m_PreviewExpanded\": true,\r\n    \"m_DismissedVersion\": 0,\r\n   
+    \"m_PreviewMode\": 2,\r\n    \"m_CustomColors\": {\r\n        \"m_SerializableColors\":
+    []\r\n    },\r\n    \"m_TextureType\": 0,\r\n    \"m_InputSpace\": 4,\r\n   
+    \"m_NormalOutputSpace\": 3\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 2,\r\n    \"m_Type\":
+    \"UnityEditor.Rendering.Universal.ShaderGraph.UniversalLitSubTarget\",\r\n   
+    \"m_ObjectId\": \"c7b01b04221e4a94ab043041a797a3bb\",\r\n    \"m_WorkflowMode\":
+    1,\r\n    \"m_NormalDropOffSpace\": 0,\r\n    \"m_ClearCoat\": false,\r\n   
+    \"m_BlendModePreserveSpecular\": false\r\n}\r\n\r\n{\r\n    \"m_SGVersion\":
+    0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.DynamicValueMaterialSlot\",\r\n   
+    \"m_ObjectId\": \"cae42d2bc6475b8a9325d9df322b1880\",\r\n    \"m_Id\": 2,\r\n   
+    \"m_DisplayName\": \"Out\",\r\n    \"m_SlotType\": 1,\r\n    \"m_Hidden\": false,\r\n   
+    \"m_ShaderOutputName\": \"Out\",\r\n    \"m_StageCapability\": 3,\r\n    \"m_Value\":
+    {\r\n        \"e00\": 0.0,\r\n        \"e01\": 0.0,\r\n        \"e02\": 0.0,\r\n       
+    \"e03\": 0.0,\r\n        \"e10\": 0.0,\r\n        \"e11\": 0.0,\r\n        \"e12\":
+    0.0,\r\n        \"e13\": 0.0,\r\n        \"e20\": 0.0,\r\n        \"e21\": 0.0,\r\n       
+    \"e22\": 0.0,\r\n        \"e23\": 0.0,\r\n        \"e30\": 0.0,\r\n        \"e31\":
+    0.0,\r\n        \"e32\": 0.0,\r\n        \"e33\": 0.0\r\n    },\r\n    \"m_DefaultValue\":
+    {\r\n        \"e00\": 1.0,\r\n        \"e01\": 0.0,\r\n        \"e02\": 0.0,\r\n       
+    \"e03\": 0.0,\r\n        \"e10\": 0.0,\r\n        \"e11\": 1.0,\r\n        \"e12\":
+    0.0,\r\n        \"e13\": 0.0,\r\n        \"e20\": 0.0,\r\n        \"e21\": 0.0,\r\n       
+    \"e22\": 1.0,\r\n        \"e23\": 0.0,\r\n        \"e30\": 0.0,\r\n        \"e31\":
+    0.0,\r\n        \"e32\": 0.0,\r\n        \"e33\": 1.0\r\n    }\r\n}\r\n\r\n{\r\n   
+    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.Vector1MaterialSlot\",\r\n   
+    \"m_ObjectId\": \"d25a69bb6610308da8f9fae31dea24ac\",\r\n    \"m_Id\": 5,\r\n   
+    \"m_DisplayName\": \"Tile\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\": false,\r\n   
+    \"m_ShaderOutputName\": \"Tile\",\r\n    \"m_StageCapability\": 3,\r\n    \"m_Value\":
+    1.0,\r\n    \"m_DefaultValue\": 1.0,\r\n    \"m_Labels\": [\r\n        \"X\"\r\n   
+    ]\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.BlockNode\",\r\n   
+    \"m_ObjectId\": \"d49422db1ea849daa1841fe2a772802e\",\r\n    \"m_Group\": {\r\n       
+    \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"SurfaceDescription.NormalTS\",\r\n   
+    \"m_DrawState\": {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\":
+    {\r\n            \"serializedVersion\": \"2\",\r\n            \"x\": 0.0,\r\n           
+    \"y\": 0.0,\r\n            \"width\": 0.0,\r\n            \"height\": 0.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"a0527842467442bb8f43b1b0becf9fe3\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    },\r\n    \"m_SerializedDescriptor\":
+    \"SurfaceDescription.NormalTS\"\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n   
+    \"m_Type\": \"UnityEditor.ShaderGraph.Vector3MaterialSlot\",\r\n    \"m_ObjectId\":
+    \"d73bfd387672c288b5f3f4aaa7096f82\",\r\n    \"m_Id\": 0,\r\n    \"m_DisplayName\":
+    \"Out\",\r\n    \"m_SlotType\": 1,\r\n    \"m_Hidden\": false,\r\n    \"m_ShaderOutputName\":
+    \"Out\",\r\n    \"m_StageCapability\": 3,\r\n    \"m_Value\": {\r\n        \"x\":
+    0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0\r\n    },\r\n    \"m_DefaultValue\":
+    {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n        \"z\": 0.0\r\n   
+    },\r\n    \"m_Labels\": [\r\n        \"X\",\r\n        \"Y\",\r\n        \"Z\"\r\n   
+    ]\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.BlockNode\",\r\n   
+    \"m_ObjectId\": \"eb9cdab8002a4fda911cc69ff7653b92\",\r\n    \"m_Group\": {\r\n       
+    \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"SurfaceDescription.BaseColor\",\r\n   
+    \"m_DrawState\": {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\":
+    {\r\n            \"serializedVersion\": \"2\",\r\n            \"x\": 0.0,\r\n           
+    \"y\": 0.0,\r\n            \"width\": 0.0,\r\n            \"height\": 0.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"4b6b89d76c5f46f08adcaad78901060b\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    },\r\n    \"m_SerializedDescriptor\":
+    \"SurfaceDescription.BaseColor\"\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n   
+    \"m_Type\": \"UnityEditor.ShaderGraph.BlockNode\",\r\n    \"m_ObjectId\": \"ec0efb3a256745d38f05fb7c97aa90ce\",\r\n   
+    \"m_Group\": {\r\n        \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"VertexDescription.Normal\",\r\n   
+    \"m_DrawState\": {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\":
+    {\r\n            \"serializedVersion\": \"2\",\r\n            \"x\": 0.0,\r\n           
+    \"y\": 0.0,\r\n            \"width\": 0.0,\r\n            \"height\": 0.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"17d6763429474013b62c7c3b8e48c295\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    },\r\n    \"m_SerializedDescriptor\":
+    \"VertexDescription.Normal\"\r\n}\r\n\r\n{\r\n    \"m_SGVersion\": 0,\r\n   
+    \"m_Type\": \"UnityEditor.ShaderGraph.BlockNode\",\r\n    \"m_ObjectId\": \"ee5f6134cbce4910ac6c74be913cbfde\",\r\n   
+    \"m_Group\": {\r\n        \"m_Id\": \"\"\r\n    },\r\n    \"m_Name\": \"SurfaceDescription.AlphaClipThreshold\",\r\n   
+    \"m_DrawState\": {\r\n        \"m_Expanded\": true,\r\n        \"m_Position\":
+    {\r\n            \"serializedVersion\": \"2\",\r\n            \"x\": 0.0,\r\n           
+    \"y\": 0.0,\r\n            \"width\": 0.0,\r\n            \"height\": 0.0\r\n       
+    }\r\n    },\r\n    \"m_Slots\": [\r\n        {\r\n            \"m_Id\": \"71e89306bf4441c3a89bc8e203439c34\"\r\n       
+    }\r\n    ],\r\n    \"synonyms\": [],\r\n    \"m_Precision\": 0,\r\n    \"m_PreviewExpanded\":
+    true,\r\n    \"m_DismissedVersion\": 0,\r\n    \"m_PreviewMode\": 0,\r\n    \"m_CustomColors\":
+    {\r\n        \"m_SerializableColors\": []\r\n    },\r\n    \"m_SerializedDescriptor\":
+    \"SurfaceDescription.AlphaClipThreshold\"\r\n}\r\n\r\n{\r\n    \"m_SGVersion\":
+    0,\r\n    \"m_Type\": \"UnityEditor.ShaderGraph.NormalMaterialSlot\",\r\n   
+    \"m_ObjectId\": \"fc43d96e36f3d681b77c626e1d413d69\",\r\n    \"m_Id\": 4,\r\n   
+    \"m_DisplayName\": \"Normal\",\r\n    \"m_SlotType\": 0,\r\n    \"m_Hidden\":
+    false,\r\n    \"m_ShaderOutputName\": \"Normal\",\r\n    \"m_StageCapability\":
+    3,\r\n    \"m_Value\": {\r\n        \"x\": 0.0,\r\n        \"y\": 0.0,\r\n       
+    \"z\": 0.0\r\n    },\r\n    \"m_DefaultValue\": {\r\n        \"x\": 0.0,\r\n       
+    \"y\": 0.0,\r\n        \"z\": 0.0\r\n    },\r\n    \"m_Labels\": [\r\n       
+    \"X\",\r\n        \"Y\",\r\n        \"Z\"\r\n    ],\r\n    \"m_Space\": 4\r\n}\r\n\r\n"
+  m_AssetMaybeChangedOnDisk: 0
+  m_AssetMaybeDeleted: 0
+--- !u!114 &21
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2428,20 +3278,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Children:
-  - {fileID: 18}
-  - {fileID: 24}
+  - {fileID: 22}
+  - {fileID: 31}
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 405
-    width: 847
-    height: 529
+    y: 454
+    width: 1117.5
+    height: 480
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 106
+  controlID: 38
   draggingID: 0
---- !u!114 &18
+--- !u!114 &22
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2451,27 +3301,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ProjectBrowser
+  m_Name: ArchetypesWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 463
-    height: 529
-  m_MinSize: {x: 232, y: 276}
-  m_MaxSize: {x: 10002, y: 10026}
-  m_ActualView: {fileID: 19}
+    width: 715
+    height: 480
+  m_MinSize: {x: 202, y: 226}
+  m_MaxSize: {x: 4002, y: 4026}
+  m_ActualView: {fileID: 2}
   m_Panes:
-  - {fileID: 19}
-  - {fileID: 20}
-  - {fileID: 21}
-  - {fileID: 22}
   - {fileID: 23}
-  m_Selected: 0
-  m_LastSelected: 1
---- !u!114 &19
+  - {fileID: 24}
+  - {fileID: 25}
+  - {fileID: 26}
+  - {fileID: 27}
+  - {fileID: 28}
+  - {fileID: 29}
+  - {fileID: 30}
+  - {fileID: 2}
+  m_Selected: 8
+  m_LastSelected: 7
+--- !u!114 &23
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2493,10 +3347,10 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1
-    y: 24
-    width: 461
-    height: 503
+    x: -831.5
+    y: 532
+    width: 539.5
+    height: 454
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -2519,7 +3373,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/_ScriptableObjects/PlacedObject/BaseAction/ShootingWeaponType
+    - Assets/__Scripts/Pathfinding/ECS
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -2537,7 +3391,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 2ab80000
     m_LastClickedID: 47146
-    m_ExpandedIDs: 000000002a080000cecd000066cf0000ece50000e4ec000050f6000052f6000050fc000052fc000054fc000056fc000058fc00005cfc00005efc000062fc000064fc000068fc00006efc00007e0301008003010084030100860301008a0301008e0301009a030100a00a0100aa0a0100f6110100f8110100fc110100fe11010002120100b8170100c4180100c61801004a1a01004e1a0100501a0100001e01002a2201002c2201002e22010030220100322201003422010036220100382201003a2201003c2201003e22010040220100422201004422010046220100482201004a2201004c2201004e22010050220100522201005422010056220100582201005a2201005c2201005e22010060220100622201006422010066220100682201006a2201006c2201006e22010070220100722201007422010076220100782201007a2201007c2201007e22010080220100822201008422010086220100882201008a2201008c2201008e22010090220100922201009422010096220100982201009a2201009c2201009e220100a0220100a2220100a4220100a6220100a8220100aa220100ac220100ae220100b0220100b2220100b4220100b6220100b8220100ba220100bc220100be220100c0220100c2220100c4220100c6220100c8220100ca220100cc220100ce220100d0220100d2220100d4220100d6220100d8220100da220100dc220100de220100e0220100e2220100e4220100e6220100e8220100ea220100ec220100ee220100f0220100f2220100f4220100f6220100f8220100fa220100fc220100fe22010000230100022301000423010006230100082301000a2301000c2301000e23010010230100122301001423010016230100182301001a2301001c2301001e23010020230100222301002423010026230100282301002a2301002c2301002e23010030230100322301003423010036230100382301003a2301003c2301003e23010040230100422301004423010046230100482301004a2301004c2301004e23010050230100522301005423010056230100582301005a2301005c2301005e23010060230100622301006423010066230100682301006a2301006c2301006e23010070230100722301007423010076230100782301007a2301007c2301007e23010080230100822301008423010086230100882301008a2301008c2301008e23010090230100922301009423010096230100982301009a2301009c2301009e230100a0230100a2230100a4230100a6230100a8230100aa230100ac230100ae230100b0230100b2230100b4230100b6230100b8230100ba230100bc230100be230100c0230100c2230100c4230100c6230100c8230100ca230100cc230100ce230100d0230100d2230100d4230100d6230100d8230100da230100dc230100de230100e0230100e2230100e4230100e6230100e8230100ea230100ec230100ee230100f0230100f2230100f4230100f6230100f8230100fa230100fc230100fe23010000240100022401000424010006240100082401000a2401000c2401000e24010010240100122401001424010016240100182401001a2401001c2401001e24010020240100222401002424010026240100282401002a2401002c2401002e24010030240100322401003424010036240100382401003a2401003c2401003e24010040240100422401004424010046240100482401004a2401004c2401004e24010050240100522401005424010056240100582401005a2401005c2401005e24010060240100622401006424010066240100682401006a2401006c2401006e24010070240100722401007424010076240100782401007a2401007c2401007e24010080240100822401008424010086240100882401008a2401008c2401008e24010090240100922401009424010096240100982401009a2401009c2401009e240100a0240100a2240100a4240100a6240100a8240100aa240100ac240100ae240100b0240100b2240100b4240100b6240100b8240100ba240100bc240100be240100c0240100c2240100c4240100c6240100c8240100ca240100cc240100ce240100d0240100d2240100d4240100d6240100d8240100da240100dc240100de240100e0240100e2240100e4240100e6240100e8240100ea240100ec240100ee240100f0240100f2240100f4240100f6240100f8240100fa240100fc240100fe24010000250100022501000425010006250100082501000a2501000c2501000e25010010250100122501001425010016250100182501001a2501001c2501001e25010020250100222501002425010026250100282501002a2501002c2501002e25010030250100322501003425010036250100382501003a2501003c2501003e25010040250100422501004425010046250100482501004a2501004c2501004e25010050250100522501005425010056250100582501005a2501005c2501005e25010060250100622501006425010066250100682501006a2501006c2501006e25010070250100722501007425010076250100782501007a2501007c2501007e25010080250100822501008425010086250100882501008a2501008c2501008e25010090250100922501009425010096250100982501009a2501009c2501009e250100a0250100a2250100a4250100a6250100a8250100aa250100ac250100ae250100b0250100b2250100b4250100b6250100b8250100ba250100bc250100be250100c0250100c2250100c4250100c6250100c8250100ca250100cc250100ce250100d0250100d2250100d4250100d6250100d8250100da250100dc250100de250100e0250100e2250100e4250100e6250100e8250100ea250100ec250100ee250100f0250100f2250100f4250100f6250100f8250100fa250100fc250100fe25010000260100022601000426010006260100082601000a2601000c2601000e26010010260100122601001426010016260100182601001a2601001c2601001e26010020260100222601002426010026260100282601002a2601002c2601002e26010030260100322601003426010036260100382601003a2601003c2601003e26010040260100422601004426010046260100482601004a2601004c2601004e26010050260100522601005426010056260100582601005a2601005c2601005e26010060260100622601006426010066260100682601006a2601006c2601006e26010070260100722601007426010076260100782601007a2601007c2601007e26010080260100822601008426010086260100882601008a2601008c2601008e26010090260100922601009426010096260100982601009a2601009c2601009e260100a0260100a2260100a4260100a6260100a8260100aa260100ac260100ae260100b0260100b2260100b4260100b6260100b8260100ba260100bc260100be260100c0260100c2260100c4260100c6260100c8260100ca260100cc260100ce260100d0260100d2260100d4260100d6260100d8260100da260100dc260100de260100e0260100e2260100e4260100e6260100e8260100ea260100ec260100ee260100f0260100f2260100f4260100f6260100f8260100fa260100fc260100fe26010000270100022701000427010006270100082701000a2701000c2701000e27010010270100122701001427010016270100182701001a2701001c2701001e27010020270100222701002427010026270100282701002a2701002c2701002e270100302701003227010034270100
+    m_ExpandedIDs: 000000002c08000080e4000016e6000066fc0000e22d0100e42d0100e82d0100ea2d0100ec2d01000a2e010042300100a6340100a8340100aa340100ac340100ae340100b0340100b2340100b4340100b6340100b8340100ba340100bc340100be340100c0340100c2340100c4340100c6340100c8340100ca340100cc340100ce340100d0340100d2340100d4340100d6340100d8340100da340100dc340100de340100e0340100e2340100e4340100e6340100e8340100ea340100ec340100ee340100f0340100f2340100f4340100f6340100f8340100fa340100fc340100fe34010000350100023501000435010006350100083501000a3501000c3501000e35010010350100123501001435010016350100183501001a3501001c3501001e35010020350100223501002435010026350100283501002a3501002c3501002e35010030350100323501003435010036350100383501003a3501003c3501003e35010040350100423501004435010046350100483501004a3501004c3501004e35010050350100523501005435010056350100583501005a3501005c3501005e35010060350100623501006435010066350100683501006a3501006c3501006e35010070350100723501007435010076350100783501007a3501007c3501007e35010080350100823501008435010086350100883501008a3501008c3501008e35010090350100923501009435010096350100983501009a3501009c3501009e350100a0350100a2350100a4350100a6350100a8350100aa350100ac350100ae350100b0350100b2350100b4350100b6350100b8350100ba350100bc350100be350100c0350100c2350100c4350100c6350100c8350100ca350100cc350100ce350100d0350100d2350100d4350100d6350100d8350100da350100dc350100de350100e0350100e2350100e4350100e6350100e8350100ea350100ec350100ee350100f0350100f2350100f4350100f6350100f8350100fa350100fc350100fe35010000360100023601000436010006360100083601000a3601000c3601000e36010010360100123601001436010016360100183601001a3601001c3601001e36010020360100223601002436010026360100283601002a3601002c3601002e36010030360100323601003436010036360100383601003a3601003c3601003e36010040360100423601004436010046360100483601004a3601004c3601004e36010050360100523601005436010056360100583601005a3601005c3601005e36010060360100623601006436010066360100683601006a3601006c3601006e36010070360100723601007436010076360100783601007a3601007c3601007e36010080360100823601008436010086360100883601008a3601008c3601008e36010090360100923601009436010096360100983601009a3601009c3601009e360100a0360100a2360100a4360100a6360100a8360100aa360100ac360100ae360100b0360100b2360100b4360100b6360100b8360100ba360100bc360100be360100c0360100c2360100c4360100c6360100c8360100ca360100cc360100ce360100d0360100d2360100d4360100d6360100d8360100da360100dc360100de360100e0360100e2360100e4360100e6360100e8360100ea360100ec360100ee360100f0360100f2360100f4360100f6360100f8360100fa360100fc360100fe36010000370100023701000437010006370100083701000a3701000c3701000e37010010370100123701001437010016370100183701001a3701001c3701001e37010020370100223701002437010026370100283701002a3701002c3701002e37010030370100323701003437010036370100383701003a3701003c3701003e37010040370100423701004437010046370100483701004a3701004c3701004e37010050370100523701005437010056370100583701005a3701005c3701005e37010060370100623701006437010066370100683701006a3701006c3701006e37010070370100723701007437010076370100783701007a3701007c3701007e37010080370100823701008437010086370100883701008a3701008c3701008e37010090370100923701009437010096370100983701009a3701009c3701009e370100a0370100a2370100a4370100a6370100a8370100aa370100ac370100ae370100b0370100b2370100b4370100b6370100b8370100ba370100bc370100be370100c0370100c2370100c4370100c6370100c8370100ca370100cc370100ce370100d0370100d2370100d4370100d6370100d8370100da370100dc370100de370100e0370100e2370100e4370100e6370100e8370100ea370100ec370100ee370100f0370100f2370100f4370100f6370100f8370100fa370100fc370100fe37010000380100023801000438010006380100083801000a3801000c3801000e38010010380100123801001438010016380100183801001a3801001c3801001e38010020380100223801002438010026380100283801002a3801002c3801002e38010030380100323801003438010036380100383801003a3801003c3801003e38010040380100423801004438010046380100483801004a3801004c3801004e38010050380100523801005438010056380100583801005a3801005c3801005e38010060380100623801006438010066380100683801006a3801006c3801006e38010070380100723801007438010076380100783801007a3801007c3801007e38010080380100823801008438010086380100883801008a3801008c3801008e38010090380100923801009438010096380100983801009a3801009c3801009e380100a0380100a2380100a4380100a6380100a8380100aa380100ac380100ae380100b0380100b2380100b4380100b6380100b8380100ba380100bc380100be380100c0380100c2380100c4380100c6380100c8380100ca380100cc380100ce380100d0380100d2380100d4380100d6380100d8380100da380100dc380100de380100e0380100e2380100e4380100e6380100e8380100ea380100ec380100ee380100f0380100f2380100f4380100f6380100f8380100fa380100fc380100fe38010000390100023901000439010006390100083901000a3901000c3901000e39010010390100123901001439010016390100183901001a3901001c3901001e39010020390100223901002439010026390100283901002a3901002c3901002e39010030390100323901003439010036390100383901003a3901003c3901003e39010040390100423901004439010046390100483901004a3901004c3901004e39010050390100523901005439010056390100583901005a3901005c3901005e39010060390100623901006439010066390100683901006a3901006c3901006e39010070390100723901007439010076390100783901007a3901007c3901007e39010080390100823901008439010086390100883901008a3901008c3901008e39010090390100923901009439010096390100983901009a3901009c3901009e390100a0390100a2390100a4390100a6390100a8390100aa390100ac390100ae390100b0390100b2390100b4390100b6390100b8390100ba390100bc390100be390100c0390100c2390100c4390100c6390100c8390100ca390100cc390100ce390100d0390100d2390100d4390100d6390100d8390100da390100dc390100de390100e0390100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2563,10 +3417,10 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_AssetTreeState:
-    scrollPos: {x: 0, y: 11530.511}
-    m_SelectedIDs: 86b70000
-    m_LastClickedID: 46982
-    m_ExpandedIDs: ffffffff000000002a080000cecd000066cf0000ece50000e4ec000050f6000052f6000050fc000052fc000054fc000056fc000058fc00005cfc00005efc000062fc000064fc000068fc00006efc00007e0301008003010084030100860301008a0301008e0301009a030100a00a0100aa0a0100f6110100f8110100fc110100fe11010002120100b8170100c4180100c61801004a1a01004e1a0100501a0100001e01002a2201002c2201002e22010030220100322201003422010036220100382201003a2201003c2201003e22010040220100422201004422010046220100482201004a2201004c2201004e22010050220100522201005422010056220100582201005a2201005c2201005e22010060220100622201006422010066220100682201006a2201006c2201006e22010070220100722201007422010076220100782201007a2201007c2201007e22010080220100822201008422010086220100882201008a2201008c2201008e22010090220100922201009422010096220100982201009a2201009c2201009e220100a0220100a2220100a4220100a6220100a8220100aa220100ac220100ae220100b0220100b2220100b4220100b6220100b8220100ba220100bc220100be220100c0220100c2220100c4220100c6220100c8220100ca220100cc220100ce220100d0220100d2220100d4220100d6220100d8220100da220100dc220100de220100e0220100e2220100e4220100e6220100e8220100ea220100ec220100ee220100f0220100f2220100f4220100f6220100f8220100fa220100fc220100fe22010000230100022301000423010006230100082301000a2301000c2301000e23010010230100122301001423010016230100182301001a2301001c2301001e23010020230100222301002423010026230100282301002a2301002c2301002e23010030230100322301003423010036230100382301003a2301003c2301003e23010040230100422301004423010046230100482301004a2301004c2301004e23010050230100522301005423010056230100582301005a2301005c2301005e23010060230100622301006423010066230100682301006a2301006c2301006e23010070230100722301007423010076230100782301007a2301007c2301007e23010080230100822301008423010086230100882301008a2301008c2301008e23010090230100922301009423010096230100982301009a2301009c2301009e230100a0230100a2230100a4230100a6230100a8230100aa230100ac230100ae230100b0230100b2230100b4230100b6230100b8230100ba230100bc230100be230100c0230100c2230100c4230100c6230100c8230100ca230100cc230100ce230100d0230100d2230100d4230100d6230100d8230100da230100dc230100de230100e0230100e2230100e4230100e6230100e8230100ea230100ec230100ee230100f0230100f2230100f4230100f6230100f8230100fa230100fc230100fe23010000240100022401000424010006240100082401000a2401000c2401000e24010010240100122401001424010016240100182401001a2401001c2401001e24010020240100222401002424010026240100282401002a2401002c2401002e24010030240100322401003424010036240100382401003a2401003c2401003e24010040240100422401004424010046240100482401004a2401004c2401004e24010050240100522401005424010056240100582401005a2401005c2401005e24010060240100622401006424010066240100682401006a2401006c2401006e24010070240100722401007424010076240100782401007a2401007c2401007e24010080240100822401008424010086240100882401008a2401008c2401008e24010090240100922401009424010096240100982401009a2401009c2401009e240100a0240100a2240100a4240100a6240100a8240100aa240100ac240100ae240100b0240100b2240100b4240100b6240100b8240100ba240100bc240100be240100c0240100c2240100c4240100c6240100c8240100ca240100cc240100ce240100d0240100d2240100d4240100d6240100d8240100da240100dc240100de240100e0240100e2240100e4240100e6240100e8240100ea240100ec240100ee240100f0240100f2240100f4240100f6240100f8240100fa240100fc240100fe24010000250100022501000425010006250100082501000a2501000c2501000e25010010250100122501001425010016250100182501001a2501001c2501001e25010020250100222501002425010026250100282501002a2501002c2501002e25010030250100322501003425010036250100382501003a2501003c2501003e25010040250100422501004425010046250100482501004a2501004c2501004e25010050250100522501005425010056250100582501005a2501005c2501005e25010060250100622501006425010066250100682501006a2501006c2501006e25010070250100722501007425010076250100782501007a2501007c2501007e25010080250100822501008425010086250100882501008a2501008c2501008e25010090250100922501009425010096250100982501009a2501009c2501009e250100a0250100a2250100a4250100a6250100a8250100aa250100ac250100ae250100b0250100b2250100b4250100b6250100b8250100ba250100bc250100be250100c0250100c2250100c4250100c6250100c8250100ca250100cc250100ce250100d0250100d2250100d4250100d6250100d8250100da250100dc250100de250100e0250100e2250100e4250100e6250100e8250100ea250100ec250100ee250100f0250100f2250100f4250100f6250100f8250100fa250100fc250100fe25010000260100022601000426010006260100082601000a2601000c2601000e26010010260100122601001426010016260100182601001a2601001c2601001e26010020260100222601002426010026260100282601002a2601002c2601002e26010030260100322601003426010036260100382601003a2601003c2601003e26010040260100422601004426010046260100482601004a2601004c2601004e26010050260100522601005426010056260100582601005a2601005c2601005e26010060260100622601006426010066260100682601006a2601006c2601006e26010070260100722601007426010076260100782601007a2601007c2601007e26010080260100822601008426010086260100882601008a2601008c2601008e26010090260100922601009426010096260100982601009a2601009c2601009e260100a0260100a2260100a4260100a6260100a8260100aa260100ac260100ae260100b0260100b2260100b4260100b6260100b8260100ba260100bc260100be260100c0260100c2260100c4260100c6260100c8260100ca260100cc260100ce260100d0260100d2260100d4260100d6260100d8260100da260100dc260100de260100e0260100e2260100e4260100e6260100e8260100ea260100ec260100ee260100f0260100f2260100f4260100f6260100f8260100fa260100fc260100fe26010000270100022701000427010006270100082701000a2701000c2701000e27010010270100122701001427010016270100182701001a2701001c2701001e27010020270100222701002427010026270100282701002a2701002c2701002e270100302701003227010034270100
+    scrollPos: {x: 0, y: 3240}
+    m_SelectedIDs: 46eaffff
+    m_LastClickedID: 0
+    m_ExpandedIDs: 000000002c08000080e4000016e6000066fc0000e22d0100e42d0100e82d0100ea2d0100ec2d01000a2e010042300100a6340100a8340100aa340100ac340100ae340100b0340100b2340100b4340100b6340100b8340100ba340100bc340100be340100c0340100c2340100c4340100c6340100c8340100ca340100cc340100ce340100d0340100d2340100d4340100d6340100d8340100da340100dc340100de340100e0340100e2340100e4340100e6340100e8340100ea340100ec340100ee340100f0340100f2340100f4340100f6340100f8340100fa340100fc340100fe34010000350100023501000435010006350100083501000a3501000c3501000e35010010350100123501001435010016350100183501001a3501001c3501001e35010020350100223501002435010026350100283501002a3501002c3501002e35010030350100323501003435010036350100383501003a3501003c3501003e35010040350100423501004435010046350100483501004a3501004c3501004e35010050350100523501005435010056350100583501005a3501005c3501005e35010060350100623501006435010066350100683501006a3501006c3501006e35010070350100723501007435010076350100783501007a3501007c3501007e35010080350100823501008435010086350100883501008a3501008c3501008e35010090350100923501009435010096350100983501009a3501009c3501009e350100a0350100a2350100a4350100a6350100a8350100aa350100ac350100ae350100b0350100b2350100b4350100b6350100b8350100ba350100bc350100be350100c0350100c2350100c4350100c6350100c8350100ca350100cc350100ce350100d0350100d2350100d4350100d6350100d8350100da350100dc350100de350100e0350100e2350100e4350100e6350100e8350100ea350100ec350100ee350100f0350100f2350100f4350100f6350100f8350100fa350100fc350100fe35010000360100023601000436010006360100083601000a3601000c3601000e36010010360100123601001436010016360100183601001a3601001c3601001e36010020360100223601002436010026360100283601002a3601002c3601002e36010030360100323601003436010036360100383601003a3601003c3601003e36010040360100423601004436010046360100483601004a3601004c3601004e36010050360100523601005436010056360100583601005a3601005c3601005e36010060360100623601006436010066360100683601006a3601006c3601006e36010070360100723601007436010076360100783601007a3601007c3601007e36010080360100823601008436010086360100883601008a3601008c3601008e36010090360100923601009436010096360100983601009a3601009c3601009e360100a0360100a2360100a4360100a6360100a8360100aa360100ac360100ae360100b0360100b2360100b4360100b6360100b8360100ba360100bc360100be360100c0360100c2360100c4360100c6360100c8360100ca360100cc360100ce360100d0360100d2360100d4360100d6360100d8360100da360100dc360100de360100e0360100e2360100e4360100e6360100e8360100ea360100ec360100ee360100f0360100f2360100f4360100f6360100f8360100fa360100fc360100fe36010000370100023701000437010006370100083701000a3701000c3701000e37010010370100123701001437010016370100183701001a3701001c3701001e37010020370100223701002437010026370100283701002a3701002c3701002e37010030370100323701003437010036370100383701003a3701003c3701003e37010040370100423701004437010046370100483701004a3701004c3701004e37010050370100523701005437010056370100583701005a3701005c3701005e37010060370100623701006437010066370100683701006a3701006c3701006e37010070370100723701007437010076370100783701007a3701007c3701007e37010080370100823701008437010086370100883701008a3701008c3701008e37010090370100923701009437010096370100983701009a3701009c3701009e370100a0370100a2370100a4370100a6370100a8370100aa370100ac370100ae370100b0370100b2370100b4370100b6370100b8370100ba370100bc370100be370100c0370100c2370100c4370100c6370100c8370100ca370100cc370100ce370100d0370100d2370100d4370100d6370100d8370100da370100dc370100de370100e0370100e2370100e4370100e6370100e8370100ea370100ec370100ee370100f0370100f2370100f4370100f6370100f8370100fa370100fc370100fe37010000380100023801000438010006380100083801000a3801000c3801000e38010010380100123801001438010016380100183801001a3801001c3801001e38010020380100223801002438010026380100283801002a3801002c3801002e38010030380100323801003438010036380100383801003a3801003c3801003e38010040380100423801004438010046380100483801004a3801004c3801004e38010050380100523801005438010056380100583801005a3801005c3801005e38010060380100623801006438010066380100683801006a3801006c3801006e38010070380100723801007438010076380100783801007a3801007c3801007e38010080380100823801008438010086380100883801008a3801008c3801008e38010090380100923801009438010096380100983801009a3801009c3801009e380100a0380100a2380100a4380100a6380100a8380100aa380100ac380100ae380100b0380100b2380100b4380100b6380100b8380100ba380100bc380100be380100c0380100c2380100c4380100c6380100c8380100ca380100cc380100ce380100d0380100d2380100d4380100d6380100d8380100da380100dc380100de380100e0380100e2380100e4380100e6380100e8380100ea380100ec380100ee380100f0380100f2380100f4380100f6380100f8380100fa380100fc380100fe38010000390100023901000439010006390100083901000a3901000c3901000e39010010390100123901001439010016390100183901001a3901001c3901001e39010020390100223901002439010026390100283901002a3901002c3901002e39010030390100323901003439010036390100383901003a3901003c3901003e39010040390100423901004439010046390100483901004a3901004c3901004e39010050390100523901005439010056390100583901005a3901005c3901005e39010060390100623901006439010066390100683901006a3901006c3901006e39010070390100723901007439010076390100783901007a3901007c3901007e39010080390100823901008439010086390100883901008a3901008c3901008e39010090390100923901009439010096390100983901009a3901009c3901009e390100a0390100a2390100a4390100a6390100a8390100aa390100ac390100ae390100b0390100b2390100b4390100b6390100b8390100ba390100bc390100be390100c0390100c2390100c4390100c6390100c8390100ca390100cc390100ce390100d0390100d2390100d4390100d6390100d8390100da390100dc390100de390100e0390100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2583,7 +3437,7 @@ MonoBehaviour:
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_TrimLeadingAndTrailingWhitespace: 0
-      m_ClientGUIView: {fileID: 18}
+      m_ClientGUIView: {fileID: 22}
     m_SearchString: 
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
@@ -2592,8 +3446,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 86b70000
-    m_LastClickedInstanceID: 46982
+    m_SelectedInstanceIDs: 46eaffff
+    m_LastClickedInstanceID: -5562
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000d87002008eb10200
     m_RenameOverlay:
@@ -2612,7 +3466,7 @@ MonoBehaviour:
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_TrimLeadingAndTrailingWhitespace: 0
-      m_ClientGUIView: {fileID: 18}
+      m_ClientGUIView: {fileID: 22}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0
@@ -2624,7 +3478,44 @@ MonoBehaviour:
     m_GridSize: 16
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 207
---- !u!114 &20
+--- !u!114 &24
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd9f6db362484ab3936787916a1aee71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_TitleContent:
+    m_Text: Components
+    m_Image: {fileID: 2800000, guid: b0b3a6572f7053344b2dec07dc77b9cf, type: 3}
+    m_Tooltip: 
+    m_TextWithWhitespace: "Components\u200B"
+  m_Pos:
+    serializedVersion: 2
+    x: 775.5
+    y: 532
+    width: 741
+    height: 454
+  m_SerializedDataModeController:
+    m_DataMode: 0
+    m_PreferredDataMode: 0
+    m_SupportedDataModes: 
+    isAutomatic: 1
+  m_ViewDataDictionary: {fileID: 0}
+  m_OverlayCanvas:
+    m_LastAppliedPresetName: Default
+    m_SaveData: []
+    m_ContainerData: []
+    m_OverlaysVisible: 1
+  m_ComponentsWindowInstanceKey: 9056741d2fac44b094ff8147784b1c01
+--- !u!114 &25
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2646,10 +3537,10 @@ MonoBehaviour:
     m_TextWithWhitespace: "Console\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1073
-    y: 483
-    width: 461
-    height: 503
+    x: 775.5
+    y: 532
+    width: 741
+    height: 454
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -2661,7 +3552,7 @@ MonoBehaviour:
     m_SaveData: []
     m_ContainerData: []
     m_OverlaysVisible: 1
---- !u!114 &21
+--- !u!114 &26
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2700,8 +3591,8 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: -668446
---- !u!114 &22
+  m_LastSelectedObjectID: 442968
+--- !u!114 &27
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2737,7 +3628,44 @@ MonoBehaviour:
     m_SaveData: []
     m_ContainerData: []
     m_OverlaysVisible: 1
---- !u!114 &23
+--- !u!114 &28
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb0eaf7081c7fbb44a83e4908fb5bcc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_TitleContent:
+    m_Text: Systems
+    m_Image: {fileID: 2800000, guid: 599c162c20976004d9e42bec9f5b0251, type: 3}
+    m_Tooltip: 
+    m_TextWithWhitespace: "Systems\u200B"
+  m_Pos:
+    serializedVersion: 2
+    x: 775.5
+    y: 532
+    width: 741
+    height: 454
+  m_SerializedDataModeController:
+    m_DataMode: 0
+    m_PreferredDataMode: 0
+    m_SupportedDataModes: 
+    isAutomatic: 1
+  m_ViewDataDictionary: {fileID: 0}
+  m_OverlayCanvas:
+    m_LastAppliedPresetName: Default
+    m_SaveData: []
+    m_ContainerData: []
+    m_OverlaysVisible: 1
+  m_EditorWindowInstanceKey: 876b6e29cd6e405db737dfbbd70b94cb
+--- !u!114 &29
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2775,7 +3703,44 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_AssetObjectForEditing: {fileID: 0}
   m_AssetGUID: 75ecfea493245bd45a74d22920dbae1a
---- !u!114 &24
+--- !u!114 &30
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b250ccac62c8344eb51c0107ae7e32a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_TitleContent:
+    m_Text: Journaling
+    m_Image: {fileID: 2800000, guid: 4c43b7a1fa3793649a77d387162fe11d, type: 3}
+    m_Tooltip: 
+    m_TextWithWhitespace: "Journaling\u200B"
+  m_Pos:
+    serializedVersion: 2
+    x: 802.5
+    y: 532
+    width: 713
+    height: 454
+  m_SerializedDataModeController:
+    m_DataMode: 0
+    m_PreferredDataMode: 0
+    m_SupportedDataModes: 
+    isAutomatic: 1
+  m_ViewDataDictionary: {fileID: 0}
+  m_OverlayCanvas:
+    m_LastAppliedPresetName: Default
+    m_SaveData: []
+    m_ContainerData: []
+    m_OverlaysVisible: 1
+  m_EditorWindowInstanceKey: 
+--- !u!114 &31
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2790,18 +3755,18 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 463
+    x: 715
     y: 0
-    width: 384
-    height: 529
+    width: 402.5
+    height: 480
   m_MinSize: {x: 231, y: 276}
   m_MaxSize: {x: 10001, y: 10026}
-  m_ActualView: {fileID: 25}
+  m_ActualView: {fileID: 32}
   m_Panes:
-  - {fileID: 25}
+  - {fileID: 32}
   m_Selected: 0
   m_LastSelected: 0
---- !u!114 &25
+--- !u!114 &32
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2823,10 +3788,10 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 464
+    x: 716
     y: 24
-    width: 383
-    height: 503
+    width: 401.5
+    height: 454
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -2862,12 +3827,12 @@ MonoBehaviour:
   m_LastFoldersGridSize: -1
   m_LastProjectPath: H:\GitHub\Power-OF-Unity\Power OF Unity
   m_LockTracker:
-    m_IsLocked: 1
+    m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 72}
     m_SelectedIDs: 1acc0000
     m_LastClickedID: 52250
-    m_ExpandedIDs: 000000002a080000cecd000066cf0000ece50000e4ec000050f6000052f6000050fc000052fc000054fc000056fc000058fc00005cfc00005efc000062fc000064fc000068fc00006efc00007e0301008003010084030100860301008a0301008e0301009a030100a00a0100aa0a0100f6110100f8110100fc110100fe11010002120100b8170100c4180100c61801004a1a01004e1a0100501a0100001e01002a2201002c2201002e22010030220100322201003422010036220100382201003a2201003c2201003e22010040220100422201004422010046220100482201004a2201004c2201004e22010050220100522201005422010056220100582201005a2201005c2201005e22010060220100622201006422010066220100682201006a2201006c2201006e22010070220100722201007422010076220100782201007a2201007c2201007e22010080220100822201008422010086220100882201008a2201008c2201008e22010090220100922201009422010096220100982201009a2201009c2201009e220100a0220100a2220100a4220100a6220100a8220100aa220100ac220100ae220100b0220100b2220100b4220100b6220100b8220100ba220100bc220100be220100c0220100c2220100c4220100c6220100c8220100ca220100cc220100ce220100d0220100d2220100d4220100d6220100d8220100da220100dc220100de220100e0220100e2220100e4220100e6220100e8220100ea220100ec220100ee220100f0220100f2220100f4220100f6220100f8220100fa220100fc220100fe22010000230100022301000423010006230100082301000a2301000c2301000e23010010230100122301001423010016230100182301001a2301001c2301001e23010020230100222301002423010026230100282301002a2301002c2301002e23010030230100322301003423010036230100382301003a2301003c2301003e23010040230100422301004423010046230100482301004a2301004c2301004e23010050230100522301005423010056230100582301005a2301005c2301005e23010060230100622301006423010066230100682301006a2301006c2301006e23010070230100722301007423010076230100782301007a2301007c2301007e23010080230100822301008423010086230100882301008a2301008c2301008e23010090230100922301009423010096230100982301009a2301009c2301009e230100a0230100a2230100a4230100a6230100a8230100aa230100ac230100ae230100b0230100b2230100b4230100b6230100b8230100ba230100bc230100be230100c0230100c2230100c4230100c6230100c8230100ca230100cc230100ce230100d0230100d2230100d4230100d6230100d8230100da230100dc230100de230100e0230100e2230100e4230100e6230100e8230100ea230100ec230100ee230100f0230100f2230100f4230100f6230100f8230100fa230100fc230100fe23010000240100022401000424010006240100082401000a2401000c2401000e24010010240100122401001424010016240100182401001a2401001c2401001e24010020240100222401002424010026240100282401002a2401002c2401002e24010030240100322401003424010036240100382401003a2401003c2401003e24010040240100422401004424010046240100482401004a2401004c2401004e24010050240100522401005424010056240100582401005a2401005c2401005e24010060240100622401006424010066240100682401006a2401006c2401006e24010070240100722401007424010076240100782401007a2401007c2401007e24010080240100822401008424010086240100882401008a2401008c2401008e24010090240100922401009424010096240100982401009a2401009c2401009e240100a0240100a2240100a4240100a6240100a8240100aa240100ac240100ae240100b0240100b2240100b4240100b6240100b8240100ba240100bc240100be240100c0240100c2240100c4240100c6240100c8240100ca240100cc240100ce240100d0240100d2240100d4240100d6240100d8240100da240100dc240100de240100e0240100e2240100e4240100e6240100e8240100ea240100ec240100ee240100f0240100f2240100f4240100f6240100f8240100fa240100fc240100fe24010000250100022501000425010006250100082501000a2501000c2501000e25010010250100122501001425010016250100182501001a2501001c2501001e25010020250100222501002425010026250100282501002a2501002c2501002e25010030250100322501003425010036250100382501003a2501003c2501003e25010040250100422501004425010046250100482501004a2501004c2501004e25010050250100522501005425010056250100582501005a2501005c2501005e25010060250100622501006425010066250100682501006a2501006c2501006e25010070250100722501007425010076250100782501007a2501007c2501007e25010080250100822501008425010086250100882501008a2501008c2501008e25010090250100922501009425010096250100982501009a2501009c2501009e250100a0250100a2250100a4250100a6250100a8250100aa250100ac250100ae250100b0250100b2250100b4250100b6250100b8250100ba250100bc250100be250100c0250100c2250100c4250100c6250100c8250100ca250100cc250100ce250100d0250100d2250100d4250100d6250100d8250100da250100dc250100de250100e0250100e2250100e4250100e6250100e8250100ea250100ec250100ee250100f0250100f2250100f4250100f6250100f8250100fa250100fc250100fe25010000260100022601000426010006260100082601000a2601000c2601000e26010010260100122601001426010016260100182601001a2601001c2601001e26010020260100222601002426010026260100282601002a2601002c2601002e26010030260100322601003426010036260100382601003a2601003c2601003e26010040260100422601004426010046260100482601004a2601004c2601004e26010050260100522601005426010056260100582601005a2601005c2601005e26010060260100622601006426010066260100682601006a2601006c2601006e26010070260100722601007426010076260100782601007a2601007c2601007e26010080260100822601008426010086260100882601008a2601008c2601008e26010090260100922601009426010096260100982601009a2601009c2601009e260100a0260100a2260100a4260100a6260100a8260100aa260100ac260100ae260100b0260100b2260100b4260100b6260100b8260100ba260100bc260100be260100c0260100c2260100c4260100c6260100c8260100ca260100cc260100ce260100d0260100d2260100d4260100d6260100d8260100da260100dc260100de260100e0260100e2260100e4260100e6260100e8260100ea260100ec260100ee260100f0260100f2260100f4260100f6260100f8260100fa260100fc260100fe26010000270100022701000427010006270100082701000a2701000c2701000e27010010270100122701001427010016270100182701001a2701001c2701001e27010020270100222701002427010026270100282701002a2701002c2701002e270100302701003227010034270100
+    m_ExpandedIDs: 000000002c08000080e4000016e6000066fc0000e22d0100e42d0100e82d0100ea2d0100ec2d01000a2e010042300100a6340100a8340100aa340100ac340100ae340100b0340100b2340100b4340100b6340100b8340100ba340100bc340100be340100c0340100c2340100c4340100c6340100c8340100ca340100cc340100ce340100d0340100d2340100d4340100d6340100d8340100da340100dc340100de340100e0340100e2340100e4340100e6340100e8340100ea340100ec340100ee340100f0340100f2340100f4340100f6340100f8340100fa340100fc340100fe34010000350100023501000435010006350100083501000a3501000c3501000e35010010350100123501001435010016350100183501001a3501001c3501001e35010020350100223501002435010026350100283501002a3501002c3501002e35010030350100323501003435010036350100383501003a3501003c3501003e35010040350100423501004435010046350100483501004a3501004c3501004e35010050350100523501005435010056350100583501005a3501005c3501005e35010060350100623501006435010066350100683501006a3501006c3501006e35010070350100723501007435010076350100783501007a3501007c3501007e35010080350100823501008435010086350100883501008a3501008c3501008e35010090350100923501009435010096350100983501009a3501009c3501009e350100a0350100a2350100a4350100a6350100a8350100aa350100ac350100ae350100b0350100b2350100b4350100b6350100b8350100ba350100bc350100be350100c0350100c2350100c4350100c6350100c8350100ca350100cc350100ce350100d0350100d2350100d4350100d6350100d8350100da350100dc350100de350100e0350100e2350100e4350100e6350100e8350100ea350100ec350100ee350100f0350100f2350100f4350100f6350100f8350100fa350100fc350100fe35010000360100023601000436010006360100083601000a3601000c3601000e36010010360100123601001436010016360100183601001a3601001c3601001e36010020360100223601002436010026360100283601002a3601002c3601002e36010030360100323601003436010036360100383601003a3601003c3601003e36010040360100423601004436010046360100483601004a3601004c3601004e36010050360100523601005436010056360100583601005a3601005c3601005e36010060360100623601006436010066360100683601006a3601006c3601006e36010070360100723601007436010076360100783601007a3601007c3601007e36010080360100823601008436010086360100883601008a3601008c3601008e36010090360100923601009436010096360100983601009a3601009c3601009e360100a0360100a2360100a4360100a6360100a8360100aa360100ac360100ae360100b0360100b2360100b4360100b6360100b8360100ba360100bc360100be360100c0360100c2360100c4360100c6360100c8360100ca360100cc360100ce360100d0360100d2360100d4360100d6360100d8360100da360100dc360100de360100e0360100e2360100e4360100e6360100e8360100ea360100ec360100ee360100f0360100f2360100f4360100f6360100f8360100fa360100fc360100fe36010000370100023701000437010006370100083701000a3701000c3701000e37010010370100123701001437010016370100183701001a3701001c3701001e37010020370100223701002437010026370100283701002a3701002c3701002e37010030370100323701003437010036370100383701003a3701003c3701003e37010040370100423701004437010046370100483701004a3701004c3701004e37010050370100523701005437010056370100583701005a3701005c3701005e37010060370100623701006437010066370100683701006a3701006c3701006e37010070370100723701007437010076370100783701007a3701007c3701007e37010080370100823701008437010086370100883701008a3701008c3701008e37010090370100923701009437010096370100983701009a3701009c3701009e370100a0370100a2370100a4370100a6370100a8370100aa370100ac370100ae370100b0370100b2370100b4370100b6370100b8370100ba370100bc370100be370100c0370100c2370100c4370100c6370100c8370100ca370100cc370100ce370100d0370100d2370100d4370100d6370100d8370100da370100dc370100de370100e0370100e2370100e4370100e6370100e8370100ea370100ec370100ee370100f0370100f2370100f4370100f6370100f8370100fa370100fc370100fe37010000380100023801000438010006380100083801000a3801000c3801000e38010010380100123801001438010016380100183801001a3801001c3801001e38010020380100223801002438010026380100283801002a3801002c3801002e38010030380100323801003438010036380100383801003a3801003c3801003e38010040380100423801004438010046380100483801004a3801004c3801004e38010050380100523801005438010056380100583801005a3801005c3801005e38010060380100623801006438010066380100683801006a3801006c3801006e38010070380100723801007438010076380100783801007a3801007c3801007e38010080380100823801008438010086380100883801008a3801008c3801008e38010090380100923801009438010096380100983801009a3801009c3801009e380100a0380100a2380100a4380100a6380100a8380100aa380100ac380100ae380100b0380100b2380100b4380100b6380100b8380100ba380100bc380100be380100c0380100c2380100c4380100c6380100c8380100ca380100cc380100ce380100d0380100d2380100d4380100d6380100d8380100da380100dc380100de380100e0380100e2380100e4380100e6380100e8380100ea380100ec380100ee380100f0380100f2380100f4380100f6380100f8380100fa380100fc380100fe38010000390100023901000439010006390100083901000a3901000c3901000e39010010390100123901001439010016390100183901001a3901001c3901001e39010020390100223901002439010026390100283901002a3901002c3901002e39010030390100323901003439010036390100383901003a3901003c3901003e39010040390100423901004439010046390100483901004a3901004c3901004e39010050390100523901005439010056390100583901005a3901005c3901005e39010060390100623901006439010066390100683901006a3901006c3901006e39010070390100723901007439010076390100783901007a3901007c3901007e39010080390100823901008439010086390100883901008a3901008c3901008e39010090390100923901009439010096390100983901009a3901009c3901009e390100a0390100a2390100a4390100a6390100a8390100aa390100ac390100ae390100b0390100b2390100b4390100b6390100b8390100ba390100bc390100be390100c0390100c2390100c4390100c6390100c8390100ca390100cc390100ce390100d0390100d2390100d4390100d6390100d8390100da390100dc390100de390100e0390100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2893,10 +3858,10 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_AssetTreeState:
-    scrollPos: {x: 0, y: 12559}
-    m_SelectedIDs: 86b70000
-    m_LastClickedID: 46982
-    m_ExpandedIDs: ffffffff000000002a080000cecd000066cf0000ece50000e4ec000050f6000052f6000050fc000052fc000054fc000056fc000058fc00005cfc00005efc000062fc000064fc000068fc00006efc00007e0301008003010084030100860301008a0301008e0301009a030100a00a0100aa0a0100f6110100f8110100fc110100fe11010002120100b8170100c4180100c61801004a1a01004e1a0100501a0100001e01002a2201002c2201002e22010030220100322201003422010036220100382201003a2201003c2201003e22010040220100422201004422010046220100482201004a2201004c2201004e22010050220100522201005422010056220100582201005a2201005c2201005e22010060220100622201006422010066220100682201006a2201006c2201006e22010070220100722201007422010076220100782201007a2201007c2201007e22010080220100822201008422010086220100882201008a2201008c2201008e22010090220100922201009422010096220100982201009a2201009c2201009e220100a0220100a2220100a4220100a6220100a8220100aa220100ac220100ae220100b0220100b2220100b4220100b6220100b8220100ba220100bc220100be220100c0220100c2220100c4220100c6220100c8220100ca220100cc220100ce220100d0220100d2220100d4220100d6220100d8220100da220100dc220100de220100e0220100e2220100e4220100e6220100e8220100ea220100ec220100ee220100f0220100f2220100f4220100f6220100f8220100fa220100fc220100fe22010000230100022301000423010006230100082301000a2301000c2301000e23010010230100122301001423010016230100182301001a2301001c2301001e23010020230100222301002423010026230100282301002a2301002c2301002e23010030230100322301003423010036230100382301003a2301003c2301003e23010040230100422301004423010046230100482301004a2301004c2301004e23010050230100522301005423010056230100582301005a2301005c2301005e23010060230100622301006423010066230100682301006a2301006c2301006e23010070230100722301007423010076230100782301007a2301007c2301007e23010080230100822301008423010086230100882301008a2301008c2301008e23010090230100922301009423010096230100982301009a2301009c2301009e230100a0230100a2230100a4230100a6230100a8230100aa230100ac230100ae230100b0230100b2230100b4230100b6230100b8230100ba230100bc230100be230100c0230100c2230100c4230100c6230100c8230100ca230100cc230100ce230100d0230100d2230100d4230100d6230100d8230100da230100dc230100de230100e0230100e2230100e4230100e6230100e8230100ea230100ec230100ee230100f0230100f2230100f4230100f6230100f8230100fa230100fc230100fe23010000240100022401000424010006240100082401000a2401000c2401000e24010010240100122401001424010016240100182401001a2401001c2401001e24010020240100222401002424010026240100282401002a2401002c2401002e24010030240100322401003424010036240100382401003a2401003c2401003e24010040240100422401004424010046240100482401004a2401004c2401004e24010050240100522401005424010056240100582401005a2401005c2401005e24010060240100622401006424010066240100682401006a2401006c2401006e24010070240100722401007424010076240100782401007a2401007c2401007e24010080240100822401008424010086240100882401008a2401008c2401008e24010090240100922401009424010096240100982401009a2401009c2401009e240100a0240100a2240100a4240100a6240100a8240100aa240100ac240100ae240100b0240100b2240100b4240100b6240100b8240100ba240100bc240100be240100c0240100c2240100c4240100c6240100c8240100ca240100cc240100ce240100d0240100d2240100d4240100d6240100d8240100da240100dc240100de240100e0240100e2240100e4240100e6240100e8240100ea240100ec240100ee240100f0240100f2240100f4240100f6240100f8240100fa240100fc240100fe24010000250100022501000425010006250100082501000a2501000c2501000e25010010250100122501001425010016250100182501001a2501001c2501001e25010020250100222501002425010026250100282501002a2501002c2501002e25010030250100322501003425010036250100382501003a2501003c2501003e25010040250100422501004425010046250100482501004a2501004c2501004e25010050250100522501005425010056250100582501005a2501005c2501005e25010060250100622501006425010066250100682501006a2501006c2501006e25010070250100722501007425010076250100782501007a2501007c2501007e25010080250100822501008425010086250100882501008a2501008c2501008e25010090250100922501009425010096250100982501009a2501009c2501009e250100a0250100a2250100a4250100a6250100a8250100aa250100ac250100ae250100b0250100b2250100b4250100b6250100b8250100ba250100bc250100be250100c0250100c2250100c4250100c6250100c8250100ca250100cc250100ce250100d0250100d2250100d4250100d6250100d8250100da250100dc250100de250100e0250100e2250100e4250100e6250100e8250100ea250100ec250100ee250100f0250100f2250100f4250100f6250100f8250100fa250100fc250100fe25010000260100022601000426010006260100082601000a2601000c2601000e26010010260100122601001426010016260100182601001a2601001c2601001e26010020260100222601002426010026260100282601002a2601002c2601002e26010030260100322601003426010036260100382601003a2601003c2601003e26010040260100422601004426010046260100482601004a2601004c2601004e26010050260100522601005426010056260100582601005a2601005c2601005e26010060260100622601006426010066260100682601006a2601006c2601006e26010070260100722601007426010076260100782601007a2601007c2601007e26010080260100822601008426010086260100882601008a2601008c2601008e26010090260100922601009426010096260100982601009a2601009c2601009e260100a0260100a2260100a4260100a6260100a8260100aa260100ac260100ae260100b0260100b2260100b4260100b6260100b8260100ba260100bc260100be260100c0260100c2260100c4260100c6260100c8260100ca260100cc260100ce260100d0260100d2260100d4260100d6260100d8260100da260100dc260100de260100e0260100e2260100e4260100e6260100e8260100ea260100ec260100ee260100f0260100f2260100f4260100f6260100f8260100fa260100fc260100fe26010000270100022701000427010006270100082701000a2701000c2701000e27010010270100122701001427010016270100182701001a2701001c2701001e27010020270100222701002427010026270100282701002a2701002c2701002e270100302701003227010034270100
+    scrollPos: {x: 0, y: 1052}
+    m_SelectedIDs: c2fcfdff
+    m_LastClickedID: 0
+    m_ExpandedIDs: ffffffff000000002c08000080e4000016e6000066fc0000e22d0100e42d0100e82d0100ea2d0100ec2d01000a2e010042300100a6340100a8340100aa340100ac340100ae340100b0340100b2340100b4340100b6340100b8340100ba340100bc340100be340100c0340100c2340100c4340100c6340100c8340100ca340100cc340100ce340100d0340100d2340100d4340100d6340100d8340100da340100dc340100de340100e0340100e2340100e4340100e6340100e8340100ea340100ec340100ee340100f0340100f2340100f4340100f6340100f8340100fa340100fc340100fe34010000350100023501000435010006350100083501000a3501000c3501000e35010010350100123501001435010016350100183501001a3501001c3501001e35010020350100223501002435010026350100283501002a3501002c3501002e35010030350100323501003435010036350100383501003a3501003c3501003e35010040350100423501004435010046350100483501004a3501004c3501004e35010050350100523501005435010056350100583501005a3501005c3501005e35010060350100623501006435010066350100683501006a3501006c3501006e35010070350100723501007435010076350100783501007a3501007c3501007e35010080350100823501008435010086350100883501008a3501008c3501008e35010090350100923501009435010096350100983501009a3501009c3501009e350100a0350100a2350100a4350100a6350100a8350100aa350100ac350100ae350100b0350100b2350100b4350100b6350100b8350100ba350100bc350100be350100c0350100c2350100c4350100c6350100c8350100ca350100cc350100ce350100d0350100d2350100d4350100d6350100d8350100da350100dc350100de350100e0350100e2350100e4350100e6350100e8350100ea350100ec350100ee350100f0350100f2350100f4350100f6350100f8350100fa350100fc350100fe35010000360100023601000436010006360100083601000a3601000c3601000e36010010360100123601001436010016360100183601001a3601001c3601001e36010020360100223601002436010026360100283601002a3601002c3601002e36010030360100323601003436010036360100383601003a3601003c3601003e36010040360100423601004436010046360100483601004a3601004c3601004e36010050360100523601005436010056360100583601005a3601005c3601005e36010060360100623601006436010066360100683601006a3601006c3601006e36010070360100723601007436010076360100783601007a3601007c3601007e36010080360100823601008436010086360100883601008a3601008c3601008e36010090360100923601009436010096360100983601009a3601009c3601009e360100a0360100a2360100a4360100a6360100a8360100aa360100ac360100ae360100b0360100b2360100b4360100b6360100b8360100ba360100bc360100be360100c0360100c2360100c4360100c6360100c8360100ca360100cc360100ce360100d0360100d2360100d4360100d6360100d8360100da360100dc360100de360100e0360100e2360100e4360100e6360100e8360100ea360100ec360100ee360100f0360100f2360100f4360100f6360100f8360100fa360100fc360100fe36010000370100023701000437010006370100083701000a3701000c3701000e37010010370100123701001437010016370100183701001a3701001c3701001e37010020370100223701002437010026370100283701002a3701002c3701002e37010030370100323701003437010036370100383701003a3701003c3701003e37010040370100423701004437010046370100483701004a3701004c3701004e37010050370100523701005437010056370100583701005a3701005c3701005e37010060370100623701006437010066370100683701006a3701006c3701006e37010070370100723701007437010076370100783701007a3701007c3701007e37010080370100823701008437010086370100883701008a3701008c3701008e37010090370100923701009437010096370100983701009a3701009c3701009e370100a0370100a2370100a4370100a6370100a8370100aa370100ac370100ae370100b0370100b2370100b4370100b6370100b8370100ba370100bc370100be370100c0370100c2370100c4370100c6370100c8370100ca370100cc370100ce370100d0370100d2370100d4370100d6370100d8370100da370100dc370100de370100e0370100e2370100e4370100e6370100e8370100ea370100ec370100ee370100f0370100f2370100f4370100f6370100f8370100fa370100fc370100fe37010000380100023801000438010006380100083801000a3801000c3801000e38010010380100123801001438010016380100183801001a3801001c3801001e38010020380100223801002438010026380100283801002a3801002c3801002e38010030380100323801003438010036380100383801003a3801003c3801003e38010040380100423801004438010046380100483801004a3801004c3801004e38010050380100523801005438010056380100583801005a3801005c3801005e38010060380100623801006438010066380100683801006a3801006c3801006e38010070380100723801007438010076380100783801007a3801007c3801007e38010080380100823801008438010086380100883801008a3801008c3801008e38010090380100923801009438010096380100983801009a3801009c3801009e380100a0380100a2380100a4380100a6380100a8380100aa380100ac380100ae380100b0380100b2380100b4380100b6380100b8380100ba380100bc380100be380100c0380100c2380100c4380100c6380100c8380100ca380100cc380100ce380100d0380100d2380100d4380100d6380100d8380100da380100dc380100de380100e0380100e2380100e4380100e6380100e8380100ea380100ec380100ee380100f0380100f2380100f4380100f6380100f8380100fa380100fc380100fe38010000390100023901000439010006390100083901000a3901000c3901000e39010010390100123901001439010016390100183901001a3901001c3901001e39010020390100223901002439010026390100283901002a3901002c3901002e39010030390100323901003439010036390100383901003a3901003c3901003e39010040390100423901004439010046390100483901004a3901004c3901004e39010050390100523901005439010056390100583901005a3901005c3901005e39010060390100623901006439010066390100683901006a3901006c3901006e39010070390100723901007439010076390100783901007a3901007c3901007e39010080390100823901008439010086390100883901008a3901008c3901008e39010090390100923901009439010096390100983901009a3901009c3901009e390100a0390100a2390100a4390100a6390100a8390100aa390100ac390100ae390100b0390100b2390100b4390100b6390100b8390100ba390100bc390100be390100c0390100c2390100c4390100c6390100c8390100ca390100cc390100ce390100d0390100d2390100d4390100d6390100d8390100da390100dc390100de390100e0390100
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -2913,7 +3878,7 @@ MonoBehaviour:
       m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_TrimLeadingAndTrailingWhitespace: 0
-      m_ClientGUIView: {fileID: 24}
+      m_ClientGUIView: {fileID: 31}
     m_SearchString: 
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
@@ -2922,8 +3887,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 86b70000
-    m_LastClickedInstanceID: 46982
+    m_SelectedInstanceIDs: c2fcfdff
+    m_LastClickedInstanceID: -131902
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: 
     m_RenameOverlay:

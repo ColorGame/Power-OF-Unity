@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 /// <summary>
 /// Положение курсора мыши на сетке 
 /// </summary>
@@ -18,14 +19,19 @@ public class MouseOnGameGrid : MonoBehaviour // Класс отвечающий за положение ку
     private LevelGrid _levelGrid;
     private GridPositionXZ _mouseGridPosition;  // сеточная позиция мыши
 
+    private bool _isInit = false;
 
     public void Init(GameInput gameInput, LevelGrid levelGrid)
     {
         _gameInput = gameInput;
         _levelGrid = levelGrid;
+
+        _isInit = true;
+
+        Setup();
     }
 
-    private void Start()
+    private void Setup()
     {
         _mouseGridPosition = _levelGrid.GetGridPosition(GetPositionOnlyHitVisible());  // Установим при старте сеточную позицию мышм // НЕЛЬЗЯ ВЫЗЫВАТЬ в Awake() т.к. в результате гонки возникает нулевая ошибка (кто проснется раньше GameInput или MouseOnGameGrid неизвестно)
     }
@@ -33,11 +39,16 @@ public class MouseOnGameGrid : MonoBehaviour // Класс отвечающий за положение ку
     // Для теста, светящий шар следует за курсором мыши.
     /*private void Update()
     {
-        transform.position = MouseOnGameGrid.GetTransformPosition(); // Так можно вызывать из ЛЮБОГО МЕСТА
+        transform.gridPosition = MouseOnGameGrid.GetTransformPosition(); // Так можно вызывать из ЛЮБОГО МЕСТА
     }*/
 
     private void Update()
     {
+        if (!_isInit) 
+            return;
+
+        transform.position = GetPosition();
+
         GridPositionXZ newMouseGridPosition = _levelGrid.GetGridPosition(GetPositionOnlyHitVisible()); // Получим новую сеточную позицию мыши
         if (_levelGrid.IsValidGridPosition(newMouseGridPosition) && _mouseGridPosition != newMouseGridPosition) // Если это ДОПУСТИМАЯ сеточная позиция и она не равна предыдущей то ...
         {

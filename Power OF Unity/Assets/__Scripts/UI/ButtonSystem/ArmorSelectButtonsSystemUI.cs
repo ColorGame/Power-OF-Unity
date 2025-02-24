@@ -55,30 +55,9 @@ public class ArmorSelectButtonsSystemUI : PlacedObjectSelectButtonsSystemUI
         else
         {
             HideAllContainerArray();
-            //ClearActiveButtonContainer();
         }
     }
-
-    /*    protected override void CreateSelectButtonsSystemInActiveContainer()
-        {
-            // Переберем список 
-            foreach (PlacedObjectTypeSO placedObjectTypeSO in _warehouseManager.GetAllPlacedObjectTypeSOList())
-            {
-                switch (placedObjectTypeSO)
-                {
-                    case HeadArmorTypeSO:
-                        if (_activeContainer == _headArmorSelectContainer)
-                            CreatePlacedObjectSelectButton(placedObjectTypeSO, _headArmorSelectContainer);
-                        break;
-
-                    case BodyArmorTypeSO:
-                        if (_activeContainer == _bodyArmorSelectContainer)
-                            CreatePlacedObjectSelectButton(placedObjectTypeSO, _bodyArmorSelectContainer);
-                        break;
-                }
-            }
-        }*/
-
+  
     protected override void CreateSelectButtonsSystemInContainer(RectTransform buttonContainer)
     {
 

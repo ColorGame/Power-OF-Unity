@@ -19,7 +19,7 @@ public class UnitFriendSO : UnitTypeSO
     /// Вернуть визуал юнита в зависимости от типа БРОНИ которой он экипирован
     /// </summary>
     /// <remarks>Если передать null то вернется дефолтный визуал без брони</remarks>
-    public UnitView GetUnitViewPrefab(BodyArmorTypeSO bodyArmorTypeSO)
+    public UnitWithChangeHeadArmorView GetUnitViewPrefab(BodyArmorTypeSO bodyArmorTypeSO)
     {
         if (bodyArmorTypeSO == null)
         {

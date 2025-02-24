@@ -2,46 +2,29 @@ using UnityEngine;
 
 public class UnitSetupEntryPoint : MonoBehaviour, IEntryPoint, IStartScene
 {
+    [SerializeField] private UnitPortfolioUI _unitPortfolioUI;
+    [SerializeField] private UnitSelectAtEquipmentButtonsSystemUI _unitSelectAtEquipmentButtonsSystemUI;
+    [SerializeField] private ItemSelectButtonsSystemUI _itemSelectButtonsSystemUI;
+    [SerializeField] private ArmorSelectButtonsSystemUI _armorSelectButtonsSystemUI;
+    [SerializeField] private MarketUI _marketUI;
+    [SerializeField] private UpperMenuBarOnUnitSetupUI _upperMenuBarOnUnitSetupUI;
+    [SerializeField] private UnitSelectForManagementButtonsSystemUI _unitSelectForManagementButtonsSystemUI;
+
+    [SerializeField] private SpawnerOnUnitSetupScen _unitSpawnerOnEquipmentMenu;
+
+    [SerializeField] private PickUpDropPlacedObject _pickUpDropPlacedObject;
+    [SerializeField] private EquipmentGrid _equipmentGrid;
+    [SerializeField] private ItemGridVisual _itemGridVisual;
+    [SerializeField] private ArmorGridVisual _armorGridVisual;
+
     private UnitEquipmentSystem _unitEquipmentSystem;
-    private PickUpDropPlacedObject _pickUpDropPlacedObject;
-    private EquipmentGrid _equipmentGrid;
-    private ItemGridVisual _itemGridVisual;
-    private ArmorGridVisual _armorGridVisual;
 
-    private UnitPortfolioUI _unitPortfolioUI;
-    private UnitSelectAtEquipmentButtonsSystemUI _unitSelectAtEquipmentButtonsSystemUI;
-    private ItemSelectButtonsSystemUI _itemSelectButtonsSystemUI;
-    private ArmorSelectButtonsSystemUI _armorSelectButtonsSystemUI;
-    private MarketUI _marketUI;
-    private UpperMenuBarOnUnitSetupUI _upperMenuBarOnUnitSetupUI;
-    private UnitSelectForManagementButtonsSystemUI _unitSelectForManagementButtonsSystemUI;
-
-    private SpawnerOnUnitSetupScen _unitSpawnerOnEquipmentMenu;
 
     public void Inject(DIContainer container)
     {       
-        GetComponent();
         Register();
         Init(container);
-    }
-
-    private void GetComponent()
-    {
-        _unitPortfolioUI = GetComponentInChildren<UnitPortfolioUI>(true);
-        _unitSelectAtEquipmentButtonsSystemUI = GetComponentInChildren<UnitSelectAtEquipmentButtonsSystemUI>(true);
-        _itemSelectButtonsSystemUI = GetComponentInChildren<ItemSelectButtonsSystemUI>(true);
-        _armorSelectButtonsSystemUI = GetComponentInChildren<ArmorSelectButtonsSystemUI>(true);
-        _marketUI = GetComponentInChildren<MarketUI>(true);
-        _upperMenuBarOnUnitSetupUI = GetComponentInChildren<UpperMenuBarOnUnitSetupUI>(true);
-        _unitSelectForManagementButtonsSystemUI = GetComponentInChildren<UnitSelectForManagementButtonsSystemUI>(true);
-
-        _unitSpawnerOnEquipmentMenu = GetComponentInChildren<SpawnerOnUnitSetupScen>(true);
-
-        _pickUpDropPlacedObject = GetComponentInChildren<PickUpDropPlacedObject>(true);
-        _equipmentGrid = GetComponentInChildren<EquipmentGrid>(true);
-        _itemGridVisual = GetComponentInChildren<ItemGridVisual>(true);
-        _armorGridVisual = GetComponentInChildren<ArmorGridVisual>(true);
-    }
+    }   
 
     private void Register()
     {
@@ -69,15 +52,15 @@ public class UnitSetupEntryPoint : MonoBehaviour, IEntryPoint, IStartScene
             container.Resolve<GameInput>(),
             container.Resolve<TooltipUI>(),
             _equipmentGrid,
-            _unitEquipmentSystem,            
+            _unitEquipmentSystem,
             container.Resolve<UnitManager>()); //3
 
         _unitEquipmentSystem.Init(
             _pickUpDropPlacedObject,
             container.Resolve<UnitManager>(),
             _equipmentGrid,
-            container.Resolve<WarehouseManager>(), 
-            _itemGridVisual, 
+            container.Resolve<WarehouseManager>(),
+            _itemGridVisual,
             _armorGridVisual,
             _itemSelectButtonsSystemUI); //4
 

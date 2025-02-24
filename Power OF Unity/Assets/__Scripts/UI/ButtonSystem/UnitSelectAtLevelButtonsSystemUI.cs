@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static UnitActionSystem;
 
 /// <summary>
@@ -14,7 +15,7 @@ public class UnitSelectAtLevelButtonsSystemUI : MonoBehaviour
     [SerializeField] private Transform _enemyUnitButonContainerTransform; // В инспекторе назначить  Контейнер для кнопок( находиться в сцене в Canvas)
     [SerializeField] private Transform _friendlyUnitButonContainerTransform; // В инспекторе назначить  Контейнер для кнопок( находиться в сцене в Canvas)
 
-    private List<UnitFriendSelectAtLevelButtonUI> _friendlyUnitButtonList; // Ключ - юнит. Значение - кнопка для этого юнита
+    private List<UnitSelectAtLevelButtonUI> _friendlyUnitButtonList; // Ключ - юнит. Значение - кнопка для этого юнита
     private List<UnitEnemySelectAtLevelButtonUI> _enemyUnitButonUIList; // Список кнопок Вражеских Юнитов   
     private UnitManager _unitManager;
     private TurnSystem _turnSystem;
@@ -27,15 +28,17 @@ public class UnitSelectAtLevelButtonsSystemUI : MonoBehaviour
         _turnSystem = turnSystem;
         _unitActionSystem = unitActionSystem;
         _cameraFollow = cameraFollow;
+
+        Setup();
     }
 
     private void Awake()
     {
-        _friendlyUnitButtonList = new List<UnitFriendSelectAtLevelButtonUI>();
+        _friendlyUnitButtonList = new List<UnitSelectAtLevelButtonUI>();
         _enemyUnitButonUIList = new List<UnitEnemySelectAtLevelButtonUI>();     
     }
 
-    private void Start()
+    private void Setup()
     {
         _unitManager.OnAnyUnitDeadAndRemoveList += UnitManager_OnAnyUnitDeadAndRemoveList;// Событие Любой Юнит Умер И Удален из Списка
         _unitManager.OnAnyEnemyUnitSpawnedAndAddList += UnitManager_OnAnyEnemyUnitSpawnedAndAddList;// Любой вражеский юнит ражден и добавлен в Списка
@@ -82,7 +85,7 @@ public class UnitSelectAtLevelButtonsSystemUI : MonoBehaviour
             }
         }
 
-        foreach (UnitFriendSelectAtLevelButtonUI friendlyUnitButonUI in _friendlyUnitButtonList)// Переберем коллекцию
+        foreach (UnitSelectAtLevelButtonUI friendlyUnitButonUI in _friendlyUnitButtonList)// Переберем коллекцию
         {
             friendlyUnitButonUI.HandleStateButton(e.isBusy);
         }
@@ -118,18 +121,18 @@ public class UnitSelectAtLevelButtonsSystemUI : MonoBehaviour
 
         _friendlyUnitButtonList.Clear();
 
-        foreach (Unit unit in _unitManager.GetUnitFriendList())// Переберем дружественных юнитов
+        foreach (Unit unit in _unitManager.GetUnitList())// Переберем дружественных юнитов
         {
-            UnitFriendSelectAtLevelButtonUI UnitFriendSelectAtLevelButton = Instantiate(GameAssetsSO.Instance.unitFriendSelectAtLevelButton, _friendlyUnitButonContainerTransform); // Для каждого ЮНИТА создадим префаб кнопки и назначим родителя - Контейнер для кнопок
-            UnitFriendSelectAtLevelButton.Init(unit, _unitActionSystem,_cameraFollow);//Назвать и Присвоить
+            UnitSelectAtLevelButtonUI UnitSelectAtLevelButton = Instantiate(GameAssetsSO.Instance.unitFriendSelectAtLevelButton, _friendlyUnitButonContainerTransform); // Для каждого ЮНИТА создадим префаб кнопки и назначим родителя - Контейнер для кнопок
+            UnitSelectAtLevelButton.Init(unit, _unitActionSystem,_cameraFollow);//Назвать и Присвоить
 
-            _friendlyUnitButtonList.Add(UnitFriendSelectAtLevelButton);     
+            _friendlyUnitButtonList.Add(UnitSelectAtLevelButton);     
         }
     }
 
     private void UpdateSelectedVisual(Unit selectedUnit) //Обнавление визуализации выбора( при выборе кнопки включим рамку)
     {
-        foreach (UnitFriendSelectAtLevelButtonUI friendlyUnitButonUI in _friendlyUnitButtonList) // Переберем коллекцию
+        foreach (UnitSelectAtLevelButtonUI friendlyUnitButonUI in _friendlyUnitButtonList) // Переберем коллекцию
         {
             friendlyUnitButonUI.UpdateSelectedVisual(selectedUnit);
         }
@@ -138,7 +141,7 @@ public class UnitSelectAtLevelButtonsSystemUI : MonoBehaviour
     {
         bool isBusy = !_turnSystem.IsPlayerTurn(); // Занято когда ходит враг (НЕ Я)
 
-        foreach (UnitFriendSelectAtLevelButtonUI friendlyUnitButonUI in _friendlyUnitButtonList) // Переберем коллекцию
+        foreach (UnitSelectAtLevelButtonUI friendlyUnitButonUI in _friendlyUnitButtonList) // Переберем коллекцию
         {
             friendlyUnitButonUI.HandleStateButton(isBusy);
         }

@@ -1,4 +1,4 @@
-using Pathfinding;
+
 using UnityEngine;
 
 
@@ -27,12 +27,12 @@ public class PathfindingLinkMonoBehaviour : MonoBehaviour // Ссылка для поиска п
     private void Start()
     {
         // Получим узлы в месте перехода и соеденим их
-        GraphNode graphNodeA = AstarPath.active.GetNearest(linkPositionA).node;
-        GraphNode graphNodeB = AstarPath.active.GetNearest(linkPositionB).node;
-        uint cost = (uint)Mathf.RoundToInt(((Int3)(linkPositionA - linkPositionB)).costMagnitude);
+       // GraphNode graphNodeA = AstarPath.active.GetNearest(linkPositionA).node;
+       // GraphNode graphNodeB = AstarPath.active.GetNearest(linkPositionB).node;
+       // uint cost = (uint)Mathf.RoundToInt(((Int3)(linkPositionA - linkPositionB)).costMagnitude);
 
-        graphNodeA.AddConnection(graphNodeB, cost);
-        graphNodeB.AddConnection(graphNodeA, cost);
+       // graphNodeA.AddConnection(graphNodeB, cost);
+      //  graphNodeB.AddConnection(graphNodeA, cost);
     }
 
 }

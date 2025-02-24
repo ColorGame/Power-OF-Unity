@@ -1,6 +1,6 @@
 using UnityEngine;
 using System;
-using Pathfinding;
+
 
 public class DestructibleCrate : MonoBehaviour // Разрушаемый ящик
 {
@@ -14,7 +14,7 @@ public class DestructibleCrate : MonoBehaviour // Разрушаемый ящик
     private static LevelGrid _levelGrid;
 
     private GridPositionXZ _gridPosition; // Позиция сетки нашего ящика
-    private SingleNodeBlocker _singleNodeBlocker;
+   // private SingleNodeBlocker _singleNodeBlocker;
 
     public static void Init(SoundManager soundManager, LevelGrid levelGrid)
     {
@@ -24,14 +24,14 @@ public class DestructibleCrate : MonoBehaviour // Разрушаемый ящик
 
     private void Awake()
     {      
-        _singleNodeBlocker = GetComponent<SingleNodeBlocker>();
+      //  _singleNodeBlocker = GetComponent<SingleNodeBlocker>();
     }
 
     private void Start()
     {
         _crateDestroyed.gameObject.SetActive(false); // Скрыть Разрушенный ящик (на всякий случай если забыли скрыть в инспекторе)
         _gridPosition = _levelGrid.GetGridPosition(transform.position); //Получим сеточную позицию ящика
-        _singleNodeBlocker.BlockAtCurrentPosition();// Заблокирую узел
+      //  _singleNodeBlocker.BlockAtCurrentPosition();// Заблокирую узел
     }
     public void Damage(Vector3 explosionPosition)
     {
@@ -39,8 +39,8 @@ public class DestructibleCrate : MonoBehaviour // Разрушаемый ящик
         _crateDestroyed.parent = null; // Отсоеденим Разрушенный ящик от родителя 
         Destroy(gameObject); // Уничтожим ящик
 
-        GraphNode graphNode = AstarPath.active.GetNearest(transform.position).node; // Получим проверяемый узел
-        BlockManager.Instance.InternalUnblock(graphNode, _singleNodeBlocker); // Разблокируем узел
+      //  GraphNode graphNode = AstarPath.active.GetNearest(transform.gridPosition).node; // Получим проверяемый узел
+     //   BlockManager.Instance.InternalUnblock(graphNode, _singleNodeBlocker); // Разблокируем узел
 
         ApplyExplosionToChildren(_crateDestroyed, 150f, explosionPosition, 10f); // Применим взрыв к разрушенному ящику, с силой 150, в той же позиции, и радиус действия 10
         

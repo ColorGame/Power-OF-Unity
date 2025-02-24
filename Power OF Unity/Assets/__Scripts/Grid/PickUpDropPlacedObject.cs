@@ -451,7 +451,7 @@ public class PickUpDropPlacedObject : MonoBehaviour, IToggleActivity
       {
           Ray ray = _camera.ScreenPointToRay(_gameInput.GetMouseScreenPoint()); //Возвращает луч, идущий от камеры через точку экрана где находиться курсор мыши 
           _planeForCanvasInWorldSpace.Raycast(ray, out float planeDistance); // Пересечем луч и плоскость и получим расстояние вдоль луча, где он пересекает плоскость.
-          return _placedObject.transform.position - ray.GetPoint(planeDistance); // Вычислим смещение от точкой захвата и точкой  pivot на объекте.        
+          return _placedObject.transform.gridPosition - ray.GetPoint(planeDistance); // Вычислим смещение от точкой захвата и точкой  pivot на объекте.        
       }
 
       public Vector3 GetMousePosition(LayerMask layerMask) // Получить позицию мыши (static обозначает что метод принадлежит классу а не кокому нибудь экземпляру) // При одноэтажной игре

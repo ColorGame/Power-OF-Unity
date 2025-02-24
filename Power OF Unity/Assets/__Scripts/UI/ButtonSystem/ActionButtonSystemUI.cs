@@ -46,7 +46,7 @@ public class ActionButtonSystemUI : MonoBehaviour
         _turnSystem.OnTurnChanged += TurnSystem_OnTurnChanged; // Изменен номер хода подписываемся       
 
         SetupEventSelectedUnit(_unitActionSystem.GetSelectedUnit()); // Настройка Event у выбранного Юнита
-        CreateUnitActionButtons();// Создать Кнопки для Действий Юнита        
+     //   CreateUnitActionButtons();// Создать Кнопки для Действий Юнита        
         UpdateSelectedVisual();
         UpdateActionPoints();
     }

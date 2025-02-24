@@ -20,15 +20,15 @@ public class GridSystemXZ<TGridObject>  // Сеточная система ШЕСТИГРАННАЯ И КВАДР
     private TGridObject[,] _gridObjectArray; // Двумерный массив объектов сетки
 
 
-    public GridSystemXZ(LevelGridParameters gridParameters, Func<GridSystemXZ<TGridObject>, GridPositionXZ, TGridObject> createGridObject, int floor = 0, float floorHeight = 0)  // Конструктор
+    public GridSystemXZ(LevelGridParameters gridParameters, Func<GridSystemXZ<TGridObject>, GridPositionXZ, TGridObject> createGridObject,Vector3 anchorPosition, int floor = 0)  // Конструктор
                                                                                                                                                                                              // Func - это встроенный ДЕЛЕГАТ (третий параметр в аргументе это тип<TGridObject> который возвращает наш делегат и назавем его createGridObject)
     {
         _width = gridParameters.width;
         _height = gridParameters.height;
         _cellSize = gridParameters.cellSize;
-        _globalOffset = gridParameters.anchorGridTransform.position;
+        _floorHeight = gridParameters.floorHeight;
+        _globalOffset = anchorPosition;
         _floor = floor;
-        _floorHeight = floorHeight;
 
         _gridObjectArray = new TGridObject[_width, _height]; // создаем массив сетки определенного размером width на height
         for (int x = 0; x < _width; x++)
@@ -38,9 +38,9 @@ public class GridSystemXZ<TGridObject>  // Сеточная система ШЕСТИГРАННАЯ И КВАДР
                 GridPositionXZ gridPosition = new GridPositionXZ(x, z, floor);
                 _gridObjectArray[x, z] = createGridObject(this, gridPosition); // Вызовим делегат createGridObject и в аргумент передадим нашу GridSystemXZ и позиции сетки. Сохраняем его в каждой ячейким сетки в двумерном массив где x,y это будут индексы массива.
                                              
-                //Debug.DrawLine(GetWorldPositionCenterСornerCell(_gridPositioAnchor), GetWorldPositionCenterСornerCell(_gridPositioAnchor) + Vector3.right* .2f, Color.white, 1000); // для теста нарисуем маленькие линии в центре каждой ячейки сетки
+               // Debug.DrawLine(GetWorldPositionCenterСornerCell(_gridPositioAnchor), GetWorldPositionCenterСornerCell(_gridPositioAnchor) + Vector3.right* .2f, Color.white, 1000); // для теста нарисуем маленькие линии в центре каждой ячейки сетки
             }
-        }
+        }        
     }  
 
 

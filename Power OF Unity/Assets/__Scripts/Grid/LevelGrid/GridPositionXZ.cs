@@ -1,15 +1,16 @@
-
-
-
 using System;
+using Unity.Entities;
 
-public struct GridPositionXZ : IEquatable<GridPositionXZ> //Интерфейс Equatable - Приравниваемый    //Наряду с классами структуры представляют еще один способ создания собственных типов данных в C#. Более того многие примитивные типы, например, int, double и т.д.,
-                                                                                                //по сути являются структурами. При работе с структурой мы передаем копии значений а не ссылку.
-                                                                                                //Мы создаем свою структуру т.к. не можем воспользоваться стандартным Vector2Int. Он работает с X Y а нам нужно X Z (можно было бы сделать преобразование ХУ в XZ туда и обратно, но это добовляет много строк кода и хуже воспринимается)
+public struct GridPositionXZ : IComponentData, IEquatable<GridPositionXZ> //Интерфейс Equatable - Приравниваемый    //Наряду с классами структуры представляют еще один способ создания собственных типов данных в C#. Более того многие примитивные типы, например, int, double и т.д.,
+                                                          //по сути являются структурами. При работе с структурой мы передаем копии значений а не ссылку.
+                                                          //Мы создаем свою структуру т.к. не можем воспользоваться стандартным Vector2Int. Он работает с X Y а нам нужно X Z (можно было бы сделать преобразование ХУ в XZ туда и обратно, но это добовляет много строк кода и хуже воспринимается)
 {
     public int x;
     public int z;
-    public int floor;// Этаж на которой располагается наша сеточная позиция
+    /// <summary>
+    /// Этаж на которой располагается наша сеточная позиция
+    /// </summary>
+    public int floor;
 
     public GridPositionXZ(int x, int z, int floor) // вспомогательный конструктор
     {
@@ -18,28 +19,27 @@ public struct GridPositionXZ : IEquatable<GridPositionXZ> //Интерфейс Equatable 
         this.floor = floor;
     }
 
-
     public override string ToString() // Переопределим ToString(). Хотим увидеть в отладке Debug.Log внутренее состояние X Z и этаж
     {
-        return $"x: {x}; z: {z}; _floor: {floor }" ;
+        return $"x: {x}; z: {z}; _floor: {floor}";
     }
 
-    public static bool operator == (GridPositionXZ a, GridPositionXZ b) // Расширение для булевых операций сравнения
+    public static bool operator ==(GridPositionXZ a, GridPositionXZ b) // Расширение для булевых операций сравнения
     {
-        return a.x==b.x && a.z==b.z && a.floor == b.floor ;
+        return a.x == b.x && a.z == b.z && a.floor == b.floor;
     }
 
-    public static bool operator != (GridPositionXZ a, GridPositionXZ b) // Расширение для булевых операций сравнения
+    public static bool operator !=(GridPositionXZ a, GridPositionXZ b) // Расширение для булевых операций сравнения
     {
         return !(a == b);
     }
 
-    public static GridPositionXZ operator + (GridPositionXZ a, GridPositionXZ b) // Расширение для суммы
+    public static GridPositionXZ operator +(GridPositionXZ a, GridPositionXZ b) // Расширение для суммы
     {
         return new GridPositionXZ(a.x + b.x, a.z + b.z, a.floor + b.floor);
     }
-    
-    public static GridPositionXZ operator - (GridPositionXZ a, GridPositionXZ b) // Расширение для разности
+
+    public static GridPositionXZ operator -(GridPositionXZ a, GridPositionXZ b) // Расширение для разности
     {
         return new GridPositionXZ(a.x - b.x, a.z - b.z, a.floor - b.floor);
     }

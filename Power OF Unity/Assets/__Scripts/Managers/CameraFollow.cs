@@ -14,14 +14,14 @@ public class CameraFollow : MonoBehaviour
     public event EventHandler<float> OnCameraZoomStarted; // События На камере Масштабирование началось или завершено. Будет подписываться LookAtCamera 
     public event EventHandler OnCameraZoomCompleted;
 
-    [SerializeField] private CinemachineVirtualCamera _cinemachineVirtualCamera;
+    [SerializeField] private CinemachineCamera _cinemachineCamera;
     [SerializeField] private Collider cameraBoundsCollider; //Ссылка на коллайдер который ограничивает виртуальную камеру
 
     private GameInput _gameInput;
-    private OptionsSubMenuUI _optionsMenuUI;
+    private OptionsSubMenuUIProvider _optionsMenuUI;
 
-    // private CinemachineTransposer _cinemachineTransposer;
-    private CinemachineTransposer _cinemachineTransposer; // Компонент на виртуальной камере с помощью которого будем реализовывать ZOOM
+  
+    private CinemachineFollow _cinemachineTransposer; // Компонент на виртуальной камере с помощью которого будем реализовывать ZOOM
     private bool _edgeScrolling; // прокрутка по краям
 
     private Unit _targetUnit;
@@ -40,13 +40,13 @@ public class CameraFollow : MonoBehaviour
     private float _rotationSpeed = 5f;
     private float _zoomSpeed = 5f;
 
-    public void Init(GameInput gameInput, OptionsSubMenuUI optionsMenuUI)
+    public void Init(GameInput gameInput, OptionsSubMenuUIProvider optionsSubMenuUIProvider)
     {
         _gameInput = gameInput;
-        _optionsMenuUI = optionsMenuUI;
+        _optionsMenuUI = optionsSubMenuUIProvider;
 
-        _cinemachineTransposer = _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>(); // Получим и сохраним компонент CinemachineTransposer из виртуальной камеры, чтобы в дальнейшем изменять ее параметры для ZOOM камеры
-        _targetZoomFollowOffset = _cinemachineTransposer.m_FollowOffset; // Смещение следования
+        _cinemachineTransposer = _cinemachineCamera.GetComponent<CinemachineFollow>(); // Получим и сохраним компонент CinemachineTransposer из виртуальной камеры, чтобы в дальнейшем изменять ее параметры для ZOOM камеры
+        _targetZoomFollowOffset = _cinemachineTransposer.FollowOffset; // Смещение следования
 
         _gameInput.OnCameraMovementStarted += GameInput_OnCameraMovementStarted;
         _gameInput.OnCameraMovementCanceled += GameInput_OnCameraMovementCanceled;
@@ -54,12 +54,12 @@ public class CameraFollow : MonoBehaviour
         _gameInput.OnCameraRotateAction += GameInput_OnCameraRotateAction;
         _gameInput.OnCameraZoomAction += GameInput_OnCameraZoomAction;
 
-        _optionsMenuUI.OnEdgeScrollingChange += OptionsMenuUI_OnEdgeScrollingChange;
+        _optionsMenuUI.OnEdgeScrollingChangeProvaider += OptionsMenuUI_OnEdgeScrollingChangeProvaider;
 
         _edgeScrolling = PlayerPrefs.GetInt("edgeScrolling", 1) == 1; // Загрузим сохраненый параметр _edgeScrolling и если это 1 то будет истина если не=1 то будет ложь (из PlayerPrefs.GetInt нельзя тегать булевые параметры поэтому используем строку)
     }
 
-    private void OptionsMenuUI_OnEdgeScrollingChange(object sender, bool e) { SetEdgeScrolling(e); }
+    private void OptionsMenuUI_OnEdgeScrollingChangeProvaider(object sender, bool e) { SetEdgeScrolling(e); }
 
     private void GameInput_OnCameraZoomAction(object sender, float e)
     {
@@ -180,12 +180,12 @@ public class CameraFollow : MonoBehaviour
         {
             _targetZoomFollowOffset.y = Mathf.Clamp(_targetZoomFollowOffset.y, MIN_FOLLOW_Y_OFFSET, MAX_FOLLOW_Y_OFFSET);// ограничим значения масштабирования
 
-            _cinemachineTransposer.m_FollowOffset.y = Mathf.Lerp(_cinemachineTransposer.m_FollowOffset.y, _targetZoomFollowOffset.y, Time.deltaTime * _zoomSpeed); // Загружаем наши измененые значения, Для плавности используем Lerp
+            _cinemachineTransposer.FollowOffset.y = Mathf.Lerp(_cinemachineTransposer.FollowOffset.y, _targetZoomFollowOffset.y, Time.deltaTime * _zoomSpeed); // Загружаем наши измененые значения, Для плавности используем Lerp
 
             float tolerance = 0.009f; // Допуск //НУЖНО НАСТРОИТЬ//
-            if (Mathf.Abs(_targetZoomFollowOffset.y - _cinemachineTransposer.m_FollowOffset.y) <= tolerance)
+            if (Mathf.Abs(_targetZoomFollowOffset.y - _cinemachineTransposer.FollowOffset.y) <= tolerance)
             {
-                _cinemachineTransposer.m_FollowOffset.y = _targetZoomFollowOffset.y;
+                _cinemachineTransposer.FollowOffset.y = _targetZoomFollowOffset.y;
                 _targetZoomStarted = false;
                 OnCameraZoomCompleted?.Invoke(this, EventArgs.Empty);
                 // Debug.Log("DELTA_ZoomCompleted");

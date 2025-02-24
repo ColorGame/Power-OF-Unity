@@ -11,9 +11,9 @@ public struct EquipmentGridParameters  // Создадим структуру можно в отдельном к
     public int height;      //Высота    
     public  float cellSize;  // Размер ячейки
 
-    public EquipmentGridParameters(EquipmentSlot gridName, int width, int height, float cellSize, Transform anchorGridTransform)
+    public EquipmentGridParameters(EquipmentSlot slot, int width, int height, float cellSize, Transform anchorGridTransform)
     {
-        this.slot = gridName;
+        this.slot = slot;
         this.anchorGridTransform = anchorGridTransform;
         this.width = width;
         this.height = height;

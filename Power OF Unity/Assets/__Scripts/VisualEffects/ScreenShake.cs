@@ -35,12 +35,12 @@ public class ScreenShake : MonoBehaviour //Дрожание Экрана //Генерирует настраев
     }
 
 
-    /*//ДЛЯ ТЕСТА И НАСТРОЙКИ СИЛЫ ТРЯСКИ
+    //ДЛЯ ТЕСТА И НАСТРОЙКИ СИЛЫ ТРЯСКИ
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
             _cinemachineImpulseSource.GenerateImpulse(5);
         }
-    }*/
+    }
 }

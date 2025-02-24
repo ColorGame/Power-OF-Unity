@@ -2,6 +2,8 @@
 //Эти директивы определяют порядок интерпретации текста программы перед ее трансляцией в объектный код в том исходном файле, где они появляются. 
 
 using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Entities;
 using UnityEngine;
 
 // НАСТРОИМ ПОРЯДОК ВЫПОЛНЕНИЯ СКРИПТА PathfindingMonkey, добавим в Project Settings/ Script Execution Order и поместим выполнение PathfindingMonkey выше Default Time, чтобы PathfindingMonkey запустился РАНЬШЕ до того как ктонибудь совершит поиск пути 
@@ -18,11 +20,11 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
     private const int MOVE_DIAGONAL_COST = 14; // Стоимость движения по диоганали ( расчитывается по теореме пифагора корень квадратный из суммы квадратов катетов прямоугольного треугольника. И опять для удобства взяли 14 а не 1,4 что бы не использовать float)
 
     //переменные для ДРУГОЙ РЕАЛИЗАЦИИ МЕТОДА GetNeighbourList() БОЛЕЕ КОРОТКАЯ
-    /*// Координаты сеточных позиций для поиска соседних ячеек
-    private GridPositionXZ UP = new(0, 1);
-    private GridPositionXZ DOWN = new(0, -1);
-    private GridPositionXZ RIGHT = new(1, 0);
-    private GridPositionXZ LEFT = new(-1, 0);*/
+    // Координаты сеточных позиций для поиска соседних ячеек
+    private GridPositionXZ UP = new(0, 1,0);
+    private GridPositionXZ DOWN = new(0, -1, 0);
+    private GridPositionXZ RIGHT = new(1, 0, 0);
+    private GridPositionXZ LEFT = new(-1, 0, 0);
 
     [SerializeField] private Transform _pathfindingGridDebugObject; // Префаб отладки сетки //Передоваемый тип должен совподать с типом аргумента метода CreateDebugObject
     [SerializeField] private LayerMask _obstaclesCoverLayerMask; // маска слоя препятствия (появится в ИНСПЕКТОРЕ) НАДО ВЫБРАТЬ Obstacles и Cover// ВАЖНО НА ВСЕХ СТЕНАХ В ИГРЕ УСТАНОВИТЬ МАСКУ СЛОЕВ -Obstacles кроме дверей а на укрытиях Cover
@@ -35,7 +37,7 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
     private float _cellSize;// Размер ячейки
     private Vector3 _globalOffset = Vector3.zero; // Смещение сетки в мировых координатах
     private int _floorAmount; // Количество этажей
-    private List<GridSystemXZ<PathNode>> _gridSystemList; //Список частных сеточных систем с типом PathNode
+    private List<GridSystemXZ<PathNodeMonkey>> _gridSystemList; //Список частных сеточных систем с типом PathNodeMonkey
     private List<PathfindingLink> _pathfindingLinkList; //Список ссылок для поиска пути (т.к. ссылок на одной позиции может быть несколько - например угл здания с которого можно спуститься в 2 направления)
     private List<GridPositionXZ> _gridPositionInAirList; // Список позиций в воздухе
 
@@ -46,7 +48,7 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
         // Если ты акуратем в инспекторе то проверка не нужна
         if (Instance != null) // Сделаем проверку что этот объект существует в еденичном екземпляре
         {
-            Debug.LogError("There's more than one Pathfinding!(Там больше, чем один Pathfinding!) " + transform + " - " + Instance);
+            Debug.LogError("There's more than one PathfindingGridDate!(Там больше, чем один PathfindingGridDate!) " + transform + " - " + Instance);
             Destroy(gameObject); // Уничтожим этот дубликат
             return; // т.к. у нас уже есть экземпляр PathfindingMonkey прекратим выполнение, что бы не выполнить строку ниже
         }
@@ -65,20 +67,21 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
         _cellSize = gridParameters.cellSize;
         _floorAmount = floorAmount;
 
-        _gridSystemList = new List<GridSystemXZ<PathNode>>();
+        _gridSystemList = new List<GridSystemXZ<PathNodeMonkey>>();
         _gridPositionInAirList = new List<GridPositionXZ>();
 
         for (int floor = 0; floor < floorAmount; floor++)
         {
-            GridSystemXZ<PathNode> gridSystem = new GridSystemXZ<PathNode>(_gridParameters, // ПОСТРОИМ СЕТКУ 10 на 10 и размером 2 еденицы на этаже _floor c заданной высотою этажа и в каждой ячейки создадим объект типа PathNode
-                    (GridSystemXZ<PathNode> g, GridPositionXZ gridPosition) => new PathNode(gridPosition), floor, LevelGrid.FLOOR_HEIGHT);   //в 5 параметре аргумента зададим функцию ананимно через лямбду => new PathNode(_gridPositioAnchor) И ПЕРЕДАДИМ ЕЕ ДЕЛЕГАТУ. (лямбда выражение можно вынести в отдельный метод)
+            GridSystemXZ<PathNodeMonkey> gridSystem = new GridSystemXZ<PathNodeMonkey>(_gridParameters, // ПОСТРОИМ СЕТКУ 10 на 10 и размером 2 еденицы на этаже _floor c заданной высотою этажа и в каждой ячейки создадим объект типа PathNodeMonkey
+                    (GridSystemXZ<PathNodeMonkey> g, GridPositionXZ gridPosition) => new PathNodeMonkey(gridPosition), _levelGrid.transform.position, floor);   //в 5 параметре аргумента зададим функцию ананимно через лямбду => new PathNodeMonkey(_gridPositioAnchor) И ПЕРЕДАДИМ ЕЕ ДЕЛЕГАТУ. (лямбда выражение можно вынести в отдельный метод)
 
            // gridSystem.CreateDebugObject(_pathfindingGridDebugObject); // Создадим наш префаб в каждой ячейки// Отладочный объект можно убирать т.к. настроика завершена
 
             _gridSystemList.Add(gridSystem);
         }
 
-        // В цикле настроим все ячейки на возможность проходимости, будем стрелять лучом из каждой позиции и для начала Сделаем все узлы непроходимыми и если 1ый луч попал в пол то сделаем проходимым а 2рым луч проверим на препядствие _obstaclesDoorMousePlaneCoverLayerMask, если они есть установим эту ячейку опять не проходимой
+        
+
         for (int x = 0; x < _width; x++)
         {
             for (int z = 0; z < _height; z++)
@@ -136,11 +139,11 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
 
     public List<GridPositionXZ> FindPath(GridPositionXZ startGridPosition, GridPositionXZ endGridPosition, out int pathLength) // Найти путь // Если мы используете ключевое слово "out", то функция должна установить значение для этой переменной pathLength-длина пути, то есть она должна вывести значение.
     {
-        List<PathNode> openList = new List<PathNode>();     // Создадим список "Открытый Список" - ВСЕ УЗЛЫ КОТОРЫЕ ПРЕДСТОИТ НАЙТИ 
-        List<PathNode> closedList = new List<PathNode>();   // Создадим список "Закрытый Список" - ВСЕ УЗЛЫ, В КОТОРЫХ УЖЕ БЫЛ ПРОИЗВЕДЕН ПОИСК
+        List<PathNodeMonkey> openList = new List<PathNodeMonkey>();     // Создадим список "Открытый Список" - ВСЕ УЗЛЫ КОТОРЫЕ ПРЕДСТОИТ НАЙТИ 
+        List<PathNodeMonkey> closedList = new List<PathNodeMonkey>();   // Создадим список "Закрытый Список" - ВСЕ УЗЛЫ, В КОТОРЫХ УЖЕ БЫЛ ПРОИЗВЕДЕН ПОИСК
 
-        PathNode startNode = GetGridSystem(startGridPosition.floor).GetGridObject(startGridPosition); // Получим стартовый узел, вернем GridObjectUnitXZ типа PathNode в переданной нам startGridPosition
-        PathNode endNode = GetGridSystem(endGridPosition.floor).GetGridObject(endGridPosition); // Получим конечный узел, вернем GridObjectUnitXZ типа PathNode в переданной нам endGridPosition
+        PathNodeMonkey startNode = GetGridSystem(startGridPosition.floor).GetGridObject(startGridPosition); // Получим стартовый узел, вернем GridObjectUnitXZ типа PathNodeMonkey в переданной нам startGridPosition
+        PathNodeMonkey endNode = GetGridSystem(endGridPosition.floor).GetGridObject(endGridPosition); // Получим конечный узел, вернем GridObjectUnitXZ типа PathNodeMonkey в переданной нам endGridPosition
 
         openList.Add(startNode); //Добавим в список начальный узел
 
@@ -152,7 +155,7 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
                 {
                     GridPositionXZ gridPosition = new GridPositionXZ(x, z, flooor); // Позиция сетке
 
-                    PathNode pathNode = GetGridSystem(flooor).GetGridObject(gridPosition); // Получим объект сетки типа PathNode
+                    PathNodeMonkey  pathNode = GetGridSystem(flooor).GetGridObject(gridPosition); // Получим объект сетки типа PathNodeMonkey
 
                     pathNode.SetGCost(int.MaxValue); // Установим параметр G максимальным числом
                     pathNode.SetHCost(0);            // Установим параметр H =0
@@ -168,7 +171,7 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
 
         while (openList.Count > 0) // если в Открытом списке есть элементы то это означает что есть узлы для поиска. Цикл будет работать пока не переберет все ячейки
         {
-            PathNode currentNode = GetLowestFCostPathNode(openList); // Получим узел пути с наименьшей стоимостью F из openList и зделаем его Текущим Узлом
+            PathNodeMonkey currentNode = GetLowestFCostPathNode(openList); // Получим узел пути с наименьшей стоимостью F из openList и зделаем его Текущим Узлом
 
             if (currentNode == endNode) // Проверяем равен ли наш текущий узел конечному узлу
             {
@@ -180,7 +183,7 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
             openList.Remove(currentNode); // Удалим текущий узел из открытого списка
             closedList.Add(currentNode);  // И добавим в закрытый список // ЭТО ОЗНАЧАЕТ ЧТО МЫ ИСКАЛИ ПО ЭТОМУ УЗЛУ
 
-            foreach (PathNode neighbourNode in GetNeighbourList(currentNode)) // Переберем всех соседние узлы
+            foreach (PathNodeMonkey neighbourNode in GetNeighbourList(currentNode)) // Переберем всех соседние узлы
             {
                 if (closedList.Contains(neighbourNode)) // Проверяем что бы соседний узел небыл в "Закрытом списке"
                 {
@@ -243,11 +246,11 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
 #endif
     }
 
-    private PathNode GetLowestFCostPathNode(List<PathNode> pathNodeList) // Получить узел пути с наименьшей стоимостью F  в аргумент передадим список узлов пути// для оптимизации поиска чтобы не искать по всем подрят
+    private PathNodeMonkey GetLowestFCostPathNode(List<PathNodeMonkey> pathNodeList) // Получить узел пути с наименьшей стоимостью F  в аргумент передадим список узлов пути// для оптимизации поиска чтобы не искать по всем подрят
                                                                          // Если несколько ячеек имеют одинаковое наименьшее F то вернется первый попавшийся в списке
                                                                          // В нашем случае мы перебераем ячейки против часовой (зависит от формирования списка в методе GetNeighbourList())
     {
-        PathNode lowestFCostPathNode = pathNodeList[0]; // Возьмем первый элемент в списке
+        PathNodeMonkey lowestFCostPathNode = pathNodeList[0]; // Возьмем первый элемент в списке
         for (int i = 0; i < pathNodeList.Count; i++) // переберем в цикле другие элементы
         {
             if (pathNodeList[i].GetFCost() < lowestFCostPathNode.GetFCost()) // Если параметр F нового элемента меньше текущего то сделаем его lowestFCostPathNode
@@ -258,19 +261,19 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
         return lowestFCostPathNode;
     }
 
-    private GridSystemXZ<PathNode> GetGridSystem(int floor) // Получить Сеточную систему для данного этажа
+    private GridSystemXZ<PathNodeMonkey> GetGridSystem(int floor) // Получить Сеточную систему для данного этажа
     {
         return _gridSystemList[floor];
     }
 
-    private PathNode GetNode(int x, int z, int floor) // Получить Узел с координатами по GridPositionXZ(x,y)
+    private PathNodeMonkey GetNode(int x, int z, int floor) // Получить Узел с координатами по GridPositionXZ(x,y)
     {
         return GetGridSystem(floor).GetGridObject(new GridPositionXZ(x, z, floor));
     }
 
-    private List<PathNode> GetNeighbourList(PathNode currentNode) // Получить список соседей для currentNode (для ШЕСТИГРАННОЙ 6 сосседей , для КВАДРАТНОЙ  8 соседей
+    private List<PathNodeMonkey> GetNeighbourList(PathNodeMonkey currentNode) // Получить список соседей для currentNode (для ШЕСТИГРАННОЙ 6 сосседей , для КВАДРАТНОЙ  8 соседей
     {
-        List<PathNode> neighbourList = new List<PathNode>(); // Инициализируем новый список соседей
+        List<PathNodeMonkey> neighbourList = new List<PathNodeMonkey>(); // Инициализируем новый список соседей
 
         GridPositionXZ gridPosition = currentNode.GetGridPosition();
 
@@ -367,12 +370,12 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
         }
 #endif
 
-        List<PathNode> totalNeighbourList = new List<PathNode>(); // общий список соседей
+        List<PathNodeMonkey> totalNeighbourList = new List<PathNodeMonkey>(); // общий список соседей
         totalNeighbourList.AddRange(neighbourList); //AddRange- Добавляет элементы указанной коллекции в конец списка
 
         List<GridPositionXZ> pathfindingLinkGridPositionList = GetPathfindingLinkConnectedGridPositionList(gridPosition); // Получить список сеточных позиций которые связаны с этой сеточной позицией
 
-        foreach (GridPositionXZ pathfindingLinkGridPosition in pathfindingLinkGridPositionList) // Переберем список и преобразуем GridPositionXZ(сеточную позицию) в PathNode(узел пути)
+        foreach (GridPositionXZ pathfindingLinkGridPosition in pathfindingLinkGridPositionList) // Переберем список и преобразуем GridPositionXZ(сеточную позицию) в PathNodeMonkey(узел пути)
         {
             totalNeighbourList.Add(
                 GetNode( // Получим Узел с координатами
@@ -407,15 +410,15 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
         return gridPositionList;
     }
 
-    //2 ДРУГАЯ РЕАЛИЗАЦИЯ МЕТОДА GetNeighbourList() БОЛЕЕ КОРОТКАЯ
-    /* private List<PathNode> GetNeighbourList(PathNode currentNode) // Получить список соседей для currentNode
-     {
-         List<PathNode> neighbourList = new List<PathNode>(); // Инициализируем новый список соседей
+   /* //2 ДРУГАЯ РЕАЛИЗАЦИЯ МЕТОДА GetNeighbourList() БОЛЕЕ КОРОТКАЯ
+    private List<PathNodeMonkey> GetNeighbourList(PathNodeMonkey currentNode) // Получить список соседей для currentNode
+    {
+        List<PathNodeMonkey> neighbourList = new List<PathNodeMonkey>(); // Инициализируем новый список соседей
 
-         GridPositionXZ _gridPositioAnchor = currentNode.GetGridPosition(); // Получим сеточную позицию центра поиска
+        GridPositionXZ _gridPositioAnchor = currentNode.GetGridPosition(); // Получим сеточную позицию центра поиска
 
-         GridPositionXZ[] neigboursPositions = //Создадим массив сеточных позиций соседних ячеик
-         {
+        GridPositionXZ[] neigboursPositions = //Создадим массив сеточных позиций соседних ячеик
+        {
          _gridPositioAnchor + UP,
          _gridPositioAnchor + UP + RIGHT,
          _gridPositioAnchor + RIGHT,
@@ -426,22 +429,22 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
          _gridPositioAnchor + LEFT + UP
          };
 
-         foreach (GridPositionXZ p in neigboursPositions) // В цикле проверим на допустипость этих сеточных позиций
-         {
-             if (_itemGridSystemXYList.IsValidGridPosition(p))
-             {
-                 neighbourList.Add(GetNode(p.x, p.y));
-             }                
-         }
+        foreach (GridPositionXZ p in neigboursPositions) // В цикле проверим на допустипость этих сеточных позиций
+        {
+            if (_itemGridSystemXYList.IsValidGridPosition(p))
+            {
+                neighbourList.Add(GetNode(p.x, p.y));
+            }
+        }
 
-         return neighbourList;
-     }*/
+        return neighbourList;
+    }*/
 
-    private List<GridPositionXZ> CalculatePath(PathNode endNode) //Вычисление пути (будем разматывать клубок в обратном направлении)
+    private List<GridPositionXZ> CalculatePath(PathNodeMonkey endNode) //Вычисление пути (будем разматывать клубок в обратном направлении)
     {
-        List<PathNode> pathNodeList = new List<PathNode>(); // инициализируем список Узлов пути
+        List<PathNodeMonkey> pathNodeList = new List<PathNodeMonkey>(); // инициализируем список Узлов пути
         pathNodeList.Add(endNode);
-        PathNode currentNod = endNode;
+        PathNodeMonkey currentNod = endNode;
 
         while (currentNod.GetCameFromPathNode() != null) //В цикле добавим подключенные узлы в список. Подключенные узлы - это то с которого на него пришли (у всех узлов 1 ссылка на соседний с которого пришли). Последий узел будет стартовый и у него GetCameFromPathNode() = null - цикл прирвется
         {
@@ -450,10 +453,10 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
         }
 
         pathNodeList.Reverse(); // Т.к. мы начали с конца надо перевернуть наш список что бы получить тропинку от старта к финишу
-        // Переведем наш список "PathNode-узлов" в список "GridPositionXZ - позиций сетки"
+        // Переведем наш список "PathNodeMonkey-узлов" в список "GridPositionXZ - позиций сетки"
         List<GridPositionXZ> gridPositionList = new List<GridPositionXZ>();
 
-        foreach (PathNode pathNode in pathNodeList)
+        foreach (PathNodeMonkey pathNode in pathNodeList)
         {
             gridPositionList.Add(pathNode.GetGridPosition());
         }

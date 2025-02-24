@@ -42,7 +42,6 @@ public class PlacedObjectSelectButtonUI : MonoBehaviour
         else
             rectTransformButton.sizeDelta = new Vector2(rectTransformButton.sizeDelta.x, _minHeightButton);
 
-        // _warehouseManager.OnChangCountPlacedObject += WarehouseManager_OnChangCountPlacedObject;
 
         SetDelegateButton();
         SetTooltipButton();
@@ -111,9 +110,7 @@ public class PlacedObjectSelectButtonUI : MonoBehaviour
         {
             _tooltipUI.Hide(); // При отведении мыши скроем подсказку
         };
-    }
-
-    // public PlacedObjectTypeSO GetPlacedObjectTypeSO() {return _placedObjectTypeSO;}
+    }       
 
     private void OnDestroy()
     {

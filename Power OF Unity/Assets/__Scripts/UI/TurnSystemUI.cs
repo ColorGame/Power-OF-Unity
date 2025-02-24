@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class TurnSystemUI : MonoBehaviour // Система Ходов UI обрабатывает нажатие и отображение текста
@@ -16,9 +17,11 @@ public class TurnSystemUI : MonoBehaviour // Система Ходов UI обрабатывает нажат
     public void Init(TurnSystem turnSystem)
     {
         _turnSystem = turnSystem;
+
+        Setup();
     }
 
-    private void Start()
+    private void Setup()
     {
         //Добавим событие при нажатии на нашу кнопку// AddListener() в аргумент должен получить делегат- ссылку на функцию. Функцию будем объявлять АНАНИМНО через лямбду () => {...} 
         _endTurnButton.onClick.AddListener(() =>

@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
-using UnityEngine.XR;
 using static UnitEquipment;
 /// <summary>
 /// Анимация юнита (без MonoBehaviour)
@@ -11,31 +10,31 @@ public class UnitAnimator
     {
         _unit = unit;
         _hashAnimationName = hashAnimationName;
-        _unitEquipsViewFarm = unit.GetUnitEquipsViewFarm();
         _unitEquipment = unit.GetUnitEquipment();
+        _unitEquipsViewFarm = unit.GetUnitEquipsViewFarm();
         Setup();
     }
 
     readonly Unit _unit;
     readonly HashAnimationName _hashAnimationName;
-    readonly UnitEquipsViewFarm _unitEquipsViewFarm;
     readonly UnitEquipment _unitEquipment;
+    readonly UnitEquipViewFarm _unitEquipsViewFarm;
 
     private Animator _animator;
     private bool _skipCurrentChangeWeaponEvent = false; // Пропустить текущее событие смены оружия (При Очистке слота для другого размещаемого объекта, в этом же кадре будет помещен другой объект его и будем настраивать)
 
     private void Setup()
     {
-        _unitEquipsViewFarm.OnChangeUnitView += UnitEquipsViewFarm_OnChangeUnitView;
         _unitEquipment.OnChangeMainWeapon += UnitEquipment_OnChangeWeapon;
         _unitEquipment.OnChangeOtherWeapon += UnitEquipment_OnChangeWeapon;
+        _unitEquipsViewFarm.OnChangeUnitView += UnitEquipsViewFarm_OnChangeUnitView;
     }
 
     public void SetupOnDestroyAndQuit()
     {
-        _unitEquipsViewFarm.OnChangeUnitView -= UnitEquipsViewFarm_OnChangeUnitView;
         _unitEquipment.OnChangeMainWeapon -= UnitEquipment_OnChangeWeapon;
         _unitEquipment.OnChangeOtherWeapon -= UnitEquipment_OnChangeWeapon;
+        _unitEquipsViewFarm.OnChangeUnitView -= UnitEquipsViewFarm_OnChangeUnitView;
     }
 
     private void UnitEquipsViewFarm_OnChangeUnitView(object sender, UnitView newUnitView)
@@ -43,7 +42,6 @@ public class UnitAnimator
         _animator = newUnitView.GetAnimator();
 
         SetAnimationAndRig();
-
     }
 
     private void SetAnimationAndRig()
@@ -52,7 +50,7 @@ public class UnitAnimator
         if (rigBuilder != null)
             rigBuilder.enabled = false;
 
-        Transform attachMainShootingWeapon = _unitEquipsViewFarm.GetAttachMainShootingWeapon();
+        GameObject attachMainShootingWeapon = _unitEquipsViewFarm.GetAttachMainShootingWeapon();
         if (attachMainShootingWeapon != null && attachMainShootingWeapon.TryGetComponent(out TargetForAnimationRigging targetForAnimationRigging))
         {
             TwoBoneIKConstraint twoBoneIKConstraint = _unitEquipsViewFarm.GetCurrentUnitView().GetRigBuilder().GetComponentInChildren<TwoBoneIKConstraint>();
@@ -146,10 +144,8 @@ public class UnitAnimator
     private void StartAnimation(int nameHash)
     {
         if (_animator.GetCurrentAnimatorStateInfo(0).shortNameHash != nameHash) // Если сейчас проигрывается другая анимация то
-
-
-
             _animator.StopPlayback();
+
         _animator.Play(nameHash, 0);
 
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 /// Визуал юнита "Космический солдат". 
 /// </summary>
 /// <remarks>сотояние брони - 1.Дефолтное(без брони) 2.BodyArmor_2A_Space 3.BodyArmor_2B_SpaceMod   </remarks>
-public class UnitSpaceSoldierView : UnitView
+public class UnitSpaceSoldierView : UnitWithChangeHeadArmorView
 {
     [Header("Контейнеры в которых будем переключать\nвидимость SkinnedMeshRenderer")]
     [SerializeField] private Transform _viewDefault;

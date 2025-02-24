@@ -61,24 +61,23 @@ public class UnitSpawnerOnLevel : MonoBehaviour
         _unitActionSystem = unitActionSystem;
         _cameraFollow = cameraFollow;
 
-        UnitFriendSpawn();
+        UnitSpawn();
         UnitEnemySpawn(hashAnimationName);
     }
 
-    private void UnitFriendSpawn()
+    private void UnitSpawn()
     {
         // получить список юнитов у UnitManager и создать в каждой точке спавна       
-        List<Unit> UnitFriendOnMissionList = _unitManager.GetUnitFriendOnMissionList();
+        List<Unit> UnitOnMissionList = _unitManager.GetUnitOnMissionList();
 
-        if (UnitFriendOnMissionList.Count <= _friendPointSpawnerArray.Length) // Проверим что бы количество юнитов на миссии не превышало количество точек спавна
+        if (UnitOnMissionList.Count <= _friendPointSpawnerArray.Length) // Проверим что бы количество юнитов на миссии не превышало количество точек спавна
         {
-            for (int index = 0; index < UnitFriendOnMissionList.Count; index++)
+            for (int index = 0; index < UnitOnMissionList.Count; index++)
             {
                 Transform pointSpawner = _friendPointSpawnerArray[index];
-                Unit unitFriend = UnitFriendOnMissionList[index];
-                UnitFriendSO unitFriendSO = unitFriend.GetUnitTypeSO<UnitFriendSO>();
+                Unit unitFriend = UnitOnMissionList[index];                
 
-                SetupAndInstantiateUnit(pointSpawner, unitFriendSO, unitFriend);
+                SetupAndInstantiateUnit(pointSpawner, unitFriend);
             }
         }
         else { Debug.Log("НЕ ХВАТАЕТ точек спавна для моих юнотов!!!"); }
@@ -89,32 +88,19 @@ public class UnitSpawnerOnLevel : MonoBehaviour
         foreach (Transform pointSpawner in _enemyPointSpawnerArray)
         {
             UnitEnemySO unitEnemySO = pointSpawner.GetComponent<EnemyPointSpawner>().GetUnitEnemySO(); // Получим UnitEnemySO вражеского юнита для этого спавна
-                        
+
             Unit unitEnemy = new Unit(unitEnemySO, _soundManager, hashAnimationName); ;  // инициализируем нового юнита         
 
-            SetupAndInstantiateUnit(pointSpawner, unitEnemySO, unitEnemy);
+            SetupAndInstantiateUnit(pointSpawner, unitEnemy);
             // можно спавн сделать дочерним к unitEnemy и сохранять его последнее положение, или удалять после спавна юнита
         }
     }
 
-    private void SetupAndInstantiateUnit(Transform pointSpawner, UnitTypeSO unitTypeSO, Unit unit)
-    {        
-        Transform unitCorePrefab = unitTypeSO.GetUnitCorePrefab();
+    private void SetupAndInstantiateUnit(Transform pointSpawner,  Unit unit)
+    {
+        Transform unitCoreTransform = unit.GetUnitEquipsViewFarm().CreateCoreAndView(pointSpawner);      
 
-        UnitView unitViewPrefab = null;
-        switch (unitTypeSO)
-        {
-            case UnitFriendSO unitFriendSO:
-                unitViewPrefab = unitFriendSO.GetUnitViewPrefab(unit.GetUnitEquipment().GetBodyArmor());
-                break;
-            case UnitEnemySO unitEnemySO:
-                unitViewPrefab = unitEnemySO.GetUnitEnemyVisualPrefab();
-                break;
-        }
+        unit.SetupForSpawn(_levelGrid, _turnSystem, unitCoreTransform, _cameraFollow, _unitActionSystem);
 
-        Transform unitCoreTransform = Instantiate(unitCorePrefab, pointSpawner); // создадим ядро юнита в точке спавна        
-        Instantiate(unitViewPrefab, unitCoreTransform); // создадим визуал в ядре юнита    
-
-        unit.SetupForSpawn( _levelGrid, _turnSystem, unitCoreTransform, _cameraFollow, _unitActionSystem);
     }
 }

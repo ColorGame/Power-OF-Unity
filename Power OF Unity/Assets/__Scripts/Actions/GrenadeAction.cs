@@ -1,4 +1,4 @@
-using Pathfinding;
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -134,13 +134,13 @@ public abstract class GrenadeAction : BaseAction // Граната ДЕйствие. Наследует 
                         continue;
                     }
 
-                    LevelGridNode levelGridNode = _unit.GetLevelGrid().GetGridNode(testGridPosition);
+                   /* LevelGridNode levelGridNode = _unit.GetLevelGrid().GetGridNode(testGridPosition);
 
                     //если в этой позиции нет узла пути значит эта GridPositionXZ висит в воздухе  
                     if (levelGridNode == null)
                     {
                         continue; // Пропустим эту позицию
-                    }
+                    }*/
 
                     /*if (!PathfindingMonkey.Instance.HasPath(unitGridPosition, testGridPosition)) //Исключим сеточные позиции куда нельзя пройти или на них есть объект с тегом (Obstacles -Препятствия)  (позиции между юнитом и тестируемой позицией)
                     {

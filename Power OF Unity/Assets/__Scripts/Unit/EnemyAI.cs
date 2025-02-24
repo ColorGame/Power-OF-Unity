@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class EnemyAI : MonoBehaviour // Искуственный интелект юнита
 {
@@ -16,12 +17,17 @@ public class EnemyAI : MonoBehaviour // Искуственный интелект юнита
     private UnitManager _unitManager;
     private TurnSystem _turnSystem;
     private UnitActionSystem _unitActionSystem;
+    private bool _isInit = false;
 
     public void Init(UnitManager unitManager, TurnSystem turnSystem, UnitActionSystem unitActionSystem)
     {
         _unitManager = unitManager;
         _turnSystem = turnSystem;
         _unitActionSystem = unitActionSystem;
+
+        _isInit = true;
+
+        Setup();
     }
 
     private void Awake()
@@ -30,17 +36,19 @@ public class EnemyAI : MonoBehaviour // Искуственный интелект юнита
     }
 
 
-    private void Start()
+    private void Setup()
     {
         _turnSystem.OnTurnChanged += TurnSystem_OnTurnChanged; // Подпишемся на событие Ход Изменен
     }
 
     private void Update()
     {
-        if (_turnSystem.IsPlayerTurn()) // Проверяем это ход врага если ходит игрок то остановить выполнение (таймер работать не будет)
-        {
+        if (!_isInit)
             return;
-        }
+
+        if (_turnSystem.IsPlayerTurn()) // Проверяем это ход врага если ходит игрок то остановить выполнение (таймер работать не будет)
+            return;
+
 
         switch (_state) // Автомат действий
         {
@@ -84,7 +92,7 @@ public class EnemyAI : MonoBehaviour // Искуственный интелект юнита
 
     private bool TryTakeEnemyAIAction(Action onEnemyAIActionComplete)   // ПОПРОБОВАТЬ Выполнить Действие Вражеского Искуственного Интелекта. В аргумент передаем делегат onEnemyAIActionComplete (Действие Вражеского Искуственного Интелекта завершено)
                                                                         // Проидем по списку врагов и выполним возможные действия
-    {        
+    {
         foreach (Unit enemyUnit in _unitManager.GetUnitEnemyList()) // В цикле переберем врагов в списке Врагов
         {
             if (TryTakeEnemyAIAction(enemyUnit, onEnemyAIActionComplete))  // Проверим можем ли мы попробовать Выполним действие ИИ
@@ -134,6 +142,6 @@ public class EnemyAI : MonoBehaviour // Искуственный интелект юнита
         else
         {
             return false; // Остановить выполнение и вернуть ЛОЖЬ 
-        }        
+        }
     }
 }

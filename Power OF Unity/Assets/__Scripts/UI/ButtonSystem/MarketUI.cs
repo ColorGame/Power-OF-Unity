@@ -143,8 +143,6 @@ public class MarketUI : ObjectSelectButtonsSystemUI
         });
     }
 
-
-
     public override void SetActive(bool active)
     {
         if (_isActive == active) //Если предыдущее состояние тоже то выходим
@@ -160,9 +158,7 @@ public class MarketUI : ObjectSelectButtonsSystemUI
         else
         {
             SetActiveButtonList(false);
-            HideAllContainerArray();
-           // ClearAndUpdateSumText();
-            //ClearActiveButtonContainer();           
+            HideAllContainerArray();                 
         }
     }
 
@@ -287,42 +283,6 @@ public class MarketUI : ObjectSelectButtonsSystemUI
         ClearByuSellTextInButtonList();
     }
 
-    /*  protected override void CreateSelectButtonsSystemInActiveContainer()
-      {   
-          // Переберем список 
-          foreach (PlacedObjectTypeSO placedObjectTypeSO in _warehouseManager.GetAllPlacedObjectTypeSOList())
-          {
-              switch (placedObjectTypeSO)
-              {
-                  case GrappleTypeSO:
-                  case ShootingWeaponTypeSO:
-                  case SwordTypeSO:
-                      if (_activeContainer == _weaponSelectContainer)
-                          CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _weaponSelectContainer);
-                      break;
-
-                  case GrenadeTypeSO:
-                  case HealItemTypeSO:
-                  case ShieldItemTypeSO:
-                  case SpotterFireItemTypeSO:
-                  case CombatDroneTypeSO:
-                      if (_activeContainer == _itemSelectContainer)
-                          CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _itemSelectContainer);
-                      break;
-
-                  case HeadArmorTypeSO:
-                      if (_activeContainer == _headArmorSelectContainer)
-                          CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _headArmorSelectContainer);
-                      break;
-
-                  case BodyArmorTypeSO:
-                      if (_activeContainer == _bodyArmorSelectContainer)
-                          CreatePlacedObjectBuySellCountButton(placedObjectTypeSO, _bodyArmorSelectContainer);
-                      break;
-              }
-          }
-      }*/
-
     protected override void CreateSelectButtonsSystemInContainer(RectTransform buttonContainer)
     {
         if (buttonContainer == _weaponSelectContainer)
@@ -438,15 +398,7 @@ public class MarketUI : ObjectSelectButtonsSystemUI
         return buySellCountButton;
     }
 
-    /* protected override void ClearActiveButtonContainer()
-     {
-         base.ClearActiveButtonContainer();
-         ClearActiveCollection();
-     }*/
-    /*  private void ClearActiveCollection()
-      {        
-          ClearAndUpdateSumText();
-      }*/
+ 
     /// <summary>
     /// Очистим и обновим текст суммы главного меню магазина
     /// </summary>

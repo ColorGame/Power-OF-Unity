@@ -13,7 +13,7 @@ using UnityEngine;
 public abstract class PlacedObjectTypeWithActionSO : PlacedObjectTypeSO
 {
     [Header("Префаб размещаемого объекта 3D(для создания в МИРЕ)")]
-    [SerializeField] protected Transform _prefab3D;
+    [SerializeField] protected GameObject _prefab3D;
     [Header("Контролер переопределения АНИМАЦИИ")]
     [SerializeField] private AnimatorOverrideController _animatorOverrideController = null;
     
@@ -26,7 +26,7 @@ public abstract class PlacedObjectTypeWithActionSO : PlacedObjectTypeSO
     /// </remarks>
     public abstract BaseAction GetAction(Unit unit);   
     public AnimatorOverrideController GetAnimatorOverrideController() { return _animatorOverrideController; }
-    public Transform GetPrefab3D() { return _prefab3D; }
+    public GameObject GetPrefab3D() { return _prefab3D; }
 
 
 
@@ -40,7 +40,7 @@ public abstract class PlacedObjectTypeWithActionSO : PlacedObjectTypeSO
             string prefabName = go.name.Remove(go.name.Length - prefabDeleteLastCharName); // Получим имя префаба без последних 2 символов
             if (nameFail.Equals(prefabName, StringComparison.OrdinalIgnoreCase)) // Сравним имя SO с полученым без учета регистра
             {
-                _prefab3D = go.transform;
+                _prefab3D = go;
             }
         }
        

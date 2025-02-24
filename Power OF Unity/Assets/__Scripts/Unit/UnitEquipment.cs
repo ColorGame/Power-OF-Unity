@@ -11,6 +11,7 @@ public class UnitEquipment
     public UnitEquipment()
     {
         //Здесь можно загрузить стандартную загрузку экипировки и экипировку врагов   
+        // AddPlacedObjectAtEquipmentList();
     }
 
     public event EventHandler<MainOtherWeapon> OnChangeMainWeapon; // Изменено Основное оружие

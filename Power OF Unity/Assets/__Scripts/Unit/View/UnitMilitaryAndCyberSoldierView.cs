@@ -4,7 +4,7 @@ using UnityEngine;
 /// Визуал юнита "Солдат". 
 /// </summary>
 /// <remarks>сотояние брони - 1.BodyArmor_1A_Military 2.BodyArmor_1B_MilitaryMod 3.BodyArmor_3A_Cyber 4.BodyArmor_3B_CyberMod</remarks>
-public class UnitMilitaryAndCyberSoldierView : UnitView
+public class UnitMilitaryAndCyberSoldierView : UnitWithChangeHeadArmorView
 {
     // Чтобы не настраивать визуал для каждого юнита, закинем в общем префабе контейнеры в которых храняться нужные вьюхи
     [Header("Контейнер визуала брони для тела")]

@@ -113,7 +113,6 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
         {
             HideAllContainerArray(); //при выходе из меню менеджмента выключим все окна
             _unitManager.OnSelectedUnitChanged -= UnitManager_OnSelectedUnitChanged;
-            //ClearActiveButtonContainer();
         }
     }
 
@@ -215,28 +214,19 @@ public class UnitSelectForManagementButtonsSystemUI : UnitSelectButtonsSystemUI
             uint price = unit.GetUnitTypeSO<UnitFriendSO>().GetPriceHiring();
             _debitedText.text = $"-({price.ToString("N0")})";
         }
-    }
-
-    /*  protected override void CreateSelectButtonsSystemInActiveContainer()
-      {
-          if (_activeContainer == _myUnitsContainer)
-              GetCreatedUnitSelectButtonsList(_unitManager.GetUnitFriendList(), _myUnitsContainer);//Общий список  моих юнитов 
-
-          if (_activeContainer == _hireUnitsContainer)
-              GetCreatedUnitSelectButtonsList(_unitManager.GetHireUnitList(), _hireUnitsContainer);// список  юнитов для найма    
-      }*/
+    }   
 
     protected override void CreateSelectButtonsSystemInContainer(RectTransform buttonContainer)
     {
         if (buttonContainer == _myUnitsContainer)
-            _myUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetUnitFriendList(), _myUnitsContainer);//Общий список  моих юнитов 
+            _myUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetUnitList(), _myUnitsContainer);//Общий список  моих юнитов 
 
         if (buttonContainer == _hireUnitsContainer)
             _hireUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetHireUnitList(), _hireUnitsContainer);// список  юнитов для найма    
     }
     protected override void CreateSelectButtonsSystemInAllContainer()
     {
-        _myUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetUnitFriendList(), _myUnitsContainer);//Общий список  моих юнитов        
+        _myUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetUnitList(), _myUnitsContainer);//Общий список  моих юнитов        
         _hireUnitButtonList = GetCreatedUnitSelectButtonsList(_unitManager.GetHireUnitList(), _hireUnitsContainer);// список  юнитов для найма    
     }
     /// <summary>

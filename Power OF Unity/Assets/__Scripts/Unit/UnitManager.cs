@@ -18,8 +18,8 @@ public class UnitManager // Менеджер (администратор) Юнитов
     private List<Unit> _unitFriendOnMissionList = new List<Unit>();// список моих юнитов на МИССИИ
     private List<Unit> _unitFriendOnBarrackList = new List<Unit>();// список моих юнитов в КАЗАРМЕ. По умолчанию все юниты поступают в КАЗАРМУ
     private List<Unit> _unitFriendDeadList = new List<Unit>();// список моих ПОГИБШИХ юнитов 
-    private List<Unit> _unitEnemyList = new List<Unit>();  // список Вражеских юнитов
     private List<Unit> _hireUnitList = new List<Unit>();// список Юнитов для НАЙМА
+    private List<Unit> _unitEnemyList = new List<Unit>();  // список Вражеских юнитов
 
     private TooltipUI _tooltipUI;
     private SoundManager _soundManager;
@@ -41,7 +41,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
 
     }
 
-    private void InitUnits(bool firstStart , HashAnimationName hashAnimationName)
+    private void InitUnits(bool firstStart, HashAnimationName hashAnimationName)
     {
         if (firstStart)
         {
@@ -50,7 +50,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
             foreach (UnitTypeSO unitFriendTypeSO in unitTypeBasicListSO.GetMyUnitsBasicList())
             {
                 Unit unit = new Unit(unitFriendTypeSO, _soundManager, hashAnimationName);
-                AddUnitFriendList(unit);
+                AddUnitList(unit);
             }
 
             foreach (UnitTypeSO unitFriendTypeSO in unitTypeBasicListSO.GetHireUnitsBasiclist())
@@ -67,30 +67,23 @@ public class UnitManager // Менеджер (администратор) Юнитов
 
 
 
-    private void Unit_OnAnyEnemyUnitSpawned(object sender, EventArgs e)
+    private void Unit_OnAnyEnemyUnitSpawned(object sender, Unit unitEnemy)
     {
-        Unit unit = sender as Unit; // (Unit)sender - другая запись// Получим Юнита который является отправителем
-
-        _unitEnemyList.Add(unit); // Добавим его в список Вражеских Юнитов
+        _unitEnemyList.Add(unitEnemy); // Добавим его в список Вражеских Юнитов
         OnAnyEnemyUnitSpawnedAndAddList?.Invoke(this, EventArgs.Empty);
     }
 
-    private void Unit_OnAnyUnitDead(object sender, EventArgs e)
-    {
-        Unit unit = sender as Unit; // (Unit)sender - другая запись// Получим Юнита который является отправителем
-
-        //Debug.Log(hireUnit + " dead"); // Для теста
-
-        if (unit.IsEnemy()) // Если отправитель Враг то ...
+    private void Unit_OnAnyUnitDead(object sender, Unit unit)
+    {  
+        if (unit.GetIsEnemy()) // Если отправитель Враг то ...
         {
             _unitEnemyList.Remove(unit); // Удалим его из списка Вражеских Юнитов           
         }
-        else// если нет
+        else       
         {
             RemoveUnitFriendList(unit);
             _unitFriendDeadList.Add(unit); // Добавим к погибшим
         }
-
         OnAnyUnitDeadAndRemoveList?.Invoke(this, EventArgs.Empty); // Запустим событьие
     }
 
@@ -102,7 +95,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
         if (_warehouseManager.TryMinusCoins(_selectedUnit.GetUnitTypeSO<UnitFriendSO>().GetPriceHiring()))
         {
             RemoveHireUnitList(_selectedUnit);
-            AddUnitFriendList(_selectedUnit);
+            AddUnitList(_selectedUnit);
             return true;
         }
         else { return false; }
@@ -146,7 +139,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
     /// <summary>
     /// Добавить Юнита в общий список и добавим в локацию
     /// </summary>
-    private void AddUnitFriendList(Unit unit)
+    private void AddUnitList(Unit unit)
     {
         _unitFriendList.Add(unit);
         Unit.Location location = unit.GetLocation(); // Получим локацию юнита
@@ -169,7 +162,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
     {
         RemoveUnitFromCurrentLocation(unit);
         unit.SetLocation(newLocation);
-        AddUnitToLocation(unit, newLocation);       
+        AddUnitToLocation(unit, newLocation);
     }
 
     /// <summary>
@@ -200,7 +193,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
                 _unitFriendOnBarrackList.Add(unit);
                 break;
             case Unit.Location.Mission:
-                AddUnitFriendOnMissionList(unit);
+                AddUnitOnMissionList(unit);
                 break;
         }
         OnAddRemoveUnitFromLocation?.Invoke(this, EventArgs.Empty);
@@ -209,7 +202,7 @@ public class UnitManager // Менеджер (администратор) Юнитов
     /// <summary>
     /// Добавить Юнита на МИССИЮ (С проверкой на количество юнитов на миссии)
     /// </summary>
-    private void AddUnitFriendOnMissionList(Unit unit)
+    private void AddUnitOnMissionList(Unit unit)
     {
         if (_unitFriendOnMissionList.Count <= Constant.COUNT_UNIT_ON_MISSION_MAX) // Проверим если количество юнитов в списке меньше МАКСТМАЛЬНОГО то добавим в список переданного юнита
         {
@@ -223,17 +216,17 @@ public class UnitManager // Менеджер (администратор) Юнитов
     /// <summary>
     /// Общий список  моих юнитов 
     /// </summary>
-    public List<Unit> GetUnitFriendList() { return _unitFriendList; }
+    public List<Unit> GetUnitList() { return _unitFriendList; }
     /// <summary>
     /// Мои юниты которые на МИССИИ
     /// </summary>
-    public List<Unit> GetUnitFriendOnMissionList() { return _unitFriendOnMissionList; }
+    public List<Unit> GetUnitOnMissionList() { return _unitFriendOnMissionList; }
     /// <summary>
     /// Мои юниты которые на БАЗЕ
     /// </summary>
-    public List<Unit> GetUnitFriendOnBarrackList() { return _unitFriendOnBarrackList; }
+    public List<Unit> GetUnitOnBarrackList() { return _unitFriendOnBarrackList; }
     public List<Unit> GetUnitEnemyList() { return _unitEnemyList; }
-    public List<Unit> GetUnitFriendDeadList() { return _unitFriendDeadList; }
+    public List<Unit> GetUnitDeadList() { return _unitFriendDeadList; }
     /// <summary>
     /// Юниты для найма
     /// </summary>

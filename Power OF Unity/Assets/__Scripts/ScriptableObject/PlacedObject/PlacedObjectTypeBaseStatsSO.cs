@@ -334,7 +334,7 @@ public class PlacedObjectTypeBaseStatsSO : ScriptableObject
     }
 
     /// <summary>
-    /// Заполнить словарь, всплывающих подсказок для размещенного объекта, из имеющихся списков
+    /// Заполнить словарь, всплывающих подсказок для размещенного объекта, из имеющихся списков type is
     /// </summary>
     private Dictionary<T, List<PlacedObjectTooltip>> GetPlacedObjectTooltipDictionary<T>() where T : Enum
     {

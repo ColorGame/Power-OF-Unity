@@ -47,8 +47,8 @@ public class LookAtCamera : MonoBehaviour, ISetupForSpawn // Шкала здоровья буде
         /*// 1 МЕТОД//{ // в данном методе поворот UI игрока зависит от положения на сцене и требует доп проверки
         if (_invert) // Если текст требует инвертирование
         {
-            Vector3 directionCamera = (_cameraTransform.position - transform.position).normalized; // Нормализованый вектор направленный в сторону камеры
-            transform.LookAt(transform.position + directionCamera*(-1)); // Передадим в аргумент - смотреть относито своей позиции в противоположную сторону вектора directionCamera (он будет как бы смотреть на камеру но жопой)
+            Vector3 directionCamera = (_cameraTransform.gridPosition - transform.gridPosition).normalized; // Нормализованый вектор направленный в сторону камеры
+            transform.LookAt(transform.gridPosition + directionCamera*(-1)); // Передадим в аргумент - смотреть относито своей позиции в противоположную сторону вектора directionCamera (он будет как бы смотреть на камеру но жопой)
         }
         else
         {
@@ -57,7 +57,7 @@ public class LookAtCamera : MonoBehaviour, ISetupForSpawn // Шкала здоровья буде
 
         // 2 ЛУЧШИЙ МЕТОД//{  в данном методе UI будет паралелен рамкам экрана
 
-        if (_updateTransformStarted) // удем обнавлять положение только при движении камеры
+        if (_updateTransformStarted) // будем обнавлять положение только при движении камеры
             UpdateTransform();
     }
 
