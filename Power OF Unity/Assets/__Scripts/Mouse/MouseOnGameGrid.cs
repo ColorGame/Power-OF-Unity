@@ -35,19 +35,13 @@ public class MouseOnGameGrid : MonoBehaviour // Класс отвечающий за положение ку
     {
         _mouseGridPosition = _levelGrid.GetGridPosition(GetPositionOnlyHitVisible());  // Установим при старте сеточную позицию мышм // НЕЛЬЗЯ ВЫЗЫВАТЬ в Awake() т.к. в результате гонки возникает нулевая ошибка (кто проснется раньше GameInput или MouseOnGameGrid неизвестно)
     }
-
-    // Для теста, светящий шар следует за курсором мыши.
-    /*private void Update()
-    {
-        transform.gridPosition = MouseOnGameGrid.GetTransformPosition(); // Так можно вызывать из ЛЮБОГО МЕСТА
-    }*/
-
+   
     private void Update()
     {
         if (!_isInit) 
             return;
-
-        transform.position = GetPosition();
+        // Для теста, светящий шар следует за курсором мыши.
+        // transform.position = GetPosition();
 
         GridPositionXZ newMouseGridPosition = _levelGrid.GetGridPosition(GetPositionOnlyHitVisible()); // Получим новую сеточную позицию мыши
         if (_levelGrid.IsValidGridPosition(newMouseGridPosition) && _mouseGridPosition != newMouseGridPosition) // Если это ДОПУСТИМАЯ сеточная позиция и она не равна предыдущей то ...

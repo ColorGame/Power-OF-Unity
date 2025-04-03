@@ -28,11 +28,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 490711306097214950, guid: 602eca0fe7b206a45828fc1718ba728a,
-        type: 3}
-      propertyPath: m_RigLayers.Array.data[0].m_Rig
-      value: 
-      objectReference: {fileID: 1980372006291056408}
     - target: {fileID: 708020419933278462, guid: 602eca0fe7b206a45828fc1718ba728a,
         type: 3}
       propertyPath: m_IsActive
@@ -637,18 +632,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 555976538937224897}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1980372006291056408 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2075183540996590041, guid: 602eca0fe7b206a45828fc1718ba728a,
-    type: 3}
-  m_PrefabInstance: {fileID: 555976538937224897}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70b342d8ce5c2fd48b8fa3147d48d1d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &2743069947907238720 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2424746545548264833, guid: 602eca0fe7b206a45828fc1718ba728a,

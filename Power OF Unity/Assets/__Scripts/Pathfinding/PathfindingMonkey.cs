@@ -176,7 +176,7 @@ public class PathfindingMonkey : MonoBehaviour // Поиск пути // Логика которая б
             if (currentNode == endNode) // Проверяем равен ли наш текущий узел конечному узлу
             {
                 // Достигли конечного узла
-                pathLength = endNode.GetFCost(); // Вернем стоимость длины пути
+                pathLength = endNode.GetGCost(); // Вернем стоимость длины пути
                 return CalculatePath(endNode); // Вернем вычисленый путь
             }
 

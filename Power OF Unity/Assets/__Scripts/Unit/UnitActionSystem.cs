@@ -5,7 +5,10 @@ using UnityEngine.EventSystems;
 
 
 // Этот клас важен и он должен просыпаться самым первым. Настроим его, добавим в Project Settings/ Script Execution Order и поместим выше Deafault Time
-public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТКА ВЫБОРА ДЕЙСТВИЯ ЮНИТА)
+/// <summary>
+/// Система действий юнита (ОБРАБОТКА ВЫБОРА ДЕЙСТВИЯ ЮНИТА)
+/// </summary>
+public class UnitActionSystem : MonoBehaviour 
 {
     public event EventHandler<Unit> OnSelectedUnitChanged; // Выбранный Юнит Изменен (когда поменяется выбранный юнит мы запустим событие Event) <Unit>-новый выбранный юнит
     public event EventHandler OnSelectedActionChanged; // Выбранное Действие Изменено (когда меняется активное действие в блоке кнопок мы запустим событие Event)  
@@ -153,8 +156,10 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
             selectedAction = _selectedAction,
         });
     }
-
-    private bool TryHandleUnitSelection() // Попытка обработки выбора юнита
+    /// <summary>
+    /// Попытка обработки выбора юнита
+    /// </summary>
+    private bool TryHandleUnitSelection() 
     {
         if (_selectedAction is GrappleAction comboAction) //Если Выбранное Действие GrappleAction то
         {
@@ -179,7 +184,7 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
                     return false;
                 }
 
-                if (unit.GetType() != _selectedUnit.GetType()) // Если луч попал во врага (их типы не совподают)
+                if (unit.GetIsEnemy()) // Если луч попал во врага 
                 {
                     // ЭТО ВРАГ ЕГО ВЫБИРАТЬ НЕ НАДО
                     return false;
@@ -196,12 +201,14 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
     {
         _selectedUnit = unit; // аргумент переданный в этот метод становиться ВЫБРАННЫМ юнитом.
 
-        SetSelectedAction(baseAction); // Получим компонент "MoveAction"  нашего Выбранного юнита (по умолчанию при старте базовым действием бедет MoveAction). Сохраним в переменную _selectedAction через функцию SetSelectedAction()
+        SetSelectedAction(baseAction); 
 
         OnSelectedUnitChanged?.Invoke(this, _selectedUnit); // "?"- проверяем что !=0. Invoke вызвать (this-ссылка на объект который запускает событие "отправитель" а класс UnitSelectedVisual и ActionButtonSystemUI будет его прослушивать "обрабатывать" для этого ему нужна ссылка на _targetUnit)
     }
-
-    public void SetSelectedAction(BaseAction baseAction) //Установить Выбранное Действие, И запускаем событие  
+    /// <summary>
+    ///Установить Выбранное Действие, И запускаем событие  
+    /// </summary>
+    public void SetSelectedAction(BaseAction baseAction) 
     {
         _selectedAction = baseAction;
        
@@ -209,7 +216,6 @@ public class UnitActionSystem : MonoBehaviour // Система действий юнита (ОБРАБОТ
     }
     public BaseAction GetSelectedAction() { return _selectedAction; }// Вернуть выбранное действие
     public Unit GetSelectedUnit() { return _selectedUnit; }
-
-
+    public bool GetIsBusy() {  return _isBusy; }
 
 }

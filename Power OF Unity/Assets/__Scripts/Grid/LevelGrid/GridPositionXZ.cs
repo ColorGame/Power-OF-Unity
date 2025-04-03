@@ -1,7 +1,8 @@
 using System;
 using Unity.Entities;
+using Unity.Mathematics;
 
-public struct GridPositionXZ : IComponentData, IEquatable<GridPositionXZ> //»нтерфейс Equatable - ѕриравниваемый    //Ќар€ду с классами структуры представл€ют еще один способ создани€ собственных типов данных в C#. Ѕолее того многие примитивные типы, например, int, double и т.д.,
+public struct GridPositionXZ : IEquatable<GridPositionXZ> //»нтерфейс Equatable - ѕриравниваемый    //Ќар€ду с классами структуры представл€ют еще один способ создани€ собственных типов данных в C#. Ѕолее того многие примитивные типы, например, int, double и т.д.,
                                                           //по сути €вл€ютс€ структурами. ѕри работе с структурой мы передаем копии значений а не ссылку.
                                                           //ћы создаем свою структуру т.к. не можем воспользоватьс€ стандартным Vector2Int. ќн работает с X Y а нам нужно X Z (можно было бы сделать преобразование ’” в XZ туда и обратно, но это добовл€ет много строк кода и хуже воспринимаетс€)
 {
@@ -19,9 +20,21 @@ public struct GridPositionXZ : IComponentData, IEquatable<GridPositionXZ> //»нте
         this.floor = floor;
     }
 
+    public GridPositionXZ(int3 int3) // вспомогательный конструктор
+    {
+        this.x = int3.x;
+        this.z = int3. z;
+        this.floor = int3. y;
+    }
+
     public override string ToString() // ѕереопределим ToString(). ’отим увидеть в отладке Debug.Log внутренее состо€ние X Z и этаж
     {
         return $"x: {x}; z: {z}; _floor: {floor}";
+    }
+
+    public int3 ParseInt3()
+    {
+        return new int3(x, floor, z);
     }
 
     public static bool operator ==(GridPositionXZ a, GridPositionXZ b) // –асширение дл€ булевых операций сравнени€

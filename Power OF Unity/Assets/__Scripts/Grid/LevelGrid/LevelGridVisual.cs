@@ -1,5 +1,3 @@
-//#define HEX_GRID_SYSTEM //ШЕСТИГРАННАЯ СЕТОЧНАЯ СИСТЕМА //  В C# определен ряд директив препроцессора, оказывающих влияние на интерпреpublic enumтацию исходного кода программы компилятором. 
-//Эти директивы определяют порядок интерпретации текста программы перед ее трансляцией в объектный код в том исходном файле, где они появляются. 
 
 using System;
 using System.Collections.Generic;
@@ -41,6 +39,7 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
 
     private LevelGridVisualSingle[,,] _gridSystemVisualSingleArray; // Трехмерный массив    
 
+    private PathfindingProvider _pathfindingProvider;
     private UnitActionSystem _unitActionSystem;
     private LevelGrid _levelGrid;
     private MouseOnGameGrid _mouseOnGameGrid;
@@ -48,11 +47,12 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
     // Для отладки шестигранной сетки (отображение ячейки под мышкой)
     // private LevelGridVisualSingle _lastSelectedGridSystemVisualSingle; // Последний Выбранная Сеточная Позиция Визуализация Еденицы
 
-    public void Init(UnitActionSystem unitActionSystem, LevelGrid levelGrid, MouseOnGameGrid mouseOnGameGrid)
+    public void Init(UnitActionSystem unitActionSystem, LevelGrid levelGrid, MouseOnGameGrid mouseOnGameGrid, PathfindingProvider pathfindingProvider)
     {
         _unitActionSystem = unitActionSystem;
         _levelGrid = levelGrid;
         _mouseOnGameGrid = mouseOnGameGrid;
+        _pathfindingProvider = pathfindingProvider;
 
         Setup();
     }
@@ -83,6 +83,7 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
         _unitActionSystem.OnSelectedActionChanged += UnitActionSystem_OnSelectedActionChanged; // подпишемся на событие Выбранное Действие Изменено (когда меняется активное действие в блоке кнопок мы запустим событие Event)
         _unitActionSystem.OnBusyChanged += Instance_OnBusyChanged; //подпишемся на событие Занятость Изменена 
         _mouseOnGameGrid.OnMouseGridPositionChanged += MouseOnGameGrid_OnMouseGridPositionChanged;// подпишемся на событие Сеточная Позиция Мыши Изменена для включения и выключения круга показ. диапазон поражения гранаты
+        _pathfindingProvider.OnPathfindingComplete += PathfindingProvider_OnPathfindingComplete;//подпишемся Вычислен Путь  
         MoveAction.OnAnyUnitPathComplete += MoveAction_OnAnyUnitPathComplete; //подпишемся У любого Юнита Вычислен Путь       
 
         UpdateGridVisual();
@@ -98,6 +99,14 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
              }
          }*/
 
+    }
+
+    private void PathfindingProvider_OnPathfindingComplete(object sender, Unity.Collections.NativeParallelHashMap<Unity.Mathematics.int3, PathNode> e)
+    {
+        if (!_unitActionSystem.GetSelectedUnit().GetIsEnemy()) //Если это не враг то обновим визуализацию (чтобы не обновлять во время хотьбы врагов)
+        {
+            UpdateGridVisual();
+        }
     }
 
     private void MoveAction_OnAnyUnitPathComplete(object sender, Unit unit)
@@ -221,13 +230,13 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
                     continue; // continue заставляет программу переходить к следующей итерации цикла 'for' игнорируя код ниже
                 }
 
-              /*  LevelGridNode levelGridNode = _levelGrid.GetGridNode(testGridPosition);
+                /*  LevelGridNode levelGridNode = _levelGrid.GetGridNode(testGridPosition);
 
-                //если в этой позиции нет узла пути значит эта GridPositionXZ висит в воздухе  
-                if (levelGridNode == null)
-                {
-                    continue; // Пропустим эту позицию
-                }*/
+                  //если в этой позиции нет узла пути значит эта GridPositionXZ висит в воздухе  
+                  if (levelGridNode == null)
+                  {
+                      continue; // Пропустим эту позицию
+                  }*/
 
 
                 /*//Исключим сеточные позиции которые висят в воздухе
@@ -252,7 +261,7 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
         ShowGridPositionList(gridPositionList, gridVisualType); // Покажем возможный Диапазон стрельбы
     }
 
-    public void ShowGridPositionList(List<GridPositionXZ> gridPositionlist, GridVisualType gridVisualType)  //Покажем Список GridPositionXZ (в аргументе передается список GridPositionXZ и состояние визуализации сетки gridVisualType)
+    private void ShowGridPositionList(List<GridPositionXZ> gridPositionlist, GridVisualType gridVisualType)  //Покажем Список GridPositionXZ (в аргументе передается список GridPositionXZ и состояние визуализации сетки gridVisualType)
     {
         foreach (GridPositionXZ gridPosition in gridPositionlist) // в цикле перебереи список и Покажем(включим) только те позиции которые нам передали
         {
@@ -261,7 +270,7 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
         }
     }
 
-    public void UpdateGridVisual() // Обнавление визуала сетки
+    private void UpdateGridVisual() // Обнавление визуала сетки
     {
         HideAllGridPosition(); // Скрыть все позиции сетки
 

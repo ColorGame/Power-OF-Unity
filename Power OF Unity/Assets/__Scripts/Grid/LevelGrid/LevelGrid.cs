@@ -27,7 +27,7 @@ public class LevelGrid : MonoBehaviour // Основной скрипт который управляет СЕТК
             GridSystemXZ<GridObjectUnitXZ> gridSystem = new GridSystemXZ<GridObjectUnitXZ>(_gridParameters, // ПОСТРОИМ СЕТКУ и в каждой ячейки создадим объект типа GridObjectUnitXZ
                  (GridSystemXZ<GridObjectUnitXZ> gridSystem, GridPositionXZ gridPosition) => new GridObjectUnitXZ(gridSystem, gridPosition),transform.position, floor); //в 5 параметре аргумента зададим функцию ананимно через лямбду => new GridObjectUnitXZ(gridSystem, _gridPositioAnchor) И ПЕРЕДАДИМ ЕЕ ДЕЛЕГАТУ. (лямбда выражение можно вынести в отдельный метод)
 
-           gridSystem.CreateDebugObject(_gridDebugObjectPrefab); // Создадим наш префаб в каждой ячейки // Закоментировал т.к. PathfindingGridDebugObject будет выполнять базовыедействия вместо _gridDebugObjectPrefab
+         //  gridSystem.CreateDebugObject(_gridDebugObjectPrefab); // Создадим наш префаб в каждой ячейки // Закоментировал т.к. PathfindingGridDebugObject будет выполнять базовыедействия вместо _gridDebugObjectPrefab
 
             _gridSystemList.Add(gridSystem); // Добавим в список созданную сетку
         }

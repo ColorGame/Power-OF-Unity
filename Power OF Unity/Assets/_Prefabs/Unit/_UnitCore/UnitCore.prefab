@@ -424,7 +424,6 @@ GameObject:
   - component: {fileID: 5037594765210373008}
   - component: {fileID: 9166489426704551316}
   - component: {fileID: 591424564500887994}
-  - component: {fileID: 1038163711715851208}
   - component: {fileID: 2245190387780501782}
   - component: {fileID: -4672128768459207291}
   - component: {fileID: 4233964869486218640}
@@ -484,7 +483,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3013477999232598442}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd0e2c42b6b8e924e8d5f26645b05494, type: 3}
+  m_Script: {fileID: 11500000, guid: 98381d0e57712d4499ba1b5afc67cb8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &9166489426704551316
@@ -514,21 +513,6 @@ MonoBehaviour:
   _shootPointTransform: {fileID: 0}
   _targetAnimationAim: {fileID: 0}
   _aimRig: {fileID: 0}
---- !u!114 &1038163711715851208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3013477999232598442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b5698f5123dd04488f7ab491e33adc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _obstaclesDoorMousePlaneCoverLayerMask:
-    serializedVersion: 2
-    m_Bits: 2880
 --- !u!114 &2245190387780501782
 MonoBehaviour:
   m_ObjectHideFlags: 0

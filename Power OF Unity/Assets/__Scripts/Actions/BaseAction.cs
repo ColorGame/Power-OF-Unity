@@ -53,8 +53,11 @@ public abstract class BaseAction : MonoBehaviour, ISetupForSpawn
 
     public abstract int GetMaxActionDistance(); // Вернуть Дистанцию действия
     public abstract void TakeAction(GridPositionXZ gridPosition, Action onActionComplete); //Generic Применить Действие (Действовать) В аргумент передаем сеточную позицию под курсором и делегат onActionComplete (При Завершении Действия, в нашем случае это ClearBusy() // Очистить занятость или стать свободным - активировать кнопки UI ) 
-
-    public abstract List<GridPositionXZ> GetValidActionGridPositionList(); //Получить Список Допустимых Сеточных Позиция для Действий
+    
+    /// <summary>
+    /// Получить Список Допустимых Сеточных Позиция для Действий
+    /// </summary>
+    public abstract List<GridPositionXZ> GetValidActionGridPositionList(); 
 
     public virtual bool IsValidActionGridPosition(GridPositionXZ gridPosition) //(Проверяем) Является ли Сеточная позиция Допустимой для Действия //Сделаем virtual- если понадобиться переопределить где нибудь
     {

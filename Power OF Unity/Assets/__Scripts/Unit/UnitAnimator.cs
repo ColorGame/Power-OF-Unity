@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using static UnitEquipment;
@@ -23,11 +24,55 @@ public class UnitAnimator
     private Animator _animator;
     private bool _skipCurrentChangeWeaponEvent = false; // Пропустить текущее событие смены оружия (При Очистке слота для другого размещаемого объекта, в этом же кадре будет помещен другой объект его и будем настраивать)
 
+    /// <summary>
+    /// Анимация покоя для ОСНОВНОГО оружия
+    /// </summary>
+    private AnimationMainWeapon _idleAnimationMainWeapon;
+    /// <summary>
+    /// Анимация покоя для ДОПОЛНИТЕЛЬНОГО оружия
+    /// </summary>
+    private AnimationOtherWeapon _idleAnimationOtherWeapon;
+    /// <summary>
+    /// Анимация покоя для ДОПОЛНИТЕЛЬНОГО оружия с ШИТОМ
+    /// </summary>
+    private AnimationOtherWeapon _idleAnimationOtherWeaponWithShield;
+    /// <summary>
+    /// Анимация ожидания для ОСНОВНОГО оружия
+    /// </summary>
+    private AnimationMainWeapon _holdAnimationMainWeapon;
+    /// <summary>
+    /// Анимация ожидания для ДОПОЛНИТЕЛЬНОГО оружия
+    /// </summary>
+    private AnimationOtherWeapon _holdAnimationOtherWeapon;
+    /// <summary>
+    /// Анимация ожидания для ДОПОЛНИТЕЛЬНОГО оружия с ШИТОМ
+    /// </summary>
+    private AnimationOtherWeapon _holdAnimationOtherWeaponWithShield;
+
+
     private void Setup()
     {
         _unitEquipment.OnChangeMainWeapon += UnitEquipment_OnChangeWeapon;
         _unitEquipment.OnChangeOtherWeapon += UnitEquipment_OnChangeWeapon;
         _unitEquipsViewFarm.OnChangeUnitView += UnitEquipsViewFarm_OnChangeUnitView;
+
+        _idleAnimationMainWeapon = new AnimationMainWeapon(
+            rifleHandAnimation: _hashAnimationName.Rifle_Idle,
+            pistolHandAnimation: _hashAnimationName.Pistol_Idle,
+            swordOneHandAnimation: _hashAnimationName.Sword_Idle_OneHanded,
+            swordTwoHandAnimation: _hashAnimationName.Sword_Idle_TwoHanded);
+
+        _idleAnimationOtherWeapon = new AnimationOtherWeapon(
+            otherHandUnarmedAnimation: _hashAnimationName.Unarmed,
+            pistolHandAnimation: _hashAnimationName.Pistol_Idle,
+            swordlOneHandAnimation: _hashAnimationName.Sword_Idle_OneHanded);
+
+        _idleAnimationOtherWeaponWithShield = new AnimationOtherWeapon(
+            otherHandUnarmedAnimation: _hashAnimationName.Shield_Idle_OtherHandUnarmed,
+            pistolHandAnimation: _hashAnimationName.Shield_Idle_OtherPistol,
+            swordlOneHandAnimation: _hashAnimationName.Shield_Idle_OtherSword);
+
+        
     }
 
     public void SetupOnDestroyAndQuit()
@@ -53,7 +98,7 @@ public class UnitAnimator
         GameObject attachMainShootingWeapon = _unitEquipsViewFarm.GetAttachMainShootingWeapon();
         if (attachMainShootingWeapon != null && attachMainShootingWeapon.TryGetComponent(out TargetForAnimationRigging targetForAnimationRigging))
         {
-            TwoBoneIKConstraint twoBoneIKConstraint = _unitEquipsViewFarm.GetCurrentUnitView().GetRigBuilder().GetComponentInChildren<TwoBoneIKConstraint>();
+            TwoBoneIKConstraint twoBoneIKConstraint = rigBuilder.GetComponentInChildren<TwoBoneIKConstraint>();
             twoBoneIKConstraint.data.target = targetForAnimationRigging.GetTargetForHandIdleAnimation();
             rigBuilder.enabled = true;
         }
@@ -61,24 +106,37 @@ public class UnitAnimator
 
         switch (_unit.GetUnitState())
         {
-            case Unit.UnitState.UnitSetupMenu:
+            case Unit.UnitState.Idle:
                 SetIdleAnimation();
                 break;
-            case Unit.UnitState.UnitStartLevel:
+            case Unit.UnitState.Hold:
+                SetHoldAnimation();
                 break;
         }
     }
 
     /// <summary>
-    /// Установить анимацию покоя
+    /// Установить анимацию ПОКОЯ
     /// </summary>
     private void SetIdleAnimation()
     {
         MainOtherWeapon mainOtherWeapon = _unit.GetUnitEquipment().GetMainOtherWeapon();
+        SetAnimationForMainWeapon(mainOtherWeapon, _idleAnimationMainWeapon, _idleAnimationOtherWeapon, _idleAnimationOtherWeaponWithShield);       
+    }
+    /// <summary>
+    /// Установить анимацию УДЕРЖАНИЯ
+    /// </summary>
+    private void SetHoldAnimation()
+    {
+        MainOtherWeapon mainOtherWeapon = _unit.GetUnitEquipment().GetMainOtherWeapon();
+        SetAnimationForMainWeapon(mainOtherWeapon, _holdAnimationMainWeapon, _holdAnimationOtherWeapon,_holdAnimationOtherWeaponWithShield);
+    }
 
+    private void SetAnimationForMainWeapon(MainOtherWeapon mainOtherWeapon, AnimationMainWeapon animationMainWeapon , AnimationOtherWeapon animationOtherWeapon, AnimationOtherWeapon animationOtherWeaponWithShield)
+    {
         if (mainOtherWeapon.mainWeapon == null)
         {
-            SetIdleAnimationForOtherWeapon(mainOtherWeapon.otherWeapon, _hashAnimationName.Idle_Unarmed, _hashAnimationName.Pistol_Idle_GunDown_TwoHanded, _hashAnimationName.Sword_Idle_OneHanded);
+            SetAnimationForOtherWeapon(mainOtherWeapon.otherWeapon, animationOtherWeapon);
             return;
         }
 
@@ -86,39 +144,40 @@ public class UnitAnimator
         {
             case GrappleTypeSO grappleTypeSO:
                 if (grappleTypeSO.GetIsOneHand())
-                    StartAnimation(_hashAnimationName.Pistol_Idle_GunDown_TwoHanded);
+                    StartAnimation(animationMainWeapon.pistolHandAnimation);
                 else
-                    StartAnimation(_hashAnimationName.Rifle_Idle_GunDown_TwoHanded);
+                    StartAnimation(animationMainWeapon.rifleHandAnimation);
                 break;
 
             case ShootingWeaponTypeSO shootingWeaponTypeSO:
                 if (shootingWeaponTypeSO.GetIsOneHand())
-                    StartAnimation(_hashAnimationName.Pistol_Idle_GunDown_TwoHanded);
+                    StartAnimation(animationMainWeapon.pistolHandAnimation);
                 else
-                    StartAnimation(_hashAnimationName.Rifle_Idle_GunDown_TwoHanded);
+                    StartAnimation(animationMainWeapon.rifleHandAnimation);
                 break;
 
             case SwordTypeSO swordTypeSO:
                 if (swordTypeSO.GetIsOneHand())
-                    StartAnimation(_hashAnimationName.Sword_Idle_OneHanded);
+                    StartAnimation(animationMainWeapon.swordOneHandAnimation);
                 else
-                    StartAnimation(_hashAnimationName.Sword_Idle_TwoHanded);
+                    StartAnimation(animationMainWeapon.swordTwoHandAnimation);
                 break;
 
             case ShieldItemTypeSO: // при снарежинии щитом, будем показывать дополнительное оружие
-                SetIdleAnimationForOtherWeapon(mainOtherWeapon.otherWeapon, _hashAnimationName.Shield_Idle, _hashAnimationName.Shield_Pistol_Idle, _hashAnimationName.Shield_Sword_Idle);
+                SetAnimationForOtherWeapon(mainOtherWeapon.otherWeapon, animationOtherWeaponWithShield);
                 break;
         }
     }
+
     /// <summary>
-    /// Установить анимацию покоя для ДОПОЛНИТЕЛЬНОГО ОРУЖИЯ.<br/>
+    /// Установить анимацию для ДОПОЛНИТЕЛЬНОГО ОРУЖИЯ.<br/>
     /// Не делаю проверку "IsOneHand()" т.к. в слот доп оружия можно установить только оружие для одной руки
     /// </summary>
-    private void SetIdleAnimationForOtherWeapon(PlacedObjectTypeWithActionSO otherWeapon, int freeHandAnimation, int pistolHandAnimation, int swordlHandAnimation)
+    private void SetAnimationForOtherWeapon(PlacedObjectTypeWithActionSO otherWeapon, AnimationOtherWeapon animationOtherWeapon)
     {
         if (otherWeapon == null)
         {
-            StartAnimation(freeHandAnimation);
+            StartAnimation(animationOtherWeapon.otherHandUnarmedAnimation);
             return;// выходим и игнорируем код ниже   
         }
 
@@ -126,28 +185,29 @@ public class UnitAnimator
         {
             case GrappleTypeSO:
             case ShootingWeaponTypeSO shootingWeaponTypeSO:
-                StartAnimation(pistolHandAnimation);
+                StartAnimation(animationOtherWeapon.pistolHandAnimation);
                 break;
 
             case SwordTypeSO:
-                StartAnimation(swordlHandAnimation);
+                StartAnimation(animationOtherWeapon.swordlOneHandAnimation);
                 break;
 
             case SpotterFireItemTypeSO://Для бинокля и аптечки нет анимаци
             case HealItemTypeSO:
-                StartAnimation(freeHandAnimation);
+                StartAnimation(animationOtherWeapon.otherHandUnarmedAnimation);
                 break;
         }
     }
 
+    
 
-    private void StartAnimation(int nameHash)
+
+    private void StartAnimation(int nameHash, int layer = 0)
     {
         if (_animator.GetCurrentAnimatorStateInfo(0).shortNameHash != nameHash) // Если сейчас проигрывается другая анимация то
             _animator.StopPlayback();
 
-        _animator.Play(nameHash, 0);
-
+        _animator.CrossFade(nameHash, layer);
     }
 
     private void UnitEquipment_OnChangeWeapon(object sender, MainOtherWeapon mainOtherWeapon)
@@ -295,5 +355,33 @@ public class UnitAnimator
         }
     */
 
+    private struct AnimationMainWeapon
+    {
+        public int rifleHandAnimation;
+        public int pistolHandAnimation;
+        public int swordOneHandAnimation;
+        public int swordTwoHandAnimation;
 
+        public AnimationMainWeapon(int rifleHandAnimation, int pistolHandAnimation, int swordOneHandAnimation, int swordTwoHandAnimation)
+        {
+            this.rifleHandAnimation = rifleHandAnimation;
+            this.pistolHandAnimation = pistolHandAnimation;
+            this.swordOneHandAnimation = swordOneHandAnimation;
+            this.swordTwoHandAnimation = swordTwoHandAnimation;
+        }
+    }
+
+    private struct AnimationOtherWeapon
+    {
+        public int otherHandUnarmedAnimation;
+        public int pistolHandAnimation;
+        public int swordlOneHandAnimation;
+
+        public AnimationOtherWeapon(int otherHandUnarmedAnimation, int pistolHandAnimation, int swordlOneHandAnimation)
+        {
+            this.otherHandUnarmedAnimation = otherHandUnarmedAnimation;
+            this.pistolHandAnimation = pistolHandAnimation;
+            this.swordlOneHandAnimation = swordlOneHandAnimation;
+        }
+    }
 }

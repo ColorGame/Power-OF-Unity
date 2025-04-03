@@ -23,8 +23,8 @@ public class Unit
     /// </summary>
     public enum UnitState
     {
-        UnitSetupMenu = 0,
-        UnitStartLevel = 1,
+        Idle = 0,
+        Hold = 1,
     }
 
 
@@ -73,6 +73,7 @@ public class Unit
     private UnitActionSystem _unitActionSystem;
     private HandleAnimationEvents _handleAnimationEvents;
     private CameraFollow _cameraFollow;
+    private PathfindingProvider _pathfindingProvider;
     private Rope _unitRope;
     private Transform _headTransform;
 
@@ -87,7 +88,7 @@ public class Unit
     /// <summary>
     /// Настройка ЮНИТА при спанвне на Уровня. (Настроим transform и gridPosition ...)
     /// </summary>   
-    public virtual void SetupForSpawn(LevelGrid levelGrid, TurnSystem turnSystem, Transform unitCoreTransform, CameraFollow cameraFollow, UnitActionSystem unitActionSystem)
+    public virtual void SetupForSpawn(LevelGrid levelGrid, TurnSystem turnSystem, Transform unitCoreTransform, CameraFollow cameraFollow, UnitActionSystem unitActionSystem,PathfindingProvider pathfindingProvider)
     {
         // Когда Unit спавниться, настроим его положение в сетке и добовим к GridObjectUnitXZ(объектам сетки) в данной ячейки         
 
@@ -96,13 +97,14 @@ public class Unit
         _unitActionSystem = unitActionSystem;
         _unitCoreTransform = unitCoreTransform;
         _cameraFollow = cameraFollow;
+        _pathfindingProvider = pathfindingProvider;
         _handleAnimationEvents = unitCoreTransform.GetComponentInChildren<HandleAnimationEvents>(true);
         _baseActionsArray = unitCoreTransform.GetComponents<BaseAction>();
         _headTransform = unitCoreTransform.Find("Head");
         _unitRope = unitCoreTransform.GetComponent<Rope>();
         _gridPosition = _levelGrid.GetGridPosition(unitCoreTransform.position); //Получим сеточную позицию в месте спавна
         _levelGrid.AddUnitAtGridPosition(_gridPosition, this); //Добавим юнита в нашу сетку
-        _unitState = UnitState.UnitStartLevel;
+        _unitState = UnitState.Hold;
 
         ISetupForSpawn[] iSetupForSpawnArray = unitCoreTransform.GetComponentsInChildren<ISetupForSpawn>(true);   // Найдем прикрепленные к unitCoreTransform, или к его дочерним объектам, все классы, реализующие интерфейс ISetupForSpawn.             
         foreach (var iSetupForSpawn in iSetupForSpawnArray)
@@ -209,6 +211,7 @@ public class Unit
     public TurnSystem GetTurnSystem() { return _turnSystem; }
     public SoundManager GetSoundManager() { return _soundManager; }
     public UnitActionSystem GetUnitActionSystem() { return _unitActionSystem; }
+    public PathfindingProvider GetPathfindingProvider() { return _pathfindingProvider; }
     public LevelGrid GetLevelGrid() { return _levelGrid; }
     public HandleAnimationEvents GetHandleAnimationEvents() { return _handleAnimationEvents; }
     public CameraFollow GetCameraFollow() { return _cameraFollow; }

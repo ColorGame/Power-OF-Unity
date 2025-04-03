@@ -39,7 +39,7 @@ public class SpawnerOnUnitSetupScen : MonoBehaviour
         if (_selectedUnit != null)
         {
             _selectedUnit.GetUnitEquipsViewFarm().CreateOnlyView(transform);
-            _selectedUnit.SetUnitState(Unit.UnitState.UnitSetupMenu);
+            _selectedUnit.SetUnitState(Unit.UnitState.Idle);
         }
     }
 

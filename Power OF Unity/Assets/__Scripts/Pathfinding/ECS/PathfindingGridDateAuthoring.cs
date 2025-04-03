@@ -38,7 +38,7 @@ public class PathfindingGridDateAuthoring : MonoBehaviour
 /// <summary>
 /// ƒанные сетки поиска пути.<br/>
 /// ѕолностью копирует основную сетку.<br/>
-/// якорь трансформа сетки будет определ€тьс€ при инициализации в GameplayEntryPoint
+/// якорь трансформа сетки будет ативироватьс€ в GameplayEntryPoint
 /// </summary>
 public struct PathfindingGridDate : IComponentData, IEnableableComponent
 {
@@ -48,5 +48,6 @@ public struct PathfindingGridDate : IComponentData, IEnableableComponent
     public int floorAmount; //  оличество этажей
     public float floorHeight;// ¬ысота этажа
 
-    public float3 anchorGrid; //якорь трансформа сетки будет определ€тьс€ при инициализации в GameplayEntryPoint
+    public float3 anchorGrid; //якорь трансформа сетки будет определ€тьс€ при инициализации в GameplayEntryPoint                            
+
 }

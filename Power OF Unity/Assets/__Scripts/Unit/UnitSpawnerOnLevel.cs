@@ -20,6 +20,7 @@ public class UnitSpawnerOnLevel : MonoBehaviour
     private LevelGrid _levelGrid;
     private UnitActionSystem _unitActionSystem;
     private CameraFollow _cameraFollow;
+    private PathfindingProvider _pathfindingProvider;
 
     /// <summary>
     /// Автоматическая комплектация таблицы через кнопку в ИНСПЕКТОРЕ
@@ -52,7 +53,7 @@ public class UnitSpawnerOnLevel : MonoBehaviour
     }
 
 
-    public void Init(UnitManager unitManager, TurnSystem turnSystem, SoundManager soundManager, LevelGrid levelGrid, UnitActionSystem unitActionSystem, CameraFollow cameraFollow, HashAnimationName hashAnimationName)
+    public void Init(UnitManager unitManager, TurnSystem turnSystem, SoundManager soundManager, LevelGrid levelGrid, UnitActionSystem unitActionSystem, CameraFollow cameraFollow, HashAnimationName hashAnimationName, PathfindingProvider pathfindingProvider)
     {
         _unitManager = unitManager;
         _turnSystem = turnSystem;
@@ -60,9 +61,10 @@ public class UnitSpawnerOnLevel : MonoBehaviour
         _levelGrid = levelGrid;
         _unitActionSystem = unitActionSystem;
         _cameraFollow = cameraFollow;
+        _pathfindingProvider = pathfindingProvider;
 
         UnitSpawn();
-        UnitEnemySpawn(hashAnimationName);
+      //  UnitEnemySpawn(hashAnimationName);
     }
 
     private void UnitSpawn()
@@ -100,7 +102,7 @@ public class UnitSpawnerOnLevel : MonoBehaviour
     {
         Transform unitCoreTransform = unit.GetUnitEquipsViewFarm().CreateCoreAndView(pointSpawner);      
 
-        unit.SetupForSpawn(_levelGrid, _turnSystem, unitCoreTransform, _cameraFollow, _unitActionSystem);
+        unit.SetupForSpawn(_levelGrid, _turnSystem, unitCoreTransform, _cameraFollow, _unitActionSystem, _pathfindingProvider);
 
     }
 }

@@ -767,7 +767,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""64dd061e-3a5d-4949-ad2c-3b072529467a"",
-                    ""path"": ""<Mouse>/gridPosition"",
+                    ""path"": ""<Mouse>/pathNode"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -778,7 +778,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""d3e3bffa-8405-4a21-a01e-c0c1546d2420"",
-                    ""path"": ""<Pen>/gridPosition"",
+                    ""path"": ""<Pen>/pathNode"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
@@ -789,7 +789,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""6915735d-f6cd-4d88-93c6-c6c593337173"",
-                    ""path"": ""<Touchscreen>/touch*/gridPosition"",
+                    ""path"": ""<Touchscreen>/touch*/pathNode"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Touch"",
@@ -800,7 +800,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""8f36a7f7-1d5f-4caf-b28a-089be110c745"",
-                    ""path"": ""<VirtualMouse>/gridPosition"",
+                    ""path"": ""<VirtualMouse>/pathNode"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

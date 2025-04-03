@@ -1,18 +1,19 @@
-using System;
-using Unity.Entities;
+using Unity.Collections;
 using Unity.Mathematics;
 
 /// <summary>
 /// Узел пути (создается в каждой ячейки сетки)
 /// </summary>
-public struct PathNode: IComponentData
+public struct PathNode 
 {
     /// <summary>
     /// X,Y,Z (XZ-плоскость Y- этаж)
     /// </summary>
     public int3 gridPosition;
     public float3 worldPosition;
-
+    /// <summary>
+    /// Индекс узла в массиве
+    /// </summary>
     public int index;
     /// <summary>
     /// Стоимость смещения от старта до текущей ячейки<br/>
@@ -28,15 +29,25 @@ public struct PathNode: IComponentData
     /// Сумма g+h
     /// </summary>
     public int fCost;
-
-    public bool isWalkable;
-    public bool isInAir;
-
     /// <summary>
-    /// пришел из индекса узла
+    /// Можно пройти по этому узлу?
+    /// </summary>
+    public bool isWalkable;
+    /// <summary>
+    /// Этот узел в воздухе?
+    /// </summary>
+    public bool isInAir;
+    /// <summary>
+    /// Список мировых позиций от начала пути до этого узла
+    /// </summary>
+    public NativeList<float3> pathWorldPositionList;
+    /// <summary>
+    /// пришел из индекса узла(сосед)
     /// </summary>
     public int cameFromNodeIndex;
-
+    /// <summary>
+    /// gCost + hCost
+    /// </summary>
     public void CalculateFCost()
     {
         fCost = gCost + hCost;

@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
@@ -18,14 +19,15 @@ public class GameplayEntryPoint : MonoBehaviour, IEntryPoint
     private TurnSystemUI _turnSystemUI;
     private LevelGridVisual _levelGridVisual;
     private GameEndUI _gameEndUI;
+    private PathfindingProvider _pathfindingProvider;
 
 
-    public  void Inject(DIContainer container)
+    public void Inject(DIContainer container)
     {
+        InitEntity();
         GetComponent();
         Register();
         Init(container);
-        InitEntity();
     }
 
     private void GetComponent()
@@ -47,23 +49,25 @@ public class GameplayEntryPoint : MonoBehaviour, IEntryPoint
     private void Register()
     {
         _turnSystem = new TurnSystem();
+        _pathfindingProvider = new PathfindingProvider();
     }
 
     private void Init(DIContainer container)
     {
         _cameraFollow.Init(container.Resolve<GameInput>(), container.Resolve<OptionsSubMenuUIProvider>());
-      //  FloorVisibility.Init(_levelGrid, _cameraFollow); // инициализировать до спавна юнитов
+        FloorVisibility.Init(_levelGrid, _cameraFollow); // инициализировать до спавна юнитов
         _mouseOnGameGrid.Init(container.Resolve<GameInput>(), _levelGrid);
-        _unitSpawnerOnLevel.Init(container.Resolve<UnitManager>(), _turnSystem, container.Resolve<SoundManager>(), _levelGrid, _unitActionSystem, _cameraFollow, container.Resolve<HashAnimationName>());
+        _unitSpawnerOnLevel.Init(container.Resolve<UnitManager>(), _turnSystem, container.Resolve<SoundManager>(), _levelGrid, _unitActionSystem, _cameraFollow, container.Resolve<HashAnimationName>(),_pathfindingProvider);
         _unitActionSystem.Init(container.Resolve<GameInput>(), container.Resolve<UnitManager>(), _turnSystem, _levelGrid, _mouseOnGameGrid);
         _unitSelectAtLevelButtonsSystemUI.Init(container.Resolve<UnitManager>(), _turnSystem, _unitActionSystem, _cameraFollow);
         _optionsMenagerUI.Init(container.Resolve<UnitManager>(), _unitActionSystem);
         _actionButtonSystemUI.Init(_unitActionSystem, _turnSystem, container.Resolve<TooltipUI>());
         _enemyAI.Init(container.Resolve<UnitManager>(), _turnSystem, _unitActionSystem);
-        _levelGridVisual.Init(_unitActionSystem, _levelGrid, _mouseOnGameGrid);
+        _pathfindingProvider.Init(_unitActionSystem, _mouseOnGameGrid);
+        _levelGridVisual.Init(_unitActionSystem, _levelGrid, _mouseOnGameGrid, _pathfindingProvider);
         _gameEndUI.Init(container.Resolve<ScenesService>());
         _turnSystemUI.Init(_turnSystem);
-        
+
         DoorInteract.Init(container.Resolve<SoundManager>(), _levelGrid, container.Resolve<HashAnimationName>());
         BarrelInteract.Init(container.Resolve<SoundManager>(), _levelGrid);
         DestructibleCrate.Init(container.Resolve<SoundManager>(), _levelGrid);
@@ -83,15 +87,6 @@ public class GameplayEntryPoint : MonoBehaviour, IEntryPoint
         pathfindingGridDate.anchorGrid = transform.position;
         entityManager.SetComponentData(entityPathfinding, pathfindingGridDate);
         entityManager.SetComponentEnabled<PathfindingGridDate>(entityPathfinding, true);
-
-
-        /*
-        entityQuery = new EntityQueryBuilder(Allocator.Temp).WithPresent<PathfindingParams>().Build(entityManager);// способ  Создадия конструктора для обращения к сущности 
-        PathfindingParams pathfindingParams = entityManager.GetComponentData<PathfindingParams>(entityPathfinding);
-        pathfindingParams.startPosition = new Unity.Mathematics.int3(0, 0, 0);
-        pathfindingParams.endPosition = new Unity.Mathematics.int3(12, 0, 7);
-        entityManager.SetComponentData(entityPathfinding, pathfindingParams);
-        entityManager.SetComponentEnabled<PathfindingParams>(entityPathfinding, true);*/
-    }
+    }   
 
 }

@@ -174,7 +174,7 @@ public class ActionButtonSystemUI : MonoBehaviour
     private void UnitActionSystem_OnSelectedUnitChanged(object sender, Unit selectedUnit)
     {
         SetupEventSelectedUnit(selectedUnit);   // Настройка Event у выбранного Юнита
-        CreateUnitActionButtons();  // Создать Кнопки для Действий Юнита 
+       // CreateUnitActionButtons();  // Создать Кнопки для Действий Юнита 
         UpdateSelectedVisual();
         UpdateActionPoints();
     }

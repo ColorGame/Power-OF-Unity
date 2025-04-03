@@ -16,7 +16,7 @@ public class RopeRanderer : MonoBehaviour
     {
         LineRenderer.enabled = true;
 
-        //LineRenderer.SetPosition(0, startPosition);
+        //LineRenderer.SetPosition(0, startGridPosition);
         LineRenderer.SetPosition(1, targetPosition);
     }
 
