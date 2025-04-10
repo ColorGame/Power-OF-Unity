@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Entities;
@@ -8,7 +9,10 @@ using UnityEngine;
 // НАСТРОИМ ПОРЯДОК ВЫПОЛНЕНИЯ СКРИПТА LevelGrid, добавим в Project Settings/ Script Execution Order и поместим выполнение LevelGrid выше Default Time, чтобы LevelGrid запустился РАНЬШЕ до того как ктонибудь совершит поиск пути ( В StartScene() мы запускаем класс PathfindingMonkey - настроику поиска пути)
 
 public class LevelGrid : MonoBehaviour // Основной скрипт который управляет СЕТКОЙ данного УРОВНЯ . Оснавная задача Присвоить или Получить определенного Юнита К заданной Позиции Сетки
-{  
+{
+    public event EventHandler<GridPositionXZ> OnAddUnitAtGridPosition; 
+    public event EventHandler<GridPositionXZ> OnRemoveUnitAtGridPosition; 
+
 
     [SerializeField] private Transform _gridDebugObjectPrefab; // Префаб отладки сетки //Передоваемый тип должен совподать с типом аргумента метода CreateDebugObject
     [SerializeField] private GridParamsSO _levelGridPAramsSO;
@@ -31,24 +35,12 @@ public class LevelGrid : MonoBehaviour // Основной скрипт который управляет СЕТК
 
             _gridSystemList.Add(gridSystem); // Добавим в список созданную сетку
         }
-    }
-
-    private void Start()
-    {      
-        //  PathfindingMonkey.Instance.InitOnLoad(_gridParameters, _floorAmount); // ПОСТРОИМ СЕТКУ УЗЛОВ ПОИСКА ПУТИ // УБЕДИМСЯ ЧТО ЭТОТ МЕТОД СТАРТУЕТ РАНЬШЕ до того как ктонибудь совершит поиск пути
-    }
+    }  
 
     private GridSystemXZ<GridObjectUnitXZ> GetGridSystem(int floor) // Получить Сеточную систему для данного этажа
     {
         return _gridSystemList[floor];
-    }
-
-
-    public void AddUnitAtGridPosition(GridPositionXZ gridPosition, Unit unit) // Добавить определенного Юнита К заданной Позиции Сетки
-    {
-        GridObjectUnitXZ gridObject = GetGridSystem(gridPosition.floor).GetGridObject(gridPosition); // Получим GridObjectUnitXZ который находится в _gridPositioAnchor
-        gridObject.AddUnit(unit); // Добавить юнита 
-    }
+    }    
 
     public List<Unit> GetUnitListAtGridPosition(GridPositionXZ gridPosition) // Получить Список Юнитов В заданной Позиции Сетки
     {
@@ -56,10 +48,18 @@ public class LevelGrid : MonoBehaviour // Основной скрипт который управляет СЕТК
         return gridObject.GetUnitList();// получим юнита
     }
 
+    public void AddUnitAtGridPosition(GridPositionXZ gridPosition, Unit unit) // Добавить определенного Юнита К заданной Позиции Сетки
+    {
+        GridObjectUnitXZ gridObject = GetGridSystem(gridPosition.floor).GetGridObject(gridPosition); // Получим GridObjectUnitXZ который находится в _gridPositioAnchor
+        gridObject.AddUnit(unit); // Добавить юнита 
+        OnAddUnitAtGridPosition?.Invoke(this, gridPosition);
+    }
+
     public void RemoveUnitAtGridPosition(GridPositionXZ gridPosition, Unit unit) // Удаление юнита из заданной позиции сетки
     {
         GridObjectUnitXZ gridObject = GetGridSystem(gridPosition.floor).GetGridObject(gridPosition); // Получим GridObjectUnitXZ который находится в _gridPositioAnchor
         gridObject.RemoveUnit(unit); // удалим юнита
+        OnRemoveUnitAtGridPosition?.Invoke(this, gridPosition);
     }
 
     public void UnitMovedGridPosition(Unit unit, GridPositionXZ fromGridPosition, GridPositionXZ toGridPosition) // Юнит Перемещен в Сеточной позиции из позиции fromGridPosition в позицию toGridPosition

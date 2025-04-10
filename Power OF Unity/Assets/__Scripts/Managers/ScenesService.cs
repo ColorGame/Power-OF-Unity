@@ -62,7 +62,7 @@ public class ScenesService
         Scene scene =  await LoadSceneAsync(sceneName, LoadSceneMode.Single);
         FindEntryPointInSceneAndInject(scene);
 
-        await UniTask.Delay(TimeSpan.FromSeconds(2f));
+        await UniTask.Delay(TimeSpan.FromSeconds(1f));
         _loadingScreenProvider.Unload();
         TryFindStartSceneAndActivate(scene);
     }

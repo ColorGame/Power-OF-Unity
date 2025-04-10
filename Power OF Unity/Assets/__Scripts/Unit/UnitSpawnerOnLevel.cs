@@ -20,7 +20,7 @@ public class UnitSpawnerOnLevel : MonoBehaviour
     private LevelGrid _levelGrid;
     private UnitActionSystem _unitActionSystem;
     private CameraFollow _cameraFollow;
-    private PathfindingProvider _pathfindingProvider;
+    private PathfindingProviderSystem _pathfindingProvider;
 
     /// <summary>
     /// Автоматическая комплектация таблицы через кнопку в ИНСПЕКТОРЕ
@@ -53,7 +53,7 @@ public class UnitSpawnerOnLevel : MonoBehaviour
     }
 
 
-    public void Init(UnitManager unitManager, TurnSystem turnSystem, SoundManager soundManager, LevelGrid levelGrid, UnitActionSystem unitActionSystem, CameraFollow cameraFollow, HashAnimationName hashAnimationName, PathfindingProvider pathfindingProvider)
+    public void Init(UnitManager unitManager, TurnSystem turnSystem, SoundManager soundManager, LevelGrid levelGrid, UnitActionSystem unitActionSystem, CameraFollow cameraFollow, HashAnimationName hashAnimationName, PathfindingProviderSystem pathfindingProvider)
     {
         _unitManager = unitManager;
         _turnSystem = turnSystem;

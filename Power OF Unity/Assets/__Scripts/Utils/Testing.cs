@@ -22,7 +22,7 @@ public class Testing : MonoBehaviour
     private void Update()
     {
         //ТЕСТ 
-        //Debug.Log(_itemGridSystemXYList.GetGridPosition(MouseOnGameGrid.GetTransformPosition())); // Получим положение сетки прямо под мышкой
+        //Debug.Log(_itemGridSystemXYList.GetGridPosition(MouseOnGameGrid.GetWorldPosition())); // Получим положение сетки прямо под мышкой
 
         //ТЕСТ Допустимых Сеточных Позиция для Действий
 
@@ -33,7 +33,7 @@ public class Testing : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.T))
         {
             //Для отрисовки линии следования из (0,0) в место указателя мыши
-            /*GridPositionXZ _mouseGridPosition = _levelGrid.GetGridPosition(MouseOnGameGrid.GetTransformPosition());
+            /*GridPositionXZ _mouseGridPosition = _levelGrid.GetGridPosition(MouseOnGameGrid.GetWorldPosition());
 
             GridPositionXZ startGridPosition = new GridPositionXZ(0, 0);
 

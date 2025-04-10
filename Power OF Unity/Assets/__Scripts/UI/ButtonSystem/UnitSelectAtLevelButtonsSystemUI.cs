@@ -73,7 +73,7 @@ public class UnitSelectAtLevelButtonsSystemUI : MonoBehaviour
         UpdateSelectedVisual(selectedUnit);
     }
 
-    private void UnitActionSystem_OnBusyChanged(object sender, OnUnitSystemEventArgs e)
+    private void UnitActionSystem_OnBusyChanged(object sender, BusyChangedEventArgs e)
     {
         if (e.selectedAction is GrappleAction comboAction) // Если выполняется Комбо Сделаем проверку состояний комбо
         {

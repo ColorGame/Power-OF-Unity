@@ -197,10 +197,10 @@ public class CameraFollow : MonoBehaviour
     {
         if (_targetMoveStarted)
         {
-            transform.position = Vector3.Lerp(transform.position, _targetUnit.GetTransformPosition(), Time.deltaTime * _moveSpeed);
+            transform.position = Vector3.Lerp(transform.position, _targetUnit.GetWorldPosition(), Time.deltaTime * _moveSpeed);
 
             float stoppingDistance = 0.2f; // Дистанция остановки //НУЖНО НАСТРОИТЬ//
-            if (Vector3.Distance(transform.position, _targetUnit.GetTransformPosition()) < stoppingDistance)  // Если растояние до целевой позиции меньше чем Дистанция остановки // Мы достигли цели        
+            if (Vector3.Distance(transform.position, _targetUnit.GetWorldPosition()) < stoppingDistance)  // Если растояние до целевой позиции меньше чем Дистанция остановки // Мы достигли цели        
             {
                 _targetMoveStarted = false;
             }

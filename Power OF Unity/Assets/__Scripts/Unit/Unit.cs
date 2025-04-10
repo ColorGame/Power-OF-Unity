@@ -1,4 +1,5 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 using static Unit;
 
@@ -73,7 +74,7 @@ public class Unit
     private UnitActionSystem _unitActionSystem;
     private HandleAnimationEvents _handleAnimationEvents;
     private CameraFollow _cameraFollow;
-    private PathfindingProvider _pathfindingProvider;
+    private PathfindingProviderSystem _pathfindingProvider;
     private Rope _unitRope;
     private Transform _headTransform;
 
@@ -88,7 +89,7 @@ public class Unit
     /// <summary>
     /// Настройка ЮНИТА при спанвне на Уровня. (Настроим transform и gridPosition ...)
     /// </summary>   
-    public virtual void SetupForSpawn(LevelGrid levelGrid, TurnSystem turnSystem, Transform unitCoreTransform, CameraFollow cameraFollow, UnitActionSystem unitActionSystem,PathfindingProvider pathfindingProvider)
+    public virtual void SetupForSpawn(LevelGrid levelGrid, TurnSystem turnSystem, Transform unitCoreTransform, CameraFollow cameraFollow, UnitActionSystem unitActionSystem, PathfindingProviderSystem pathfindingProvider)
     {
         // Когда Unit спавниться, настроим его положение в сетке и добовим к GridObjectUnitXZ(объектам сетки) в данной ячейки         
 
@@ -126,7 +127,7 @@ public class Unit
     /// </summary>
     private void SetupOnDestroyAndQuit()
     {
-        _levelGrid.GetGridPosition(GetTransformPosition());
+        _levelGrid.GetGridPosition(GetWorldPosition());
         _levelGrid.RemoveUnitAtGridPosition(_gridPosition, this);
         _actionPointsSystem.SetupOnDestroyAndQuit();
 
@@ -137,17 +138,27 @@ public class Unit
         _healthSystem.OnDead -= HealthSystem_OnDead;
     }
 
-    public void UpdateGridPosition()
+    public void UpdateGridPosition(GridPositionXZ newGridPosition = default)
     {
-        GridPositionXZ newGridPosition = _levelGrid.GetGridPosition(GetTransformPosition()); //Получим новую позицию юнита на сетке.
+        if (newGridPosition == default)// Если аргумент пустой то найдем актуальную сеточную позицию
+            newGridPosition = _levelGrid.GetGridPosition(GetWorldPosition()); //Получим новую позицию юнита на сетке.
+
         if (newGridPosition != _gridPosition) // Если новая позиция на сетке отличается от последней то ...
         {
             // Изменем положение юнита на сетке
-            GridPositionXZ oldGridPosition = _gridPosition; // Сохраним старую позицию что бы передать в event
+            _levelGrid.UnitMovedGridPosition(this, _gridPosition, newGridPosition); 
             _gridPosition = newGridPosition; //Обновим позицию - Новая позиция становиться текущей
-
-            _levelGrid.UnitMovedGridPosition(this, oldGridPosition, newGridPosition); //в UnitMovedGridPosition запускаем Событие. Поэтому эту строку поместим в КОНЦЕЦ . Иначе мы запускаем событие сетка обнавляется а юнит еще не перемещен
         }
+    }
+
+    private void HealthSystem_OnDead(object sender, EventArgs e) // Будет выполняться при смерти юнита
+    {
+        SetupOnDestroyAndQuit();
+        UnityEngine.Object.Destroy(_unitCoreTransform.gameObject); // Уничтожим игровой объект к которому прикриплен данный скрипт
+
+        // Вслучае смерти активного Юнита надо предать ход следующему юниту это происходит в UnitActionSystem    
+
+        OnAnyUnitDead?.Invoke(this, this); // Запустим событие Любой Мертвый Юнит. Событие статичное поэтому будет выполняться для любого мертвого Юнита      
     }
 
     public T GetAction<T>() where T : BaseAction //Фунцкция для получения любого типа базового действия // Создадим метод с GENERICS и ограничим типами в  BaseAction
@@ -161,32 +172,12 @@ public class Unit
         }
         return null; // Если нет совпадений то вернем ноль
     }
-
-    public GridPositionXZ GetGridPosition() // Получить сеточную позицию
-    {
-        return _gridPosition;
-    }
-
-    public Vector3 GetWorldPosition() // Получить мировую позицию
-    {
-        return GetTransformPosition();
-    }
-
-    public BaseAction[] GetBaseActionsArray() // Получить Список базовых действий
-    {
-        return _baseActionsArray;
-    }
-
-    private void HealthSystem_OnDead(object sender, EventArgs e) // Будет выполняться при смерти юнита
-    {
-        SetupOnDestroyAndQuit();
-        UnityEngine.Object.Destroy(_unitCoreTransform.gameObject); // Уничтожим игровой объект к которому прикриплен данный скрипт
-
-        // Вслучае смерти активного Юнита надо предать ход следующему юниту это происходит в UnitActionSystem    
-
-        OnAnyUnitDead?.Invoke(this, this); // Запустим событие Любой Мертвый Юнит. Событие статичное поэтому будет выполняться для любого мертвого Юнита      
-    }
-
+    // Получить сеточную позицию
+    public GridPositionXZ GetGridPosition() { return _gridPosition; }
+    // Получить мировую позицию
+    public Vector3 GetWorldPosition() { return _unitCoreTransform.position; }   
+    // Получить Список базовых действий
+    public BaseAction[] GetBaseActionsArray() { return _baseActionsArray; }
     public HealthSystem GetHealthSystem() { return _healthSystem; }
     public UnitActionPoints GetActionPointsSystem() { return _actionPointsSystem; }
     public UnitEquipment GetUnitEquipment() { return _unitEquipment; }
@@ -195,7 +186,6 @@ public class Unit
     public UnitAccuracySystem GetUnitAccuracySystem() { return _unitAccuracySystem; }
     public bool GetIsEnemy() { return _isEnemy; }
     public Rope GetUnitRope() { return _unitRope; }
-    public Vector3 GetTransformPosition() { return _unitCoreTransform.position; }
     public void SetTransformPosition(Vector3 position) { _unitCoreTransform.position = position; }
     public Transform GetTransform() { return _unitCoreTransform; }
     public void SetTransformForward(Vector3 forward) { _unitCoreTransform.forward = forward; }
@@ -211,7 +201,7 @@ public class Unit
     public TurnSystem GetTurnSystem() { return _turnSystem; }
     public SoundManager GetSoundManager() { return _soundManager; }
     public UnitActionSystem GetUnitActionSystem() { return _unitActionSystem; }
-    public PathfindingProvider GetPathfindingProvider() { return _pathfindingProvider; }
+    public PathfindingProviderSystem GetPathfindingProvider() { return _pathfindingProvider; }
     public LevelGrid GetLevelGrid() { return _levelGrid; }
     public HandleAnimationEvents GetHandleAnimationEvents() { return _handleAnimationEvents; }
     public CameraFollow GetCameraFollow() { return _cameraFollow; }

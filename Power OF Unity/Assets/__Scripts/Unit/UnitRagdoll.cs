@@ -27,14 +27,14 @@ public class UnitRagdoll : MonoBehaviour //  Юнит Тряпичная кукла// Висит на Тря
 
             case ShootAction shootAction:
                 
-                Vector3 directionKeeler = (keelerUnit.GetTransformPosition() - transform.position).normalized; //Направление к киллеру , что бы узнать с какой стороны нанесен урон
+                Vector3 directionKeeler = (keelerUnit.GetWorldPosition() - transform.position).normalized; //Направление к киллеру , что бы узнать с какой стороны нанесен урон
                 explosionPosition = transform.position + directionKeeler; // Сместим точку взрыва в сторону киллера            
                 _explosionForce = 300f; //НУЖНО НАСТРОИТЬ//
                 break;
 
             case SwordAction swordAction:
 
-                directionKeeler = (keelerUnit.GetTransformPosition() - transform.position).normalized; //Направление к киллеру , что бы узнать с какой стороны нанесен урон
+                directionKeeler = (keelerUnit.GetWorldPosition() - transform.position).normalized; //Направление к киллеру , что бы узнать с какой стороны нанесен урон
                 explosionPosition = transform.position + directionKeeler; // Сместим точку взрыва в сторону киллера    
                 _explosionForce = 500f; //НУЖНО НАСТРОИТЬ//
                 break;

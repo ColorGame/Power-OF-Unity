@@ -24,7 +24,7 @@ public class IsLockedUI : MonoBehaviour // При взаимодействии с дверью, если ее 
         Show(); 
     }
     
-    private void UnitActionSystem_OnBusyChanged(object sender, OnUnitSystemEventArgs e)
+    private void UnitActionSystem_OnBusyChanged(object sender, BusyChangedEventArgs e)
     {
         if (!e.isBusy) // Когда игрок освобождается то скроем надпись
         {

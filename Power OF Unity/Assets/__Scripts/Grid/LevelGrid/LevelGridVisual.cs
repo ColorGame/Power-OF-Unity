@@ -39,7 +39,7 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
 
     private LevelGridVisualSingle[,,] _gridSystemVisualSingleArray; // Трехмерный массив    
 
-    private PathfindingProvider _pathfindingProvider;
+    private PathfindingProviderSystem _pathfindingProviderSystem;
     private UnitActionSystem _unitActionSystem;
     private LevelGrid _levelGrid;
     private MouseOnGameGrid _mouseOnGameGrid;
@@ -47,12 +47,12 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
     // Для отладки шестигранной сетки (отображение ячейки под мышкой)
     // private LevelGridVisualSingle _lastSelectedGridSystemVisualSingle; // Последний Выбранная Сеточная Позиция Визуализация Еденицы
 
-    public void Init(UnitActionSystem unitActionSystem, LevelGrid levelGrid, MouseOnGameGrid mouseOnGameGrid, PathfindingProvider pathfindingProvider)
+    public void Init(UnitActionSystem unitActionSystem, LevelGrid levelGrid, MouseOnGameGrid mouseOnGameGrid, PathfindingProviderSystem pathfindingProvider)
     {
         _unitActionSystem = unitActionSystem;
         _levelGrid = levelGrid;
         _mouseOnGameGrid = mouseOnGameGrid;
-        _pathfindingProvider = pathfindingProvider;
+        _pathfindingProviderSystem = pathfindingProvider;
 
         Setup();
     }
@@ -81,12 +81,14 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
         }
 
         _unitActionSystem.OnSelectedActionChanged += UnitActionSystem_OnSelectedActionChanged; // подпишемся на событие Выбранное Действие Изменено (когда меняется активное действие в блоке кнопок мы запустим событие Event)
-        _unitActionSystem.OnBusyChanged += Instance_OnBusyChanged; //подпишемся на событие Занятость Изменена 
+        _unitActionSystem.OnBusyChanged += UnitActionSystem_OnBusyChanged; //подпишемся на событие Занятость Изменена 
         _mouseOnGameGrid.OnMouseGridPositionChanged += MouseOnGameGrid_OnMouseGridPositionChanged;// подпишемся на событие Сеточная Позиция Мыши Изменена для включения и выключения круга показ. диапазон поражения гранаты
-        _pathfindingProvider.OnPathfindingComplete += PathfindingProvider_OnPathfindingComplete;//подпишемся Вычислен Путь  
-        MoveAction.OnAnyUnitPathComplete += MoveAction_OnAnyUnitPathComplete; //подпишемся У любого Юнита Вычислен Путь       
+        _pathfindingProviderSystem.OnPathfindingComplete += PathfindingProviderSystem_OnPathfindingComplete;//подпишемся Вычислен Путь              
 
-        UpdateGridVisual();
+        HideAllGridPosition();
+
+        if (_pathfindingProviderSystem.IsPathfindingComplete())//Если к этому моменту путь расчитан то обновим визуал
+            UpdateGridVisual();
 
 
         // Отабразим всю сетку для отладки HEX(ЗАКОМЕНТИРОВАЛ СТРОКУ в методе MouseOnGameGrid_OnMouseGridPositionChanged)
@@ -101,7 +103,7 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
 
     }
 
-    private void PathfindingProvider_OnPathfindingComplete(object sender, Unity.Collections.NativeParallelHashMap<Unity.Mathematics.int3, PathNode> e)
+    private void PathfindingProviderSystem_OnPathfindingComplete(object sender, EventArgs e)
     {
         if (!_unitActionSystem.GetSelectedUnit().GetIsEnemy()) //Если это не враг то обновим визуализацию (чтобы не обновлять во время хотьбы врагов)
         {
@@ -109,20 +111,10 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
         }
     }
 
-    private void MoveAction_OnAnyUnitPathComplete(object sender, Unit unit)
+    private void UnitActionSystem_OnBusyChanged(object sender, BusyChangedEventArgs e)
     {
-        if (_unitActionSystem.GetSelectedUnit() == unit) // Если путь вычислен у выделенного юнита то обновим визуализацию (чтобы не обновлять во время хотьбы врагов)
-        {
+        if (!e.isBusy && e.selectedAction is not MoveAction) // Если освободился(НЕ Занят) и НЕ во время движения то обновим. MoveAction обрабатывает PathfindingProviderSystem 
             UpdateGridVisual();
-        }
-    }
-    private void Instance_OnBusyChanged(object sender, OnUnitSystemEventArgs e)
-    {
-        if (e.selectedAction is not MoveAction) // Если Занятость Изменена НЕ во время движения то обновим. MoveAction сам подписан на OnBusyChanged и в нем расчитывает путь.
-                                                // После расчета вызывается событие OnAnyUnitPathComplete там и будем обновлять
-        {
-            UpdateGridVisual();
-        }
     }
     private void UnitActionSystem_OnSelectedActionChanged(object sender, EventArgs e)
     {
@@ -198,7 +190,10 @@ public class LevelGridVisual : MonoBehaviour //Сеточная система визуализации  Ви
         }
     }
 
-    private void HideAllGridPosition() // Скрыть все позиции сетки
+    /// <summary>
+    /// Скрыть все позиции сетки
+    /// </summary>
+    private void HideAllGridPosition()
     {
         for (int x = 0; x < _levelGrid.GetWidth(); x++)
         {

@@ -70,7 +70,7 @@ public class ActionButtonSystemUI : MonoBehaviour
     }
 
     // скрыть кнопки когда занят действием
-    private void UnitActionSystem_OnBusyChanged(object sender, UnitActionSystem.OnUnitSystemEventArgs e)
+    private void UnitActionSystem_OnBusyChanged(object sender, UnitActionSystem.BusyChangedEventArgs e)
     {
         if (e.selectedAction is GrappleAction grappleAction) // Если выполняется Комбо Сделаем проверку состояний комбо
         {

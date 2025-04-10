@@ -17,7 +17,7 @@ public class GrenadeStunAction : GrenadeAction
            
             GrenadeProjectile grenadeProjectile = grenadeProjectileTransform.GetComponent<GrenadeProjectile>(); // Возьмем у гранаты компонент GrenadeProjectile
 
-            grenadeProjectile.Init(_targetGridPositin, TypeGrenade.Stun, OnGrenadeBehaviorComplete, _grenadeDamage, _unit.GetSoundManager(), _unit.GetTurnSystem(), _unit.GetLevelGrid()); // И вызовим функцию InitOnLoad() передав в нее целевую позицию (сеточныая позиция курсора мыши) Тип ГРАНАТЫ  и передадим в делегат функцию OnGrenadeBehaviorComplete ( при взрыве гранаты будем вызывать эту функцию)
+            grenadeProjectile.Init(_targetGridPositin, TypeGrenade.Stun, OnGrenadeBehaviorComplete, _grenadeDamage, _unit.GetSoundManager(), _unit.GetTurnSystem(), _levelGrid); // И вызовим функцию InitOnLoad() передав в нее целевую позицию (сеточныая позиция курсора мыши) Тип ГРАНАТЫ  и передадим в делегат функцию OnGrenadeBehaviorComplete ( при взрыве гранаты будем вызывать эту функцию)
         }
     }
 

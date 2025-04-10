@@ -14,9 +14,9 @@ public class UnitActionSystem : MonoBehaviour
     public event EventHandler OnSelectedActionChanged; // Выбранное Действие Изменено (когда меняется активное действие в блоке кнопок мы запустим событие Event)  
     public event EventHandler OnGameOver; // Конец игры
 
-    public event EventHandler<OnUnitSystemEventArgs> OnBusyChanged; // Занятость Изменена (когда меняется значение _isBusy, мы запустим событие Event, и передаем ее в аргументе) в <> -generic этот тип будем вторым аргументом
+    public event EventHandler<BusyChangedEventArgs> OnBusyChanged; // Занятость Изменена (когда меняется значение _isBusy, мы запустим событие Event, и передаем ее в аргументе) в <> -generic этот тип будем вторым аргументом
 
-    public class OnUnitSystemEventArgs : EventArgs // Расширим класс событий, чтобы в аргументе события передать нужных юнитов
+    public struct BusyChangedEventArgs  // Расширим класс событий, чтобы в аргументе события передать нужных юнитов
     {
         public bool isBusy;
         public BaseAction selectedAction; // выбранное действие
@@ -140,7 +140,7 @@ public class UnitActionSystem : MonoBehaviour
     private void SetBusy() // Установить Занятый
     {
         _isBusy = true;
-        OnBusyChanged?.Invoke(this, new OnUnitSystemEventArgs // создаем новый экземпляр класса OnUnitSystemEventArgs
+        OnBusyChanged?.Invoke(this, new BusyChangedEventArgs // создаем новый экземпляр класса BusyChangedEventArgs
         {
             isBusy = _isBusy,
             selectedAction = _selectedAction,
@@ -150,7 +150,7 @@ public class UnitActionSystem : MonoBehaviour
     private void ClearBusy() // Очистить занятость или стать свободным
     {
         _isBusy = false;
-        OnBusyChanged?.Invoke(this, new OnUnitSystemEventArgs // создаем новый экземпляр класса OnUnitSystemEventArgs
+        OnBusyChanged?.Invoke(this, new BusyChangedEventArgs // создаем новый экземпляр класса BusyChangedEventArgs
         {
             isBusy = _isBusy,
             selectedAction = _selectedAction,

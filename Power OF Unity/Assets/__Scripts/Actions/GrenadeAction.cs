@@ -61,7 +61,7 @@ public abstract class GrenadeAction : BaseAction // Граната ДЕйствие. Наследует 
         {
             case State.GrenadeBefore:
 
-                Vector3 targetPositin = _unit.GetLevelGrid().GetWorldPosition(_targetGridPositin);
+                Vector3 targetPositin = _levelGrid.GetWorldPosition(_targetGridPositin);
                 Vector3 targetDirection = (targetPositin - transform.position).normalized; // Направление к целивой ячейки, еденичный вектор
                 targetDirection.y = 0; // Чтобы юнит не наклонялся пли броске (т.к. вектор будет поворачиваться только по плоскости x,y)
 
@@ -122,7 +122,7 @@ public abstract class GrenadeAction : BaseAction // Граната ДЕйствие. Наследует 
                     GridPositionXZ offsetGridPosition = new GridPositionXZ(x, z, floor); // Смещенная сеточная позиция. Где началом координат(0,0, 0-этаж) является сам юнит 
                     GridPositionXZ testGridPosition = unitGridPosition + offsetGridPosition; // Тестируемая Сеточная позиция
 
-                    if (!_unit.GetLevelGrid().IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
+                    if (!_levelGrid.IsValidGridPosition(testGridPosition)) // Проверим Является ли testGridPosition Допустимой Сеточной Позицией если нет то переходим к след циклу
                     {
                         continue; // continue заставляет программу переходить к следующей итерации цикла 'for' игнорируя код ниже
                     }
@@ -134,7 +134,7 @@ public abstract class GrenadeAction : BaseAction // Граната ДЕйствие. Наследует 
                         continue;
                     }
 
-                   /* LevelGridNode levelGridNode = _unit.GetLevelGrid().GetGridNode(testGridPosition);
+                   /* LevelGridNode levelGridNode = _levelGrid.GetGridNode(testGridPosition);
 
                     //если в этой позиции нет узла пути значит эта GridPositionXZ висит в воздухе  
                     if (levelGridNode == null)
@@ -156,8 +156,8 @@ public abstract class GrenadeAction : BaseAction // Граната ДЕйствие. Наследует 
                     }*/
 
                     // ПРОВЕРИМ НА возможность броска через препятствия 
-                    Vector3 worldTestGridPosition = _unit.GetLevelGrid().GetWorldPosition(testGridPosition);   // Получим мировые координаты тестируемой сеточной позиции 
-                    Vector3 unitWorldPosition = _unit.GetLevelGrid().GetWorldPosition(unitGridPosition); // Переведем в мировые координаты переданную нам сеточную позицию Юнита  
+                    Vector3 worldTestGridPosition = _levelGrid.GetWorldPosition(testGridPosition);   // Получим мировые координаты тестируемой сеточной позиции 
+                    Vector3 unitWorldPosition = _unit.GetWorldPosition(); // Переведем в мировые координаты переданную нам сеточную позицию Юнита  
                     Vector3 grenadeDirection = (worldTestGridPosition - unitWorldPosition).normalized; //Нормализованный Вектор Направления броска Гранаты
 
                     float heightRaycast = 2f; // Высота выстрела луча (делаю высоким что бы игнорировать низкие препядствия т.к. через них можно бросать гранатой) Через препятствия выше 2,5м бросать грнату НЕЛЬЗЯ (высота потолка 3м)

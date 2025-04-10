@@ -2,14 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
+using static PathNodeSystem;
 
 public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс BaseAction // ВЫделим в отдельный класс // Лежит на каждом юните
 {
-    public static event EventHandler<Unit> OnAnyUnitPathComplete; // У любого Юнита Вычислен Путь // static - обозначает что event будет существовать для всего класса не зависимо от того скольго у нас созданно Юнитов.
-                                                                  // Поэтому для прослушивания этого события слушателю не нужна ссылка на какую-либо конкретную единицу, они могут получить доступ к событию через класс, который затем запускает одно и то же событие для каждой единицы. 
-
     public event EventHandler OnStartMoving; // Начал двигаться (когда юнит начнет движение мы запустим событие Event)
     public event EventHandler OnStopMoving; // Прекратил движение (когда юнит законсит движение мы запустим событие Event)  
     public event EventHandler<OnChangeFloorsStartedEventArgs> OnChangedFloorsStarted; // Начали менять этажи 
@@ -20,7 +19,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
     }
 
     private int _moveDistance; // Максимальная дистанция движения в сетке
-      
+
     private int _currentPositionIndex; // Текущая Позиция Индекс
     private bool _isStartChangingFloors = true; // Начал менять этаж
     private float _differentFloorsTeleportTimer; // Таймер телепортации на разные этажи
@@ -35,31 +34,28 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
     /// <summary>
     /// Позиция конца пути
     /// </summary>
-    private int3 _gridPositionEndPath; 
+    private int3 _gridPositionEndPath;
     private UnitActionSystem _unitActionSystem;
-    private PathfindingProvider _pathfindingProvider;
+    private PathfindingProviderSystem _pathfindingProviderSystem;
 
     public override void SetupForSpawn(Unit unit)
     {
         base.SetupForSpawn(unit);
         _unitActionSystem = _unit.GetUnitActionSystem();
-        _pathfindingProvider = _unit.GetPathfindingProvider();
+        _pathfindingProviderSystem = _unit.GetPathfindingProvider();
         _moveDistance = _unit.GetUnitTypeSO().GetBasicMoveDistance();
 
-        _pathfindingProvider.OnPathfindingComplete += PathfindingProvider_OnPathfindingComplete; //подпишемся путь вычислен
-        _unitActionSystem.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged;  //подпишемся Выбранный Юнит Изменен
+        _pathfindingProviderSystem.OnPathfindingComplete += PathfindingProvider_OnPathfindingComplete; //подпишемся путь вычислен
+        _unitActionSystem.OnSelectedUnitChanged += UnitActionSystem_OnSelectedUnitChanged;  //подпишемся Выбранный Юнит Изменен      
     }
 
-    private void PathfindingProvider_OnPathfindingComplete(object sender, NativeParallelHashMap<int3, PathNode> validGridPositionPathNodeDict)
+
+    private void PathfindingProvider_OnPathfindingComplete(object sender, EventArgs e)
     {
         if (_unitActionSystem.GetSelectedUnit() == _unit) // Если выбран этот юнит
         {
-            _validGridPositionPathNodeDict = validGridPositionPathNodeDict;
-           
-            foreach (var collection in validGridPositionPathNodeDict)
-            {
-                _validGridPositionList.Add(new GridPositionXZ(collection.Key));
-            }
+            _validGridPositionList = _pathfindingProviderSystem.GetValidGridPositionMoveForSelectedUnit();
+            _validGridPositionPathNodeDict = _pathfindingProviderSystem.GetvalidGridPositionPathNodeDict();
         }
     }
     private void UnitActionSystem_OnSelectedUnitChanged(object sender, Unit selectedUnit)
@@ -77,7 +73,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
             return; // выходим и игнорируем код ниже
         }
 
-        if (!_pathfindingProvider.IsPathfindingComplete())//Если путь не расчитан 
+        if (!_pathfindingProviderSystem.IsPathfindingComplete())//Если путь не расчитан 
         {
             return; // выходим и игнорируем код ниже            
         }
@@ -85,13 +81,13 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
         // Буду двигаться по списку ячеек из pathWorldPositionList, каждая следующая ячейка будет targetPosition
         Vector3 targetPosition = _validGridPositionPathNodeDict[_gridPositionEndPath].pathWorldPositionList[_currentPositionIndex]; // Целевой позицией будет позиция из листа с заданным индексом
 
-        GridPositionXZ targetGridPosition = _unit.GetLevelGrid().GetGridPosition(targetPosition); // Получим сеточную позицию Целевой позиции
-        GridPositionXZ unitGridPosition = _unit.GetLevelGrid().GetGridPosition(transform.position); // Получим сеточную позицию Юнита  
-       
+        GridPositionXZ targetGridPosition = _levelGrid.GetGridPosition(targetPosition); // Получим сеточную позицию Целевой позиции
+        GridPositionXZ unitGridPosition = _unit.GetGridPosition(); // Получим сеточную позицию Юнита  
+
         if (targetGridPosition.floor != unitGridPosition.floor)// Если этаж Целевой позииции не совпадает с этажом Юнита то ...      
         {
             if (_isStartChangingFloors)// Если только начали менять этаж то настроим таймер и запустим событие
-            {               
+            {
                 _isStartChangingFloors = false;
                 _differentFloorsTeleportTimer = _differentFloorsTeleportTimerMax;
 
@@ -117,56 +113,55 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
             {
                 _isStartChangingFloors = true; //Сбросим параметр старта смены этажей
                 transform.position = targetPosition;
-                _unit.UpdateGridPosition();
+                _unit.UpdateGridPosition(targetGridPosition); //При смене этажа обновим сеточную позицию
             }
         }
         else
         {
             // Обычная логика перемещения
-
             Vector3 moveDirection = (targetPosition - transform.position).normalized; // Направление движения, еденичный вектор
 
-            float rotateSpeed = 10f; //Чем больше тем быстрее
+            float rotateSpeed = 10f; //Чем больше тем быстрее   
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDirection), Time.deltaTime * rotateSpeed); // поворт юнита. ЗАМЕНИЛ Lerp на - Slerp Сферически интерполирует между кватернионами a и b по соотношению t. Параметр t ограничен диапазоном [0, 1]. Используйте это для создания поворота, который плавно интерполирует между первым кватернионом a и вторым кватернионом b на основе значения параметра t. Если значение параметра близко к 0, выходные данные будут близки к a, если оно близко к 1, выходные данные будут близки к b.
 
-            float moveSpead = 4f; //НУЖНО НАСТРОИТЬ//
+            float moveSpead = 8f; //НУЖНО НАСТРОИТЬ//
             transform.position += moveDirection * moveSpead * Time.deltaTime;
         }
 
-        float stoppingDistanceSQR = 0.4f; // Дистанция остановки в степени два //НУЖНО НАСТРОИТЬ//
-        if ((targetPosition-transform.position).sqrMagnitude < stoppingDistanceSQR)  // Если квадрат растояние до целевой позиции меньше чем Дистанция остановки // Мы достигли цели        
+        float stoppingDistanceSQR = 0.05f; // Дистанция остановки в степени два //НУЖНО НАСТРОИТЬ//
+        float distSQR = (targetPosition - transform.position).sqrMagnitude;
+        if (distSQR < stoppingDistanceSQR)  // Если квадрат растояние до целевой позиции меньше чем Дистанция остановки // Мы достигли цели        
         {
             _currentPositionIndex--; // уменьшим индекс на еденицу
-            _unit.UpdateGridPosition();
+            _unit.UpdateGridPosition(targetGridPosition); 
 
-            if (_currentPositionIndex == 0) // Если мы дошли до конца списка тогда...
+            if (_currentPositionIndex < 0) // Если мы прошли все узлы пути...
             {
                 _unit.GetSoundManager().SetLoop(false);
                 _unit.GetSoundManager().Stop();
 
-                OnStopMoving?.Invoke(this, EventArgs.Empty); //Запустим событие Прекратил движение
-                                                             // _singleNodeBlocker.BlockAtCurrentPosition(); // Заблокирую узел на новом месте и разблокирую предыдущий
+                OnStopMoving?.Invoke(this, EventArgs.Empty); //Запустим событие Прекратил движение                                                          
                 ActionComplete(); // Вызовим базовую функцию ДЕЙСТВИЕ ЗАВЕРШЕНО                
-            }           
+            }
         }
     }
 
 
     public override void TakeAction(GridPositionXZ gridPosition, Action onActionComplete) // Движение к целевой позиции. В аргумент передаем сеточную позицию  и делегат. Вызываю ее для передачи новой целевой позиции
     {
-        _gridPositionEndPath =  gridPosition.ParseInt3();
+        _gridPositionEndPath = gridPosition.ParseInt3();
         _currentPositionIndex = _validGridPositionPathNodeDict[_gridPositionEndPath].pathWorldPositionList.Length - 1;
 
         _unit.GetSoundManager().SetLoop(true);
         _unit.GetSoundManager().Play(SoundName.Move);
-      
+
         OnStartMoving?.Invoke(this, EventArgs.Empty); // Запустим событие Начал двигаться 
         ActionStart(onActionComplete); // Вызовим базовую функцию СТАРТ ДЕЙСТВИЯ // Вызываем этот метод в конце после всех настроек т.к. в этом методе есть EVENT и он должен запускаться после всех настроек
     }
 
     public override bool IsValidActionGridPosition(GridPositionXZ gridPosition) //(Проверяем) Является ли Сеточная позиция Допустимой для Действия
     {
-        return _pathfindingProvider.IsPathfindingComplete() ? _validGridPositionPathNodeDict.ContainsKey(gridPosition.ParseInt3()) : false;
+        return _pathfindingProviderSystem.IsPathfindingComplete() ? _validGridPositionPathNodeDict.ContainsKey(gridPosition.ParseInt3()) : false;
     }
 
     public override List<GridPositionXZ> GetValidActionGridPositionList()  // переопределим базовую функцию
@@ -211,8 +206,8 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
 
     private void OnDestroy()
     {
-        _pathfindingProvider.OnPathfindingComplete -= PathfindingProvider_OnPathfindingComplete; 
-        _unitActionSystem.OnSelectedUnitChanged -= UnitActionSystem_OnSelectedUnitChanged;  
+        _pathfindingProviderSystem.OnPathfindingComplete -= PathfindingProvider_OnPathfindingComplete;
+        _unitActionSystem.OnSelectedUnitChanged -= UnitActionSystem_OnSelectedUnitChanged;
     }
 
 }

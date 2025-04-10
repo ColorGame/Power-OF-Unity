@@ -15,6 +15,7 @@ public abstract class BaseAction : MonoBehaviour, ISetupForSpawn
 
     protected bool _isActive; // Булевая переменная. Что бы исключить паралельное выполнение нескольких действий
     protected Unit _unit;
+    protected LevelGrid _levelGrid;
     protected PlacedObjectTypeWithActionSO _placedObjectTypeWithActionSO;
 
     //Буду использовать встроенный делегат Action вместо - //public delegate void ActionCompleteDelegate(); //завершение действия // Объявляем делегат который не принимает аргумент и возвращает пустоту
@@ -27,6 +28,7 @@ public abstract class BaseAction : MonoBehaviour, ISetupForSpawn
     public virtual void SetupForSpawn(Unit unit)
     {
         _unit = unit;
+        _levelGrid = _unit.GetLevelGrid();
     }
     protected virtual void Awake() // protected virtual- обозначает что можно переопределить в дочерних классах
     {
