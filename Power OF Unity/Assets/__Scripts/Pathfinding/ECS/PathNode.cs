@@ -1,10 +1,11 @@
+using System;
 using Unity.Collections;
 using Unity.Mathematics;
 
 /// <summary>
 /// ”зел пути (создаетс€ в каждой €чейки сетки)
 /// </summary>
-public struct PathNode 
+public struct PathNode
 {
     /// <summary>
     /// X,Y,Z (XZ-плоскость Y- этаж)
@@ -36,11 +37,7 @@ public struct PathNode
     /// <summary>
     /// Ётот узел в воздухе?
     /// </summary>
-    public bool isInAir;
-    /// <summary>
-    /// —писок мировых позиций от начала пути до этого узла
-    /// </summary>
-    public NativeList<float3> pathWorldPositionList;
+    public bool isInAir;   
     /// <summary>
     /// пришел из индекса узла(сосед)
     /// </summary>
@@ -56,5 +53,8 @@ public struct PathNode
     public void SetIsWalkable(bool isWalkable)
     {
         this.isWalkable = isWalkable;
-    }
+    }    
 }
+
+
+

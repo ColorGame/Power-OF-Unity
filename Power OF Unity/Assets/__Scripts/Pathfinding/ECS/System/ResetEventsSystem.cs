@@ -12,13 +12,13 @@ partial struct ResetEventsSystem : ISystem
         foreach (RefRW<PathfindingParams> pathfindingParams in SystemAPI.Query<RefRW<PathfindingParams>>().WithPresent<PathfindingParams>())
         {
             pathfindingParams.ValueRW.onPathfindingComplete = false;
-            Debug.Log($"onPathfindingComplete = false");
+          //  Debug.Log($"onPathfindingComplete = false");
         }
 
-        foreach (RefRW<ValidGridPositionPathNodeDict> validGridPositionPathNodeDict in SystemAPI.Query<RefRW<ValidGridPositionPathNodeDict>>())
+        foreach (RefRW<ValidGridPositionPointsPathDict> validGridPositionPathNodeDict in SystemAPI.Query<RefRW<ValidGridPositionPointsPathDict>>())
         {
             validGridPositionPathNodeDict.ValueRW.onRegister = false;
-            Debug.Log($"onRegister = false");
+          //  Debug.Log($"onRegister = false");
         }
     }
 }

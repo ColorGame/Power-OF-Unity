@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Entities;
+using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
@@ -23,7 +25,8 @@ partial struct PathNodeSystem : ISystem
     private CollisionFilter _collisionObstaclesCoverFilter;
 
     private NativeArray<PathNode> _defaultPathNodeArray;
-    private NativeParallelHashMap<int3, PathNode> _validGridPositionPathNodeDict;
+    private NativeArray<PointsPath> _pointsPathArray;
+    private NativeHashMap<int3, PointsPath> _validGridPositionPointsPathDict;
 
     private Entity _createEntity;
 
@@ -32,9 +35,7 @@ partial struct PathNodeSystem : ISystem
     {
         _createEntity = state.EntityManager.CreateEntity(); //создадим сущность 
         state.EntityManager.AddComponent<DefaultPathNodeArray>(_createEntity);
-        state.EntityManager.AddComponent<ValidGridPositionPathNodeDict>(_createEntity);
-
-
+        state.EntityManager.AddComponent<ValidGridPositionPointsPathDict>(_createEntity);
 
         _collisionMousePlaneFilter = new CollisionFilter
         {//https://discussions.unity.com/t/how-do-i-use-layermasks/481 -обхъъяснение битового сдвига
@@ -59,33 +60,30 @@ partial struct PathNodeSystem : ISystem
             // В цикле настроим все ячейки на возможность проходимости, будем стрелять лучом из каждой позиции и для начала Сделаем все узлы непроходимыми
             // и если 1ый луч попал в пол то сделаем проходимым а 2рым луч проверим на препядствие _obstaclesDoorMousePlaneCoverLayerMask,
             // если они есть установим эту ячейку опять не проходимой
-            PhysicsWorldSingleton physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
-            CollisionWorld collisionWorld = physicsWorldSingleton.CollisionWorld;// Для создания луча                              
+
+            CollisionWorld collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld;// Для создания луча                              
 
             _defaultPathNodeArray = new NativeArray<PathNode>(pathfindingGridDate.ValueRO.width * pathfindingGridDate.ValueRO.height * pathfindingGridDate.ValueRO.floorAmount, Allocator.Persistent);
+            _pointsPathArray = new NativeArray<PointsPath>(_defaultPathNodeArray.Length, Allocator.Persistent);
 
             for (int x = 0; x < pathfindingGridDate.ValueRO.width; x++)
             {
                 for (int z = 0; z < pathfindingGridDate.ValueRO.height; z++)
                 {
                     for (int flooor = 0; flooor < pathfindingGridDate.ValueRO.floorAmount; flooor++)
-                    {
+                    {      
+                        int index = CalculateIndex(x, flooor, z, pathfindingGridDate.ValueRO.width, pathfindingGridDate.ValueRO.floorAmount);
                         // Entity pathNodeEntity = state.EntityManager.CreateEntity(typeof(PathNode)); //создадим сущность типа PathNode
                         PathNode pathNode = new PathNode(); // Создадим и инициализируем узел
-
                         pathNode.gridPosition = new int3(x, flooor, z);
                         pathNode.worldPosition = GetWorldPosition(pathNode.gridPosition, pathfindingGridDate.ValueRO.cellSize, pathfindingGridDate.ValueRO.anchorGrid, pathfindingGridDate.ValueRO.floorHeight);
-                        pathNode.index = CalculateIndex(x, flooor, z, pathfindingGridDate.ValueRO.width, pathfindingGridDate.ValueRO.floorAmount);
+                        pathNode.index = index;
                         pathNode.gCost = int.MaxValue;
                         pathNode.hCost = default;
                         pathNode.fCost = default;
                         pathNode.cameFromNodeIndex = -1; //Установим недопустимое значение
-
                         pathNode.isInAir = false; //По умолчанию узел НЕ в воздухе
                         pathNode.isWalkable = false; //По умолчанию сделаем НЕпроходимой
-
-                        pathNode.pathWorldPositionList = new NativeList<float3>(Allocator.Persistent);
-
 
                         //Выстрелим ЛУЧ. // Для данного коллайдера что бы все правильно работало нужно стрелять СВЕРХУ ВНИЗ,  поэтому сместим его вверх,
                         //и будем стрелять вниз, лучом размер которого в два раза больше чем смещение вниз, луч будет взаимодействовать с выбранной маской слоя
@@ -121,28 +119,35 @@ partial struct PathNodeSystem : ISystem
                             //Debug.Log($"{pathNode.gridPosition}препятсвие");
                         }
 
-                        _defaultPathNodeArray[pathNode.index] = pathNode;
+                        //Сохраним отредактированный узел в массиве
+                        _defaultPathNodeArray[index] = pathNode;
+
+                        //Создадим и сохраним для кажлого узла ТОЧКИ ПУТИ
+                        PointsPath pointsPath = new PointsPath();
+                        pointsPath.worldPositionList = new NativeList<float3>(Allocator.Persistent);
+                        _pointsPathArray[index] = pointsPath;
                     }
                 }
             }
-
+          
             state.EntityManager.SetComponentData(_createEntity, new DefaultPathNodeArray
             {
-                pathNodeArray = _defaultPathNodeArray
+                pathNodeArray = _defaultPathNodeArray,
+                pointsPathArray = _pointsPathArray
             });
 
             //Создам словарь такимже размером как и вся карта. Чтобы не выйти за пределы текущей ёмкости (Если для хотьбы допустимы все узлы)
-            _validGridPositionPathNodeDict = new NativeParallelHashMap<int3, PathNode>(_defaultPathNodeArray.Length, Allocator.Persistent);
-            state.EntityManager.SetComponentData(_createEntity, new ValidGridPositionPathNodeDict
+            _validGridPositionPointsPathDict = new NativeHashMap<int3, PointsPath>(_defaultPathNodeArray.Length, Allocator.Persistent);
+            state.EntityManager.SetComponentData(_createEntity, new ValidGridPositionPointsPathDict
             {
-                dictionary = _validGridPositionPathNodeDict,
+                dictionary = _validGridPositionPointsPathDict,
                 onRegister = true,
             });
 
-            Debug.Log($"Словапь СОЗДАН onRegister = {SystemAPI.GetSingleton<ValidGridPositionPathNodeDict>().dictionary.IsCreated}");
+            // Debug.Log($"Словапь СОЗДАН onRegister = {SystemAPI.GetSingleton<ValidGridPositionPointsPathDict>().dictionary.IsCreated}");
 
             //Выключим чтобы в след кадре не запустился Update
-            state.EntityManager.SetComponentEnabled<PathfindingGridDate>(pathfindingEntity, false);
+            state.EntityManager.SetComponentEnabled<PathfindingGridDate>(pathfindingEntity, false);          
         }
     }
 
@@ -151,13 +156,14 @@ partial struct PathNodeSystem : ISystem
     public
     void OnDestroy(ref SystemState state)
     {
-        foreach (PathNode pathNode in _defaultPathNodeArray)
+        foreach (PointsPath pointsPath in _pointsPathArray)
         {
-            pathNode.pathWorldPositionList.Dispose();
+            pointsPath.worldPositionList.Dispose();
         }
+        _pointsPathArray.Dispose();
         _defaultPathNodeArray.Dispose();
-        _validGridPositionPathNodeDict.Dispose();
-    }
+        _validGridPositionPointsPathDict.Dispose();
+    }   
 
 
     /// <summary> 
@@ -192,21 +198,26 @@ partial struct PathNodeSystem : ISystem
 
     /// <summary>
     /// Массив взех узлов пути в дефолтном состоянии.<br/> 
+    /// Массив точек пути для каждого узлаю.<br/> 
+    /// ИНДЕКСЫ ДОЛЖНЫ СОВПАДАТЬ!!!<br/> 
     /// Добавить этот компонет к сущности Pathfinding.<br/>  
     /// </summary>
     public struct DefaultPathNodeArray : IComponentData
     {
         public NativeArray<PathNode> pathNodeArray;
+        public NativeArray<PointsPath> pointsPathArray;
     }
 
     /// <summary>
-    /// Словарь - допустимые позиции сетки и узлы пути.<br/> 
-    /// Добавить этот компонет к сущности Pathfinding.<br/>  
-    /// И выключить по умолчанию
+    /// Словарь - допустимые позиции сетки и вычесленные точки пути для этих позиций.<br/> 
+    /// PointsPath(точки пути) - это ссылка на ячейку памяти из DefaultPathNodeArray.pointsPathArray
+    /// Добавить этот компонет к сущности Pathfinding.<br/> 
     /// </summary>
-    public struct ValidGridPositionPathNodeDict : IComponentData
+    public struct ValidGridPositionPointsPathDict : IComponentData
     {
-        public NativeParallelHashMap<int3, PathNode> dictionary;
+        public NativeHashMap<int3, PointsPath> dictionary;
         public bool onRegister;
     }
+
+   
 }

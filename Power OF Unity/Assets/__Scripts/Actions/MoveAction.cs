@@ -30,7 +30,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
     /// Словарь - допустимые позиции сетки и узлы пути <br/>
     /// PathNode - содержит инфу о пути
     /// </summary>
-    private NativeParallelHashMap<int3, PathNode> _validGridPositionPathNodeDict; //Словарь. КЛЮЧ - допустимые сеточные позиции. ЗНАЧЕНИЕ - узел для этой сеточной позиции
+    private NativeHashMap<int3, PointsPath> _validGridPositionPointsPathDict; //Словарь. КЛЮЧ - допустимые сеточные позиции. ЗНАЧЕНИЕ - узел для этой сеточной позиции
     /// <summary>
     /// Позиция конца пути
     /// </summary>
@@ -55,7 +55,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
         if (_unitActionSystem.GetSelectedUnit() == _unit) // Если выбран этот юнит
         {
             _validGridPositionList = _pathfindingProviderSystem.GetValidGridPositionMoveForSelectedUnit();
-            _validGridPositionPathNodeDict = _pathfindingProviderSystem.GetvalidGridPositionPathNodeDict();
+            _validGridPositionPointsPathDict = _pathfindingProviderSystem.GetvalidGridPositionPointsPathDict();
         }
     }
     private void UnitActionSystem_OnSelectedUnitChanged(object sender, Unit selectedUnit)
@@ -79,7 +79,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
         }
 
         // Буду двигаться по списку ячеек из pathWorldPositionList, каждая следующая ячейка будет targetPosition
-        Vector3 targetPosition = _validGridPositionPathNodeDict[_gridPositionEndPath].pathWorldPositionList[_currentPositionIndex]; // Целевой позицией будет позиция из листа с заданным индексом
+        Vector3 targetPosition = _validGridPositionPointsPathDict[_gridPositionEndPath].worldPositionList[_currentPositionIndex]; // Целевой позицией будет позиция из листа с заданным индексом
 
         GridPositionXZ targetGridPosition = _levelGrid.GetGridPosition(targetPosition); // Получим сеточную позицию Целевой позиции
         GridPositionXZ unitGridPosition = _unit.GetGridPosition(); // Получим сеточную позицию Юнита  
@@ -150,7 +150,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
     public override void TakeAction(GridPositionXZ gridPosition, Action onActionComplete) // Движение к целевой позиции. В аргумент передаем сеточную позицию  и делегат. Вызываю ее для передачи новой целевой позиции
     {
         _gridPositionEndPath = gridPosition.ParseInt3();
-        _currentPositionIndex = _validGridPositionPathNodeDict[_gridPositionEndPath].pathWorldPositionList.Length - 1;
+        _currentPositionIndex = _validGridPositionPointsPathDict[_gridPositionEndPath].worldPositionList.Length - 1;
 
         _unit.GetSoundManager().SetLoop(true);
         _unit.GetSoundManager().Play(SoundName.Move);
@@ -161,7 +161,7 @@ public class MoveAction : BaseAction // Действие перемещения НАСЛЕДУЕТ класс Bas
 
     public override bool IsValidActionGridPosition(GridPositionXZ gridPosition) //(Проверяем) Является ли Сеточная позиция Допустимой для Действия
     {
-        return _pathfindingProviderSystem.IsPathfindingComplete() ? _validGridPositionPathNodeDict.ContainsKey(gridPosition.ParseInt3()) : false;
+        return _pathfindingProviderSystem.IsPathfindingComplete() ? _validGridPositionPointsPathDict.ContainsKey(gridPosition.ParseInt3()) : false;
     }
 
     public override List<GridPositionXZ> GetValidActionGridPositionList()  // переопределим базовую функцию

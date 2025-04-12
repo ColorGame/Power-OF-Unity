@@ -22,7 +22,7 @@ public partial class PathfindingProviderSystem : SystemBase
     /// Словарь - допустимые позиции сетки и узлы пути <br/>
     /// PathNode - содержит инфу о пути
     /// </summary>
-    private NativeParallelHashMap<int3, PathNode> _validGridPositionPathNodeDict; //Словарь. КЛЮЧ - допустимые сеточные позиции. ЗНАЧЕНИЕ - узел для этой сеточной позиции
+    private NativeHashMap<int3, PointsPath> _validGridPositionPointsPathDict; //Словарь. КЛЮЧ - допустимые сеточные позиции. ЗНАЧЕНИЕ - ТОЧКИ ПУТИ для этой сеточной позиции
     /// <summary>
     /// Список допустимых сеточных позиции ПЕРЕДВИЖЕНИЯ для выбранного юнита
     /// </summary>
@@ -100,7 +100,7 @@ public partial class PathfindingProviderSystem : SystemBase
 
         if (unit.GetActionPointsSystem().CanSpendActionPointsToTakeAction(unit.GetAction<MoveAction>()))//Если хватает очков для перемещения то расчитаем путь
         {
-            Debug.Log("Установим поиск пути для юнита OnSelectedUnitChanged");
+          //  Debug.Log("Установим поиск пути для юнита OnSelectedUnitChanged");
             SetPathfindingForSelectedUnit();
         }
         else
@@ -129,13 +129,13 @@ public partial class PathfindingProviderSystem : SystemBase
 
     protected override void OnUpdate()
     {
-        // При включении ValidGridPositionPathNodeDict сохраним ссылку на словарь внутри него 
-        foreach (RefRO<ValidGridPositionPathNodeDict> validGridPositionPathNodeDict in SystemAPI.Query<RefRO<ValidGridPositionPathNodeDict>>())
+        // При включении ValidGridPositionPointsPathDict сохраним ссылку на словарь внутри него 
+        foreach (RefRO<ValidGridPositionPointsPathDict> validGridPositionPathNodeDict in SystemAPI.Query<RefRO<ValidGridPositionPointsPathDict>>())
         {
             if (validGridPositionPathNodeDict.ValueRO.onRegister)
             {
-                _validGridPositionPathNodeDict = validGridPositionPathNodeDict.ValueRO.dictionary;
-                Debug.Log($"validDict.onRegister = true");
+                _validGridPositionPointsPathDict = validGridPositionPathNodeDict.ValueRO.dictionary;
+               // Debug.Log($"validDict.onRegister = true");
             }
         }
 
@@ -144,7 +144,7 @@ public partial class PathfindingProviderSystem : SystemBase
             if (pathfindingParams.ValueRO.onPathfindingComplete)
             {
                 PathfindingComplete();
-                Debug.Log($"PathfindingComplete");
+               // Debug.Log($"PathfindingComplete");
             }
         }
     }
@@ -155,7 +155,7 @@ public partial class PathfindingProviderSystem : SystemBase
     /// </summary>
     public void PathfindingComplete()
     {
-        foreach (var collection in _validGridPositionPathNodeDict)
+        foreach (var collection in _validGridPositionPointsPathDict)
         {
             _validGridPositionMoveForSelectedUnitList.Add(new GridPositionXZ(collection.Key));
         }
@@ -172,7 +172,7 @@ public partial class PathfindingProviderSystem : SystemBase
     /// <summary>
     /// Получить ссылку на Словарь - допустимые позиции сетки и узлы пути
     /// </summary>
-    public NativeParallelHashMap<int3, PathNode> GetvalidGridPositionPathNodeDict() { return _validGridPositionPathNodeDict; }
+    public NativeHashMap<int3, PointsPath> GetvalidGridPositionPointsPathDict() { return _validGridPositionPointsPathDict; }
 
     /// <summary>
     /// Завершен ли поиск пути.
